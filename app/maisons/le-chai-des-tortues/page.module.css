@@ -67,9 +67,25 @@
 .kitchenGrid article > span { display: block; margin-bottom: 4rem; color: var(--ocean); font-size: .78rem; font-weight: 700; letter-spacing: .16em; }
 .kitchenGrid p { color: var(--muted); }
 
+.roomsSection { padding-block: 9rem; background: #18343c; color: white; }
+.roomsInner { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(3rem, 8vw, 8rem); }
+.roomsHeading { position: sticky; top: 7rem; align-self: start; }
+.roomsHeading h2 { max-width: 520px; }
+.roomsList article { display: grid; grid-template-columns: 72px 1fr; gap: 1.5rem; padding-block: 2.2rem; border-top: 1px solid rgba(255,255,255,.16); }
+.roomsList article:last-child { border-bottom: 1px solid rgba(255,255,255,.16); }
+.roomsList article > span { color: rgba(255,255,255,.5); font-size: .78rem; font-weight: 700; letter-spacing: .15em; }
+.roomsList h3 { margin: 0 0 .7rem; }
+.roomsList p { margin: 0; color: rgba(255,255,255,.68); }
+
 .family { padding-block: 8rem; background: var(--deep); color: white; }
 .familyInner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
 .familyText p { color: rgba(255,255,255,.72); font-size: 1.05rem; }
+
+.included { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(3rem, 8vw, 8rem); padding-block: 9rem; }
+.includedHeading p:not(.eyebrow) { max-width: 560px; color: var(--muted); }
+.includedList { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.includedList li { position: relative; padding: 1.35rem 1rem 1.35rem 2.2rem; border-bottom: 1px solid var(--line); font-size: 1.02rem; }
+.includedList li::before { content: '✓'; position: absolute; left: 0; color: var(--ocean); font-weight: 700; }
 
 .experiences { padding-block: 9rem; }
 .experienceHeading { max-width: 800px; margin-bottom: 3rem; }
@@ -81,6 +97,20 @@
 .localTip { padding-bottom: 9rem; text-align: center; }
 .localTip blockquote { max-width: 980px; margin: 0 auto; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2rem, 4vw, 4rem); line-height: 1.18; }
 
+.stayOptions { padding-block: 9rem; background: var(--sand); }
+.stayOptionsInner { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(3rem, 8vw, 8rem); }
+.optionCards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.optionCards article { padding: 2.4rem; background: white; border: 1px solid var(--line); }
+.optionCards span { display: inline-block; margin-bottom: 3rem; color: var(--ocean); font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.optionCards p { color: var(--muted); }
+
+.practical { padding-block: 8rem; background: #102930; color: white; }
+.practicalInner { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(3rem, 8vw, 8rem); }
+.practicalGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.16); }
+.practicalGrid div { padding: 2rem; background: #102930; }
+.practicalGrid strong { display: block; margin-bottom: .75rem; font-family: Georgia, 'Times New Roman', serif; font-size: 1.25rem; font-weight: 400; }
+.practicalGrid p { margin: 0; color: rgba(255,255,255,.68); }
+
 .cta { padding-block: 9rem; background: linear-gradient(rgba(9,32,41,.84), rgba(9,32,41,.9)), url('/images/destination/ile-de-re.jpg') center/cover; color: white; text-align: center; }
 .cta h2 { max-width: 800px; margin-inline: auto; }
 .cta p:not(.eyebrow) { max-width: 670px; margin: 0 auto 2rem; color: rgba(255,255,255,.76); }
@@ -88,9 +118,10 @@
 @media (max-width: 900px) {
   .highlights { grid-template-columns: repeat(2, 1fr); }
   .highlights div:nth-child(2) { border-right: 0; }
-  .intro, .imageStory, .familyInner { grid-template-columns: 1fr; }
+  .intro, .imageStory, .familyInner, .roomsInner, .included, .stayOptionsInner, .practicalInner { grid-template-columns: 1fr; }
+  .roomsHeading { position: static; }
   .imagePanel { min-height: 520px; }
-  .kitchenGrid, .experienceGrid { grid-template-columns: 1fr; }
+  .kitchenGrid, .experienceGrid, .practicalGrid { grid-template-columns: 1fr; }
   .kitchenGrid article > span, .experienceGrid article > span { margin-bottom: 1.5rem; }
 }
 
@@ -100,10 +131,12 @@
   .actions { flex-direction: column; align-items: stretch; }
   .highlights { grid-template-columns: 1fr; }
   .highlights div { border-right: 0; border-bottom: 1px solid var(--line); }
-  .intro, .kitchen, .experiences, .localTip { padding-block: 5.5rem; }
+  .intro, .kitchen, .experiences, .localTip, .included, .roomsSection, .stayOptions, .practical { padding-block: 5.5rem; }
   .imagePanel { min-height: 380px; }
   .storyCopy { padding: 4rem 1.4rem; }
   .family { padding-block: 5.5rem; }
   .familyInner { gap: 2rem; }
+  .roomsList article { grid-template-columns: 48px 1fr; }
+  .optionCards { grid-template-columns: 1fr; }
   .cta { padding-block: 6rem; }
 }
