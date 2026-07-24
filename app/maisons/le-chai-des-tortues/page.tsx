@@ -88,7 +88,7 @@ export default function LeChaiDesTortuesPage() {
           <article>
             <span>01</span>
             <h3>Tout pour recevoir</h3>
-            <p>Four, lave-vaisselle, réfrigérateur-congélateur, cafetières filtre et capsules, bouilloire, grille-pain et appareil à raclette.</p>
+            <p>Four, lave-vaisselle, lave-linge, réfrigérateur-congélateur, cafetières filtre et capsules, bouilloire, grille-pain et appareil à raclette.</p>
           </article>
           <article>
             <span>02</span>
