@@ -139,6 +139,16 @@ p { margin-top: 0; }
 .moment-card h3 { font-size: clamp(1.7rem, 2.5vw, 2.35rem); }
 .moment-card p { color: var(--muted); }
 
+.returning-guests { background: var(--deep); color: white; padding-block: 8rem; }
+.returning-guests-inner { display: grid; grid-template-columns: .95fr 1.05fr; gap: clamp(3rem, 7vw, 7rem); align-items: start; }
+.returning-guests-heading { position: sticky; top: 3rem; }
+.returning-guests-heading h2 { max-width: 580px; }
+.reasons-grid { display: grid; gap: 1px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.14); }
+.reason-card { padding: clamp(2rem, 4vw, 3.5rem); background: var(--deep); }
+.reason-card > span { display: block; margin-bottom: 2.2rem; color: rgba(255,255,255,.52); font-size: .76rem; font-weight: 700; letter-spacing: .16em; }
+.reason-card h3 { font-size: clamp(1.65rem, 2.7vw, 2.35rem); margin-bottom: 1rem; }
+.reason-card p { color: rgba(255,255,255,.7); margin-bottom: 0; }
+
 .hospitality { display: grid; grid-template-columns: 1.05fr .95fr; min-height: 680px; background: var(--sand); }
 .hospitality-image { background: linear-gradient(0deg, rgba(16,43,53,.1), rgba(16,43,53,.1)), url('/images/destination/ile-de-re.jpg') center/cover; }
 .hospitality-copy { align-self: center; max-width: 680px; padding: clamp(3rem, 7vw, 7rem); }
@@ -175,6 +185,8 @@ p { margin-top: 0; }
   .property-card { display: grid; grid-template-columns: .95fr 1.05fr; }
   .moments-grid { grid-template-columns: 1fr; }
   .moment-card > span { margin-bottom: 1.5rem; }
+  .returning-guests-inner { grid-template-columns: 1fr; }
+  .returning-guests-heading { position: static; }
   .hospitality { grid-template-columns: 1fr; }
   .hospitality-image { min-height: 500px; }
   .carnet { grid-template-columns: 1fr; gap: 1rem; }
@@ -200,6 +212,8 @@ p { margin-top: 0; }
   .property-card { display: block; }
   .property-image { min-height: 300px; }
   .ideal-day { padding-bottom: 5.5rem; }
+  .returning-guests { padding-block: 5.5rem; }
+  .reason-card { padding: 2rem 1.4rem; }
   .hospitality-image { min-height: 360px; }
   .hospitality-copy { padding: 4rem 1.4rem; }
   .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
