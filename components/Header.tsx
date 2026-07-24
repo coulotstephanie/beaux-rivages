@@ -4,6 +4,7 @@ import { BrandLogo } from "./BrandLogo";
 const links = [
   ["Nos maisons", "/#maisons"],
   ["Les îles", "/#iles"],
+  ["Le Carnet", "/carnet"],
   ["L’hospitalité", "/#hospitalite"],
   ["Contact", "/#contact"],
 ] as const;
