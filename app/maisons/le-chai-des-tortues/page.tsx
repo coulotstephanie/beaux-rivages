@@ -6,7 +6,8 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Le Chai des Tortues | Beaux Rivages",
-  description: "Ancien chai en pierre à Rivedoux-Plage, à 250 mètres de la plage. Une maison familiale, authentique et généreusement équipée sur l’Île de Ré.",
+  description:
+    "Ancien chai en pierre à Rivedoux-Plage, à 250 mètres de la plage. Une maison familiale, authentique et généreusement équipée sur l’Île de Ré.",
 };
 
 const highlights = [
@@ -31,6 +32,33 @@ const experiences = [
   },
 ] as const;
 
+const rooms = [
+  {
+    number: "01",
+    title: "Trois chambres pour ralentir",
+    text: "Des espaces paisibles, des ventilateurs de plafond utilisables été comme hiver et des rideaux thermiques pour préserver le confort au fil des saisons.",
+  },
+  {
+    number: "02",
+    title: "Deux salles d’eau",
+    text: "Une organisation fluide pour les familles et les séjours entre amis, avec des espaces pensés pour que chacun puisse prendre son rythme.",
+  },
+  {
+    number: "03",
+    title: "Une maison faite pour vivre ensemble",
+    text: "Cuisine généreuse, salle à manger conviviale, livres et jeux : ici, tout invite à partager les repas, les histoires et les vacances.",
+  },
+] as const;
+
+const included = [
+  "Équipements bébé mis à disposition gratuitement",
+  "Jeux, livres et matériel de plage pour toute la famille",
+  "Cuisine complète et équipements dédiés aux fruits de mer",
+  "Fibre, lave-vaisselle et lave-linge",
+  "Ventilateurs de plafond et rideaux thermiques",
+  "Arrivée autonome ou accueil personnalisé en option",
+] as const;
+
 export default function LeChaiDesTortuesPage() {
   return (
     <main className={styles.page}>
@@ -41,15 +69,26 @@ export default function LeChaiDesTortuesPage() {
         <div className={`${styles.heroContent} shell`}>
           <p className="eyebrow light">Rivedoux-Plage · Île de Ré</p>
           <h1>Le Chai des Tortues</h1>
-          <p>Un ancien chai en pierre, restauré avec respect, où l’authenticité rétaise rencontre le confort d’une maison pensée pour les familles et les grandes tablées.</p>
+          <p>
+            Un ancien chai en pierre, restauré avec respect, où l’authenticité
+            rétaise rencontre le confort d’une maison pensée pour les familles
+            et les grandes tablées.
+          </p>
           <div className={styles.actions}>
-            <Link className="button" href="/#reserver">Demander mes dates</Link>
-            <a className="button button-ghost" href="#decouvrir">Découvrir la maison</a>
+            <Link className="button" href="/#reserver">
+              Demander mes dates
+            </Link>
+            <a className="button button-ghost" href="#decouvrir">
+              Découvrir la maison
+            </a>
           </div>
         </div>
       </section>
 
-      <section className={`${styles.highlights} shell`} aria-label="Informations essentielles">
+      <section
+        className={`${styles.highlights} shell`}
+        aria-label="Informations essentielles"
+      >
         {highlights.map(([value, label]) => (
           <div key={label}>
             <strong>{value}</strong>
@@ -64,18 +103,41 @@ export default function LeChaiDesTortuesPage() {
           <h2>La pierre, le bois, la lumière et le plaisir d’être ensemble.</h2>
         </div>
         <div className={styles.introText}>
-          <p>Le Chai des Tortues conserve l’âme de son histoire. Les pierres d’origine de l’Île de Ré ont été préservées et réemployées lors de la rénovation, donnant à la maison une atmosphère chaleureuse et profondément locale.</p>
-          <p>À l’intérieur, chaque espace a été pensé pour rendre le séjour simple et généreux : équipements bébé offerts, jeux et livres pour tous les âges, confort toute l’année grâce aux ventilateurs de plafond et rideaux thermiques, ainsi qu’une cuisine rare dans une location de vacances.</p>
+          <p>
+            Le Chai des Tortues conserve l’âme de son histoire. Les pierres
+            d’origine de l’Île de Ré ont été préservées et réemployées lors de
+            la rénovation, donnant à la maison une atmosphère chaleureuse et
+            profondément locale.
+          </p>
+          <p>
+            À l’intérieur, chaque espace a été pensé pour rendre le séjour
+            simple et généreux : équipements bébé offerts, jeux et livres pour
+            tous les âges, confort toute l’année grâce aux ventilateurs de
+            plafond et rideaux thermiques, ainsi qu’une cuisine rare dans une
+            location de vacances.
+          </p>
         </div>
       </section>
 
       <section className={styles.imageStory}>
-        <div className={styles.imagePanel} role="img" aria-label="Pierres anciennes et ambiance chaleureuse du Chai des Tortues" />
+        <div
+          className={styles.imagePanel}
+          role="img"
+          aria-label="Pierres anciennes et ambiance chaleureuse du Chai des Tortues"
+        />
         <div className={styles.storyCopy}>
           <p className="eyebrow">L’âme du lieu</p>
           <h2>Un ancien chai devenu maison de vacances.</h2>
-          <p>Ici, le patrimoine n’est pas un décor. Il se ressent dans l’épaisseur des murs, dans la texture de la pierre et dans cette sensation immédiate d’entrer dans une maison qui a une histoire.</p>
-          <p>La rénovation a recherché l’équilibre : préserver le caractère du bâti, tout en offrant le niveau d’équipement et d’attention attendu d’une adresse Beaux Rivages.</p>
+          <p>
+            Ici, le patrimoine n’est pas un décor. Il se ressent dans
+            l’épaisseur des murs, dans la texture de la pierre et dans cette
+            sensation immédiate d’entrer dans une maison qui a une histoire.
+          </p>
+          <p>
+            La rénovation a recherché l’équilibre : préserver le caractère du
+            bâti, tout en offrant le niveau d’équipement et d’attention attendu
+            d’une adresse Beaux Rivages.
+          </p>
         </div>
       </section>
 
@@ -88,18 +150,49 @@ export default function LeChaiDesTortuesPage() {
           <article>
             <span>01</span>
             <h3>Tout pour recevoir</h3>
-            <p>Four, lave-vaisselle, lave-linge, réfrigérateur-congélateur, cafetières filtre et capsules, bouilloire, grille-pain et appareil à raclette.</p>
+            <p>
+              Four, lave-vaisselle, lave-linge, réfrigérateur-congélateur,
+              cafetières filtre et capsules, bouilloire, grille-pain et appareil
+              à raclette.
+            </p>
           </article>
           <article>
             <span>02</span>
             <h3>Des équipements d’exception</h3>
-            <p>Ninja dual air fryer et robot pâtissier-cuiseur Kenwood pour préparer facilement des repas complets, même en vacances.</p>
+            <p>
+              Ninja dual air fryer et robot pâtissier-cuiseur Kenwood pour
+              préparer facilement des repas complets, même en vacances.
+            </p>
           </article>
           <article>
             <span>03</span>
             <h3>L’expérience fruits de mer</h3>
-            <p>Grande marmite, couteaux à huîtres, pinces et ustensiles dédiés pour profiter pleinement des huîtres, coquillages et produits de l’océan.</p>
+            <p>
+              Grande marmite, couteaux à huîtres, pinces et ustensiles dédiés
+              pour profiter pleinement des huîtres, coquillages et produits de
+              l’océan.
+            </p>
           </article>
+        </div>
+      </section>
+
+      <section className={styles.roomsSection}>
+        <div className={`${styles.roomsInner} shell`}>
+          <div className={styles.roomsHeading}>
+            <p className="eyebrow light">Les espaces de la maison</p>
+            <h2>Un refuge pensé pour les séjours en famille ou entre amis.</h2>
+          </div>
+          <div className={styles.roomsList}>
+            {rooms.map((room) => (
+              <article key={room.number}>
+                <span>{room.number}</span>
+                <div>
+                  <h3>{room.title}</h3>
+                  <p>{room.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -110,10 +203,34 @@ export default function LeChaiDesTortuesPage() {
             <h2>Tout est prévu pour les familles.</h2>
           </div>
           <div className={styles.familyText}>
-            <p>Lit parapluie, chaise haute, poussette, baignoire pliante et tapis d’éveil sont mis gratuitement à disposition. Des livres, jeux et équipements de plage complètent l’accueil.</p>
-            <p>Le séjour commence sans liste interminable à préparer : il ne reste qu’à profiter de l’île, de la plage et du temps passé ensemble.</p>
+            <p>
+              Lit parapluie, chaise haute, poussette, baignoire pliante et tapis
+              d’éveil sont mis gratuitement à disposition. Des livres, jeux et
+              équipements de plage complètent l’accueil.
+            </p>
+            <p>
+              Le séjour commence sans liste interminable à préparer : il ne
+              reste qu’à profiter de l’île, de la plage et du temps passé
+              ensemble.
+            </p>
           </div>
         </div>
+      </section>
+
+      <section className={`${styles.included} shell`}>
+        <div className={styles.includedHeading}>
+          <p className="eyebrow">L’essentiel, déjà sur place</p>
+          <h2>Une maison généreusement équipée.</h2>
+          <p>
+            Les détails pratiques ont été anticipés pour laisser davantage de
+            place aux vacances.
+          </p>
+        </div>
+        <ul className={styles.includedList}>
+          {included.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       </section>
 
       <section className={`${styles.experiences} shell`}>
@@ -134,15 +251,77 @@ export default function LeChaiDesTortuesPage() {
 
       <section className={`${styles.localTip} shell`}>
         <p className="eyebrow">Le conseil de Stéphanie & Bruno</p>
-        <blockquote>« Commencez la journée par les Halles, puis passez chez Nina Métayer pour découvrir ses créations inspirées de ses racines rétaises. Notre conseil gourmand : goûtez le pain au chocolat praliné. »</blockquote>
+        <blockquote>
+          « Commencez la journée par les Halles, puis passez chez Nina Métayer
+          pour découvrir ses créations inspirées de ses racines rétaises. Notre
+          conseil gourmand : goûtez le pain au chocolat praliné. »
+        </blockquote>
+      </section>
+
+      <section className={styles.stayOptions}>
+        <div className={`${styles.stayOptionsInner} shell`}>
+          <div>
+            <p className="eyebrow">Personnalisez votre séjour</p>
+            <h2>La liberté d’arriver comme vous l’aimez.</h2>
+          </div>
+          <div className={styles.optionCards}>
+            <article>
+              <span>Inclus</span>
+              <h3>Arrivée autonome</h3>
+              <p>
+                Des informations claires et complètes vous permettent de vous
+                installer sereinement, à votre rythme.
+              </p>
+            </article>
+            <article>
+              <span>En option</span>
+              <h3>Arrivée personnalisée Beaux Rivages</h3>
+              <p>
+                Stéphanie ou Bruno vous accueille, vous présente la maison et
+                partage ses recommandations selon vos envies.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.practical}>
+        <div className={`${styles.practicalInner} shell`}>
+          <div>
+            <p className="eyebrow light">Informations pratiques</p>
+            <h2>Une réservation claire, sans surprise.</h2>
+          </div>
+          <div className={styles.practicalGrid}>
+            <div>
+              <strong>Linge en option</strong>
+              <p>20 € par personne pour un séjour prêt à vivre dès l’arrivée.</p>
+            </div>
+            <div>
+              <strong>Animaux bienvenus</strong>
+              <p>25 € par animal et par séjour, avec gamelles mises à disposition.</p>
+            </div>
+            <div>
+              <strong>Paiements acceptés</strong>
+              <p>Chèques-Vacances, virement bancaire et espèces.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className={styles.cta}>
         <div className="shell">
           <p className="eyebrow light">Votre séjour sur l’Île de Ré</p>
           <h2>Le Chai des Tortues vous attend.</h2>
-          <p>Écrivez directement à Stéphanie pour connaître les disponibilités, les conditions et personnaliser votre séjour.</p>
-          <a className="button" href="mailto:coulotstephanie@gmail.com?subject=Demande%20de%20séjour%20-%20Le%20Chai%20des%20Tortues">Contacter Stéphanie</a>
+          <p>
+            Écrivez directement à Stéphanie pour connaître les disponibilités,
+            les conditions et personnaliser votre séjour.
+          </p>
+          <a
+            className="button"
+            href="mailto:coulotstephanie@gmail.com?subject=Demande%20de%20séjour%20-%20Le%20Chai%20des%20Tortues"
+          >
+            Contacter Stéphanie
+          </a>
         </div>
       </section>
 
