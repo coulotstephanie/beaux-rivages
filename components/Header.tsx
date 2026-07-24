@@ -5,8 +5,8 @@ const links = [
   ["Nos maisons", "/#maisons"],
   ["Les îles", "/#iles"],
   ["Le Carnet", "/carnet"],
+  ["Construisez votre séjour", "/construisez-votre-sejour"],
   ["L’hospitalité", "/#hospitalite"],
-  ["Contact", "/#contact"],
 ] as const;
 
 export function Header() {
