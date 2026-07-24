@@ -1,0 +1,249 @@
+.page {
+  background: #f4f1e9;
+  color: #21392f;
+}
+
+.hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(17, 42, 36, 0.08), rgba(17, 42, 36, 0.72)),
+    radial-gradient(circle at 72% 24%, rgba(255,255,255,0.28), transparent 28%),
+    linear-gradient(145deg, #b3c6b1 0%, #6c8f7b 40%, #284b43 100%);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -18% 26%;
+  height: 46%;
+  border-radius: 50% 50% 0 0;
+  background: rgba(226, 235, 224, 0.11);
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(12, 34, 29, 0.7) 0%, rgba(12, 34, 29, 0.2) 64%, transparent 100%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 850px;
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+  color: white;
+}
+
+.heroContent h1 {
+  margin: 0 0 1.25rem;
+  font-size: clamp(3.4rem, 8vw, 7.2rem);
+  line-height: 0.92;
+  font-weight: 500;
+  letter-spacing: -0.055em;
+}
+
+.heroContent > p:not(:first-child) {
+  max-width: 760px;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 2rem;
+}
+
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid rgba(33, 57, 47, 0.16);
+}
+
+.highlights div {
+  padding: 2.2rem 1.5rem;
+  border-right: 1px solid rgba(33, 57, 47, 0.14);
+}
+
+.highlights div:last-child { border-right: 0; }
+.highlights strong,
+.highlights span { display: block; }
+.highlights strong { font-size: 1.18rem; margin-bottom: 0.35rem; }
+.highlights span { color: #68766f; }
+
+.intro,
+.comfort {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(3rem, 8vw, 8rem);
+  padding-top: clamp(5rem, 10vw, 9rem);
+  padding-bottom: clamp(5rem, 10vw, 9rem);
+}
+
+.intro h2,
+.historyCopy h2,
+.arrival h2,
+.beach h2,
+.comfort h2,
+.moments h2,
+.cta h2 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4.7rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+
+.introText,
+.comfortList,
+.beachText {
+  display: grid;
+  gap: 1.2rem;
+  align-content: center;
+  color: #5e6e66;
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.history {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  min-height: 650px;
+  background: #203c34;
+  color: white;
+}
+
+.historyVisual {
+  min-height: 620px;
+  background:
+    linear-gradient(180deg, rgba(31, 60, 52, 0.05), rgba(31, 60, 52, 0.36)),
+    radial-gradient(circle at 38% 22%, rgba(255,255,255,0.26), transparent 22%),
+    linear-gradient(145deg, #aebea5 0%, #758b6c 44%, #3e5a48 100%);
+}
+
+.historyCopy {
+  padding: clamp(4rem, 7vw, 7rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.historyCopy p:last-child {
+  margin-top: 1.5rem;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.75;
+}
+
+.arrival,
+.moments {
+  padding-top: clamp(5rem, 9vw, 8rem);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.sectionHeading {
+  max-width: 880px;
+  margin-bottom: 3.5rem;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(33, 57, 47, 0.16);
+  border: 1px solid rgba(33, 57, 47, 0.16);
+}
+
+.cardGrid article {
+  background: #f4f1e9;
+  min-height: 310px;
+  padding: 2.3rem;
+}
+
+.cardGrid span {
+  display: block;
+  margin-bottom: 3rem;
+  color: #8a9891;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+}
+
+.cardGrid h3 {
+  margin: 0 0 1rem;
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+.cardGrid p {
+  color: #65746d;
+  line-height: 1.7;
+}
+
+.beach {
+  background: linear-gradient(135deg, #25534d, #163d38);
+  color: white;
+}
+
+.beachInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(3rem, 8vw, 8rem);
+  padding-top: clamp(5rem, 9vw, 8rem);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.beachText { color: rgba(255,255,255,0.78); }
+
+.localTip {
+  background: #c7b28d;
+  color: #1a332c;
+  padding: clamp(4rem, 8vw, 7rem) 0;
+}
+
+.localTip blockquote {
+  max-width: 980px;
+  margin: 1.3rem 0 0;
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.cta {
+  background: #17362f;
+  color: white;
+  text-align: center;
+  padding: clamp(5rem, 10vw, 9rem) 0;
+}
+
+.cta p:not(:first-child) {
+  max-width: 700px;
+  margin: 1.4rem auto 2rem;
+  color: rgba(255,255,255,0.76);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .highlights { grid-template-columns: repeat(2, 1fr); }
+  .highlights div:nth-child(2) { border-right: 0; }
+  .intro,
+  .history,
+  .beachInner,
+  .comfort { grid-template-columns: 1fr; }
+  .historyVisual { min-height: 420px; }
+  .cardGrid { grid-template-columns: 1fr; }
+  .cardGrid article { min-height: auto; }
+}
+
+@media (max-width: 560px) {
+  .hero { min-height: 79vh; }
+  .heroContent { padding-bottom: 3rem; }
+  .highlights { grid-template-columns: 1fr; }
+  .highlights div { border-right: 0; border-bottom: 1px solid rgba(33, 57, 47, 0.14); }
+  .highlights div:last-child { border-bottom: 0; }
+  .historyCopy { padding: 3.5rem 1.4rem; }
+  .localTip blockquote { font-size: 1.8rem; }
+}
