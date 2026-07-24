@@ -44,6 +44,24 @@ const moments = [
   },
 ] as const;
 
+const reasons = [
+  {
+    number: "01",
+    title: "Une attention sincère",
+    text: "Une carafe d’eau fraîche au réfrigérateur, une attention locale et des maisons préparées avec le même soin que si nous recevions des amis.",
+  },
+  {
+    number: "02",
+    title: "Des adresses vraiment vécues",
+    text: "Nous habitons les îles toute l’année. Nos conseils viennent de nos habitudes, de nos producteurs et des lieux où nous aimons revenir.",
+  },
+  {
+    number: "03",
+    title: "La liberté d’être accueilli à sa façon",
+    text: "Arrivée autonome pour profiter immédiatement, ou accueil personnalisé par Stéphanie ou Bruno pour commencer le séjour accompagné.",
+  },
+] as const;
+
 export default function HomePage() {
   return (
     <main>
@@ -101,6 +119,24 @@ export default function HomePage() {
               <p>{moment.text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="returning-guests">
+        <div className="returning-guests-inner shell">
+          <div className="returning-guests-heading">
+            <p className="eyebrow light">Pourquoi nos voyageurs reviennent</p>
+            <h2>Parce qu’un beau séjour se joue souvent dans les détails que l’on n’oublie pas.</h2>
+          </div>
+          <div className="reasons-grid">
+            {reasons.map((reason) => (
+              <article className="reason-card" key={reason.number}>
+                <span>{reason.number}</span>
+                <h3>{reason.title}</h3>
+                <p>{reason.text}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
