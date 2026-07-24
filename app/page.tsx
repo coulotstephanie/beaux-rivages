@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
@@ -27,6 +28,21 @@ const properties = [
   },
 ] as const;
 
+const moments = [
+  {
+    title: "Le matin, au rythme des marchés",
+    text: "Un panier à la main, quelques produits choisis chez nos producteurs préférés et le plaisir de préparer un déjeuner qui sent déjà les vacances.",
+  },
+  {
+    title: "L’après-midi, entre vélo et océan",
+    text: "Des pistes cyclables, des chemins bordés de pins et cette lumière atlantique qui accompagne chaque détour jusqu’à la plage.",
+  },
+  {
+    title: "Le soir, simplement ensemble",
+    text: "Une grande table, des huîtres, un coucher de soleil et le sentiment précieux de ralentir enfin.",
+  },
+] as const;
+
 export default function HomePage() {
   return (
     <main>
@@ -39,6 +55,16 @@ export default function HomePage() {
         <p>Beaux Rivages réunit trois lieux singuliers sur l’Île de Ré et l’Île d’Oléron. Chaque séjour associe le caractère d’une maison, nos adresses testées toute l’année et une hospitalité façonnée par trois générations d’expérience hôtelière.</p>
       </section>
 
+      <section className="manifesto" aria-label="La promesse Beaux Rivages">
+        <div className="manifesto-image" aria-hidden="true" />
+        <div className="manifesto-copy">
+          <p className="eyebrow light">L’Atlantique comme horizon</p>
+          <h2>Partir avant même d’avoir fait ses valises.</h2>
+          <p>Le séjour commence ici : dans le bruit des vagues, la lumière qui glisse sur les façades, le marché du matin et les chemins qui mènent à l’océan. Nos maisons ne sont pas une destination à part. Elles sont une manière plus intime de vivre les îles.</p>
+          <Link className="text-link light-link" href="#maisons">Choisir son atmosphère <span>→</span></Link>
+        </div>
+      </section>
+
       <section className="benefits shell" aria-label="Avantages de la réservation directe">
         <div><strong>Réservation directe</strong><span>Une relation simple, sans intermédiaire</span></div>
         <div><strong>Conseils locaux</strong><span>Les adresses de Stéphanie & Bruno</span></div>
@@ -47,12 +73,31 @@ export default function HomePage() {
       </section>
 
       <section className="properties shell" id="maisons">
-        <div className="section-heading">
-          <p className="eyebrow">Nos maisons</p>
-          <h2>Trois atmosphères, une même exigence.</h2>
+        <div className="section-heading split-heading">
+          <div>
+            <p className="eyebrow">Nos maisons</p>
+            <h2>Trois atmosphères, une même exigence.</h2>
+          </div>
+          <p>Patrimoine et convivialité, design face à l’océan ou sérénité au bord de la plage : choisissez la maison qui ressemble à votre prochaine parenthèse.</p>
         </div>
         <div className="property-grid">
           {properties.map((property) => <PropertyCard key={property.name} {...property} />)}
+        </div>
+      </section>
+
+      <section className="ideal-day shell">
+        <div className="section-heading">
+          <p className="eyebrow">Une journée idéale</p>
+          <h2>Les îles se racontent dans les petits moments.</h2>
+        </div>
+        <div className="moments-grid">
+          {moments.map((moment, index) => (
+            <article className="moment-card" key={moment.title}>
+              <span>0{index + 1}</span>
+              <h3>{moment.title}</h3>
+              <p>{moment.text}</p>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -62,6 +107,18 @@ export default function HomePage() {
           <p className="eyebrow">Le mot de Stéphanie</p>
           <h2>L’excellence de l’hôtellerie, le charme d’une maison de famille.</h2>
           <p>Nous souhaitons que vous vous sentiez chez nous comme accueillis par des amis : libres de profiter de votre séjour en toute indépendance, mais toujours accompagnés lorsque vous avez besoin d’un conseil ou d’une attention particulière.</p>
+          <p className="signature">Stéphanie & Bruno</p>
+        </div>
+      </section>
+
+      <section className="carnet shell">
+        <div>
+          <p className="eyebrow">Le Carnet Beaux Rivages</p>
+          <h2>Nos bonnes adresses, réellement testées toute l’année.</h2>
+        </div>
+        <div className="carnet-copy">
+          <p>Ostréiculteurs, marchés, pâtisseries, restaurants, plages selon le vent, balades à vélo et escapades de saison : nous partageons les lieux que nous aimons et les conseils que nous donnons à nos proches.</p>
+          <Link className="button" href="/carnet">Ouvrir le Carnet</Link>
         </div>
       </section>
 
