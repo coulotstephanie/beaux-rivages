@@ -71,7 +71,7 @@ export default function VillaRaieMantaPage() {
             Villa Raie Manta a été entièrement rénovée pour offrir une expérience fluide, lumineuse et généreuse. Son parti pris architectural est sa signature : installer le salon à l’étage afin d’ouvrir la maison sur l’océan et le pont de l’Île de Ré.
           </p>
           <p>
-            Les espaces accueillent jusqu’à huit voyageurs et un bébé, avec quatre chambres, deux salles de bain, deux WC, une grande cuisine-salle à manger et une terrasse pensée pour prolonger les journées dehors.
+            Les espaces accueillent jusqu’à huit voyageurs et un bébé, avec quatre chambres, deux salles de bain, trois WC — dont un à l’étage —, une grande cuisine-salle à manger et une terrasse pensée pour prolonger les journées dehors.
           </p>
         </div>
       </section>
@@ -122,7 +122,7 @@ export default function VillaRaieMantaPage() {
               Une suite au rez-de-chaussée facilite les séjours intergénérationnels. À l’étage, une chambre profite d’une vue mer remarquable, accompagnée d’une chambre avec lits jumeaux et d’une chambre pensée pour les enfants.
             </p>
             <p>
-              Deux salles de bain et deux WC permettent à huit voyageurs de séjourner confortablement, tout en conservant des espaces calmes et intimes.
+              Deux salles de bain et trois WC, dont un à l’étage, permettent à huit voyageurs de séjourner confortablement, tout en conservant des espaces calmes et intimes.
             </p>
           </div>
         </div>
