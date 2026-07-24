@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { PropertyCard } from "@/components/PropertyCard";
+import { StayInspiration } from "@/components/StayInspiration";
 
 const properties = [
   {
@@ -84,6 +85,8 @@ export default function HomePage() {
           {properties.map((property) => <PropertyCard key={property.name} {...property} />)}
         </div>
       </section>
+
+      <StayInspiration />
 
       <section className="ideal-day shell">
         <div className="section-heading">
