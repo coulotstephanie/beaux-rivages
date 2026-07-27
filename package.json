@@ -14,10 +14,12 @@
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --linked --schema public > platform/database/database.types.ts",
     "db:backup": "bash scripts/backup-supabase.sh",
+    "archives:search": "node scripts/search-archives.mjs",
     "validate": "npm run lint && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.9",
+    "framer-motion": "^12.42.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.27.0",
     "next": "^15.5.22",

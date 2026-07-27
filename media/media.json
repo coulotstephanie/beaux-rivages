@@ -1,0 +1,81 @@
+[
+  {
+    "id": "brand-film-v1",
+    "title": "Film Beaux Rivages v1",
+    "description": "Film manifeste : territoire, art de vivre, maisons et hospitalité.",
+    "type": "video",
+    "src": "/videos/beaux-rivages-hero-v1.mp4",
+    "webm": "/videos/beaux-rivages-hero-v1.webm",
+    "location": "Îles de Ré et d’Oléron",
+    "property": "brand",
+    "emotion": ["calme", "évasion", "désir"],
+    "season": ["toute-annee"],
+    "priority": 10,
+    "tags": ["hero", "océan", "hospitalité", "maisons"]
+  },
+  {
+    "id": "destination-pont-rose",
+    "title": "Le pont dans la lumière rose",
+    "description": "Le pont de l’Île de Ré sous un ciel rose.",
+    "type": "image",
+    "src": "/images/destination/pont-ile-de-re-rose.jpg",
+    "location": "Rivedoux-Plage",
+    "property": "destination",
+    "emotion": ["lumière", "calme"],
+    "season": ["toute-annee"],
+    "priority": 10,
+    "tags": ["île-de-ré", "pont", "coucher-de-soleil"]
+  },
+  {
+    "id": "destination-fort-boyard",
+    "title": "Fort Boyard depuis la plage",
+    "description": "La silhouette du fort face aux Saumonards.",
+    "type": "image",
+    "src": "/images/destination/fort-boyard-depuis-plage.jpg",
+    "location": "Boyardville",
+    "property": "nid",
+    "emotion": ["évasion", "famille"],
+    "season": ["printemps", "été"],
+    "priority": 10,
+    "tags": ["île-d-oléron", "plage", "fort-boyard"]
+  },
+  {
+    "id": "villa-vue-ocean",
+    "title": "Vue mer de Villa Raie Manta",
+    "description": "L’océan depuis le séjour de la villa.",
+    "type": "image",
+    "src": "/images/properties/villa-raie-manta/vue-ocean.jpeg",
+    "location": "Rivedoux-Plage",
+    "property": "villa",
+    "emotion": ["lumière", "contemplation"],
+    "season": ["toute-annee"],
+    "priority": 10,
+    "tags": ["vue-mer", "salon", "île-de-ré"]
+  },
+  {
+    "id": "chai-film",
+    "title": "Le film du Chai des Tortues",
+    "description": "La pierre, le bois et la lumière du Chai.",
+    "type": "video",
+    "src": "/videos/chai-des-tortues-film-sans-son.mp4",
+    "location": "Rivedoux-Plage",
+    "property": "chai",
+    "emotion": ["chaleur", "authenticité"],
+    "season": ["toute-annee"],
+    "priority": 9,
+    "tags": ["pierre", "maison", "visite"]
+  },
+  {
+    "id": "nid-acces-plage",
+    "title": "La plage au bout du chemin",
+    "description": "Accès à la plage des Saumonards.",
+    "type": "image",
+    "src": "/images/properties/nid-d-ete/acces-plage.jpeg",
+    "location": "Boyardville",
+    "property": "nid",
+    "emotion": ["liberté", "famille"],
+    "season": ["printemps", "été"],
+    "priority": 10,
+    "tags": ["plage", "île-d-oléron", "saumonards"]
+  }
+]

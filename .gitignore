@@ -4,6 +4,8 @@ out/
 .vercel/
 .env
 .env.local
+/film-kit/*.mp4
+/film-kit/*.webm
 .env.*.local
 *.log
 .DS_Store

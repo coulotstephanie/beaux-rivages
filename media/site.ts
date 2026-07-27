@@ -25,6 +25,8 @@ export const siteMedia = {
   },
   properties: propertyMedia,
   video: {
-    homepageHero: "/videos/beaux-rivages-hero.mp4",
+    homepageHero: "/videos/beaux-rivages-hero-v1.mp4",
+    homepageHeroWebm: "/videos/beaux-rivages-hero-v1.webm",
+    homepageHeroLegacy: "/videos/beaux-rivages-hero.mp4",
   },
 } as const;

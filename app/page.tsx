@@ -4,13 +4,13 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PropertyCard } from "@/components/PropertyCard";
 import { properties } from "@/data";
-import { Badge, Button, Card, Container, Heading, Section } from "@/components/ui";
+import { Badge, Button, Card, Heading, Section } from "@/components/ui";
 import { FutureVisualScenes } from "@/components/FutureVisualScenes";
 import { siteMedia } from "@/media/site";
 import { PageStructuredData } from "@/components/PageStructuredData";
 import { staticPageSeo } from "@/content/fr/seo";
 import { createPageMetadata } from "@/seo";
-import { CinematicHeroMedia } from "@/components/CinematicHeroMedia";
+import { HeroVideo, VideoOverlay } from "@/components/media";
 
 const pageSeo = staticPageSeo["/"];
 
@@ -65,20 +65,16 @@ export default function HomePage() {
 
       <section className="premium-hero" aria-labelledby="home-title">
         <div className="premium-hero__media">
-          <CinematicHeroMedia poster={siteMedia.destination.sea} sequences={[
-            { src: siteMedia.video.homepageHero, label: "Océan · Pont de Ré · Fort Boyard · Maisons" },
-          ]} sound={false} />
+          <HeroVideo
+            poster={siteMedia.destination.sea}
+            sources={{
+              mp4: siteMedia.video.homepageHero,
+              webm: siteMedia.video.homepageHeroWebm,
+            }}
+          />
         </div>
         <div className="premium-hero__overlay" />
-        <Container size="wide" className="premium-hero__content">
-          <Badge light>Hospitalité sur les îles</Badge>
-          <h1 id="home-title">Nous ouvrons les portes des îles.</h1>
-          <p>Trois maisons de caractère, une sélection d’adresses réellement testées et une attention portée à chaque détail du séjour.</p>
-          <div className="premium-hero__actions">
-            <Button href="#maisons">Découvrir les maisons</Button>
-            <Button href="/destinations" variant="secondary">Explorer les îles</Button>
-          </div>
-        </Container>
+        <div id="home-title"><VideoOverlay /></div>
         <a className="scroll-indicator" href="#pourquoi" aria-label="Faire défiler vers la suite">
           <span />
           Découvrir
