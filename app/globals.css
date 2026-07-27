@@ -2724,7 +2724,8 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-dashboard-page { min-height: 100vh; padding-bottom: 6rem; color: #193530; background: #f3efe7; }
 .admin-dashboard-page > header { min-height: 90px; padding: 1rem 4vw; display: flex; align-items: center; justify-content: space-between; color: white; background: #163832; }
 .admin-dashboard-page > header nav { display: flex; flex-wrap: wrap; gap: 1rem; }
-.admin-dashboard-page > header nav a { color: inherit; }
+.admin-dashboard-page > header .brand-logo small { color: #c9ac7e; }
+.admin-dashboard-page > header nav a { min-height: 44px; padding: .55rem .15rem; display: inline-flex; align-items: center; color: inherit; }
 .admin-dashboard-page > .shell { width: min(1520px,92vw); padding-top: clamp(2.5rem,6vw,6rem); }
 .admin-dashboard-page h1 { max-width: 980px; margin-bottom: .7rem; font-family: var(--font-serif); font-size: clamp(2.8rem,6vw,5.8rem); font-weight: 400; line-height: .95; }
 .admin-dashboard-page__intro { max-width: 720px; margin-bottom: 2.5rem; color: #536863; font-size: 1.05rem; }
