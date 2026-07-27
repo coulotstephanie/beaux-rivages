@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { AmbientSound } from "@/components/AmbientSound";
 import { PremiumUX } from "@/components/PremiumUX";
+import { Analytics } from "@/components/Analytics";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   applicationName: "Beaux Rivages",
   keywords: ["Île de Ré", "Île d’Oléron", "maison de vacances", "location saisonnière", "Beaux Rivages"],
   robots: { index: true, follow: true },
+  verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION },
   icons: { icon: "/icon.svg" },
 };
 
@@ -29,6 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div id="main-content" tabIndex={-1}>{children}</div>
         <PremiumUX />
         <AmbientSound />
+        <Analytics />
       </body>
     </html>
   );

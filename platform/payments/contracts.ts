@@ -1,0 +1,20 @@
+export type PaymentPurpose = "deposit" | "full-payment" | "balance";
+export type PaymentRecord = {
+  id: string;
+  reservationId: string;
+  purpose: PaymentPurpose;
+  amount: number;
+  currency: "EUR";
+  provider: "stripe";
+  providerId: string;
+  status: "pending" | "paid" | "failed" | "refunded";
+  createdAt: string;
+  updatedAt: string;
+};
+export interface PaymentRepository {
+  save(payment: PaymentRecord): Promise<PaymentRecord>;
+  findByProviderId(providerId: string): Promise<PaymentRecord | null>;
+}
+export interface RefundGateway {
+  refund(input: { paymentProviderId: string; amount?: number; reason?: string }): Promise<{ refundId: string; status: string }>;
+}

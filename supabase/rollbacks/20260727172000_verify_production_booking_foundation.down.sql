@@ -1,0 +1,2 @@
+-- No rollback operation: the verification migration creates no persistent object
+-- and rolls back all fixtures inside a PL/pgSQL subtransaction.

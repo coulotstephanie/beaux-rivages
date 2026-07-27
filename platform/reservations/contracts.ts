@@ -20,3 +20,9 @@ export interface ReservationRepository {
 export interface PaymentGateway {
   createCheckout(reservation: Reservation): Promise<{ url: string; externalId: string }>;
 }
+export type PaymentMethod = "stripe" | "bank-transfer" | "cash" | "holiday-vouchers";
+export interface PaymentMethodAdapter {
+  readonly method: PaymentMethod;
+  readonly enabled: boolean;
+  prepare(reservation: Reservation): Promise<{ status: "disabled" | "prepared"; instructions?: string }>;
+}

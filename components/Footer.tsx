@@ -37,6 +37,7 @@ export function Footer() {
             <Link href="/sejour">Votre séjour</Link>
             <Link href="/avant-arrivee">Avant votre arrivée</Link>
             <Link href="/conseils">Les conseils de Stéphanie & Bruno</Link>
+            <Link href="/mot-de-stephanie">Le mot de Stéphanie</Link>
             <Link href="/saisons">Les saisons</Link>
             <Link href="/coulisses">Les coulisses</Link>
             <Link href="/avis">Avis voyageurs</Link>

@@ -79,6 +79,13 @@ export const staticPageSeo = {
     breadcrumbs: [home, { name: "Conseils de Stéphanie et Bruno", path: "/conseils" }],
     schemaTypes: ["CollectionPage"],
   },
+  "/mot-de-stephanie": {
+    title: "Le mot de Stéphanie | L’hospitalité Beaux Rivages",
+    description: "La lettre de Stéphanie, l’histoire familiale et la philosophie d’accueil qui donnent vie aux maisons Beaux Rivages.",
+    path: "/mot-de-stephanie",
+    breadcrumbs: [home, { name: "Le mot de Stéphanie", path: "/mot-de-stephanie" }],
+    schemaTypes: ["WebPage"],
+  },
   "/inspiration": {
     title: "Inspirez-moi | Votre séjour personnalisé Beaux Rivages",
     description: "Trouvez votre maison idéale, vos expériences et vos bonnes adresses selon votre façon de voyager et vos envies.",

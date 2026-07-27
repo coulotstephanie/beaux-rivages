@@ -3,7 +3,7 @@ import type { Property } from "./data";
 export type BookingStep = 1 | 2 | 3 | 4;
 export type GuestCounts = { adults: number; children: number; babies: number; pets: number };
 export type AttentionType = "Anniversaire" | "Lune de miel" | "Demande en mariage" | "Anniversaire de mariage" | "Autre";
-export type StayOptionId = "signature" | "linen" | "beach-towels" | "robes" | "slippers" | "personal-arrival" | "late-checkout" | "pet" | "basket";
+export type StayOptionId = "signature" | "linen" | "beach-towels" | "robes" | "slippers" | "personal-arrival" | "late-checkout" | "pet" | "aperitif-basket" | "basket";
 export type StayOption = { id: StayOptionId; label: string; description: string; price: number; unit?: string };
 export type BookingExperienceId = "romance" | "anniversaire" | "lune-de-miel" | "fruits-de-mer" | "velo" | "famille";
 export type BookingExperienceOption = {
@@ -59,6 +59,7 @@ export const stayOptions: StayOption[] = [
   { id: "personal-arrival", label: "Arrivée personnalisée", description: "Une mise en scène adaptée à votre séjour et à votre heure d’arrivée.", price: 35 },
   { id: "late-checkout", label: "Départ tardif", description: "Profitez de quelques heures supplémentaires, selon disponibilité.", price: 55 },
   { id: "pet", label: "Animal", description: "Accueil d’un animal avec gamelles mises à disposition.", price: 25, unit: "par séjour" },
+  { id: "aperitif-basket", label: "Panier apéritif", description: "Une sélection conviviale inspirée des producteurs et saveurs des îles.", price: 52 },
   { id: "basket", label: "Panier gourmand", description: "Une sélection de saison, salée ou sucrée, préparée pour votre arrivée.", price: 48 },
 ];
 

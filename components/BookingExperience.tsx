@@ -57,6 +57,7 @@ export function BookingExperience({
     attentionMessage: "",
   });
   const [preview, setPreview] = useState(false);
+  const [finalValidation, setFinalValidation] = useState<{ status: "idle" | "checking" | "error"; message?: string }>({ status: "idle" });
   const contentRef = useRef<HTMLDivElement>(null);
   const selectedProperty = useMemo(() => properties.find((property) => property.slug === selection.propertySlug), [selection.propertySlug]);
 
@@ -89,14 +90,34 @@ export function BookingExperience({
   const updateExperiences = (experiences: BookingExperienceId[]) => setSelection((current) => ({ ...current, experiences }));
   const updateAttention = (attention: AttentionType | null, attentionMessage: string) => setSelection((current) => ({ ...current, attention, attentionMessage }));
 
-  const continueJourney = () => {
+  const continueJourney = async () => {
     if (!canContinue) return;
     if (step < 4) {
       const next = (step + 1) as BookingStep;
       setMaxAccessible((current) => Math.max(current, next) as BookingStep);
       changeStep(next);
     }
-    else {
+    else if (selectedProperty && selection.arrival && selection.departure) {
+      setFinalValidation({ status: "checking" });
+      const response = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertySlug: selectedProperty.slug,
+          arrival: selection.arrival,
+          departure: selection.departure,
+          ...selection.guests,
+          options: selection.options,
+          experiences: selection.experiences,
+        }),
+      });
+      const result = await response.json() as { error?: string };
+      if (!response.ok) {
+        setPreview(false);
+        setFinalValidation({ status: "error", message: result.error ?? "La disponibilité ou le tarif ne peut pas être confirmé." });
+        return;
+      }
+      setFinalValidation({ status: "idle" });
       setPreview(true);
       requestAnimationFrame(() => document.getElementById("booking-preview")?.scrollIntoView({ behavior: "smooth" }));
     }
@@ -123,6 +144,7 @@ export function BookingExperience({
               <AvailabilityCalendar
                 arrival={selection.arrival}
                 departure={selection.departure}
+                propertySlug={selection.propertySlug ?? ""}
                 onChange={(arrival, departure) => setSelection((current) => ({ ...current, arrival, departure }))}
               />
             </section>
@@ -147,10 +169,11 @@ export function BookingExperience({
           )}
           <div className="booking-experience__navigation">
             {step > 1 && <button type="button" onClick={() => changeStep((step - 1) as BookingStep)}>← Retour</button>}
-            <button type="button" className="booking-next-button" disabled={!canContinue} onClick={continueJourney}>
-              {step === 4 ? "Voir mon séjour" : "Continuer"} <span aria-hidden="true">→</span>
+            <button type="button" className="booking-next-button" disabled={!canContinue || finalValidation.status === "checking"} onClick={() => void continueJourney()}>
+              {finalValidation.status === "checking" ? "Vérification…" : step === 4 ? "Voir mon séjour" : "Continuer"} <span aria-hidden="true">→</span>
             </button>
             {!canContinue && <p role="status">{step === 1 ? "Choisissez une maison pour continuer." : "Choisissez une date d’arrivée et de départ."}</p>}
+            {finalValidation.status === "error" ? <p role="alert">{finalValidation.message}</p> : null}
           </div>
         </div>
         <BookingSidebar selection={selection} property={selectedProperty} />

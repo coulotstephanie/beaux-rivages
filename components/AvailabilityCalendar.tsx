@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { trackEvent } from "@/platform/analytics/events";
 
 type AvailabilityCalendarProps = {
   arrival: string | null;
   departure: string | null;
+  propertySlug: string;
   onChange: (arrival: string | null, departure: string | null) => void;
 };
 
@@ -22,7 +24,9 @@ function fromISO(value: string) {
   return new Date(`${value}T12:00:00`);
 }
 
-export function AvailabilityCalendar({ arrival, departure, onChange }: AvailabilityCalendarProps) {
+type CalendarBlock = { startsOn: string; endsOn: string; status: string };
+
+export function AvailabilityCalendar({ arrival, departure, propertySlug, onChange }: AvailabilityCalendarProps) {
   const [view, setView] = useState(() => {
     const base = new Date();
     return new Date(base.getFullYear(), base.getMonth(), 1);
@@ -32,6 +36,26 @@ export function AvailabilityCalendar({ arrival, departure, onChange }: Availabil
     date.setHours(0, 0, 0, 0);
     return date;
   }, []);
+  const [blocks, setBlocks] = useState<CalendarBlock[]>([]);
+  const [calendarStatus, setCalendarStatus] = useState<"loading" | "ready" | "error">("loading");
+  useEffect(() => {
+    const controller = new AbortController();
+    setCalendarStatus("loading");
+    fetch(`/api/calendar?property=${encodeURIComponent(propertySlug)}`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("calendar");
+        return response.json() as Promise<{ blocks: CalendarBlock[] }>;
+      })
+      .then((data) => {
+        setBlocks(data.blocks);
+        setCalendarStatus("ready");
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setCalendarStatus("error");
+      });
+    return () => controller.abort();
+  }, [propertySlug]);
   const days = useMemo(() => {
     const firstDay = (view.getDay() + 6) % 7;
     const count = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
@@ -40,8 +64,16 @@ export function AvailabilityCalendar({ arrival, departure, onChange }: Availabil
 
   const selectDate = (date: Date) => {
     const value = toISO(date);
+    const occupied = blocks.some((block) => value >= block.startsOn && value < block.endsOn);
+    if (occupied) return;
     if (!arrival || departure || value < arrival) onChange(value, null);
-    else if (value > arrival) onChange(arrival, value);
+    else if (value > arrival) {
+      const crossesOccupiedStay = blocks.some((block) => arrival < block.endsOn && value > block.startsOn);
+      if (!crossesOccupiedStay) {
+        onChange(arrival, value);
+        trackEvent("search_availability", { property_slug: propertySlug, arrival, departure: value });
+      }
+    }
   };
 
   return (
@@ -63,16 +95,19 @@ export function AvailabilityCalendar({ arrival, departure, onChange }: Availabil
             if (!date) return <span key={`empty-${index}`} />;
             const value = toISO(date);
             const disabled = date < today;
+            const occupied = blocks.some((block) => value >= block.startsOn && value < block.endsOn);
+            const arrivalDay = blocks.some((block) => value === block.startsOn);
+            const departureDay = blocks.some((block) => value === block.endsOn);
             const selected = value === arrival || value === departure;
             const inRange = Boolean(arrival && departure && value > arrival && value < departure);
             return (
               <button
                 type="button"
                 key={value}
-                disabled={disabled}
-                className={`${selected ? "is-selected" : ""}${inRange ? " is-in-range" : ""}`}
+                disabled={disabled || occupied || calendarStatus !== "ready"}
+                className={`${selected ? "is-selected" : ""}${inRange ? " is-in-range" : ""}${occupied ? " is-occupied" : ""}${arrivalDay ? " is-arrival" : ""}${departureDay ? " is-departure" : ""}`}
                 onClick={() => selectDate(date)}
-                aria-label={date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+                aria-label={`${date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}${occupied ? ", occupé" : arrivalDay ? ", arrivée" : departureDay ? ", départ" : ", disponible"}`}
                 aria-pressed={selected}
               >
                 {date.getDate()}
@@ -81,7 +116,15 @@ export function AvailabilityCalendar({ arrival, departure, onChange }: Availabil
           })}
         </div>
       </div>
-      <p className="booking-disclaimer">Calendrier de démonstration — les disponibilités réelles seront confirmées par Stéphanie.</p>
+      <div className="availability-calendar__legend" aria-label="Légende du calendrier">
+        <span><i className="is-free" />Disponible</span>
+        <span><i className="is-occupied" />Occupé</span>
+        <span><i className="is-arrival" />Arrivée</span>
+        <span><i className="is-departure" />Départ</span>
+      </div>
+      <p className="booking-disclaimer" role="status">
+        {calendarStatus === "loading" ? "Synchronisation des calendriers…" : calendarStatus === "error" ? "Le calendrier ne peut pas être vérifié pour le moment. Contactez Stéphanie avant toute demande." : "Disponibilités synchronisées avec les calendriers des plateformes. Une ultime vérification est effectuée lors de la demande."}
+      </p>
     </div>
   );
 }

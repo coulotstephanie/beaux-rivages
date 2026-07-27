@@ -15,7 +15,7 @@ export const metadata = createPageMetadata({
   image: siteMedia.destination.sea,
 });
 
-const optionIds: StayOptionId[] = ["signature", "linen", "beach-towels", "robes", "slippers", "personal-arrival", "late-checkout", "pet", "basket"];
+const optionIds: StayOptionId[] = ["signature", "linen", "beach-towels", "robes", "slippers", "personal-arrival", "late-checkout", "pet", "aperitif-basket", "basket"];
 
 export default async function BookingPage({ searchParams }: { searchParams: Promise<{ maison?: string; option?: string; options?: string; experience?: string; experiences?: string }> }) {
   const { maison, option, options, experience, experiences } = await searchParams;

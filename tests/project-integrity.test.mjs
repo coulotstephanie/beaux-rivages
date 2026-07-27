@@ -263,3 +263,48 @@ test("premium media remains operable with keyboard, touch, zoom and video", () =
   assert.match(lightbox, /pointerStart/);
   assert.match(seasons, /<video/);
 });
+
+test("pricing plans configure every house without platform scraping", () => {
+  const configuration = JSON.parse(read("content/rates.json"));
+  const expected = new Set(["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]);
+  assert.equal(configuration.plans.length, 3);
+  for (const plan of configuration.plans) {
+    expected.delete(plan.propertySlug);
+    for (const key of ["baseNightlyRate", "weekendNightlyRate", "minimumNights", "maximumNights", "cleaningFee", "securityDeposit"]) {
+      assert.equal(typeof plan[key], "number", `${plan.propertySlug}.${key} should be numeric`);
+      assert.ok(plan[key] >= 0, `${plan.propertySlug}.${key} should be positive`);
+    }
+    assert.ok(plan.maximumNights >= plan.minimumNights);
+    assert.ok(plan.seasons.length >= 3);
+    assert.ok(plan.promotions.some((promotion) => promotion.kind === "long-stay"));
+  }
+  assert.equal(expected.size, 0);
+  const pricingSource = read("platform/pricing/service.ts");
+  assert.doesNotMatch(pricingSource, /airbnb|booking\.com|abritel|scrap/i);
+});
+
+test("pricing engine supports daily rates, stay rules, fees and promotions", () => {
+  const contracts = read("platform/pricing/contracts.ts");
+  const service = read("platform/pricing/service.ts");
+  for (const capability of ["baseNightlyRate", "weekendNightlyRate", "minimumNights", "maximumNights", "cleaningFee", "securityDeposit", "touristTax", "optionPrices"]) {
+    assert.match(contracts, new RegExp(capability));
+  }
+  for (const promotion of ["long-stay", "last-minute", "early-booking", "code", "seasonal"]) {
+    assert.match(contracts, new RegExp(promotion));
+  }
+  assert.match(service, /nightlyLines/);
+  assert.match(service, /bestPromotion/);
+  assert.match(service, /buildAnnualRates/);
+});
+
+test("availability and pricing APIs are documented and protected", () => {
+  for (const route of ["calendar", "availability", "reservation", "pricing", "options", "ical", "rates", "promotions", "quote"]) {
+    assert.ok(existsSync(join(root, "app", "api", route, "route.ts")), `missing /api/${route}`);
+  }
+  const security = read("platform/http/security.ts");
+  assert.match(security, /rateLimit/);
+  assert.match(security, /requireAdmin/);
+  assert.match(read("docs/PRICING_AND_AVAILABILITY_API.md"), /Aucun\s+scraping/);
+  assert.match(read("components/AvailabilityCalendar.tsx"), /api\/calendar/);
+  assert.match(read("components/PriceSummary.tsx"), /api\/pricing/);
+});
