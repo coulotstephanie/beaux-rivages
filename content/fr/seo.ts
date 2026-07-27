@@ -58,6 +58,27 @@ export const staticPageSeo = {
     breadcrumbs: [home, { name: "Choisir sa maison", path: "/choisir" }],
     schemaTypes: ["WebPage"],
   },
+  "/construisez-votre-sejour": {
+    title: "Construisez votre séjour sur Ré ou Oléron | Beaux Rivages",
+    description: "Créez un séjour personnalisé selon vos voyageurs et vos envies : gastronomie, vélo, plages, patrimoine, nature ou sports nautiques.",
+    path: "/construisez-votre-sejour",
+    breadcrumbs: [home, { name: "Construisez votre séjour", path: "/construisez-votre-sejour" }],
+    schemaTypes: ["WebPage"],
+  },
+  "/avant-arrivee": {
+    title: "Avant votre arrivée sur Ré ou Oléron | Beaux Rivages",
+    description: "Checklist, météo intelligente, marées, marchés, restaurants et carte interactive pour préparer votre arrivée chez Beaux Rivages.",
+    path: "/avant-arrivee",
+    breadcrumbs: [home, { name: "Avant votre arrivée", path: "/avant-arrivee" }],
+    schemaTypes: ["WebPage"],
+  },
+  "/conseils": {
+    title: "Les conseils de Stéphanie et Bruno | Beaux Rivages",
+    description: "Bonnes adresses, producteurs, restaurants, balades et astuces personnelles de Stéphanie et Bruno sur les îles de Ré et d’Oléron.",
+    path: "/conseils",
+    breadcrumbs: [home, { name: "Conseils de Stéphanie et Bruno", path: "/conseils" }],
+    schemaTypes: ["CollectionPage"],
+  },
   "/inspiration": {
     title: "Inspirez-moi | Votre séjour personnalisé Beaux Rivages",
     description: "Trouvez votre maison idéale, vos expériences et vos bonnes adresses selon votre façon de voyager et vos envies.",

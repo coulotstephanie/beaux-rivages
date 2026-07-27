@@ -17,6 +17,7 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
   const openerRef = useRef<HTMLElement | null>(null);
   const pointerStart = useRef<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
   const isOpen = activeIndex !== null;
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
 
   useEffect(() => {
     if (activeIndex === null) setIsPlaying(false);
+    setIsZoomed(false);
   }, [activeIndex]);
 
   if (activeIndex === null) return null;
@@ -109,17 +111,27 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
       >
         {isPlaying ? "Pause" : "Diaporama"}
       </button>
+      <button
+        className="image-lightbox__zoom"
+        type="button"
+        onClick={() => setIsZoomed((value) => !value)}
+        aria-pressed={isZoomed}
+        aria-label={isZoomed ? "Réduire l’image" : "Zoomer dans l’image"}
+      >
+        {isZoomed ? "−" : "+"}
+      </button>
       <button type="button" className="image-lightbox__previous" onClick={() => onChange((activeIndex - 1 + images.length) % images.length)} aria-label="Image précédente">←</button>
       <figure
+        className={isZoomed ? "is-zoomed" : ""}
         onPointerDown={(event) => {
-          if (event.pointerType !== "mouse") pointerStart.current = event.clientX;
+          if (!isZoomed && event.pointerType !== "mouse") pointerStart.current = event.clientX;
         }}
         onPointerUp={(event) => handlePointerEnd(event.clientX)}
         onPointerCancel={() => {
           pointerStart.current = null;
         }}
       >
-        <Image src={image.src} alt={image.alt} fill sizes="100vw" quality={90} draggable={false} />
+        <Image src={image.src} alt={image.alt} fill sizes="100vw" quality={90} draggable={false} onDoubleClick={() => setIsZoomed((value) => !value)} />
         {image.caption && <figcaption id={captionId}>{image.caption}</figcaption>}
       </figure>
       <button type="button" className="image-lightbox__next" onClick={() => onChange((activeIndex + 1) % images.length)} aria-label="Image suivante">→</button>

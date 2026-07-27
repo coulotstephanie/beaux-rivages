@@ -2541,3 +2541,104 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 @media (max-width: 760px) {
   .property-connections .container > div,.destination-guide__houses .container > div { grid-template-columns: 1fr; }
 }
+
+/* Sprint 4 — expérience Signature */
+.signature-builder-section,.arrival-section,.arrival-weather,.arrival-openings,.host-magazine,.returning-reviews { padding: clamp(4.5rem,8vw,8rem) 0; }
+.signature-builder,.smart-weather,.arrival-checklist { padding: clamp(1.5rem,4vw,3rem); border: 1px solid var(--line); background: white; box-shadow: 0 22px 70px rgba(15,35,40,.07); }
+.smart-weather__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; }
+.smart-weather__head h2,.signature-builder legend { margin: .5rem 0 0; font-family: var(--font-serif); font-size: clamp(2rem,4vw,3.5rem); font-weight: 400; line-height: 1.05; }
+.smart-weather__now { display: grid; grid-template-columns: repeat(3,minmax(90px,1fr)); gap: .6rem; min-width: 320px; }
+.smart-weather__now div { padding: 1rem; background: var(--sand); }
+.smart-weather__now strong,.smart-weather__now span { display: block; }
+.smart-weather__now strong { font-family: var(--font-serif); font-size: 1.55rem; font-weight: 400; }
+.smart-weather__now span { margin-top: .25rem; color: var(--muted); font-size: .68rem; text-transform: uppercase; }
+.smart-weather__controls { margin: 2rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.smart-weather__controls fieldset,.signature-builder fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.smart-weather__controls legend { margin-bottom: .7rem; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.smart-weather__controls fieldset > div { display: flex; flex-wrap: wrap; gap: .5rem; }
+.smart-weather button,.smart-weather__controls a,.signature-builder button { min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--line); color: var(--deep); background: transparent; cursor: pointer; font: inherit; }
+.smart-weather button[aria-pressed="true"],.signature-builder button[aria-pressed="true"] { color: white; border-color: var(--deep); background: var(--deep); }
+.smart-weather__controls a { display: inline-flex; align-items: center; text-decoration: none; }
+.smart-weather__recommendations { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; }
+.smart-weather__recommendations article { padding: 1.35rem; border-left: 3px solid var(--gold); background: var(--sand); }
+.smart-weather__recommendations h3 { margin: .4rem 0; font-family: var(--font-serif); font-size: 1.35rem; font-weight: 400; }
+.smart-weather__recommendations p,.smart-weather__source,.smart-weather__status { color: var(--muted); line-height: 1.65; }
+.smart-weather__recommendations a { color: var(--deep); font-size: .75rem; font-weight: 700; }
+.smart-weather__source { margin: 1.4rem 0 0; font-size: .72rem; }
+.signature-builder__progress { display: flex; gap: .35rem; margin-bottom: 2rem; }
+.signature-builder__progress span { height: 4px; flex: 1; background: var(--line); }
+.signature-builder__progress span.is-active { background: var(--gold); }
+.signature-builder legend { margin-bottom: 1.5rem; }
+.signature-builder__party,.signature-builder__interests { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; }
+.signature-builder__interests { grid-template-columns: repeat(2,1fr); }
+.signature-builder__party button,.signature-builder__interests button { padding: 1.25rem; text-align: left; }
+.signature-builder__next { margin-top: 1.5rem; color: white !important; border-color: var(--deep) !important; background: var(--deep) !important; }
+.signature-builder__navigation { display: flex; justify-content: space-between; gap: 1rem; }
+.signature-builder__result { padding: clamp(1.5rem,4vw,3rem); color: white; background: var(--deep); }
+.signature-builder__result h2 { margin: .5rem 0 1rem; font-family: var(--font-serif); font-size: clamp(2.2rem,5vw,4.5rem); font-weight: 400; }
+.signature-builder__days { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; margin: 2rem 0; }
+.signature-builder__days article { padding: 1.25rem; border: 1px solid rgba(255,255,255,.18); }
+.signature-builder__days h3 { font-family: var(--font-serif); font-size: 1.45rem; font-weight: 400; }
+.signature-builder__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.comparison-section { padding: clamp(5rem,9vw,9rem) 0; color: white; background: var(--deep); }
+.comparison-section .section-heading p { color: rgba(255,255,255,.7); }
+.house-comparison__scroll { overflow-x: auto; border: 1px solid rgba(255,255,255,.18); }
+.house-comparison table { width: 100%; min-width: 920px; border-collapse: collapse; }
+.house-comparison th,.house-comparison td { padding: 1rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,.14); text-align: left; vertical-align: top; }
+.house-comparison thead th { color: var(--gold); font-family: var(--font-serif); font-size: 1.25rem; font-weight: 400; }
+.house-comparison tbody th { width: 180px; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+.house-comparison a { color: white; text-underline-offset: 4px; }
+.house-comparison > p { color: rgba(255,255,255,.66); font-size: .75rem; line-height: 1.6; }
+.arrival-checklist__progress { margin-bottom: 1.5rem; }
+.arrival-checklist__progress progress { width: 100%; height: 8px; accent-color: var(--gold); }
+.arrival-checklist__progress span { display: block; margin-top: .5rem; color: var(--muted); font-size: .75rem; }
+.arrival-checklist__grid { display: grid; grid-template-columns: repeat(2,1fr); gap: .7rem 1.2rem; }
+.arrival-checklist label { min-height: 52px; padding: .9rem; display: flex; align-items: center; gap: .8rem; border: 1px solid var(--line); cursor: pointer; }
+.arrival-checklist input { width: 20px; height: 20px; accent-color: var(--deep); }
+.arrival-weather { background: var(--sand); }
+.arrival-openings { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem,6vw,6rem); }
+.arrival-openings > div:last-child { display: grid; gap: .8rem; }
+.arrival-openings article { padding: 1.5rem; border: 1px solid var(--line); background: white; }
+.arrival-openings article a { color: var(--deep); font-weight: 700; }
+.arrival-map-section { padding: clamp(5rem,9vw,9rem) 0; color: white; background: var(--deep); }
+.arrival-map-section h2 { margin: .6rem 0 2rem; font-family: var(--font-serif); font-size: clamp(2.3rem,5vw,4.5rem); font-weight: 400; }
+.host-magazine { display: grid; grid-template-columns: repeat(2,1fr); gap: clamp(1rem,3vw,2rem); }
+.host-magazine article { display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; background: var(--sand); }
+.host-magazine article:nth-child(3n+1) { grid-column: 1 / -1; }
+.host-magazine__media { min-height: 300px; position: relative; overflow: hidden; }
+.host-magazine__media img { object-fit: cover; transition: transform .7s ease; }
+.host-magazine article:hover img { transform: scale(1.025); }
+.host-magazine__copy { padding: clamp(1.5rem,4vw,3rem); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.host-magazine__copy h2 { margin: .6rem 0 1rem; font-family: var(--font-serif); font-size: clamp(1.8rem,3vw,3rem); font-weight: 400; }
+.host-magazine__copy p { color: var(--muted); line-height: 1.75; }
+.host-magazine__copy a { color: var(--deep); font-weight: 700; }
+.host-magazine__tip { padding-left: 1rem; border-left: 2px solid var(--gold); font-style: italic; }
+.returning-reviews { background: var(--sand); }
+.returning-reviews > div:last-child { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+.season-films { padding: clamp(5rem,9vw,9rem) 0; color: white; background: var(--deep); }
+.season-films__grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-top: 2rem; }
+.season-films figure { margin: 0; }
+.season-films video { width: 100%; aspect-ratio: 16/9; display: block; background: #061e24; object-fit: cover; }
+.season-films figcaption { padding: 1rem 0; color: rgba(255,255,255,.72); }
+.image-lightbox figure { overflow: auto; }
+.image-lightbox figure.is-zoomed img { transform: scale(1.8); cursor: zoom-out; }
+.image-lightbox__zoom { position: absolute; z-index: 4; top: 1rem; right: 4.5rem; min-width: 44px; min-height: 44px; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; color: white; background: rgba(4,25,31,.65); cursor: pointer; }
+
+@media (max-width: 820px) {
+  .smart-weather__head { flex-direction: column; }
+  .smart-weather__now { width: 100%; min-width: 0; }
+  .smart-weather__controls,.arrival-openings { grid-template-columns: 1fr; }
+  .smart-weather__recommendations,.signature-builder__days,.returning-reviews > div:last-child { grid-template-columns: 1fr; }
+  .host-magazine { grid-template-columns: 1fr; }
+  .host-magazine article,.host-magazine article:nth-child(3n+1) { grid-column: auto; }
+}
+@media (max-width: 620px) {
+  .signature-builder__party,.signature-builder__interests,.arrival-checklist__grid,.season-films__grid { grid-template-columns: 1fr; }
+  .host-magazine article { grid-template-columns: 1fr; }
+  .smart-weather__now { grid-template-columns: 1fr; }
+  .smart-weather__now div { display: flex; align-items: baseline; justify-content: space-between; }
+  .image-lightbox__zoom { top: 4.6rem; right: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .host-magazine__media img,.image-lightbox figure img { transition: none; }
+}

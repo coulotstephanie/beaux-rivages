@@ -23,6 +23,7 @@ export function Footer() {
             <p className="premium-footer__label">Découvrir</p>
             <Link href="/maisons">Nos maisons</Link>
             <Link href="/choisir">Choisir ma maison</Link>
+            <Link href="/construisez-votre-sejour">Construire mon séjour</Link>
             <Link href="/inspiration">Inspirez-moi</Link>
             <Link href="/destinations">Destinations</Link>
             <Link href="/experiences">Expériences</Link>
@@ -34,6 +35,8 @@ export function Footer() {
             <Link href="/engagements">Nos engagements</Link>
             <Link href="/pourquoi-beaux-rivages">Pourquoi Beaux Rivages ?</Link>
             <Link href="/sejour">Votre séjour</Link>
+            <Link href="/avant-arrivee">Avant votre arrivée</Link>
+            <Link href="/conseils">Les conseils de Stéphanie & Bruno</Link>
             <Link href="/saisons">Les saisons</Link>
             <Link href="/coulisses">Les coulisses</Link>
             <Link href="/avis">Avis voyageurs</Link>

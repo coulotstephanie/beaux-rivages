@@ -231,3 +231,35 @@ test("booking handoff clearly uses a native email action", () => {
   assert.match(journey, /Votre application e-mail va s’ouvrir/);
   assert.match(journey, /Préparer l’e-mail de demande/);
 });
+
+test("the Signature experience exposes its weather, planning and arrival journeys", () => {
+  const weatherEngine = read("weatherEngine.ts");
+  const stayBuilder = read("components/SignatureStayBuilder.tsx");
+  const comparison = read("components/HouseComparisonTable.tsx");
+  const arrival = read("app/avant-arrivee/page.tsx");
+
+  for (const signal of ["precipitation", "windDirection", "temperature", "tide", "season"]) {
+    assert.match(weatherEngine, new RegExp(signal), `weather engine should account for ${signal}`);
+  }
+  for (const interest of ["gastronomie", "velo", "plages", "patrimoine", "nature", "nautique"]) {
+    assert.match(stayBuilder, new RegExp(interest), `stay builder should offer ${interest}`);
+  }
+  for (const property of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
+    assert.match(comparison, new RegExp(property), `comparison should include ${property}`);
+  }
+  assert.match(arrival, /ArrivalChecklist/);
+  assert.match(arrival, /SmartWeatherAdvisor/);
+  assert.match(arrival, /PremiumInteractiveMap/);
+});
+
+test("premium media remains operable with keyboard, touch, zoom and video", () => {
+  const lightbox = read("components/ImageLightbox.tsx");
+  const fullscreenGallery = read("components/FullscreenGallery.tsx");
+  const seasons = read("app/saisons/page.tsx");
+
+  assert.match(lightbox, /ArrowLeft/);
+  assert.match(lightbox, /ArrowRight/);
+  assert.match(lightbox, /isZoomed/);
+  assert.match(lightbox, /pointerStart/);
+  assert.match(seasons, /<video/);
+});

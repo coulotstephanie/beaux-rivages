@@ -62,6 +62,9 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
         <Link href="/maisons" onClick={closeMenu}>Nos maisons</Link>
         <Link href="/choisir" onClick={closeMenu}>Quelle maison pour vous ?</Link>
         <Link href="/inspiration" onClick={closeMenu}>Inspirez-moi</Link>
+        <Link href="/construisez-votre-sejour" onClick={closeMenu}>Construisez votre séjour</Link>
+        <Link href="/avant-arrivee" onClick={closeMenu}>Avant votre arrivée</Link>
+        <Link href="/conseils" onClick={closeMenu}>Les conseils de Stéphanie & Bruno</Link>
         <Link href="/sejour" onClick={closeMenu}>Votre séjour</Link>
         <Link href="/saisons" onClick={closeMenu}>Les saisons</Link>
         <Link href="/destinations" onClick={closeMenu}>Les îles</Link>
