@@ -4,7 +4,8 @@ type BrandLogoProps = { compact?: boolean; light?: boolean };
 
 export function BrandLogo({ compact = false, light = false }: BrandLogoProps) {
   return (
-    <Link href="/" className={`brand-logo${compact ? " compact" : ""}${light ? " light" : ""}`} aria-label="Beaux Rivages, accueil">
+    <Link href="/" className={`brand-logo${compact ? " compact" : ""}${light ? " light" : ""}`}>
+      <span className="sr-only">Accueil Beaux Rivages.</span>
       <svg className="brand-symbol" viewBox="0 0 88 88" aria-hidden="true">
         <g className="brand-sun">
           <path d="M55 13v8M42 18l5 7M68 18l-5 7M76 30l-8 3M34 30l8 3" />

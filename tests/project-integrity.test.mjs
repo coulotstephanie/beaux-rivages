@@ -1,0 +1,233 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { basename, join } from "node:path";
+import test from "node:test";
+
+const root = process.cwd();
+const read = (path) => readFileSync(join(root, path), "utf8");
+
+const routes = [
+  "/",
+  "/avis",
+  "/carnet",
+  "/carnet-voyageur",
+  "/choisir",
+  "/coulisses",
+  "/destinations",
+  "/engagements",
+  "/experiences",
+  "/faq",
+  "/inspiration",
+  "/maisons",
+  "/personnaliser",
+  "/phototheque",
+  "/pourquoi-beaux-rivages",
+  "/pourquoi-revenir",
+  "/reserver",
+  "/saisons",
+  "/sejour",
+];
+const redirectedRoutes = ["/carnet-voyageur"];
+
+test("all public routes have a page and centralized SEO configuration", () => {
+  const seoConfig = read("content/fr/seo.ts");
+  for (const route of routes) {
+    const page = route === "/" ? "app/page.tsx" : `app${route}/page.tsx`;
+    assert.ok(existsSync(join(root, page)), `Missing page for ${route}`);
+    assert.match(seoConfig, new RegExp(`"${route === "/" ? "\\/" : route}"\\s*:`), `Missing SEO config for ${route}`);
+  }
+});
+
+test("property routes use the central property SEO and media manifests", () => {
+  for (const slug of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
+    const page = read(`app/maisons/${slug}/page.tsx`);
+    const manifest = read(`media/properties/${slug}.ts`);
+    assert.match(page, /createPropertySeo\(property\)/);
+    assert.doesNotMatch(manifest, new RegExp(`/properties/(?!${slug.replaceAll("-", "\\-")})[^/]+/`));
+  }
+});
+
+test("every property manifest exclusively references its own media directory", () => {
+  for (const slug of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
+    const manifest = read(`media/properties/${slug}.ts`);
+    const propertyPaths = [...manifest.matchAll(/\/images\/properties\/([^/]+)\//g)].map((match) => match[1]);
+    assert.ok(propertyPaths.every((owner) => owner === slug), `${slug} contains a foreign property media path`);
+    assert.match(manifest, new RegExp(`owner:\\s*"${slug}"|owner:\\s*slug|owner:\\s*["']${slug}["']`));
+  }
+  const propertyPage = read("components/PropertyPage.tsx");
+  assert.match(propertyPage, /Media owned by another property/);
+  assert.match(propertyPage, /presentation\.experiences/);
+});
+
+test("every media filename declared by a manifest exists in public", () => {
+  const manifests = [
+    ["media/destinations.ts", "public/images/destination"],
+    ["media/properties/chai-des-tortues.ts", "public/images/properties/chai-des-tortues"],
+    ["media/properties/villa-raie-manta.ts", "public/images/properties/villa-raie-manta"],
+    ["media/properties/nid-d-ete.ts", "public/images/properties/nid-d-ete"],
+  ];
+
+  for (const [manifestPath, mediaDirectory] of manifests) {
+    const source = read(manifestPath);
+    const filenames = [...source.matchAll(/["'`]([^"'`/]+\.(?:avif|webp|jpe?g|png|mp4))["'`]/gi)]
+      .map((match) => match[1]);
+    for (const filename of filenames) {
+      assert.ok(
+        existsSync(join(root, mediaDirectory, filename)),
+        `${basename(manifestPath)} references missing media ${filename}`,
+      );
+    }
+  }
+});
+
+test("all repository media are represented by the centralized media layer", () => {
+  const mediaSource = [
+    read("media/destinations.ts"),
+    read("media/properties/chai-des-tortues.ts"),
+    read("media/properties/villa-raie-manta.ts"),
+    read("media/properties/nid-d-ete.ts"),
+    read("media/site.ts"),
+  ].join("\n");
+  const directories = [
+    "public/images/destination",
+    "public/images/properties/chai-des-tortues",
+    "public/images/properties/villa-raie-manta",
+    "public/images/properties/nid-d-ete",
+    "public/videos",
+  ];
+
+  for (const directory of directories) {
+    for (const entry of readdirSync(join(root, directory), { withFileTypes: true })) {
+      if (!entry.isFile()) continue;
+      assert.ok(mediaSource.includes(entry.name), `Unregistered media: ${directory}/${entry.name}`);
+    }
+  }
+});
+
+test("the canonical origin remains absolute and unique", () => {
+  const seo = read("seo.ts");
+  assert.equal((seo.match(/export const SITE_URL = "https:\/\/www\.beaux-rivages\.com"/g) ?? []).length, 1);
+  assert.match(seo, /alternates: \{ canonical \}/);
+});
+
+test("the Carnet exposes premium guides, interactive maps and ideal days", () => {
+  const data = read("carnetPremiumData.ts");
+  const page = read("app/carnet/page.tsx");
+  const categories = [
+    "restaurants", "plages", "producteurs", "fort-boyard",
+    "marches", "velo", "parkings", "bornes-electriques",
+  ];
+  for (const category of categories) {
+    assert.match(data, new RegExp(`id: "${category}"`), `Missing Carnet category ${category}`);
+  }
+  assert.match(page, /<PremiumPlaceCollection \/>/);
+  assert.match(page, /<PremiumInteractiveMap \/>/);
+  assert.match(page, /<IdealDays \/>/);
+  assert.match(data, /export const idealDays/);
+});
+
+test("the premium experience collection includes all requested experiences", () => {
+  const data = read("experiences.ts");
+  const page = read("app/experiences/page.tsx");
+  const slugs = [
+    "pack-signature", "romance", "anniversaire", "demande-en-mariage",
+    "plateau-fruits-de-mer", "atelier-macarons", "lever-de-soleil",
+    "coucher-de-soleil", "peche-a-pied", "balade-velo", "bien-etre", "famille",
+  ];
+  for (const slug of slugs) {
+    assert.match(data, new RegExp(`slug: "${slug}"`), `Missing experience ${slug}`);
+  }
+  assert.match(page, /<ExperienceCollection experiences=\{experiences\} \/>/);
+  assert.match(read("components/ExperienceCollection.tsx"), /Ajouter à mon séjour/);
+});
+
+test("every Carnet link to an experience anchor targets an existing experience", () => {
+  const carnet = read("carnetData.ts");
+  const experienceData = read("experiences.ts");
+  const linkedSlugs = [...carnet.matchAll(/href:\s*"\/experiences#([^"]+)"/g)].map((match) => match[1]);
+  for (const slug of linkedSlugs) {
+    assert.match(experienceData, new RegExp(`slug: "${slug}"`), `Broken Carnet experience anchor ${slug}`);
+  }
+});
+
+test("the sitemap includes every centralized static route", () => {
+  const sitemap = read("app/sitemap.ts");
+  for (const route of routes.filter((route) => route !== "/" && !redirectedRoutes.includes(route))) {
+    assert.match(sitemap, new RegExp(`"${route}"`), `Sitemap missing ${route}`);
+  }
+  for (const route of redirectedRoutes) {
+    assert.doesNotMatch(sitemap, new RegExp(`"${route}"`), `Redirected route should not be indexed: ${route}`);
+  }
+});
+
+test("the sitemap publishes every detailed experience", () => {
+  const sitemap = read("app/sitemap.ts");
+  assert.match(sitemap, /experiences\.map/);
+  assert.match(sitemap, /\/experiences\/\$\{experience\.slug\}/);
+});
+
+test("personalization selections are preserved into the booking journey", () => {
+  const composer = read("components/StayComposer.tsx");
+  const bookingPage = read("app/reserver/page.tsx");
+  assert.match(composer, /params\.set\("options"/);
+  assert.match(composer, /params\.set\("experiences"/);
+  assert.match(bookingPage, /options\?\.split/);
+  assert.match(bookingPage, /experiences\?\.split/);
+});
+
+test("platform foundations keep external providers behind typed contracts", () => {
+  assert.match(read("platform/content/repository.ts"), /interface ContentRepository/);
+  assert.match(read("platform/admin/service.ts"), /AdminAuthorizer/);
+  assert.match(read("platform/calendar/contracts.ts"), /interface CalendarConnector/);
+  assert.match(read("platform/reservations/contracts.ts"), /interface ReservationRepository/);
+  assert.match(read("platform/reservations/contracts.ts"), /interface PaymentGateway/);
+  assert.match(read("platform/traveler/contracts.ts"), /type TravelerPortal/);
+});
+
+test("iCal normalization handles event boundaries, cancellation and deduplication", () => {
+  const source = read("platform/calendar/ical.ts");
+  assert.match(source, /BEGIN:VEVENT/);
+  assert.match(source, /DTSTART/);
+  assert.match(source, /DTEND/);
+  assert.match(source, /status !== "cancelled"/);
+  assert.match(source, /new Map/);
+});
+
+test("deployment configuration never commits local secrets", () => {
+  const ignored = read(".gitignore");
+  const example = read(".env.example");
+  const workflow = read(".github/workflows/ci.yml");
+  assert.match(ignored, /^\.env$/m);
+  assert.match(ignored, /^\.env\.local$/m);
+  for (const secretKey of ["AUTH_SECRET", "DATABASE_URL", "PAYMENT_PROVIDER_SECRET"]) {
+    assert.match(example, new RegExp(`^${secretKey}=$`, "m"), `${secretKey} must stay empty in .env.example`);
+  }
+  assert.match(workflow, /npm ci/);
+  assert.match(workflow, /npm run validate/);
+});
+
+test("internationalization declares target locales without prematurely publishing them", () => {
+  const config = read("i18n/config.ts");
+  const messages = read("i18n/messages.ts");
+  assert.match(config, /\["fr", "en", "de"\]/);
+  assert.match(config, /productionLocales[^=]*=\s*\["fr"\]/);
+  assert.match(messages, /Record<SupportedLocale, MessageCatalog>/);
+});
+
+test("booking review prevents invalid navigation and capacity overflow", () => {
+  const journey = read("components/BookingExperience.tsx");
+  const stepper = read("components/BookingStepper.tsx");
+  const guests = read("components/GuestSelector.tsx");
+  assert.match(journey, /maxAccessible/);
+  assert.match(stepper, /disabled=\{step > maxAccessible\}/);
+  assert.match(journey, /selectedProperty\?\.capacity/);
+  assert.match(guests, /countedGuests >= maxGuests/);
+});
+
+test("booking handoff clearly uses a native email action", () => {
+  const button = read("components/ui/Button.tsx");
+  const journey = read("components/BookingExperience.tsx");
+  assert.match(button, /href\.startsWith\("mailto:"\)/);
+  assert.match(journey, /Votre application e-mail va s’ouvrir/);
+  assert.match(journey, /Préparer l’e-mail de demande/);
+});

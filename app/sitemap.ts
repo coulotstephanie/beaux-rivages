@@ -1,0 +1,39 @@
+import type { MetadataRoute } from "next";
+import { properties } from "@/data";
+import { destinationGuides } from "@/destinationGuides";
+import { experiences } from "@/experiences";
+
+const staticRoutes = [
+  "",
+  "/maisons",
+  "/carnet",
+  "/choisir",
+  "/avis",
+  "/coulisses",
+  "/destinations",
+  "/engagements",
+  "/experiences",
+  "/faq",
+  "/inspiration",
+  "/personnaliser",
+  "/phototheque",
+  "/pourquoi-beaux-rivages",
+  "/pourquoi-revenir",
+  "/reserver",
+  "/saisons",
+  "/sejour",
+] as const;
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://www.beaux-rivages.com";
+  const propertyRoutes = properties.map((property) => `/maisons/${property.slug}`);
+  const guideRoutes = destinationGuides.map((guide) => `/destinations/${guide.slug}`);
+  const experienceRoutes = experiences.map((experience) => `/experiences/${experience.slug}`);
+
+  return [...staticRoutes, ...propertyRoutes, ...guideRoutes, ...experienceRoutes].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: route === "" ? "weekly" : "monthly",
+    priority: route === "" ? 1 : route.startsWith("/maisons") ? 0.9 : route.startsWith("/destinations/") || route.startsWith("/experiences/") ? 0.85 : 0.7,
+  }));
+}

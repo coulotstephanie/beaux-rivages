@@ -1,172 +1,209 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
 import { PropertyCard } from "@/components/PropertyCard";
-import { StayInspiration } from "@/components/StayInspiration";
+import { properties } from "@/data";
+import { Badge, Button, Card, Container, Heading, Section } from "@/components/ui";
+import { FutureVisualScenes } from "@/components/FutureVisualScenes";
+import { siteMedia } from "@/media/site";
+import { PageStructuredData } from "@/components/PageStructuredData";
+import { staticPageSeo } from "@/content/fr/seo";
+import { createPageMetadata } from "@/seo";
+import { CinematicHeroMedia } from "@/components/CinematicHeroMedia";
 
-const properties = [
-  {
-    name: "Le Chai des Tortues",
-    location: "Rivedoux-Plage · Île de Ré",
-    promise: "Un ancien chai en pierre, pensé pour les familles, les grandes tablées et la douceur de vivre rétaise, à 250 mètres de la plage.",
-    image: "/images/chai/hero.jpg",
-    href: "/maisons/le-chai-des-tortues",
-  },
-  {
-    name: "Villa Raie Manta",
-    location: "Rivedoux-Plage · Île de Ré",
-    promise: "Une maison contemporaine baignée de lumière, dont le salon panoramique ouvre le séjour sur l’océan et le pont de l’Île de Ré.",
-    image: "/images/villa/hero.jpg",
-    href: "/maisons/villa-raie-manta",
-  },
-  {
-    name: "Le Nid d’Été",
-    location: "Saint-Georges-d’Oléron · Île d’Oléron",
-    promise: "Une parenthèse entre patrimoine, forêt et océan, dans la résidence historique La Maison Heureuse, avec accès privé à la plage des Saumonards.",
-    image: "/images/nid/hero.jpg",
-    href: "/maisons/le-nid-d-ete",
-  },
-] as const;
+const pageSeo = staticPageSeo["/"];
+
+export const metadata = createPageMetadata({
+  ...pageSeo,
+  image: siteMedia.destination.sea,
+  openGraphTitle: "Beaux Rivages — L’hospitalité des îles",
+});
+
+const reasons = [
+  ["01", "Des maisons singulières", "Trois lieux de caractère, choisis pour leur relation particulière à l’océan et leur façon d’accueillir les moments partagés."],
+  ["02", "Une hospitalité sincère", "Une arrivée libre, une présence discrète et les attentions d’une maison préparée comme si nous recevions des amis."],
+  ["03", "Les îles de l’intérieur", "Nos producteurs, nos habitudes et nos adresses réellement fréquentées pour vivre Ré et Oléron avec justesse."],
+];
 
 const moments = [
   {
-    title: "Le matin, au rythme des marchés",
-    text: "Un panier à la main, quelques produits choisis chez nos producteurs préférés et le plaisir de préparer un déjeuner qui sent déjà les vacances.",
+    eyebrow: "Au fil des saisons",
+    title: "Les paysages qui nous font ralentir.",
+    image: siteMedia.destination.marsh,
+    href: "/destinations",
+    className: "moment-card--large",
   },
   {
-    title: "L’après-midi, entre vélo et océan",
-    text: "Des pistes cyclables, des chemins bordés de pins et cette lumière atlantique qui accompagne chaque détour jusqu’à la plage.",
+    eyebrow: "Savoir-faire",
+    title: "Rencontrer ceux qui façonnent les îles.",
+    image: siteMedia.destination.salt,
+    href: "/experiences",
+    className: "moment-card--portrait",
   },
   {
-    title: "Le soir, simplement ensemble",
-    text: "Une grande table, des huîtres, un coucher de soleil et le sentiment précieux de ralentir enfin.",
-  },
-] as const;
-
-const reasons = [
-  {
-    number: "01",
-    title: "Une attention sincère",
-    text: "Une carafe d’eau fraîche au réfrigérateur, une attention locale et des maisons préparées avec le même soin que si nous recevions des amis.",
+    eyebrow: "Carnet gourmand",
+    title: "Les saveurs de l’Atlantique.",
+    image: siteMedia.destination.food,
+    href: "/carnet",
+    className: "moment-card--wide",
   },
   {
-    number: "02",
-    title: "Des adresses vraiment vécues",
-    text: "Nous habitons les îles toute l’année. Nos conseils viennent de nos habitudes, de nos producteurs et des lieux où nous aimons revenir.",
+    eyebrow: "Ralentir",
+    title: "Retrouver le temps de regarder l’horizon.",
+    image: siteMedia.destination.beach,
+    href: "/experiences",
+    className: "moment-card--small",
   },
-  {
-    number: "03",
-    title: "La liberté d’être accueilli à sa façon",
-    text: "Arrivée autonome pour profiter immédiatement, ou accueil personnalisé par Stéphanie ou Bruno pour commencer le séjour accompagné.",
-  },
-] as const;
+];
 
 export default function HomePage() {
   return (
     <main>
+      <PageStructuredData {...pageSeo} />
       <Header />
-      <Hero />
 
-      <section className="intro shell" id="iles">
-        <p className="eyebrow">L’esprit Beaux Rivages</p>
-        <h2>Nous ne proposons pas simplement des maisons. Nous ouvrons les portes des îles.</h2>
-        <p>Beaux Rivages réunit trois lieux singuliers sur l’Île de Ré et l’Île d’Oléron. Chaque séjour associe le caractère d’une maison, nos adresses testées toute l’année et une hospitalité façonnée par trois générations d’expérience hôtelière.</p>
-      </section>
-
-      <section className="manifesto" aria-label="La promesse Beaux Rivages">
-        <div className="manifesto-image" aria-hidden="true" />
-        <div className="manifesto-copy">
-          <p className="eyebrow light">L’Atlantique comme horizon</p>
-          <h2>Partir avant même d’avoir fait ses valises.</h2>
-          <p>Le séjour commence ici : dans le bruit des vagues, la lumière qui glisse sur les façades, le marché du matin et les chemins qui mènent à l’océan. Nos maisons ne sont pas une destination à part. Elles sont une manière plus intime de vivre les îles.</p>
-          <Link className="text-link light-link" href="#maisons">Choisir son atmosphère <span>→</span></Link>
+      <section className="premium-hero" aria-labelledby="home-title">
+        <div className="premium-hero__media">
+          <CinematicHeroMedia poster={siteMedia.destination.sea} sequences={[
+            { src: siteMedia.video.homepageHero, label: "Océan · Pont de Ré · Fort Boyard · Maisons" },
+          ]} sound={false} />
         </div>
-      </section>
-
-      <section className="benefits shell" aria-label="Avantages de la réservation directe">
-        <div><strong>Réservation directe</strong><span>Une relation simple, sans intermédiaire</span></div>
-        <div><strong>Conseils locaux</strong><span>Les adresses de Stéphanie & Bruno</span></div>
-        <div><strong>Accueil au choix</strong><span>Autonome ou personnalisé</span></div>
-        <div><strong>Paiements souples</strong><span>Chèques-Vacances, virement ou espèces</span></div>
-      </section>
-
-      <section className="properties shell" id="maisons">
-        <div className="section-heading split-heading">
-          <div>
-            <p className="eyebrow">Nos maisons</p>
-            <h2>Trois atmosphères, une même exigence.</h2>
+        <div className="premium-hero__overlay" />
+        <Container size="wide" className="premium-hero__content">
+          <Badge light>Hospitalité sur les îles</Badge>
+          <h1 id="home-title">Nous ouvrons les portes des îles.</h1>
+          <p>Trois maisons de caractère, une sélection d’adresses réellement testées et une attention portée à chaque détail du séjour.</p>
+          <div className="premium-hero__actions">
+            <Button href="#maisons">Découvrir les maisons</Button>
+            <Button href="/destinations" variant="secondary">Explorer les îles</Button>
           </div>
-          <p>Patrimoine et convivialité, design face à l’océan ou sérénité au bord de la plage : choisissez la maison qui ressemble à votre prochaine parenthèse.</p>
-        </div>
-        <div className="property-grid">
-          {properties.map((property) => <PropertyCard key={property.name} {...property} />)}
-        </div>
+        </Container>
+        <a className="scroll-indicator" href="#pourquoi" aria-label="Faire défiler vers la suite">
+          <span />
+          Découvrir
+        </a>
       </section>
 
-      <StayInspiration />
-
-      <section className="ideal-day shell">
-        <div className="section-heading">
-          <p className="eyebrow">Une journée idéale</p>
-          <h2>Les îles se racontent dans les petits moments.</h2>
-        </div>
-        <div className="moments-grid">
-          {moments.map((moment, index) => (
-            <article className="moment-card" key={moment.title}>
-              <span>0{index + 1}</span>
-              <h3>{moment.title}</h3>
-              <p>{moment.text}</p>
-            </article>
+      <Section id="pourquoi" className="why-section">
+        <Heading
+          eyebrow="Pourquoi Beaux Rivages"
+          title="Le voyage commence avant même d’ouvrir la porte."
+          description="Nos maisons sont le point de départ d’une expérience plus vaste : vivre les îles comme nous les vivons toute l’année."
+        />
+        <div className="why-grid">
+          {reasons.map(([number, title, copy]) => (
+            <Card key={number} className="why-card">
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </Card>
           ))}
         </div>
-      </section>
+        <div className="direct-benefits premium-benefits" aria-label="Avantages de la réservation directe">
+          <div><strong>Meilleur tarif</strong><span>En réservant en direct</span></div>
+          <div><strong>Relation directe</strong><span>Avec Stéphanie & Bruno</span></div>
+          <div><strong>Chèques-Vacances</strong><span>Acceptés</span></div>
+          <div><strong>Conseils locaux</strong><span>Vraiment personnalisés</span></div>
+        </div>
+      </Section>
 
-      <section className="returning-guests">
-        <div className="returning-guests-inner shell">
-          <div className="returning-guests-heading">
-            <p className="eyebrow light">Pourquoi nos voyageurs reviennent</p>
-            <h2>Parce qu’un beau séjour se joue souvent dans les détails que l’on n’oublie pas.</h2>
+      <Section id="maisons" tone="sand" className="premium-properties">
+        <Heading
+          eyebrow="Nos maisons"
+          title="Trois identités, un même niveau d’attention."
+          description="Chaque maison possède son rythme, ses matières, ses usages et son rapport particulier à l’océan."
+        />
+        <div className="property-grid">
+          {properties.map((property) => (
+            <PropertyCard
+              key={property.title}
+              title={property.title}
+              subtitle={property.intro}
+              href={`/maisons/${property.slug}`}
+              image={property.hero}
+              location={property.location}
+            />
+          ))}
+        </div>
+      </Section>
+
+      <section className="local-signature" aria-labelledby="nina-metayer-title">
+        <div className="local-signature__visual">
+          <Image
+            src={siteMedia.destination.food}
+            alt="Une douceur gourmande à savourer sur l’Île de Ré"
+            fill
+            quality={90}
+            loading="lazy"
+            sizes="(max-width: 900px) 100vw, 52vw"
+          />
+        </div>
+        <div className="local-signature__copy">
+          <Badge>À Rivedoux-Plage</Badge>
+          <p className="local-signature__award">Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024</p>
+          <h2 id="nina-metayer-title">La pâtisserie de Nina Métayer, à quelques pas.</h2>
+          <p>Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.</p>
+          <div className="local-signature__actions">
+            <Button href="/carnet#gastronomie">Voir dans notre Carnet</Button>
+            <Button href="https://larochelle.delicatisserie.com/" variant="ghost">Découvrir Chez Nina <span aria-hidden="true">↗</span></Button>
           </div>
-          <div className="reasons-grid">
-            {reasons.map((reason) => (
-              <article className="reason-card" key={reason.number}>
-                <span>{reason.number}</span>
-                <h3>{reason.title}</h3>
-                <p>{reason.text}</p>
-              </article>
-            ))}
-          </div>
         </div>
       </section>
 
-      <section className="hospitality" id="hospitalite">
-        <div className="hospitality-image" aria-hidden="true" />
-        <div className="hospitality-copy">
-          <p className="eyebrow">Le mot de Stéphanie</p>
-          <h2>L’excellence de l’hôtellerie, le charme d’une maison de famille.</h2>
-          <p>Nous souhaitons que vous vous sentiez chez nous comme accueillis par des amis : libres de profiter de votre séjour en toute indépendance, mais toujours accompagnés lorsque vous avez besoin d’un conseil ou d’une attention particulière.</p>
-          <p className="signature">Stéphanie & Bruno</p>
+      <Section id="experiences" tone="dark" className="moments-section">
+        <Heading
+          eyebrow="Les Instants Beaux Rivages"
+          title="Des souvenirs qui commencent par une lumière, un goût, un chemin."
+          description="Traverser les marais salants, suivre une piste cyclable jusqu’à l’océan, partager des huîtres chez un producteur."
+          light
+        />
+        <div className="moments-grid">
+          {moments.map((moment) => (
+            <Link href={moment.href} className={`moment-card ${moment.className}`} key={moment.title}>
+              <Image src={moment.image} alt="" fill quality={88} loading="lazy" sizes="(max-width: 800px) 100vw, (max-width: 1400px) 58vw, 700px" />
+              <span className="moment-card__overlay" />
+              <span className="moment-card__content">
+                <span className="eyebrow light">{moment.eyebrow}</span>
+                <strong>{moment.title}</strong>
+              </span>
+              <span className="moment-card__arrow" aria-hidden="true">↗</span>
+            </Link>
+          ))}
+        </div>
+        <Button href="/experiences" variant="secondary">Explorer toutes les expériences</Button>
+      </Section>
+
+      <FutureVisualScenes />
+
+      <section className="host-advice">
+        <div className="host-advice__visual">
+          <Image
+            src={siteMedia.destination.lane}
+            alt="Ruelle lumineuse au charme insulaire"
+            fill
+            quality={88}
+            loading="lazy"
+            sizes="(max-width: 900px) 100vw, 50vw"
+          />
+        </div>
+        <div className="host-advice__copy">
+          <Badge>Le conseil de Stéphanie & Bruno</Badge>
+          <blockquote>« Les plus belles vacances ne se mesurent pas en mètres carrés. Elles se mesurent en souvenirs. »</blockquote>
+          <p>Nos recommandations viennent de notre vie sur les îles : des producteurs, artisans et expériences que nous partageons comme nous le ferions avec des amis.</p>
+          <Button href="/carnet" variant="ghost">Ouvrir le Carnet Beaux Rivages <span aria-hidden="true">→</span></Button>
         </div>
       </section>
 
-      <section className="carnet shell">
-        <div>
-          <p className="eyebrow">Le Carnet Beaux Rivages</p>
-          <h2>Nos bonnes adresses, réellement testées toute l’année.</h2>
-        </div>
-        <div className="carnet-copy">
-          <p>Ostréiculteurs, marchés, pâtisseries, restaurants, plages selon le vent, balades à vélo et escapades de saison : nous partageons les lieux que nous aimons et les conseils que nous donnons à nos proches.</p>
-          <Link className="button" href="/carnet">Ouvrir le Carnet</Link>
-        </div>
-      </section>
-
-      <section className="booking shell" id="reserver">
-        <p className="eyebrow">Préparer votre séjour</p>
-        <h2>Parlons de vos prochaines vacances.</h2>
-        <p>Indiquez la maison souhaitée, vos dates et le nombre de voyageurs. Stéphanie vous répondra personnellement avec les disponibilités et les conditions de réservation directe.</p>
-        <a className="button" href="mailto:coulotstephanie@gmail.com?subject=Demande%20de%20séjour%20Beaux%20Rivages">Faire une demande</a>
-      </section>
+      <Section className="premium-closing">
+        <Heading
+          eyebrow="L’esprit Beaux Rivages"
+          title="Les îles nous ont offert tant de souvenirs… Nous espérons qu’elles vous en offriront autant."
+          description="Bienvenue chez Beaux Rivages."
+          align="center"
+        />
+        <Button href="/reserver">Préparer votre séjour</Button>
+      </Section>
 
       <Footer />
     </main>

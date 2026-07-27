@@ -1,23 +1,32 @@
 {
-  "name": "beaux-rivages",
-  "version": "1.0.0",
+  "name": "beaux-rivages-v3",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc --noEmit"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/project-integrity.test.mjs",
+    "test:site": "node tests/crawl-site.mjs",
+    "validate": "npm run lint && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
-    "next": "15.2.8",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.27.0",
+    "next": "^15.5.22",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "lucide-react": "^0.468.0"
+    "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.22",
     "typescript": "^5.7.2"
   }
 }
