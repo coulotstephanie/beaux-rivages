@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { propertySlugs } from "@/platform/calendar/config";
+import { reservationStatuses } from "@/platform/admin/contracts";
 
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 const cents = z.number().int().min(0).max(10_000_000);
@@ -58,3 +59,55 @@ export const createReservationSchema = z.object({
 });
 
 export type CreateReservationInput = z.infer<typeof createReservationSchema>;
+
+export const adminManualReservationSchema = z.object({
+  action: z.literal("create_reservation"),
+  propertySlug: z.enum(propertySlugs),
+  arrival: isoDate,
+  departure: isoDate,
+  adults: z.number().int().min(1).max(30),
+  children: z.number().int().min(0).max(30).default(0),
+  babies: z.number().int().min(0).max(10).default(0),
+  pets: z.number().int().min(0).max(10).default(0),
+  channel: z.enum(["direct", "manual"]).default("manual"),
+  status: z.enum(["requested", "confirmed"]).default("confirmed"),
+  totalCents: cents,
+  guest: guestInputSchema,
+}).strict().superRefine((input, context) => {
+  if (input.departure <= input.arrival) {
+    context.addIssue({ code: "custom", path: ["departure"], message: "La date de départ doit suivre l’arrivée." });
+  }
+});
+
+export const adminBlockDatesSchema = z.object({
+  action: z.literal("block_dates"),
+  propertySlug: z.enum(propertySlugs),
+  arrival: isoDate,
+  departure: isoDate,
+  note: z.string().trim().min(2).max(300),
+}).strict().superRefine((input, context) => {
+  if (input.departure <= input.arrival) {
+    context.addIssue({ code: "custom", path: ["departure"], message: "La date de fin doit suivre la date de début." });
+  }
+});
+
+export const adminReservationUpdateSchema = z.object({
+  action: z.literal("update_reservation"),
+  reservationId: z.string().uuid(),
+  status: z.enum(reservationStatuses),
+  arrival: isoDate.optional(),
+  departure: isoDate.optional(),
+  cancellationReason: z.string().trim().max(500).optional(),
+}).strict().superRefine((input, context) => {
+  if (input.arrival && input.departure && input.departure <= input.arrival) {
+    context.addIssue({ code: "custom", path: ["departure"], message: "La date de départ doit suivre l’arrivée." });
+  }
+});
+
+export const adminOperationSchema = z.discriminatedUnion("action", [
+  adminManualReservationSchema,
+  adminBlockDatesSchema,
+  adminReservationUpdateSchema,
+]);
+
+export type AdminOperationInput = z.infer<typeof adminOperationSchema>;
