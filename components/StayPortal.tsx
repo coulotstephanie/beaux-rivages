@@ -9,6 +9,7 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
   const [token, setToken] = useState(initialToken);
   const [stay, setStay] = useState<StayAccessPayload | null>(null);
   const [message, setMessage] = useState("Utilisez le lien sécurisé reçu après confirmation.");
+  const [paymentBusy, setPaymentBusy] = useState(false);
   const load = async (accessToken: string) => {
     if (!accessToken) return;
     const response = await fetch("/api/stay", { headers: { Authorization: `Bearer ${accessToken}` } });
@@ -22,6 +23,22 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
     setMessage("Séjour chargé.");
   };
   useEffect(() => { if (initialToken) void load(initialToken); }, [initialToken]);
+  const pay = async (purpose: "deposit" | "balance" | "full-payment") => {
+    setPaymentBusy(true);
+    setMessage("Préparation du paiement sécurisé…");
+    try {
+      const response = await fetch("/api/payments/checkout", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ purpose }),
+      });
+      const payload = await response.json() as { checkoutUrl?: string; error?: string };
+      if (!response.ok || !payload.checkoutUrl) return setMessage(payload.error ?? "Paiement indisponible.");
+      window.location.assign(payload.checkoutUrl);
+    } finally {
+      setPaymentBusy(false);
+    }
+  };
   if (!stay) return (
     <div className="stay-portal__login">
       <h2>Ouvrir mon séjour</h2>
@@ -41,7 +58,7 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
       <header><p className="eyebrow">Réservation {stay.reference}</p><h2>Bienvenue, {stay.travelerName}.</h2><p>{stay.propertyName} · du {new Date(`${stay.arrival}T12:00:00`).toLocaleDateString("fr-FR")} au {new Date(`${stay.departure}T12:00:00`).toLocaleDateString("fr-FR")}</p></header>
       <ol className="stay-timeline">{steps.map((step, index) => <li key={step} className={index <= activeStep ? "is-complete" : ""} aria-current={index === activeStep ? "step" : undefined}><span>{index + 1}</span><strong>{step}</strong><small>{index === 0 ? "Confirmation enregistrée" : index === 1 ? `${stay.depositPaid} € d’acompte · ${stay.balanceRemaining} € restant` : index === 2 ? "La maison se prépare" : index === 3 ? "Informations accessibles au bon moment" : index === 4 ? "Stéphanie & Bruno restent disponibles" : index === 5 ? "Départ avant l’horaire convenu" : "Merci pour votre confiance"}</small></li>)}</ol>
       <div className="stay-portal__grid">
-        <section><h3>Votre réservation</h3><dl><div><dt>Voyageurs</dt><dd>{stay.guests}</dd></div><div><dt>Acompte</dt><dd>{stay.depositPaid} €</dd></div><div><dt>Solde</dt><dd>{stay.balanceRemaining} €</dd></div></dl></section>
+        <section><h3>Votre réservation</h3><dl><div><dt>Voyageurs</dt><dd>{stay.guests}</dd></div><div><dt>Acompte</dt><dd>{stay.depositPaid} €</dd></div><div><dt>Solde</dt><dd>{stay.balanceRemaining} €</dd></div></dl>{stay.balanceRemaining > 0 && <div className="stay-portal__payments"><p>Paiement sécurisé Stripe · environnement de test</p>{stay.depositPaid <= 0 && <button type="button" disabled={paymentBusy} onClick={() => void pay("deposit")}>Régler l’acompte</button>}<button type="button" disabled={paymentBusy} onClick={() => void pay(stay.depositPaid > 0 ? "balance" : "full-payment")}>{stay.depositPaid > 0 ? "Régler le solde" : "Régler la totalité"}</button></div>}<p role="status">{message}</p></section>
         <section><h3>Vos options</h3>{stay.options.length ? <ul>{stay.options.map((option) => <li key={option}>{option}</li>)}</ul> : <p>Aucune option ajoutée.</p>}</section>
         <section><h3>Stéphanie & Bruno</h3><a href="tel:+33617260094">+33 6 17 26 00 94</a><a href="mailto:coulotstephanie@gmail.com">coulotstephanie@gmail.com</a></section>
         <section><h3>Documents</h3>{stay.documents.map((document) => <span key={document.id}><a href={`/api/documents/contract?token=${encodeURIComponent(token)}&document=${document.id}`}>PDF · {document.title}</a><a href={`/api/documents/contract?token=${encodeURIComponent(token)}&document=${document.id}&format=html`} target="_blank" rel="noreferrer">Version HTML imprimable</a></span>)}</section>

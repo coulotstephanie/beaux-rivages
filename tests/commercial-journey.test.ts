@@ -3,6 +3,7 @@ import test from "node:test";
 import { calculateQuote } from "../platform/pricing/service";
 import { stayEmailTemplates } from "../platform/email/templates";
 import { StripePaymentAdapter } from "../platform/payments/stripe";
+import { amountDue, purposeToKind } from "../platform/payments/contracts";
 
 test("complete direct-booking preparation calculates a family quote", async () => {
   const quote = await calculateQuote({
@@ -41,4 +42,14 @@ test("Stripe remains disabled without an environment secret", async () => {
   const adapter = new StripePaymentAdapter();
   await assert.rejects(() => adapter.refund({ paymentProviderId: "pi_test" }), /not configured/);
   if (previous) process.env.STRIPE_SECRET_KEY = previous;
+});
+
+test("Stripe amount calculation never exceeds the authoritative database balance", () => {
+  const reservation = { totalCents: 120000, depositDueCents: 36000 };
+  assert.equal(amountDue({ ...reservation, purpose: "deposit", paidCents: 0 }), 36000);
+  assert.equal(amountDue({ ...reservation, purpose: "deposit", paidCents: 10000 }), 26000);
+  assert.equal(amountDue({ ...reservation, purpose: "balance", paidCents: 36000 }), 84000);
+  assert.equal(amountDue({ ...reservation, purpose: "full-payment", paidCents: 0 }), 120000);
+  assert.equal(amountDue({ ...reservation, purpose: "balance", paidCents: 120000 }), 0);
+  assert.equal(purposeToKind("full-payment"), "full");
 });

@@ -84,6 +84,17 @@ export type BackOfficeSnapshot = {
     recentSyncs: { id: string; provider: string; property: string; status: string; importedCount: number; errorCount: number; startedAt: string }[];
     emailStatus: Record<string, number>;
     paymentStatus: Record<string, number>;
+    recentPayments: {
+      id: string;
+      reservationReference: string;
+      guestName: string;
+      kind: string;
+      status: string;
+      amountCents: number;
+      refundedCents: number;
+      createdAt: string;
+      refundable: boolean;
+    }[];
     recentErrors: { id: string; area: string; message: string; occurredAt: string }[];
   };
 };

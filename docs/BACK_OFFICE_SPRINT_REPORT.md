@@ -40,3 +40,9 @@
 - clés Stripe TEST et webhook Stripe TEST ;
 - validation juridique des contrats ;
 - connexion Yousign et Resend.
+
+## Extension Stripe TEST
+
+Le mode Pilotage affiche désormais les paiements récents et permet de demander
+un remboursement TEST depuis une action protégée. Les événements Stripe sont
+conservés séparément afin de détecter les doublons, les échecs et les rejouages.

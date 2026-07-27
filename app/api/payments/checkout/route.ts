@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
-import type { PaymentPurpose } from "@/platform/payments/contracts";
+import { amountDue, purposeToKind, type PaymentPurpose } from "@/platform/payments/contracts";
 import { StripePaymentAdapter } from "@/platform/payments/stripe";
+import { isDatabaseConfigured } from "@/platform/database/client";
+import { SupabaseStripePaymentRepository } from "@/platform/database/payments";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { verifyStayAccessToken } from "@/platform/traveler/access";
 
@@ -15,12 +17,24 @@ export async function POST(request: NextRequest) {
   const purpose = input.purpose as PaymentPurpose;
   if (!token || !["deposit", "full-payment", "balance"].includes(purpose)) return noStoreJson({ error: "Accès ou type de paiement invalide." }, { status: 400 });
   try {
+    if (!process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_") || !process.env.STRIPE_WEBHOOK_SECRET?.startsWith("whsec_")) {
+      return noStoreJson({ error: "Stripe TEST attend encore la configuration du webhook." }, { status: 503 });
+    }
     const stay = verifyStayAccessToken(token);
-    const depositPercentage = Math.min(100, Math.max(1, Number(process.env.BOOKING_DEPOSIT_PERCENTAGE ?? 30)));
-    const total = stay.contractDetails?.total ?? stay.depositPaid + stay.balanceRemaining;
-    const amount = purpose === "deposit" ? Math.round(total * depositPercentage) / 100 : purpose === "balance" ? stay.balanceRemaining : total;
-    if (amount <= 0) return noStoreJson({ error: "Aucun montant à régler." }, { status: 400 });
-    const session = await new StripePaymentAdapter().createCheckout({ stay, purpose, amount });
+    if (!isDatabaseConfigured()) return noStoreJson({ error: "Base de données non configurée." }, { status: 503 });
+    const repository = new SupabaseStripePaymentRepository();
+    const reservation = await repository.payableReservation(stay.reservationId, stay.reference);
+    const amountCents = amountDue({ purpose, totalCents: reservation.totalCents, depositDueCents: reservation.depositDueCents, paidCents: reservation.paidCents });
+    if (amountCents <= 0) return noStoreJson({ error: "Aucun montant à régler." }, { status: 400 });
+    const payment = await repository.createPending({ reservationId: stay.reservationId, kind: purposeToKind(purpose), amountCents });
+    let session;
+    try {
+      session = await new StripePaymentAdapter().createCheckout({ stay, purpose, amountCents, paymentId: payment.id, idempotencyKey: payment.idempotency_key });
+      await repository.attachSession(payment.id, session);
+    } catch (error) {
+      await repository.markCreationFailed(payment.id, error instanceof Error ? error.message : "Unknown error");
+      throw error;
+    }
     return noStoreJson({ checkoutUrl: session.url, sessionId: session.id, mode: process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_") ? "test" : "disabled" });
   } catch (error) {
     console.error(JSON.stringify({ event: "payment.checkout.error", message: error instanceof Error ? error.message : "Unknown error" }));

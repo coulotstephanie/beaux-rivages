@@ -184,6 +184,23 @@ test("platform foundations keep external providers behind typed contracts", () =
   assert.match(read("platform/traveler/contracts.ts"), /type TravelerPortal/);
 });
 
+test("Stripe TEST verifies signatures and handles the complete payment lifecycle", () => {
+  const adapter = read("platform/payments/stripe.ts");
+  const checkout = read("app/api/payments/checkout/route.ts");
+  const webhook = read("app/api/payments/webhook/route.ts");
+  const refund = read("app/api/admin/payments/refund/route.ts");
+  assert.match(adapter, /constructEvent/);
+  assert.match(adapter, /payment_intent_data/);
+  assert.match(checkout, /payableReservation/);
+  assert.match(checkout, /amountDue/);
+  for (const event of ["checkout.session.completed", "checkout.session.expired", "payment_intent.succeeded", "payment_intent.payment_failed", "charge.refunded"]) {
+    assert.match(webhook, new RegExp(event.replaceAll(".", "\\.")), `Missing Stripe event ${event}`);
+  }
+  assert.match(webhook, /claimEvent/);
+  assert.match(refund, /requireAdmin/);
+  assert.match(refund, /requireSameOrigin/);
+});
+
 test("iCal normalization handles event boundaries, cancellation and deduplication", () => {
   const source = read("platform/calendar/ical.ts");
   assert.match(source, /BEGIN:VEVENT/);

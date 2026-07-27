@@ -2814,6 +2814,12 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-alert { padding: .75rem; display: grid; gap: .2rem; border-left: 3px solid #b25d42; background: #fff7f4; }
 .admin-alert span,.admin-alert small { color: #6d7976; font-size: .8rem; }
 .admin-export-stack { display: grid; gap: .6rem; }
+.admin-payment-actions { display: flex; align-items: center; gap: .5rem; }
+.admin-payment-actions button { min-height: 38px; padding: .4rem .65rem; border: 1px solid #8b372d; color: #8b372d; background: transparent; cursor: pointer; }
+.stay-portal__payments { margin-top: 1rem; padding-top: 1rem; display: grid; gap: .6rem; border-top: 1px solid var(--line); }
+.stay-portal__payments p { margin: 0; color: var(--muted); font-size: .8rem; }
+.stay-portal__payments button { min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--deep); color: white; background: var(--deep); cursor: pointer; }
+.stay-portal__payments button + button { color: var(--deep); background: transparent; }
 
 .stephanie-letter { padding: clamp(5rem,10vw,10rem) 0; display: grid; grid-template-columns: 1fr .9fr; gap: clamp(2rem,7vw,7rem); }
 .stephanie-letter h2 { margin: .6rem 0 2rem; font-family: var(--font-serif); font-size: clamp(2.5rem,5vw,5rem); font-weight: 400; line-height: 1; }

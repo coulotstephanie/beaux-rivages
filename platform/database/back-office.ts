@@ -47,7 +47,7 @@ export class SupabaseBackOfficeRepository {
       this.client.from("reservations").select("*").order("arrival", { ascending: false }).limit(5000),
       this.client.from("reservation_guests").select("reservation_id,guest_id,is_primary"),
       this.client.from("guests").select("id,first_name,last_name,email,phone").order("last_name"),
-      this.client.from("payments").select("reservation_id,status,amount_cents,paid_at,created_at").order("created_at", { ascending: false }),
+      this.client.from("payments").select("id,reservation_id,kind,status,amount_cents,refunded_cents,provider_payment_id,paid_at,created_at").order("created_at", { ascending: false }),
       this.client.from("contracts").select("id,reservation_id,number,status,updated_at").order("updated_at", { ascending: false }).limit(500),
       this.client.from("invoices").select("id,reservation_id,number,status,total_cents,updated_at").order("updated_at", { ascending: false }).limit(500),
       this.client.from("occupancy_blocks").select("property_id,source,stay_range,created_at").limit(10000),
@@ -166,6 +166,16 @@ export class SupabaseBackOfficeRepository {
         }),
         emailStatus: countBy((emailsResult.data ?? []) as Row[], "status"),
         paymentStatus: countBy(paymentRows, "status"),
+        recentPayments: paymentRows.slice(0, 30).map((row) => {
+          const reservation = reservationById.get(String(row.reservation_id));
+          return {
+            id: String(row.id), reservationReference: reservation?.reference ?? "—",
+            guestName: reservation?.guestName ?? "Voyageur", kind: String(row.kind), status: String(row.status),
+            amountCents: Number(row.amount_cents), refundedCents: Number(row.refunded_cents),
+            createdAt: String(row.created_at),
+            refundable: Boolean(row.provider_payment_id) && ["paid", "partially_refunded"].includes(String(row.status)) && Number(row.refunded_cents) < Number(row.amount_cents),
+          };
+        }),
         recentErrors,
       },
     };

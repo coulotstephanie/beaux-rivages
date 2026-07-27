@@ -7,6 +7,10 @@ const migration = readFileSync(
   new URL("../supabase/migrations/20260727170000_production_booking_foundation.sql", import.meta.url),
   "utf8",
 );
+const stripeMigration = readFileSync(
+  new URL("../supabase/migrations/20260727204500_stripe_test_payments.sql", import.meta.url),
+  "utf8",
+);
 
 test("the reservation payload accepts a complete validated request", () => {
   const result = createReservationSchema.safeParse({
@@ -131,4 +135,12 @@ test("back-office status changes accept only the reservation lifecycle", () => {
     reservationId: "73f640dc-e678-4ba0-a6df-b12576880805",
     status: "deleted",
   }).success, false);
+});
+
+test("Stripe webhook persistence is idempotent, private and reversible", () => {
+  assert.match(stripeMigration, /provider_event_id text not null/);
+  assert.match(stripeMigration, /unique \(provider, provider_event_id\)/);
+  assert.match(stripeMigration, /enable row level security/);
+  assert.doesNotMatch(stripeMigration, /\bto anon\b/i);
+  assert.match(stripeMigration, /claim_payment_event/);
 });

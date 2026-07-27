@@ -534,6 +534,53 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_events: {
+        Row: {
+          error_message: string | null
+          event_type: string
+          id: string
+          payload: Json
+          payment_id: string | null
+          processed_at: string | null
+          provider: string
+          provider_event_id: string
+          received_at: string
+          status: string
+        }
+        Insert: {
+          error_message?: string | null
+          event_type: string
+          id?: string
+          payload?: Json
+          payment_id?: string | null
+          processed_at?: string | null
+          provider?: string
+          provider_event_id: string
+          received_at?: string
+          status?: string
+        }
+        Update: {
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          payment_id?: string | null
+          processed_at?: string | null
+          provider?: string
+          provider_event_id?: string
+          received_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_events_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount_cents: number
@@ -549,6 +596,7 @@ export type Database = {
           provider: string
           provider_payload: Json
           provider_payment_id: string | null
+          provider_session_id: string | null
           refunded_cents: number
           reservation_id: string
           status: Database["public"]["Enums"]["payment_status"]
@@ -568,6 +616,7 @@ export type Database = {
           provider?: string
           provider_payload?: Json
           provider_payment_id?: string | null
+          provider_session_id?: string | null
           refunded_cents?: number
           reservation_id: string
           status?: Database["public"]["Enums"]["payment_status"]
@@ -587,6 +636,7 @@ export type Database = {
           provider?: string
           provider_payload?: Json
           provider_payment_id?: string | null
+          provider_session_id?: string | null
           refunded_cents?: number
           reservation_id?: string
           status?: Database["public"]["Enums"]["payment_status"]
@@ -1352,6 +1402,15 @@ export type Database = {
           requested_property_id: string
         }
         Returns: Json
+      }
+      claim_payment_event: {
+        Args: {
+          event_id: string
+          event_name: string
+          event_payload: Json
+          event_provider: string
+        }
+        Returns: string
       }
       create_direct_reservation: {
         Args: {

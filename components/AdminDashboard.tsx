@@ -115,6 +115,21 @@ export function AdminDashboard() {
     URL.revokeObjectURL(url);
     setMessage("Export CSV préparé.");
   };
+  const refund = async (paymentId: string) => {
+    if (!window.confirm("Confirmer le remboursement intégral de ce paiement TEST ?")) return;
+    setBusy(true);
+    try {
+      const response = await call("/api/admin/payments/refund", {
+        method: "POST", body: JSON.stringify({ paymentId, reason: "Remboursement intégral depuis le Back Office" }),
+      });
+      const payload = await response.json() as { error?: string };
+      if (!response.ok) return setMessage(payload.error ?? "Remboursement impossible.");
+      setMessage("Remboursement Stripe TEST demandé. Le webhook mettra le statut à jour.");
+      await load();
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const filteredReservations = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -202,6 +217,7 @@ export function AdminDashboard() {
         <article className="admin-card"><h3>État des calendriers</h3>{data.pilotage.calendarSources.map((source) => <div className="admin-health-row" key={source.id}><div><strong>{source.property}</strong><span>{source.provider} · synchro {dateTime(source.lastSyncedAt)}</span></div><Status value={source.status} /></div>)}</article>
         <article className="admin-card"><h3>Dernières synchronisations</h3>{data.pilotage.recentSyncs.slice(0, 10).map((sync) => <div className="admin-health-row" key={sync.id}><div><strong>{sync.property} · {sync.provider}</strong><span>{sync.importedCount} import(s), {sync.errorCount} erreur(s) · {dateTime(sync.startedAt)}</span></div><Status value={sync.status} /></div>)}</article>
         <article className="admin-card"><h3>Alertes récentes</h3>{data.pilotage.recentErrors.map((error) => <div className="admin-alert" key={error.id}><strong>{error.area}</strong><span>{error.message}</span><small>{dateTime(error.occurredAt)}</small></div>)}{!data.pilotage.recentErrors.length && <p className="admin-empty">Aucune anomalie récente détectée.</p>}</article>
+        <article className="admin-card"><h3>Paiements Stripe TEST</h3>{data.pilotage.recentPayments.map((payment) => <div className="admin-health-row" key={payment.id}><div><strong>{payment.guestName} · {money(payment.amountCents)}</strong><span>{payment.reservationReference} · {payment.kind} · {dateTime(payment.createdAt)}</span></div><div className="admin-payment-actions"><Status value={payment.status} />{payment.refundable && <button type="button" disabled={busy} onClick={() => void refund(payment.id)}>Rembourser</button>}</div></div>)}{!data.pilotage.recentPayments.length && <p className="admin-empty">Aucun paiement enregistré.</p>}</article>
         <article className="admin-card"><h3>Exports & journaux</h3><div className="admin-export-stack"><button type="button" onClick={() => void download("reservations")}>Exporter les réservations CSV</button><button type="button" onClick={() => void download("payments")}>Exporter les paiements CSV</button><button type="button" onClick={() => void download("audit_logs")}>Exporter le journal d’audit CSV</button></div></article>
       </div>
     </section>}
