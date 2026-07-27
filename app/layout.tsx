@@ -13,11 +13,16 @@ export const metadata: Metadata = {
   keywords: ["Île de Ré", "Île d’Oléron", "maison de vacances", "location saisonnière", "Beaux Rivages"],
   robots: { index: true, follow: true },
   verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION },
-  icons: { icon: "/icon.svg" },
+  manifest: "/manifest.webmanifest",
+  openGraph: { images: ["/opengraph.png"] },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a2733",
+  themeColor: "#16354A",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,

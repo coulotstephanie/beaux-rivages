@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="150" viewBox="0 0 760 150" role="img" aria-label="Logo Beaux Rivages">
+<rect width="100%" height="100%" fill="#16354A"/>
+<g transform="translate(28 18)">
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 19V81M26 20H48C62 20 69 27 69 37C69 47 61 53 48 53H26M48 53C64 53 74 62 76 79" stroke-width="5.2"/>
+    <path d="M52 20V81M52 20H69C82 20 89 27 89 37C89 47 81 53 69 53H52M69 53L91 81" stroke-width="3.2"/>
+    <path d="M14 69C31 61 43 61 58 69C73 77 85 77 100 68" stroke-width="2.2"/>
+    <path d="M18 76C32 70 44 70 58 77C72 84 84 84 97 77" stroke-width="1.25"/>
+  </g></g>
+  <text x="162" y="70" fill="#FFFFFF" text-anchor="start" font-family="Optima, 'Avenir Next', sans-serif" font-size="31" letter-spacing="5.89" font-weight="500">BEAUX RIVAGES</text>
+  <text x="162" y="94" fill="#FFFFFF" text-anchor="start" font-family="Optima, 'Avenir Next', sans-serif" font-size="8" letter-spacing="2.15">TROIS MAISONS. DEUX ÎLES. UNE MÊME PASSION DE L’HOSPITALITÉ.</text>
+</svg>

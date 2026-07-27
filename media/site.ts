@@ -19,6 +19,9 @@ export const siteMedia = {
     familySunset: destinationMedia.familySunset.src,
     morningSurf: destinationMedia.morningSurf.src,
     familyForeshore: destinationMedia.familyForeshore.src,
+    fortBoyard: destinationMedia.fortBoyard.src,
+    oceanBreakfast: destinationMedia.oceanBreakfast.src,
+    beachPicnic: destinationMedia.beachPicnic.src,
   },
   properties: propertyMedia,
   video: {

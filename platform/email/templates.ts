@@ -8,15 +8,15 @@ export type StayEmailData = {
 
 const shell = (title: string, preheader: string, content: string) => `<!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title></head>
-<body style="margin:0;background:#eee7dc;color:#102b35;font-family:Arial,sans-serif">
+<body style="margin:0;background:#F7F3EA;color:#16354A;font-family:Arial,sans-serif">
 <div style="display:none;max-height:0;overflow:hidden">${preheader}</div>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:24px">
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#fbfaf7">
-<tr><td style="padding:32px;background:#0a2733;color:#fff"><div style="font-family:Georgia,serif;font-size:26px;letter-spacing:2px">BEAUX RIVAGES</div><div style="color:#b59463;font-size:10px;letter-spacing:2px">L’HOSPITALITÉ DES ÎLES</div></td></tr>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#fff">
+<tr><td style="padding:32px;background:#16354A;color:#fff"><img src="https://www.beaux-rivages.com/brand/logo-horizontal-blanc.svg" width="340" alt="BEAUX RIVAGES" style="display:block;max-width:100%;height:auto"><span style="display:none">BEAUX RIVAGES</span></td></tr>
 <tr><td style="padding:42px 32px">${content}</td></tr>
-<tr><td style="padding:24px 32px;background:#0a2733;color:#d9d3c8;font-size:12px">Stéphanie & Bruno · +33 6 17 26 00 94 · Beaux Rivages</td></tr>
+<tr><td style="padding:24px 32px;background:#16354A;color:#D8C3A5;font-size:12px">Stéphanie & Bruno · +33 6 17 26 00 94 · Beaux Rivages</td></tr>
 </table></td></tr></table></body></html>`;
-const button = (url: string, label: string) => `<p style="margin:28px 0"><a href="${url}" style="display:inline-block;padding:14px 20px;background:#0a2733;color:#fff;text-decoration:none">${label}</a></p>`;
+const button = (url: string, label: string) => `<p style="margin:28px 0"><a href="${url}" style="display:inline-block;padding:14px 20px;background:#16354A;color:#fff;text-decoration:none">${label}</a></p>`;
 const greeting = (data: StayEmailData) => `<p>Bonjour ${data.travelerName},</p>`;
 
 export const stayEmailTemplates = {

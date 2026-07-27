@@ -1,0 +1,15 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 0 0 760 150
+%%Title: Beaux Rivages — logo horizontal
+%%Creator: Beaux Rivages Brand Kit
+/navy {0.703 0.284 0 0.710 setcmykcolor} def
+/O /Optima findfont 31 scalefont def
+navy 5.2 setlinewidth 1 setlinecap 1 setlinejoin
+54 37 moveto 54 99 lineto
+54 98 moveto 76 98 lineto 90 98 97 91 97 81 curveto 97 71 89 65 76 65 curveto 54 65 lineto
+76 65 moveto 92 65 102 56 104 39 curveto stroke
+80 98 moveto 80 37 lineto 80 98 moveto 97 98 110 91 110 81 curveto 110 71 102 65 97 65 curveto
+97 65 moveto 119 37 lineto stroke
+O setfont 162 70 moveto (BEAUX RIVAGES) show
+showpage
+%%EOF

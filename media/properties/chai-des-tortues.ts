@@ -87,6 +87,11 @@ const arrival = [
 const exterior = [
   editorialMorningCoffee,
   propertyAsset(
+    "professional/cour-interieure-pierre.jpg",
+    "La petite cour intérieure du Chai entourée de murs en pierre",
+    "Une respiration minérale au cœur de la maison",
+  ),
+  propertyAsset(
     "exterior/facade-pierre.jpeg",
     "La façade en pierre du Chai des Tortues",
     "Une maison dans la pierre rétaise",
@@ -100,6 +105,21 @@ const exterior = [
 
 const livingRoom = [
   editorialAperitif,
+  propertyAsset(
+    "professional/espace-de-vie-panoramique.jpg",
+    "Vue panoramique de la cuisine, de la salle à manger et du salon du Chai",
+    "Tout l’espace de vie réuni sous la structure du chai",
+  ),
+  propertyAsset(
+    "professional/sejour-cuisine-escalier.jpg",
+    "Le séjour du Chai avec la cuisine en bois et l’escalier en colimaçon",
+    "Pierre, bois et métal dans un même volume",
+  ),
+  propertyAsset(
+    "professional/salon-pierre.jpg",
+    "Le salon du Chai bordé de murs en pierre claire",
+    "Le calme du salon sous les poutres",
+  ),
   originalHero,
   propertyAsset(
     "living-room/salon-pierres.jpeg",
@@ -120,6 +140,11 @@ const livingRoom = [
 
 const kitchen = [
   editorialIsland,
+  propertyAsset(
+    "professional/cuisine-bois.jpg",
+    "La cuisine du Chai habillée de bois avec son îlot central",
+    "Une cuisine généreuse pensée pour recevoir",
+  ),
   propertyAsset(
     "kitchen/cuisine-ouverte.jpeg",
     "La cuisine ouverte et son grand plan de travail",
@@ -153,6 +178,26 @@ const bedrooms = [
   editorialBedroom,
   editorialHoneymoon,
   propertyAsset(
+    "professional/chambre-pierre-bois.jpg",
+    "Une chambre du Chai entre mur en pierre et plafond en bois clair",
+    "Dormir entre pierre et bois",
+  ),
+  propertyAsset(
+    "professional/chambre-bois-clair.jpg",
+    "Une chambre lumineuse du Chai avec ses rangements en bois clair",
+    "Une chambre douce et lumineuse",
+  ),
+  propertyAsset(
+    "professional/chambre-suite-salle-eau.jpg",
+    "Une chambre du Chai ouverte sur sa salle d’eau",
+    "Le confort d’une chambre avec salle d’eau",
+  ),
+  propertyAsset(
+    "professional/etage-chambres-salle-eau.jpg",
+    "Le palier distribuant deux chambres et une salle d’eau du Chai",
+    "L’étage pensé pour accueillir",
+  ),
+  propertyAsset(
     "bedroom-1/chambre-pierres.jpeg",
     "La chambre principale bordée d’un mur en pierre",
     "La douceur de la pierre",
@@ -181,6 +226,16 @@ const bedrooms = [
 
 const bathrooms = [
   propertyAsset(
+    "professional/douche-pierre-verte.jpg",
+    "La douche contemporaine aux parois minérales vertes du Chai",
+    "Une salle d’eau au caractère minéral",
+  ),
+  propertyAsset(
+    "professional/vasque-douche-suite.jpg",
+    "La vasque en bois et la douche attenante d’une chambre du Chai",
+    "Bois brut, verrière et douche minérale",
+  ),
+  propertyAsset(
     "bathroom/douche-pierre.jpeg",
     "La douche contemporaine encadrée de pierre",
     "La première salle d’eau",
@@ -203,6 +258,11 @@ const bathrooms = [
 ];
 
 const details = [
+  propertyAsset(
+    "professional/palier-pierre.jpg",
+    "Le palier de l’étage autour de l’escalier noir et du mur en pierre",
+    "La pierre accompagne chaque niveau",
+  ),
   propertyAsset(
     "details/plan-de-travail.jpeg",
     "Le plan de travail de la cuisine et ses détails en bois",
@@ -267,27 +327,39 @@ const propertyGallery = [
   editorialBedroom,
   editorialHoneymoon,
   editorialFamilyGames,
-  originalHero,
+  livingRoom[1],
   livingRoom[2],
-  kitchen[1],
-  exterior[1],
   livingRoom[3],
-  kitchen[2],
+  kitchen[1],
+  bedrooms[2],
+  bedrooms[3],
+  bedrooms[4],
+  bedrooms[5],
   bathrooms[0],
-  details[0],
-  kitchen[5],
-  bathrooms[2],
-  details[2],
-  exterior[2],
-  livingRoom[4],
-  kitchen[3],
-  kitchen[4],
   bathrooms[1],
-  bathrooms[3],
+  exterior[1],
+  details[0],
+  originalHero,
+  livingRoom[5],
+  kitchen[2],
+  exterior[2],
+  livingRoom[6],
+  kitchen[3],
+  bathrooms[2],
   details[1],
+  kitchen[6],
+  bathrooms[4],
   details[3],
+  exterior[3],
+  livingRoom[7],
+  kitchen[4],
+  kitchen[5],
+  bathrooms[3],
+  bathrooms[5],
+  details[2],
   details[4],
   details[5],
+  details[6],
 ];
 
 export const chaiDesTortuesMedia = {

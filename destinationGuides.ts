@@ -142,6 +142,9 @@ export const destinationGuides: DestinationGuide[] = [
       { src: siteMedia.destination.flowerDunes, alt: "Dunes fleuries et barques sur le sable", caption: "Les couleurs du littoral au printemps" },
       { src: siteMedia.destination.morningSurf, alt: "Surfeur dans la lumière du matin", caption: "L’océan au réveil" },
       { src: siteMedia.destination.familyForeshore, alt: "Famille jouant sur l’estran à marée basse", caption: "La plage, simplement, en famille" },
+      { src: siteMedia.destination.fortBoyard, alt: "Fort Boyard aperçu depuis la plage", caption: "Fort Boyard à l’horizon" },
+      { src: siteMedia.destination.oceanBreakfast, alt: "Petit-déjeuner face à l’océan", caption: "Le premier café face aux vagues" },
+      { src: siteMedia.destination.beachPicnic, alt: "Pique-nique sur la plage", caption: "Une fin de journée sur le sable" },
     ],
     chapters: [
       { eyebrow: "Les Saumonards", title: "Une plage face à Fort Boyard", copy: "Depuis Boyardville, la forêt accompagne les derniers mètres avant une plage familiale ouverte sur le pertuis.", image: siteMedia.properties["nid-d-ete"].hero.src, tips: ["Venir le matin en famille", "Revenir à l’heure dorée"] },
