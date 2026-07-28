@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { StayAccessPayload } from "@/platform/traveler/contracts";
+import { conciergeSuggestions } from "@/conciergeEngine";
+import { SmartWeatherAdvisor } from "@/components/SmartWeatherAdvisor";
 
 const steps = ["Réservation", "Paiement", "Préparation", "Arrivée", "Séjour", "Départ", "Merci"];
 
@@ -10,6 +12,8 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
   const [stay, setStay] = useState<StayAccessPayload | null>(null);
   const [message, setMessage] = useState("Utilisez le lien sécurisé reçu après confirmation.");
   const [paymentBusy, setPaymentBusy] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [testimonial, setTestimonial] = useState("");
   const load = async (accessToken: string) => {
     if (!accessToken) return;
     const response = await fetch("/api/stay", { headers: { Authorization: `Bearer ${accessToken}` } });
@@ -23,6 +27,14 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
     setMessage("Séjour chargé.");
   };
   useEffect(() => { if (initialToken) void load(initialToken); }, [initialToken]);
+  useEffect(() => {
+    try { setFavorites(JSON.parse(localStorage.getItem("beaux-rivages-favorites") ?? "[]") as string[]); } catch { setFavorites([]); }
+  }, []);
+  const toggleFavorite = (id: string) => setFavorites((current) => {
+    const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+    localStorage.setItem("beaux-rivages-favorites", JSON.stringify(next));
+    return next;
+  });
   const pay = async (purpose: "deposit" | "balance" | "full-payment") => {
     setPaymentBusy(true);
     setMessage("Préparation du paiement sécurisé…");
@@ -53,9 +65,11 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
   );
   const today = new Date().toISOString().slice(0, 10);
   const activeStep = today < stay.arrival ? 2 : today <= stay.departure ? 4 : 6;
+  const countdown = Math.max(0, Math.ceil((Date.parse(`${stay.arrival}T12:00:00`) - Date.now()) / 86_400_000));
+  const guide = conciergeSuggestions.filter((item) => stay.guideSlugs.includes(item.id) || ["conseil", "marche", "itineraire-lumiere"].includes(item.id)).slice(0, 6);
   return (
     <div className="stay-portal">
-      <header><p className="eyebrow">Réservation {stay.reference}</p><h2>Bienvenue, {stay.travelerName}.</h2><p>{stay.propertyName} · du {new Date(`${stay.arrival}T12:00:00`).toLocaleDateString("fr-FR")} au {new Date(`${stay.departure}T12:00:00`).toLocaleDateString("fr-FR")}</p></header>
+      <header><p className="eyebrow">Réservation {stay.reference}</p><h2>Bienvenue, {stay.travelerName}.</h2><p>{stay.propertyName} · du {new Date(`${stay.arrival}T12:00:00`).toLocaleDateString("fr-FR")} au {new Date(`${stay.departure}T12:00:00`).toLocaleDateString("fr-FR")}</p>{today < stay.arrival ? <strong className="stay-countdown">J−{countdown} avant votre arrivée</strong> : today <= stay.departure ? <strong className="stay-countdown">Votre séjour est en cours</strong> : null}</header>
       <ol className="stay-timeline">{steps.map((step, index) => <li key={step} className={index <= activeStep ? "is-complete" : ""} aria-current={index === activeStep ? "step" : undefined}><span>{index + 1}</span><strong>{step}</strong><small>{index === 0 ? "Confirmation enregistrée" : index === 1 ? `${stay.depositPaid} € d’acompte · ${stay.balanceRemaining} € restant` : index === 2 ? "La maison se prépare" : index === 3 ? "Informations accessibles au bon moment" : index === 4 ? "Stéphanie & Bruno restent disponibles" : index === 5 ? "Départ avant l’horaire convenu" : "Merci pour votre confiance"}</small></li>)}</ol>
       <div className="stay-portal__grid">
         <section><h3>Votre réservation</h3><dl><div><dt>Voyageurs</dt><dd>{stay.guests}</dd></div><div><dt>Acompte</dt><dd>{stay.depositPaid} €</dd></div><div><dt>Solde</dt><dd>{stay.balanceRemaining} €</dd></div></dl>{stay.balanceRemaining > 0 && <div className="stay-portal__payments"><p>Paiement sécurisé Stripe · environnement de test</p>{stay.depositPaid <= 0 && <button type="button" disabled={paymentBusy} onClick={() => void pay("deposit")}>Régler l’acompte</button>}<button type="button" disabled={paymentBusy} onClick={() => void pay(stay.depositPaid > 0 ? "balance" : "full-payment")}>{stay.depositPaid > 0 ? "Régler le solde" : "Régler la totalité"}</button></div>}<p role="status">{message}</p></section>
@@ -65,6 +79,9 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
         <section><h3>Arrivée</h3>{stay.arrivalDetails?.accessCode ? <><p>Code d’accès</p><strong>{stay.arrivalDetails.accessCode}</strong><p>{stay.arrivalDetails.parking}</p></> : <p>Les informations sensibles seront disponibles à partir du {stay.arrivalDetails ? new Date(stay.arrivalDetails.availableFrom).toLocaleString("fr-FR") : "moment prévu"}.</p>}</section>
         <section><h3>Guide personnalisé</h3><a href="/carnet">Ouvrir le Carnet Beaux Rivages →</a></section>
       </div>
+      <section className="stay-personal-guide"><p className="eyebrow">Votre programme</p><h3>Nos idées pour ce séjour</h3><div>{guide.map((item) => <article key={item.id}><button type="button" aria-pressed={favorites.includes(item.id)} aria-label={favorites.includes(item.id) ? `Retirer ${item.title} des favoris` : `Ajouter ${item.title} aux favoris`} onClick={() => toggleFavorite(item.id)}>{favorites.includes(item.id) ? "♥" : "♡"}</button><span>{item.kind}</span><h4>{item.title}</h4><p>{item.description}</p><a href={item.href}>Voir →</a></article>)}</div></section>
+      <SmartWeatherAdvisor compact />
+      {today > stay.departure ? <section className="stay-testimonial"><p className="eyebrow">Après le séjour</p><h3>Racontez-nous votre plus beau moment.</h3><label htmlFor="stay-testimonial">Votre témoignage</label><textarea id="stay-testimonial" rows={5} value={testimonial} onChange={(event) => setTestimonial(event.target.value)} /><a className="primary-button" href={`mailto:coulotstephanie@gmail.com?subject=${encodeURIComponent(`Témoignage ${stay.reference}`)}&body=${encodeURIComponent(testimonial)}`}>Envoyer à Stéphanie & Bruno</a></section> : null}
     </div>
   );
 }

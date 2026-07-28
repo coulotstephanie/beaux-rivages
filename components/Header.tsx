@@ -41,6 +41,7 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
           <Link href="/destinations">Les îles</Link>
           <Link href="/experiences">Expériences</Link>
           <Link href="/carnet">Le Carnet</Link>
+          <Link href="/conciergerie">Conciergerie</Link>
           <Link href="/phototheque">Photothèque</Link>
           <Link href="/avis">Avis</Link>
         </nav>
@@ -70,6 +71,7 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
         <Link href="/destinations" onClick={closeMenu}>Les îles</Link>
         <Link href="/experiences" onClick={closeMenu}>Expériences</Link>
         <Link href="/carnet" onClick={closeMenu}>Le Carnet</Link>
+        <Link href="/conciergerie" onClick={closeMenu}>Conciergerie intelligente</Link>
         <Link href="/phototheque" onClick={closeMenu}>Photothèque</Link>
         <Link href="/personnaliser" onClick={closeMenu}>Personnaliser</Link>
         <Link href="/engagements" onClick={closeMenu}>Nos engagements</Link>

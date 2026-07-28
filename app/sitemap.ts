@@ -7,6 +7,7 @@ const staticRoutes = [
   "",
   "/maisons",
   "/carnet",
+  "/conciergerie",
   "/choisir",
   "/construisez-votre-sejour",
   "/avant-arrivee",

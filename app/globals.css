@@ -958,6 +958,64 @@ body.menu-open { overflow: hidden; }
   .premium-footer__brand,.premium-footer__grid > div:last-child { grid-column: auto; }
   .premium-footer__bottom { flex-direction: column; gap: 8px; }
 }
+
+/* EPIC 6–9 — conciergerie, conditions du jour et inspiration */
+.concierge-section { padding: clamp(5rem,9vw,9rem) 0; }
+.concierge-planner__intro { max-width: 760px; }
+.concierge-planner__intro h2,.today-islands__title h2,.concierge-carnet h2,.inspiration-manifesto h2,.inspiration-editorial h2,.inspiration-host h2,.inspiration-seasons h2 { margin: .45rem 0 1rem; font: 400 clamp(2.5rem,5vw,5.5rem)/1 var(--font-serif); }
+.concierge-planner__intro > p:last-child,.today-islands__title > p:last-child { color: var(--muted); line-height: 1.75; }
+.concierge-planner__form { margin: 3rem 0; padding: clamp(1.2rem,3vw,2.2rem); display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 2rem; background: var(--sand); }
+.concierge-planner fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.concierge-planner legend { margin-bottom: .8rem; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.concierge-planner fieldset > div { display: flex; flex-wrap: wrap; gap: .5rem; }
+.concierge-planner button { min-height: 44px; padding: .65rem .85rem; border: 1px solid rgba(20,52,50,.25); color: var(--deep); background: transparent; cursor: pointer; }
+.concierge-planner button[aria-pressed="true"] { color: white; border-color: var(--deep); background: var(--deep); }
+.concierge-planner__result-head { margin-bottom: 1.5rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.concierge-planner__result-head h3 { margin: .35rem 0 0; font: 400 2rem var(--font-serif); }
+.concierge-planner__result-head .primary-button { color: white; }
+.concierge-planner__cards { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; }
+.concierge-planner__cards article { min-height: 250px; padding: 1.5rem; display: flex; flex-direction: column; border-top: 3px solid var(--gold); background: white; box-shadow: var(--shadow-soft); }
+.concierge-planner__cards article > span { color: var(--gold-text); font-size: .67rem; letter-spacing: .08em; text-transform: uppercase; }
+.concierge-planner__cards h4 { margin: auto 0 .6rem; font: 400 1.5rem var(--font-serif); }
+.concierge-planner__cards p { color: var(--muted); line-height: 1.6; }
+.concierge-planner__cards a { color: var(--deep); font-size: .78rem; font-weight: 700; }
+.today-islands { padding: clamp(5rem,9vw,9rem) 0; background: #e8e1d4; }
+.today-islands__title { max-width: 800px; margin-bottom: 2.5rem; }
+.smart-weather__now { grid-template-columns: repeat(3,minmax(105px,1fr)); }
+.concierge-carnet { padding: clamp(4rem,8vw,7rem) 0; display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
+.concierge-carnet > div { max-width: 760px; }
+.inspiration-navigation { position: sticky; z-index: 5; top: 72px; padding: .9rem 5vw; display: flex; justify-content: center; gap: clamp(1rem,4vw,4rem); overflow-x: auto; background: rgba(247,244,237,.94); backdrop-filter: blur(12px); }
+.inspiration-navigation a { color: var(--deep); font-size: .72rem; font-weight: 700; text-decoration: none; white-space: nowrap; text-transform: uppercase; letter-spacing: .08em; }
+.inspiration-manifesto { padding: clamp(7rem,14vw,14rem) 0; text-align: center; }
+.inspiration-manifesto p { max-width: 760px; margin-inline: auto; color: var(--muted); font-size: 1.1rem; line-height: 1.9; }
+.inspiration-editorial { min-height: 780px; position: relative; display: grid; grid-template-columns: 1.1fr .9fr; background: var(--deep); }
+.inspiration-editorial > img { width: 55%!important; object-fit: cover; }
+.inspiration-editorial > div { z-index: 1; grid-column: 2; padding: clamp(4rem,8vw,8rem); color: white; align-self: center; }
+.inspiration-editorial ol { margin: 2.5rem 0; padding: 0; list-style: none; }
+.inspiration-editorial li { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,.2); }
+.inspiration-editorial li span { width: 80px; display: inline-block; color: #d7c18e; }
+.inspiration-editorial a,.inspiration-seasons a { color: white; }
+.inspiration-host { padding: clamp(7rem,12vw,12rem) 0; display: grid; grid-template-columns: 1fr .8fr; gap: clamp(3rem,8vw,8rem); align-items: center; }
+.inspiration-host blockquote { margin: 2rem 0; font: 400 clamp(1.5rem,3vw,2.8rem)/1.35 var(--font-serif); }
+.inspiration-host img { width: 100%; height: min(700px,80vh); object-fit: cover; }
+.inspiration-seasons { min-height: 720px; padding: 8vw; display: grid; place-items: center; color: white; text-align: center; background: linear-gradient(rgba(12,34,35,.3),rgba(12,34,35,.76)),url("/images/destination/marais-coucher-soleil.jpeg") center/cover; }
+.inspiration-seasons > div { max-width: 850px; }
+.inspiration-seasons p { font-size: 1.1rem; line-height: 1.8; }
+@media (max-width: 900px) {
+  .concierge-planner__form,.concierge-planner__cards { grid-template-columns: 1fr 1fr; }
+  .concierge-planner__form fieldset:last-child { grid-column: 1/-1; }
+  .inspiration-editorial { display: block; padding-top: 65vw; }
+  .inspiration-editorial > img { width: 100%!important; height: 65vw!important; }
+  .inspiration-host { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .concierge-planner__form,.concierge-planner__cards { grid-template-columns: 1fr; }
+  .concierge-planner__form fieldset:last-child { grid-column: auto; }
+  .concierge-planner__result-head,.concierge-carnet { align-items: stretch; flex-direction: column; }
+  .concierge-planner__result-head .primary-button { width: 100%; }
+  .inspiration-navigation { justify-content: flex-start; }
+  .inspiration-editorial > div { padding: 3rem 1.4rem; }
+}
 @media (prefers-reduced-motion:reduce){.hero-video video,.immersive-button,.scroll-indicator span{transition:none!important;animation:none!important}.hero-video video{display:none}}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -2832,6 +2890,19 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .stay-portal__payments p { margin: 0; color: var(--muted); font-size: .8rem; }
 .stay-portal__payments button { min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--deep); color: white; background: var(--deep); cursor: pointer; }
 .stay-portal__payments button + button { color: var(--deep); background: transparent; }
+.stay-countdown { width: fit-content; margin-top: 1.2rem; padding: .65rem 1rem; display: block; color: var(--deep); background: var(--sand); font: 400 1.2rem var(--font-serif); }
+.stay-personal-guide { margin: 3rem 0; }
+.stay-personal-guide > h3,.stay-testimonial h3 { font: 400 clamp(2rem,4vw,3.4rem) var(--font-serif); }
+.stay-personal-guide > div { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; }
+.stay-personal-guide article { min-height: 240px; padding: 1.3rem; position: relative; display: flex; flex-direction: column; background: var(--sand); }
+.stay-personal-guide article button { position: absolute; top: 1rem; right: 1rem; border: 0; color: var(--gold-text); background: transparent; font-size: 1.5rem; cursor: pointer; }
+.stay-personal-guide article > span { color: var(--gold-text); font-size: .7rem; text-transform: uppercase; }
+.stay-personal-guide h4 { margin: auto 2rem .5rem 0; font: 400 1.45rem var(--font-serif); }
+.stay-personal-guide p { color: var(--muted); line-height: 1.55; }
+.stay-personal-guide a { color: var(--deep); font-weight: 700; }
+.stay-testimonial { margin-top: 3rem; padding: clamp(1.5rem,4vw,3rem); background: var(--sand); }
+.stay-testimonial label,.stay-testimonial textarea { width: 100%; display: block; }
+.stay-testimonial textarea { margin: .5rem 0 1rem; padding: 1rem; border: 1px solid var(--line); background: white; font: inherit; }
 
 .stephanie-letter { padding: clamp(5rem,10vw,10rem) 0; display: grid; grid-template-columns: 1fr .9fr; gap: clamp(2rem,7vw,7rem); }
 .stephanie-letter h2 { margin: .6rem 0 2rem; font-family: var(--font-serif); font-size: clamp(2.5rem,5vw,5rem); font-weight: 400; line-height: 1; }
@@ -2855,6 +2926,7 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .admin-form-grid { grid-template-columns: repeat(2,1fr); }
   .admin-login { grid-template-columns: 1fr; align-items: stretch; }
   .stephanie-letter { grid-template-columns: 1fr; }
+  .stay-personal-guide > div { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
   .admin-dashboard > form { align-items: stretch; flex-direction: column; }
@@ -2874,4 +2946,5 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .admin-table-wrap table { min-width: 850px; }
   .stephanie-letter__media { min-height: 130vw; }
   .stephanie-letter__media video { width: 92%; right: 0; }
+  .stay-personal-guide > div { grid-template-columns: 1fr; }
 }

@@ -24,8 +24,12 @@ type ApiResponse = {
   daily: {
     temperature_2m_max: number[];
     precipitation_probability_max: number[];
+    sunrise: string[];
+    sunset: string[];
   };
 };
+
+type MarineResponse = { current?: { sea_surface_temperature?: number; wave_height?: number } };
 
 const tides: { value: TideState; label: string }[] = [
   { value: "basse", label: "Basse" },
@@ -38,6 +42,8 @@ export function SmartWeatherAdvisor({ compact = false }: { compact?: boolean }) 
   const [destination, setDestination] = useState<WeatherDestination>("ile-de-re");
   const [tide, setTide] = useState<TideState>("montante");
   const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
+  const [sun, setSun] = useState<{ sunrise: string; sunset: string } | null>(null);
+  const [sea, setSea] = useState<{ temperature?: number; waveHeight?: number } | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
@@ -47,17 +53,29 @@ export function SmartWeatherAdvisor({ compact = false }: { compact?: boolean }) 
       latitude: String(location.latitude),
       longitude: String(location.longitude),
       current: "temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m",
-      daily: "temperature_2m_max,precipitation_probability_max",
+      daily: "temperature_2m_max,precipitation_probability_max,sunrise,sunset",
       timezone: "Europe/Paris",
       forecast_days: "2",
     });
+    const marineParams = new URLSearchParams({
+      latitude: String(location.latitude),
+      longitude: String(location.longitude),
+      current: "sea_surface_temperature,wave_height",
+      timezone: "Europe/Paris",
+    });
     setStatus("loading");
-    fetch(`https://api.open-meteo.com/v1/forecast?${params}`, { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("Prévisions indisponibles");
-        return response.json() as Promise<ApiResponse>;
+    Promise.all([
+      fetch(`https://api.open-meteo.com/v1/forecast?${params}`, { signal: controller.signal }),
+      fetch(`https://marine-api.open-meteo.com/v1/marine?${marineParams}`, { signal: controller.signal }),
+    ])
+      .then(async ([weatherResponse, marineResponse]) => {
+        if (!weatherResponse.ok) throw new Error("Prévisions indisponibles");
+        return [
+          await weatherResponse.json() as ApiResponse,
+          marineResponse.ok ? await marineResponse.json() as MarineResponse : null,
+        ] as const;
       })
-      .then((data) => {
+      .then(([data, marine]) => {
         setWeather({
           temperature: data.current.temperature_2m,
           apparentTemperature: data.current.apparent_temperature,
@@ -69,6 +87,11 @@ export function SmartWeatherAdvisor({ compact = false }: { compact?: boolean }) 
           precipitationProbability: data.daily.precipitation_probability_max[0] ?? 0,
           season: getSeason(),
         });
+        setSun({ sunrise: data.daily.sunrise[0], sunset: data.daily.sunset[0] });
+        setSea(marine?.current ? {
+          temperature: marine.current.sea_surface_temperature,
+          waveHeight: marine.current.wave_height,
+        } : null);
         setStatus("ready");
       })
       .catch((error: unknown) => {
@@ -92,9 +115,12 @@ export function SmartWeatherAdvisor({ compact = false }: { compact?: boolean }) 
         </div>
         {weather ? (
           <div className="smart-weather__now" aria-live="polite">
-            <strong>{Math.round(weather.temperature)}°</strong>
-            <span>Ressenti {Math.round(weather.apparentTemperature)}°</span>
-            <span>Vent {windCardinal(weather.windDirection)} · {Math.round(weather.windSpeed)} km/h</span>
+            <div><strong>{Math.round(weather.temperature)}°</strong><span>Air</span></div>
+            <div><strong>{sea?.temperature == null ? "—" : `${Math.round(sea.temperature)}°`}</strong><span>Mer</span></div>
+            <div><strong>{Math.round(weather.windSpeed)}</strong><span>Vent km/h · {windCardinal(weather.windDirection)}</span></div>
+            <div><strong>{sun?.sunrise ? new Date(sun.sunrise).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "—"}</strong><span>Lever du soleil</span></div>
+            <div><strong>{sun?.sunset ? new Date(sun.sunset).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "—"}</strong><span>Coucher du soleil</span></div>
+            <div><strong>{sea?.waveHeight == null ? "—" : `${sea.waveHeight.toFixed(1)} m`}</strong><span>Houle</span></div>
           </div>
         ) : null}
       </div>
@@ -115,7 +141,7 @@ export function SmartWeatherAdvisor({ compact = false }: { compact?: boolean }) 
               {item.label}
             </button>
           ))}
-          <a href={weatherDestinations[destination].tideUrl} target="_blank" rel="noreferrer">Vérifier auprès du SHOM ↗</a>
+          <a href={weatherDestinations[destination].tideUrl} target="_blank" rel="noreferrer">Horaires officiels des marées · SHOM ↗</a>
         </fieldset>
       </div>
 
@@ -140,7 +166,7 @@ export function SmartWeatherAdvisor({ compact = false }: { compact?: boolean }) 
         </div>
       ) : null}
       <p className="smart-weather__source">
-        Prévisions : <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a>. Marées : saisie voyageur et vérification officielle SHOM. Les conditions locales et consignes de sécurité prévalent toujours.
+        Météo, soleil et mer : <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a>. Horaires de marées : vérification officielle SHOM. Les conditions locales et consignes de sécurité prévalent toujours.
       </p>
     </section>
   );
