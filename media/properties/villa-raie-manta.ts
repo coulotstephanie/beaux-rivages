@@ -8,6 +8,15 @@ const asset = (file: string, alt: string, caption?: string): MediaAsset => ({
   owner: "villa-raie-manta",
 });
 
+// Sources originales conservées dans la médiathèque pour réversibilité.
+// Elles ne sont jamais rendues sur le site car leurs légendes sont incrustées.
+export const villaRetouchedOriginals = [
+  "airbnb-chambre-1-1.jpeg",
+  "airbnb-chambre-2-1.jpeg",
+  "airbnb-chambre-3-1.jpeg",
+  "airbnb-chambre-4-1.jpeg",
+] as const;
+
 const salonSea = asset("salon-vue-mer.jpeg", "Salon à l’étage de Villa Raie Manta", "Le salon signature");
 const editorialSalon = asset("editorial/salon-aperitif.png", "Salon de Villa Raie Manta préparé pour un apéritif", "L’apéritif dans la lumière");
 const editorialIsland = asset("editorial/ilot-aperitif.png", "Îlot de cuisine animé par un retour du marché", "L’îlot prêt à cuisiner");
@@ -37,11 +46,11 @@ const airbnbKitchen = [
   asset("airbnb-espace-repas-1.jpeg", "Espace repas de Villa Raie Manta", "La grande table"),
 ];
 const airbnbBedrooms = [
-  asset("airbnb-chambre-1-1.jpeg", "Suite du rez-de-chaussée avec lit 160", "La suite du rez-de-chaussée"),
+  asset("chambre-rez-de-chaussee-sans-texte.png", "Suite du rez-de-chaussée avec lit 160", "La suite du rez-de-chaussée"),
   asset("airbnb-chambre-1-2.jpeg", "Dressing de la suite de Villa Raie Manta", "Une suite pensée dans les détails"),
-  asset("airbnb-chambre-2-1.jpeg", "Chambre avec deux lits simples réunissables", "La chambre modulable"),
-  asset("airbnb-chambre-3-1.jpeg", "Chambre double à l’étage", "Une chambre dans la lumière"),
-  asset("airbnb-chambre-4-1.jpeg", "Chambre avec lits superposés", "La chambre des enfants"),
+  asset("chambre-modulable-sans-texte.png", "Chambre avec deux lits simples réunissables", "La chambre modulable"),
+  asset("chambre-vue-mer-sans-texte.png", "Chambre double à l’étage avec vue sur l’océan", "Une chambre dans la lumière"),
+  asset("chambre-enfants-sans-texte.png", "Chambre avec lits superposés", "La chambre des enfants"),
 ];
 const airbnbBathrooms = [
   asset("airbnb-salle-de-bains-entiere-1-1.jpeg", "Première salle d’eau de Villa Raie Manta", "La salle d’eau de la suite"),

@@ -27,8 +27,7 @@ export function HeroVideo({ sources, poster, priority = true, className = "" }: 
   useEffect(() => {
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
     const constrained = connection?.saveData || connection?.effectiveType === "2g";
-    const desktop = window.matchMedia("(min-width: 701px)").matches;
-    setCanPlayVideo(desktop && !reduceMotion && !constrained);
+    setCanPlayVideo(!reduceMotion && !constrained);
   }, [reduceMotion]);
 
   useEffect(() => {
@@ -62,4 +61,3 @@ export function HeroVideo({ sources, poster, priority = true, className = "" }: 
     </div>
   );
 }
-

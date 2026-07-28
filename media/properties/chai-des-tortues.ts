@@ -178,19 +178,19 @@ const bedrooms = [
   editorialBedroom,
   editorialHoneymoon,
   propertyAsset(
-    "professional/chambre-pierre-bois.jpg",
-    "Une chambre du Chai entre mur en pierre et plafond en bois clair",
-    "Dormir entre pierre et bois",
+    "professional/chambre-pierre-bois-habillee.png",
+    "Une chambre du Chai préparée avec du linge naturel entre pierre et bois",
+    "Une chambre prête à accueillir",
   ),
   propertyAsset(
-    "professional/chambre-bois-clair.jpg",
-    "Une chambre lumineuse du Chai avec ses rangements en bois clair",
-    "Une chambre douce et lumineuse",
+    "professional/chambre-bois-clair-habillee.png",
+    "Une chambre lumineuse du Chai avec son lit soigneusement préparé",
+    "Le calme du linge naturel",
   ),
   propertyAsset(
-    "professional/chambre-suite-salle-eau.jpg",
-    "Une chambre du Chai ouverte sur sa salle d’eau",
-    "Le confort d’une chambre avec salle d’eau",
+    "professional/chambre-suite-salle-eau-habillee.png",
+    "Une chambre du Chai préparée avec soin et ouverte sur sa salle d’eau",
+    "Le confort d’une suite prête à vivre",
   ),
   propertyAsset(
     "professional/etage-chambres-salle-eau.jpg",
