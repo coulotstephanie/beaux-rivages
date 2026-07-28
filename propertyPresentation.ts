@@ -143,10 +143,10 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
     experiences: [
       { title: "Le premier passage vers la plage", copy: "Ouvrir le portail privé et rejoindre les Saumonards avant que la journée ne commence vraiment.", image: propertyMedia["nid-d-ete"].hero.src, alt: propertyMedia["nid-d-ete"].hero.alt },
       { title: "Jeux sur le sable", copy: "Emporter le matériel prévu pour les enfants et laisser la plage devenir leur terrain d’aventure.", image: propertyMedia["nid-d-ete"].lifestyle[4].src, alt: propertyMedia["nid-d-ete"].lifestyle[4].alt },
-      { title: "Déjeuner à l’ombre", copy: "Retrouver la fraîcheur des arbres et le calme du jardin après une matinée face à l’océan.", image: propertyMedia["nid-d-ete"].lifestyle[3].src, alt: propertyMedia["nid-d-ete"].lifestyle[3].alt },
-      { title: "La forêt à vélo", copy: "Suivre les pistes de la forêt des Saumonards vers Boyardville, entre pins et air salin.", image: propertyMedia["nid-d-ete"].lifestyle[6].src, alt: propertyMedia["nid-d-ete"].lifestyle[6].alt },
-      { title: "Fort Boyard à l’horizon", copy: "Revenir sur la plage lorsque le fort se découpe dans la lumière plus douce de la fin du jour.", image: propertyMedia["nid-d-ete"].lifestyle[1].src, alt: propertyMedia["nid-d-ete"].lifestyle[1].alt },
-      { title: "Une soirée sous les peupliers", copy: "Refermer le portail, retrouver le jardin clos et écouter le silence revenir dans la résidence.", image: propertyMedia["nid-d-ete"].lifestyle[7].src, alt: propertyMedia["nid-d-ete"].lifestyle[7].alt },
+      { title: "Déjeuner sous la voile", copy: "Retrouver la fraîcheur de la terrasse et partager le déjeuner à l’ombre après une matinée face à l’océan.", image: propertyMedia["nid-d-ete"].terrace[0].src, alt: propertyMedia["nid-d-ete"].terrace[0].alt },
+      { title: "La forêt des Saumonards", copy: "Suivre à pied ou à vélo les pistes vers Boyardville, entre pins, sable et air salin.", image: propertyMedia["nid-d-ete"].lifestyle[3].src, alt: propertyMedia["nid-d-ete"].lifestyle[3].alt },
+      { title: "Fort Boyard à l’horizon", copy: "Revenir sur la plage lorsque le fort se découpe dans la lumière plus douce de la fin du jour.", image: propertyMedia["nid-d-ete"].lifestyle[8].src, alt: propertyMedia["nid-d-ete"].lifestyle[8].alt },
+      { title: "Le soleil descend sur l’océan", copy: "Revenir sur le sable et regarder la lumière s’étirer sur l’eau avant de retrouver le calme de la résidence.", image: propertyMedia["nid-d-ete"].lifestyle[5].src, alt: propertyMedia["nid-d-ete"].lifestyle[5].alt },
     ],
   },
 };

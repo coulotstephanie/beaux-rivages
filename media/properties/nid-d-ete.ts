@@ -22,6 +22,7 @@ const ocean = asset("ocean.jpeg", "Océan derrière les ganivelles", "Face à l�
 const poplars = asset("peupliers.jpeg", "Pinède et aire de promenade près de la plage", "La forêt des Saumonards");
 const family = asset("famille-plage.jpeg", "Jeux d’enfants sur la plage", "Des vacances en famille");
 const sunset = asset("coucher-soleil.jpeg", "Coucher de soleil sur l’océan", "Les soirées face à la mer");
+const fortBoyard = asset("fort-boyard-saumonards.jpg", "Fort Boyard vu depuis la plage des Saumonards", "Fort Boyard à l’horizon");
 const beach = asset("plage.jpeg", "Plage près du Nid d’Été", "Le sable au bout du chemin");
 const shade = asset("voile-ombrage.jpeg", "Dune fleurie et embarcations sur la plage", "La côte sauvage d’Oléron");
 const airbnbLivingRoom = [
@@ -101,7 +102,7 @@ export const nidDEteMedia = {
   bathrooms: airbnbBathroom,
   terrace: [editorialTerraceLunch, airbnbExterior[0], ...airbnbTerrace],
   details: [...airbnbDetails, ...airbnbTerrace.slice(0, 3)],
-  lifestyle: [access, beachView, ocean, poplars, family, sunset, beach, shade],
+  lifestyle: [access, beachView, ocean, poplars, family, sunset, beach, shade, fortBoyard],
   videos: [],
   gallery: [
     access,
@@ -130,6 +131,7 @@ export const nidDEteMedia = {
     poplars,
     family,
     sunset,
+    fortBoyard,
     beach,
     shade,
   ],
