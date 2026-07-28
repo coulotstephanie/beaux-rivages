@@ -2279,6 +2279,8 @@ body.menu-open { overflow: hidden; }
   .premium-experience-card__copy { min-height: 620px; }
 }
 @media (max-width: 580px) {
+  .experience-collection-intro h2 { font-size: clamp(2.65rem, 13vw, 4rem); overflow-wrap: anywhere; }
+  .experience-collection-intro > p:last-child { font-size: 1rem; }
   .premium-experience-card__copy { min-height: 0; padding: 2.5rem 1.4rem 3rem; }
   .premium-experience-card__copy dl > div { grid-template-columns: 1fr; gap: .3rem; }
 }
