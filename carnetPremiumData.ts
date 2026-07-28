@@ -1,5 +1,3 @@
-import { siteMedia } from "@/media/site";
-
 export type PremiumMapCategory =
   | "restaurants"
   | "plages"
@@ -34,28 +32,41 @@ export type PremiumPlace = {
   imageSource: string;
 };
 
-const licensedImages = {
-  re: {
-    image: siteMedia.destination.saintMartinPort,
-    imageAlt: "Port de Saint-Martin-de-Ré au cœur des fortifications",
-    imageCredit: "Angelo Brathot",
-    imageLicense: "Domaine public",
-    imageSource: "https://commons.wikimedia.org/wiki/File:Port_de_St_Martin-de-R%C3%A9_T_%2845053203774%29.jpg",
-  },
-  oleron: {
-    image: siteMedia.destination.chassiron,
-    imageAlt: "Pointe de Chassiron et littoral de l’Île d’Oléron",
-    imageCredit: "Dimimis",
-    imageLicense: "CC BY-SA 3.0",
-    imageSource: "https://commons.wikimedia.org/wiki/File:Pointe_de_Chassiron.jpg",
-  },
-  rochelle: {
-    image: siteMedia.destination.laRochelleOldPort,
-    imageAlt: "Tours à l’entrée du Vieux-Port de La Rochelle",
-    imageCredit: "Jebulon",
-    imageLicense: "CC0",
-    imageSource: "https://commons.wikimedia.org/wiki/File:Entrance_La_Rochelle_old_harbor.jpg",
-  },
+const beauxRivagesPhoto = (image: string, imageAlt: string) => ({
+  image,
+  imageAlt,
+  imageCredit: "Collection Beaux Rivages",
+  imageLicense: "Tous droits réservés",
+  imageSource: "/phototheque",
+});
+
+// Chaque fiche possède une photographie propre : aucune image générique par
+// destination n'est partagée entre les cartes du guide.
+const placeImages = {
+  "chez-nina": beauxRivagesPhoto("/images/properties/chai-des-tortues/viennoiseries.jpeg", "Viennoiseries artisanales pour un petit-déjeuner à Rivedoux"),
+  "la-tartentiere": beauxRivagesPhoto("/images/properties/nid-d-ete/editorial/terrasse-dejeuner.png", "Déjeuner estival dressé en terrasse"),
+  "la-martiniere": beauxRivagesPhoto("/images/properties/chai-des-tortues/port-fleuri.jpeg", "Promenade fleurie près du port"),
+  "huitres-et-ma-re": beauxRivagesPhoto("/images/destination/huitres-vin-blanc.jpg", "Huîtres de l’Atlantique accompagnées d’un verre de vin blanc"),
+  "marche-rivedoux": beauxRivagesPhoto("/images/properties/chai-des-tortues/editorial/espace-de-vie-retour-marche.png", "Retour du marché dans la maison"),
+  "boucle-sud-re": beauxRivagesPhoto("/images/properties/chai-des-tortues/village-velo.jpeg", "Vélo posé dans un village de l’Île de Ré"),
+  "plage-sud-rivedoux": beauxRivagesPhoto("/images/destination/plage-ganivelles.jpeg", "Plage de sable derrière les ganivelles"),
+  "bio-sens": beauxRivagesPhoto("/images/properties/villa-raie-manta/editorial/chambre-attention.png", "Ambiance douce et attention bien-être"),
+  "reeduk-coach": beauxRivagesPhoto("/images/destination/surf-matin.jpg", "Activité sportive face à l’océan au petit matin"),
+  "fort-boyard-saumonards": beauxRivagesPhoto("/images/destination/fort-boyard-depuis-plage.jpg", "Fort Boyard aperçu depuis la plage des Saumonards"),
+  boyardville: beauxRivagesPhoto("/images/properties/nid-d-ete/vue-plage.jpeg", "Vue lumineuse sur la plage près de Boyardville"),
+  "marche-boyardville": beauxRivagesPhoto("/images/properties/nid-d-ete/editorial/petit-dejeuner-cuisine.png", "Produits frais disposés dans la cuisine"),
+  "port-cotiniere": beauxRivagesPhoto("/images/destination/dunes-fleuries-barques.jpg", "Barques du littoral oléronais au milieu des dunes"),
+  "plage-saumonards": beauxRivagesPhoto("/images/properties/nid-d-ete/plage.jpeg", "Plage des Saumonards au bord de l’océan"),
+  "piste-saumonards": beauxRivagesPhoto("/images/properties/nid-d-ete/peupliers.jpeg", "Chemin ombragé dans la végétation oléronaise"),
+  "vieux-port-la-rochelle": beauxRivagesPhoto("/images/destination/guide-vieux-port-la-rochelle.jpg", "Tours et entrée du Vieux-Port de La Rochelle"),
+  "aquarium-la-rochelle": beauxRivagesPhoto("/images/destination/bateau-calme.jpeg", "Reflets bleus et bateau sur une mer calme"),
+  "tours-la-rochelle": beauxRivagesPhoto("/images/destination/pont-ile-de-re-rose.jpg", "Architecture littorale dans la lumière rose du soir"),
+  "marche-central-la-rochelle": beauxRivagesPhoto("/images/destination/petit-dejeuner-ocean.jpg", "Petit-déjeuner composé de produits frais"),
+  "musee-maritime": beauxRivagesPhoto("/images/destination/peche-plage-atlantique.jpg", "Mémoire maritime et pêche sur le littoral atlantique"),
+  "rue-saint-nicolas": beauxRivagesPhoto("/images/destination/ruelle.jpeg", "Ruelle fleurie au charme charentais"),
+  "parking-greffieres": beauxRivagesPhoto("/images/destination/village-fleuri.jpeg", "Arrivée paisible aux portes de la ville"),
+  "parking-vieux-port-sud": beauxRivagesPhoto("/images/destination/famille-coucher-soleil.jpg", "Promenade au bord de l’eau à la fin du jour"),
+  "recharge-verdun": beauxRivagesPhoto("/images/destination/marais-coucher-soleil.jpeg", "Paysage charentais dans une lumière apaisée"),
 } as const;
 
 const osm = (lat: number, lng: number) =>
@@ -77,7 +88,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "5 min à vélo",
     walkTime: "18 min à pied",
     hostTip: "Précommandez les créations les plus demandées et passez tôt pour les viennoiseries.",
-    ...licensedImages.re,
+    ...placeImages["chez-nina"],
   },
   {
     slug: "la-tartentiere",
@@ -94,7 +105,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "24 min à vélo",
     walkTime: "1 h 20 à pied",
     hostTip: "Commandez au moins la veille : les recettes favorites partent vite.",
-    ...licensedImages.re,
+    ...placeImages["la-tartentiere"],
   },
   {
     slug: "la-martiniere",
@@ -111,7 +122,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "42 min à vélo",
     walkTime: "2 h 35 à pied",
     hostTip: "Après le port, choisissez votre parfum et poursuivez la promenade sur les remparts.",
-    ...licensedImages.re,
+    ...placeImages["la-martiniere"],
   },
   {
     slug: "huitres-et-ma-re",
@@ -128,7 +139,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "8 min à vélo",
     walkTime: "27 min à pied",
     hostTip: "C’est notre adresse pour rapporter un plateau à partager à la maison.",
-    ...licensedImages.re,
+    ...placeImages["huitres-et-ma-re"],
   },
   {
     slug: "marche-rivedoux",
@@ -145,7 +156,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "4 min à vélo",
     walkTime: "15 min à pied",
     hostTip: "Venez avec un panier avant 9 h, puis rejoignez la plage.",
-    ...licensedImages.re,
+    ...placeImages["marche-rivedoux"],
   },
   {
     slug: "boucle-sud-re",
@@ -162,7 +173,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "Boucle modulable",
     walkTime: "Itinéraire vélo",
     hostTip: "Regardez le vent avant le départ et gardez la portion la plus facile pour le retour.",
-    ...licensedImages.re,
+    ...placeImages["boucle-sud-re"],
   },
   {
     slug: "plage-sud-rivedoux",
@@ -179,7 +190,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "7 min à vélo",
     walkTime: "23 min à pied",
     hostTip: "Consultez les horaires de marée : le paysage change complètement au fil de la journée.",
-    ...licensedImages.re,
+    ...placeImages["plage-sud-rivedoux"],
   },
   {
     slug: "bio-sens",
@@ -196,7 +207,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "4 min à vélo",
     walkTime: "15 min à pied",
     hostTip: "Réservez votre créneau avant l’arrivée en période de mariage et les week-ends.",
-    ...licensedImages.re,
+    ...placeImages["bio-sens"],
   },
   {
     slug: "reeduk-coach",
@@ -213,7 +224,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "6 min à vélo",
     walkTime: "20 min à pied",
     hostTip: "Consultez le planning et réservez les petits groupes avant votre arrivée.",
-    ...licensedImages.re,
+    ...placeImages["reeduk-coach"],
   },
   {
     slug: "fort-boyard-saumonards",
@@ -230,7 +241,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "1 min à vélo",
     walkTime: "Quelques pas",
     hostTip: "Arrivez vingt minutes avant le coucher du soleil et restez après.",
-    ...licensedImages.oleron,
+    ...placeImages["fort-boyard-saumonards"],
   },
   {
     slug: "boyardville",
@@ -247,7 +258,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "18 min à vélo",
     walkTime: "1 h à pied",
     hostTip: "Associez le marché du matin, le port puis la forêt à l’heure chaude.",
-    ...licensedImages.oleron,
+    ...placeImages.boyardville,
   },
   {
     slug: "marche-boyardville",
@@ -264,7 +275,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "18 min à vélo",
     walkTime: "1 h à pied",
     hostTip: "Faites les achats tôt et laissez le déjeuner se décider selon l’arrivage.",
-    ...licensedImages.oleron,
+    ...placeImages["marche-boyardville"],
   },
   {
     slug: "port-cotiniere",
@@ -281,7 +292,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "58 min à vélo",
     walkTime: "3 h 20 à pied",
     hostTip: "Venez lorsque les bateaux rentrent, puis prolongez sur la côte ouest.",
-    ...licensedImages.oleron,
+    ...placeImages["port-cotiniere"],
   },
   {
     slug: "plage-saumonards",
@@ -298,7 +309,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "1 min à vélo",
     walkTime: "Quelques pas",
     hostTip: "Le matin est doux en famille ; le soir, la vue sur le fort devient spectaculaire.",
-    ...licensedImages.oleron,
+    ...placeImages["plage-saumonards"],
   },
   {
     slug: "piste-saumonards",
@@ -315,7 +326,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "1 à 2 h à vélo",
     walkTime: "Balade modulable",
     hostTip: "Choisissez cette boucle aux heures chaudes et emportez de l’eau.",
-    ...licensedImages.oleron,
+    ...placeImages["piste-saumonards"],
   },
   {
     slug: "vieux-port-la-rochelle",
@@ -332,7 +343,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "48 min à vélo",
     walkTime: "2 h 45 à pied",
     hostTip: "Commencez avant 10 h, lorsque la lumière et les quais sont encore calmes.",
-    ...licensedImages.rochelle,
+    ...placeImages["vieux-port-la-rochelle"],
   },
   {
     slug: "aquarium-la-rochelle",
@@ -349,7 +360,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "50 min à vélo",
     walkTime: "2 h 55 à pied",
     hostTip: "Réservez un billet horodaté et privilégiez l’ouverture ou la fin de journée.",
-    ...licensedImages.rochelle,
+    ...placeImages["aquarium-la-rochelle"],
   },
   {
     slug: "tours-la-rochelle",
@@ -366,7 +377,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "48 min à vélo",
     walkTime: "2 h 45 à pied",
     hostTip: "La tour de la Lanterne et les quais forment une très belle séquence à pied.",
-    ...licensedImages.rochelle,
+    ...placeImages["tours-la-rochelle"],
   },
   {
     slug: "marche-central-la-rochelle",
@@ -383,7 +394,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "47 min à vélo",
     walkTime: "2 h 40 à pied",
     hostTip: "Venez un jour de grand marché et choisissez selon les arrivages.",
-    ...licensedImages.rochelle,
+    ...placeImages["marche-central-la-rochelle"],
   },
   {
     slug: "musee-maritime",
@@ -400,7 +411,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "53 min à vélo",
     walkTime: "3 h à pied",
     hostTip: "Associez-le à l’Aquarium ou au Gabut pour une journée sans voiture.",
-    ...licensedImages.rochelle,
+    ...placeImages["musee-maritime"],
   },
   {
     slug: "rue-saint-nicolas",
@@ -417,7 +428,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "50 min à vélo",
     walkTime: "2 h 50 à pied",
     hostTip: "Prenez une rue de traverse et laissez le programme volontairement ouvert.",
-    ...licensedImages.rochelle,
+    ...placeImages["rue-saint-nicolas"],
   },
   {
     slug: "parking-greffieres",
@@ -434,7 +445,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "40 min à vélo",
     walkTime: "2 h 15 à pied",
     hostTip: "Laissez la voiture ici en haute saison et terminez la journée à pied.",
-    ...licensedImages.rochelle,
+    ...placeImages["parking-greffieres"],
   },
   {
     slug: "parking-vieux-port-sud",
@@ -451,7 +462,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "50 min à vélo",
     walkTime: "2 h 55 à pied",
     hostTip: "Utile avec de jeunes enfants ; sinon, préférez le parc relais.",
-    ...licensedImages.rochelle,
+    ...placeImages["parking-vieux-port-sud"],
   },
   {
     slug: "recharge-verdun",
@@ -468,7 +479,7 @@ export const premiumPlaces: PremiumPlace[] = [
     bikeTime: "48 min à vélo",
     walkTime: "2 h 45 à pied",
     hostTip: "Vérifiez les conditions et la disponibilité municipales avant le départ.",
-    ...licensedImages.rochelle,
+    ...placeImages["recharge-verdun"],
   },
 ];
 
@@ -499,8 +510,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée famille",
     eyebrow: "Sable, forêt, émerveillement",
     description: "Des étapes courtes, une vraie pause et assez de liberté pour suivre l’énergie des enfants.",
-    image: licensedImages.oleron.image,
-    imageAlt: licensedImages.oleron.imageAlt,
+    image: "/images/destination/famille-estran.jpg",
+    imageAlt: "Famille découvrant l’estran à marée basse",
     stops: [
       { time: "09:00", title: "Marché de Boyardville", detail: "Composer le pique-nique.", placeSlug: "marche-boyardville" },
       { time: "10:30", title: "Saumonards", detail: "Plage et jeux selon la marée.", placeSlug: "plage-saumonards" },
@@ -513,8 +524,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée en couple",
     eyebrow: "Lumière et temps retrouvé",
     description: "Une journée à vélo, peu d’adresses mais chacune choisie pour laisser de la place à la conversation.",
-    image: licensedImages.re.image,
-    imageAlt: licensedImages.re.imageAlt,
+    image: "/images/properties/villa-raie-manta/editorial/salon-aperitif.png",
+    imageAlt: "Apéritif à deux dans une maison Beaux Rivages",
     stops: [
       { time: "08:30", title: "Chez Nina", detail: "Viennoiseries pour partir doucement.", placeSlug: "chez-nina" },
       { time: "10:00", title: "Boucle du sud", detail: "Villages et littoral à vélo.", placeSlug: "boucle-sud-re" },
@@ -527,8 +538,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée gastronomie",
     eyebrow: "Du marché à la grande table",
     description: "Des artisans, un panier, puis le plaisir de rapporter l’Atlantique à la maison.",
-    image: licensedImages.re.image,
-    imageAlt: licensedImages.re.imageAlt,
+    image: "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
+    imageAlt: "Table de fruits de mer préparée pour le dîner",
     stops: [
       { time: "08:00", title: "Marché de Rivedoux", detail: "Produits de saison.", placeSlug: "marche-rivedoux" },
       { time: "10:00", title: "Huîtres et Ma Ré", detail: "Rencontre et commande du plateau.", placeSlug: "huitres-et-ma-re" },
@@ -541,8 +552,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée vélo",
     eyebrow: "Ré au rythme du vent",
     description: "Un parcours modulable depuis Rivedoux, avec des haltes qui comptent autant que la destination.",
-    image: licensedImages.re.image,
-    imageAlt: licensedImages.re.imageAlt,
+    image: "/images/properties/chai-des-tortues/editorial/velo-devant-porte.png",
+    imageAlt: "Vélo devant une maison en pierre de l’Île de Ré",
     stops: [
       { time: "08:30", title: "Départ de Rivedoux", detail: "Réglage des vélos et lecture du vent.", placeSlug: "boucle-sud-re" },
       { time: "10:30", title: "La Flotte", detail: "Port et ruelles." },
@@ -555,8 +566,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée nature",
     eyebrow: "Pins, marais et horizon",
     description: "Une journée presque sans intérieur, réglée par la marée, le vent et la lumière.",
-    image: licensedImages.oleron.image,
-    imageAlt: licensedImages.oleron.imageAlt,
+    image: "/images/destination/saunier.jpeg",
+    imageAlt: "Saunier travaillant dans les marais salants",
     stops: [
       { time: "08:00", title: "Forêt des Saumonards", detail: "Marche fraîche sous les pins.", placeSlug: "piste-saumonards" },
       { time: "11:00", title: "Plage", detail: "Observer l’estran.", placeSlug: "plage-saumonards" },
@@ -569,8 +580,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée pluie",
     eyebrow: "La Rochelle à couvert",
     description: "L’océan, l’histoire maritime et les halles : la pluie devient une autre manière d’entrer dans le territoire.",
-    image: licensedImages.rochelle.image,
-    imageAlt: licensedImages.rochelle.imageAlt,
+    image: "/images/properties/chai-des-tortues/professional/salon-pierre.jpg",
+    imageAlt: "Salon chaleureux pour une journée à l’abri",
     stops: [
       { time: "09:00", title: "Marché central", detail: "Petit-déjeuner et achats.", placeSlug: "marche-central-la-rochelle" },
       { time: "10:30", title: "Aquarium", detail: "Deux heures d’immersion.", placeSlug: "aquarium-la-rochelle" },
@@ -583,8 +594,8 @@ export const idealDays: IdealDay[] = [
     title: "Le week-end essentiel",
     eyebrow: "Ré, Oléron, La Rochelle",
     description: "Trois horizons complémentaires pour comprendre le littoral sans courir.",
-    image: licensedImages.rochelle.image,
-    imageAlt: licensedImages.rochelle.imageAlt,
+    image: "/images/destination/pique-nique-plage.jpg",
+    imageAlt: "Pique-nique au bord de l’océan pour un week-end sur les îles",
     stops: [
       { time: "Sam. 09:00", title: "Rivedoux et Ré", detail: "Marché, vélo et artisans.", placeSlug: "marche-rivedoux" },
       { time: "Sam. 18:00", title: "Saint-Martin", detail: "Remparts à l’heure dorée.", placeSlug: "la-martiniere" },
