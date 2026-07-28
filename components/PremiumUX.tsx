@@ -14,7 +14,7 @@ export function PremiumUX() {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealTargets = [...document.querySelectorAll<HTMLElement>(
-      "main > section:not(.page-hero):not(.premium-hero):not(.premium-property-hero), .ui-heading, .property-connections a, .destination-guide__addresses article",
+      "main > section:not(.page-hero):not(.premium-hero):not(.premium-property-hero):not(.premium-experience-collection), .ui-heading, .property-connections a, .destination-guide__addresses article",
     )];
     revealTargets.forEach((element) => element.classList.add("ux-reveal"));
     document.body.classList.add("ux-enhanced");
