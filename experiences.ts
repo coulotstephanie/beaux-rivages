@@ -16,6 +16,11 @@ export type Experience = {
   };
   audience: string;
   option?: StayOptionId;
+  storyTitle?: string;
+  story?: string;
+  whyTitle?: string;
+  advice?: string;
+  checklist?: string[];
 };
 
 export const experiences: Experience[] = [
@@ -44,6 +49,15 @@ export const experiences: Experience[] = [
     recommendedProperty: { slug: "villa-raie-manta", label: "Villa Raie Manta" },
     audience: "Couples",
     option: "personal-arrival",
+    storyTitle: "Faire de l’horizon le seul décor.",
+    story: "Nous vous aidons à choisir une plage calme, l’orientation la plus lumineuse et l’horaire juste selon la marée. Sur demande, le moment peut être prolongé par des fleurs, une bouteille fraîche, quelques images discrètes ou un dîner réservé à proximité. Rien n’est imposé : la mise en scène reste fidèle à votre histoire.",
+    whyTitle: "Un moment préparé avec précision, vécu avec naturel.",
+    advice: "L’emplacement et l’horaire sont confirmés quelques jours avant selon la météo, le vent et les marées. Un plan de repli élégant peut être prévu si les conditions changent.",
+    checklist: [
+      "Repérage du lieu et conseil sur le meilleur horaire",
+      "Coordination discrète des attentions choisies",
+      "Option fleurs, champagne, photographe ou dîner",
+    ],
   },
   {
     slug: "anniversaire",
@@ -76,8 +90,8 @@ export const experiences: Experience[] = [
     title: "Une demande en mariage face à l’océan",
     eyebrow: "Un instant unique",
     text: "Choisir le lieu, anticiper la lumière et préparer une attention discrète pour laisser toute la place à votre histoire.",
-    image: siteMedia.properties["villa-raie-manta"].exterior[0].src,
-    imageAlt: "Océan face à Villa Raie Manta",
+    image: "/images/destination/experiences/demande-mariage-ocean.jpg",
+    imageAlt: "Demande en mariage à genoux face à l’océan",
     duration: "2 à 3 h",
     idealPeriod: "Printemps à automne",
     recommendedProperty: { slug: "villa-raie-manta", label: "Villa Raie Manta" },
@@ -89,37 +103,64 @@ export const experiences: Experience[] = [
     title: "Plateau de fruits de mer",
     eyebrow: "L’Atlantique à table",
     text: "Un plateau choisi auprès de producteurs locaux, à ouvrir dans la cuisine puis à partager sans quitter la maison.",
-    image: siteMedia.destination.food,
-    imageAlt: "Fruits de mer et produits de l’Atlantique",
+    image: "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
+    imageAlt: "Plateau de fruits de mer dressé sur une grande table",
     duration: "Une soirée",
     idealPeriod: "Toute l’année",
     recommendedProperty: { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
     audience: "Gourmands, couples et familles",
     option: "personal-arrival",
+    storyTitle: "Le meilleur de l’Atlantique, déjà prêt à partager.",
+    story: "Huîtres, crevettes, bulots et coquillages sont sélectionnés selon l’arrivage auprès d’un poissonnier ou d’un producteur local. Le plateau est composé pour votre table, accompagné des essentiels et récupéré au moment convenu afin que vous n’ayez plus qu’à ouvrir une bouteille et vous installer.",
+    whyTitle: "Parce qu’un grand dîner peut rester merveilleusement simple.",
+    advice: "La composition dépend de la pêche, de la saison et des allergies signalées. Nous adaptons les quantités au nombre de convives et pouvons conseiller un vin blanc local.",
+    checklist: [
+      "Composition selon l’arrivage et le nombre de convives",
+      "Pain, citron, beurre et sauces sur demande",
+      "Conseil d’accord et horaire de retrait ou livraison à confirmer",
+    ],
   },
   {
     slug: "atelier-macarons",
     title: "Atelier macarons",
     eyebrow: "Testé par Stéphanie & Bruno",
     text: "Mettre la main à la pâte, comprendre le geste et repartir avec ses créations : un atelier que nous avons aimé vivre en famille.",
-    image: siteMedia.destination.lane,
-    imageAlt: "Ruelle rétaise menant à un atelier gourmand",
+    image: "/images/destination/experiences/atelier-macarons.jpg",
+    imageAlt: "Macarons colorés manipulés pendant un atelier gourmand",
     duration: "Une demi-journée",
     idealPeriod: "Selon programmation",
     recommendedProperty: { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
     audience: "Familles, adolescents et gourmands",
+    storyTitle: "Apprendre le geste, puis goûter ce que l’on a créé.",
+    story: "Guidés par un artisan, petits et grands découvrent les étapes qui font la précision d’un macaron : préparation des coques, pochage, garniture et assemblage. L’atelier privilégie la participation et le plaisir de faire ensemble, avec une boîte de créations à rapporter à la maison.",
+    whyTitle: "Une parenthèse gourmande qui réunit toutes les générations.",
+    advice: "Les dates et les formats varient selon la programmation de l’artisan. Nous vérifions les places, l’âge minimum éventuel et les allergènes avant de confirmer.",
+    checklist: [
+      "Atelier pratique accompagné par un professionnel",
+      "Ingrédients et matériel inclus selon la formule",
+      "Créations à déguster sur place ou à emporter",
+    ],
   },
   {
     slug: "lever-de-soleil",
     title: "Lever de soleil sur le rivage",
     eyebrow: "Avant le village",
     text: "Sortir lorsque tout est encore silencieux, marcher jusqu’à l’eau et regarder l’île commencer sa journée.",
-    image: siteMedia.destination.beach,
-    imageAlt: "Plage calme dans la lumière du matin",
+    image: "/images/destination/experiences/lever-soleil-ocean.jpg",
+    imageAlt: "Lever de soleil lumineux sur l’océan et la plage",
     duration: "1 h",
     idealPeriod: "Printemps et été",
     recommendedProperty: { slug: "nid-d-ete", label: "Le Nid d’Été" },
     audience: "Lève-tôt, photographes et couples",
+    storyTitle: "Voir la plage avant que l’île ne s’éveille.",
+    story: "Nous vous indiquons le point de départ le plus juste selon la saison. Quelques minutes de marche suffisent pour rejoindre le rivage dans le silence, observer la lumière gagner l’eau et prolonger le moment avec un café ou un petit-déjeuner au retour.",
+    whyTitle: "L’île semble entière lorsque l’on arrive avant les premiers pas.",
+    advice: "L’heure de départ est adaptée au lever du soleil et à la météo. Prévoyez une couche chaude, même en été, et arrivez une quinzaine de minutes avant l’apparition du soleil.",
+    checklist: [
+      "Point d’observation conseillé selon la saison",
+      "Horaire précis communiqué avant le séjour",
+      "Suggestion de marche et de petit-déjeuner au retour",
+    ],
   },
   {
     slug: "coucher-de-soleil",
@@ -132,6 +173,15 @@ export const experiences: Experience[] = [
     idealPeriod: "Toute l’année",
     recommendedProperty: { label: "Les trois maisons" },
     audience: "Tous les voyageurs",
+    storyTitle: "Regarder la lumière descendre sur les marais.",
+    story: "Un itinéraire court vous mène jusqu’à un point dégagé où le ciel et l’eau se répondent. Nous vous conseillons d’arriver avant l’heure dorée, de marcher un peu, puis de rester après la disparition du soleil, lorsque les couleurs deviennent plus profondes.",
+    whyTitle: "Un rituel simple qui change chaque soir.",
+    advice: "Le meilleur point de vue dépend de la couverture nuageuse et de votre île de départ. Nous partageons une option accessible en famille et une alternative plus sauvage.",
+    checklist: [
+      "Point de vue choisi selon votre maison",
+      "Horaire adapté à la date du séjour",
+      "Alternative familiale ou promenade plus confidentielle",
+    ],
   },
   {
     slug: "peche-a-pied",

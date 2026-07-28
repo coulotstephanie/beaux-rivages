@@ -171,11 +171,13 @@ img { max-width: 100%; }
 .experience-detail-advice { padding:120px 0; background:var(--deep); color:#fff; }
 .experience-detail-advice h2 { max-width:980px; font-size:clamp(46px,7vw,85px); }
 .experience-detail-advice .shell > div { display:grid; grid-template-columns:1fr 1fr; gap:70px; }
+.experience-detail-advice h3 { margin:0 0 18px; color:var(--gold); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
 .experience-detail-advice p,.experience-detail-advice li { color:rgba(255,255,255,.7); line-height:1.8; }
 .experience-detail-advice ul { margin:0; padding:0; list-style:none; }
 .experience-detail-advice li { padding:11px 0; border-bottom:1px solid rgba(255,255,255,.15); }
 .experience-detail-cta { padding-top:120px; padding-bottom:130px; text-align:center; }
 .experience-detail-cta h2 { max-width:850px; margin:0 auto 35px; font-size:clamp(44px,6vw,75px); }
+.experience-detail-cta > p:not(.eyebrow) { max-width:680px; margin:-12px auto 34px; color:var(--muted); line-height:1.75; }
 .premium-experience-card__actions { display:flex; gap:25px; align-items:center; margin-top:auto; }
 .premium-experience-card__actions a { padding-bottom:.35rem; border-bottom:1px solid currentColor; color:var(--deep); font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
 
@@ -235,6 +237,7 @@ img { max-width: 100%; }
   .identity-pillars article:last-child { border-bottom:1px solid var(--line); }
   .experience-detail-intro { gap:45px; padding-top:75px; padding-bottom:80px; }
   .experience-detail-advice { padding:80px 0; }
+  .experience-detail-hero h1 { max-width:100%; font-size:clamp(3rem,15vw,4.4rem); overflow-wrap:anywhere; }
   .premium-experience-card__actions { align-items:flex-start; flex-direction:column; }
 }
 
