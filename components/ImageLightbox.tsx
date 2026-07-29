@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { GalleryImage } from "@/data";
 
 type ImageLightboxProps = {
@@ -18,7 +19,10 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
   const pointerStart = useRef<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const isOpen = activeIndex !== null;
+
+  useEffect(() => setIsMounted(true), []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -76,7 +80,7 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
     setIsZoomed(false);
   }, [activeIndex]);
 
-  if (activeIndex === null) return null;
+  if (!isMounted || activeIndex === null || !images[activeIndex]) return null;
   const image = images[activeIndex];
   const captionId = image.caption ? "lightbox-caption" : undefined;
 
@@ -90,7 +94,7 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
       : (activeIndex - 1 + images.length) % images.length);
   };
 
-  return (
+  return createPortal(
     <div
       className="image-lightbox"
       role="dialog"
@@ -131,11 +135,12 @@ export function ImageLightbox({ images, activeIndex, onClose, onChange }: ImageL
           pointerStart.current = null;
         }}
       >
-        <Image src={image.src} alt={image.alt} fill sizes="100vw" quality={90} draggable={false} onDoubleClick={() => setIsZoomed((value) => !value)} />
+        <Image src={image.src} alt={image.alt} fill sizes="100vw" quality={90} unoptimized priority draggable={false} onDoubleClick={() => setIsZoomed((value) => !value)} />
         {image.caption && <figcaption id={captionId}>{image.caption}</figcaption>}
       </figure>
       <button type="button" className="image-lightbox__next" onClick={() => onChange((activeIndex + 1) % images.length)} aria-label="Image suivante">→</button>
       <span className="image-lightbox__count">{activeIndex + 1} / {images.length}</span>
-    </div>
+    </div>,
+    document.body,
   );
 }

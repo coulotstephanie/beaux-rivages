@@ -41,7 +41,7 @@ export function PremiumPhotoLibrary({ photos }: { photos: LibraryPhoto[] }) {
       <p className="photo-library__result" aria-live="polite">{visible.length} photographie{visible.length > 1 ? "s" : ""}</p>
       <div className="photo-library__grid">
         {visible.map((photo, index) => (
-          <button type="button" onClick={() => setActiveIndex(index)} key={photo.src} className={`photo-library__photo photo-library__photo--${index % 7}`}>
+          <button type="button" onClick={() => setActiveIndex(index)} key={photo.src} aria-label={`Ouvrir en plein écran : ${photo.caption ?? photo.alt}`} className={`photo-library__photo photo-library__photo--${index % 7}`}>
             <Image src={photo.src} alt={photo.alt} fill loading="lazy" quality={86} sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 33vw" />
             <span className="photo-library__shade" />
             <span className="photo-library__caption"><small>{photo.collection} · {photo.category}</small><strong>{photo.caption ?? photo.alt}</strong></span>
