@@ -8,6 +8,9 @@ conventionnels du projet.
 
 ### Corrigé
 
+- La photographie principale « Le séjour, pensé pour se retrouver » du Nid
+  d’Été bénéficie d’une retouche lumineuse naturelle, tout en conservant
+  strictement la pièce, son mobilier et son architecture réels.
 - Le visuel basse définition « Une pause face à l’océan » du Chai des Tortues
   est remplacé par une photographie nette adaptée aux écrans haute définition.
 - La galerie du Chai suit désormais une visite naturelle : arrivée, extérieur,
