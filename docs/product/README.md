@@ -7,5 +7,6 @@ Les documents sont normatifs et se lisent dans cet ordre :
 3. [Règles métier](PRODUCT_BOOK_03_BUSINESS_RULES.md) — décisions applicables aux réservations, prix, paiements, séjours et opérations.
 4. [Modèle de données](PRODUCT_BOOK_04_DATABASE.md) — agrégats, relations, sécurité et règles de persistance.
 5. [Contrats d’API](PRODUCT_BOOK_05_API.md) — routes, événements, webhooks et intégrations.
+6. [Design System](PRODUCT_BOOK_06_DESIGN_SYSTEM.md) — composants, tokens, responsive et accessibilité.
 
 En cas de contradiction, la Vision prime sur l’intention produit. Pour l’exécution, le droit et les contrats priment, puis les politiques validées et la configuration active. Une spécification UX peut évoluer sans affaiblir la promesse de marque.
