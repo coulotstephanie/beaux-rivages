@@ -56,7 +56,7 @@ export const experiences: Experience[] = [
     checklist: [
       "Repérage du lieu et conseil sur le meilleur horaire",
       "Coordination discrète des attentions choisies",
-      "Option fleurs, champagne, photographe ou dîner",
+      "Fleurs, champagne, photographe ou dîner selon vos envies",
     ],
   },
   {

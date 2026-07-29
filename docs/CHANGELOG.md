@@ -22,6 +22,8 @@ conventionnels du projet.
   catalogue cible des permissions déclaratives.
 - Intégration de la roadmap produit officielle V1 à V10 et de sa matrice
   d’avancement réel.
+- Intégration du Brand Book et harmonisation des libellés voyageurs autour des
+  expériences et attentions.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié

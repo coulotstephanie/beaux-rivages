@@ -75,3 +75,13 @@ memberships tenant.
 Le Product Book 09 définit l’ordre produit. Une version n’est pas considérée
 terminée parce que ses écrans existent : ses fournisseurs, automatisations,
 tests, procédures et critères de production doivent être effectivement validés.
+
+## ADR-007 — Brand Book comme garde-fou produit
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+Le Brand Book gouverne les chaînes visibles, la photographie, les interactions
+et les contenus. Les termes techniques internes peuvent conserver leur stabilité
+contractuelle, tandis que l’interface voyageur privilégie expériences,
+attentions, maisons et séjours.

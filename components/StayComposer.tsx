@@ -36,7 +36,7 @@ export function StayComposer() {
       <aside className="stay-composer__summary">
         <p className="eyebrow light">Votre composition</p><h2>Un séjour à votre image.</h2>
         {selected.length ? <ul>{options.filter(([id]) => selected.includes(id)).map(([id, label, price]) => <li key={id}><span>{label}</span><strong>{price} €</strong></li>)}</ul> : <p>Sélectionnez les attentions qui comptent pour vous.</p>}
-        <div className="stay-composer__total"><span>Estimation des options</span><strong>{total} €</strong></div>
+        <div className="stay-composer__total"><span>Estimation de vos attentions</span><strong>{total} €</strong></div>
         <small>Montant indicatif, confirmé selon la maison, le nombre de voyageurs et les disponibilités.</small>
         <Link className="primary-button" href={bookingHref}>Ajouter à ma demande</Link>
       </aside>

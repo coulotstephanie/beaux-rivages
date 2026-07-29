@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 const sections = [
   {
     title: "À préparer",
-    items: ["Confirmer le nombre de voyageurs", "Signaler bébé ou animal", "Ajouter le linge et les options", "Réserver vélos et activités sensibles"],
+    items: ["Confirmer le nombre de voyageurs", "Signaler bébé ou animal", "Choisir le linge et vos attentions", "Réserver vélos et activités sensibles"],
   },
   {
     title: "À emporter",
