@@ -14,7 +14,8 @@ conventionnels du projet.
 - Le Nid d’Été est désormais présenté par une photographie réelle de son
   intérieur ; la salle d’eau est mise en avant et la vue de cour vide a été
   retirée, ainsi que les visuels génériques « Voyager léger » et « Le confort
-  des longs séjours ».
+  des longs séjours ». La photo technique de la boîte à clés est retirée de la
+  galerie publique et, avec le plan vers D12, réservée à l’e-mail d’arrivée.
 - Le bouton « Musique classique » diffuse *Le Printemps — II. Largo*, extrait
   des *Quatre Saisons* de Vivaldi, dans un enregistrement du domaine public et
   uniquement après action explicite du visiteur. Une version AAC/M4A assure

@@ -65,6 +65,10 @@ test("keeps La Maison Heureuse as the residence and Le Nid d’Été as the lodg
   const message = renderGuestMessage(demoGuestMessageData("nid-d-ete"), "arrival", secrets);
   assert.match(message.text, /Le Nid d’Été\nLa Maison Heureuse — Appartement D12/);
   assert.match(message.text, /La Maison Heureuse est une résidence calme/);
+  assert.match(message.text, /CARTE ET PLAN D’ACCÈS/);
+  assert.match(message.html, /airbnb-exterieur-3-1\.jpeg/);
+  assert.match(message.html, /airbnb-cour-d-entree-1\.jpeg/);
+  assert.match(message.html, /Ouvrir l’itinéraire/);
 });
 
 test("rejects cancelled reservations and missing arrival secrets", () => {
