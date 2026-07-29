@@ -117,10 +117,12 @@ export function AmbientSound() {
     <aside className="ambient-sound" aria-label="Ambiance sonore">
       <audio
         ref={musicRef}
-        src="/audio/vivaldi-spring-largo.ogg"
-        preload="none"
+        preload="metadata"
         loop
-      />
+      >
+        <source src="/audio/vivaldi-spring-largo.m4a" type="audio/mp4" />
+        <source src="/audio/vivaldi-spring-largo.ogg" type="audio/ogg" />
+      </audio>
       <span className="ambient-sound__label">{labels[mode]}</span>
       {error && <span className="sr-only" role="status">{error}</span>}
       <div className="ambient-sound__controls">

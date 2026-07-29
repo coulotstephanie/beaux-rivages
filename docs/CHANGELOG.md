@@ -17,4 +17,5 @@ conventionnels du projet.
   des longs séjours ».
 - Le bouton « Musique classique » diffuse *Le Printemps — II. Largo*, extrait
   des *Quatre Saisons* de Vivaldi, dans un enregistrement du domaine public et
-  uniquement après action explicite du visiteur.
+  uniquement après action explicite du visiteur. Une version AAC/M4A assure
+  désormais sa lecture sur Safari, avec OGG comme format alternatif.

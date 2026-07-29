@@ -61,11 +61,13 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
 test("the ambient player uses the credited public-domain Vivaldi recording", () => {
   const component = read("components/AmbientSound.tsx");
   const credits = read("public/audio/README.md");
+  assert.match(component, /vivaldi-spring-largo\.m4a/);
   assert.match(component, /vivaldi-spring-largo\.ogg/);
   assert.match(component, /Vivaldi · Le Printemps/);
-  assert.match(component, /preload="none"/);
+  assert.match(component, /preload="metadata"/);
   assert.match(component, /Musique classique/);
   assert.match(credits, /domaine public/i);
+  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.m4a")));
   assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.ogg")));
 });
 
