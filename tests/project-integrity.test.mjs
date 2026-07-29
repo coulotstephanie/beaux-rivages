@@ -60,6 +60,12 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   assert.match(propertiesPage, /image=\{property\.hero\}/);
 });
 
+test("the Chai ocean pause uses a sharp destination visual", () => {
+  const manifest = read("media/properties/chai-des-tortues.ts");
+  assert.match(manifest, /destinationMedia\.oceanBreakfast/);
+  assert.doesNotMatch(manifest, /terrasse-plage\.jpeg/);
+});
+
 test("the ambient player uses the credited public-domain Vivaldi recording", () => {
   const component = read("components/AmbientSound.tsx");
   const credits = read("public/audio/README.md");

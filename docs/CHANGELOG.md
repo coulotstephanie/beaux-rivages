@@ -8,6 +8,8 @@ conventionnels du projet.
 
 ### Corrigé
 
+- Le visuel basse définition « Une pause face à l’océan » du Chai des Tortues
+  est remplacé par une photographie nette adaptée aux écrans haute définition.
 - La vidéo d’accueil reste disponible avec un bouton Lecture/Pause lorsque
   l’autoplay est refusé, l’économie de données est active ou la réduction des
   animations est demandée.

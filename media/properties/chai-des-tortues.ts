@@ -305,11 +305,10 @@ const port = destinationAsset(
   "Port fleuri de l’Île de Ré",
   "L’art de vivre rétais",
 );
-const beachTerrace = destinationAsset(
-  "terrasse-plage.jpeg",
-  "Terrasse sur la plage",
-  "Une pause face à l’océan",
-);
+const beachTerrace: MediaAsset = {
+  ...destinationMedia.oceanBreakfast,
+  caption: "Une pause face à l’océan",
+};
 const pastries = destinationAsset(
   "viennoiseries.jpeg",
   "Viennoiseries artisanales",
