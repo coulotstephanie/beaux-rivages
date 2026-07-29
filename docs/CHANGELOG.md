@@ -26,6 +26,8 @@ conventionnels du projet.
   expériences et attentions.
 - Intégration du Developer Handbook, de sa définition de Done et de la matrice
   de conformité du dépôt.
+- Intégration de l’architecture système officielle, de ses flux métier et de la
+  traçabilité des infrastructures réellement activées.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié

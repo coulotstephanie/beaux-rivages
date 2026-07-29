@@ -4,6 +4,8 @@
 
 - `DEVELOPER_HANDBOOK.md` : normes officielles de développement et définition
   de Done.
+- `SYSTEM_ARCHITECTURE.md` : vue globale des couches, infrastructures et flux
+  métier de référence.
 - `app/` : routes Next.js App Router et composition des pages.
 - `components/` : composants de présentation et interactions client.
 - `content/`, `data.ts`, `experiences.ts`, `recommendations.ts` : contenu officiel actuel.

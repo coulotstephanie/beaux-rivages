@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/project-integrity.test.mjs && tsx --test tests/contract-generator.test.ts tests/commercial-journey.test.ts tests/database-foundation.test.ts tests/guest-messaging.test.ts tests/revenue-marketing.test.ts tests/premium-backoffice.test.ts tests/channel-manager.test.ts tests/concierge-premium.test.ts tests/housekeeping-maintenance.test.ts tests/staff-auth.test.ts tests/workflow-reference.test.ts tests/technical-architecture-reference.test.ts tests/brand-book.test.ts tests/developer-handbook.test.ts",
+    "test": "node --test tests/project-integrity.test.mjs && tsx --test tests/contract-generator.test.ts tests/commercial-journey.test.ts tests/database-foundation.test.ts tests/guest-messaging.test.ts tests/revenue-marketing.test.ts tests/premium-backoffice.test.ts tests/channel-manager.test.ts tests/concierge-premium.test.ts tests/housekeeping-maintenance.test.ts tests/staff-auth.test.ts tests/workflow-reference.test.ts tests/technical-architecture-reference.test.ts tests/brand-book.test.ts tests/developer-handbook.test.ts tests/system-architecture.test.ts",
     "test:site": "node tests/crawl-site.mjs",
     "db:push": "supabase db push --linked",
     "db:test": "supabase test db",

@@ -95,3 +95,14 @@ Le Developer Handbook gouverne toute nouvelle contribution. Les écarts de
 l’existant sont consignés dans une matrice de traçabilité et corrigés
 progressivement, domaine par domaine, sans réécriture globale ni déclaration de
 conformité non mesurée.
+
+## ADR-009 — Architecture système cible et activation vérifiable
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+`SYSTEM_ARCHITECTURE.md` définit la cible globale et ses flux. Un composant
+d’infrastructure n’est toutefois considéré actif que lorsqu’il est configuré,
+testé et exploitable. La matrice de traçabilité distingue ainsi Cloudflare,
+Edge Functions, fournisseurs de notification et automatisations cibles des
+briques réellement déployées.
