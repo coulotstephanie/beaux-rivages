@@ -34,6 +34,11 @@ conventionnels du projet.
   les sources canoniques et identification explicite des documents à construire.
 - Adoption de l’ADR-0001 qui formalise DDD, Clean Architecture, Feature First,
   Repository Pattern, Event Driven, TypeScript Strict et Documentation First.
+- Adoption des ADR-0002 à ADR-0008 concernant PostgreSQL, Next.js,
+  l’authentification, les événements, les médias, l’UI et la documentation,
+  accompagnés d’une matrice d’application réelle.
+- Création du Feature Catalog officiel, avec identifiants stables, priorités,
+  états observables, dépendances et preuves de tests et documentation.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
