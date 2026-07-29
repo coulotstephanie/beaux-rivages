@@ -8,6 +8,8 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Release Candidate documentaire `1.0.0-rc.1`, gel de périmètre, critères de
+  promotion vers `v1.0.0` et gouvernance future par versions sémantiques.
 - Rapports de cohérence des migrations, sauvegarde/restauration et décision
   Go/No-Go, accompagnés d’un contrôle automatisé des paires up/down.
 - Rapport Backup Readiness comparant les sauvegardes gérées Supabase, CLI,

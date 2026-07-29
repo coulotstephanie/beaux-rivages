@@ -1,5 +1,15 @@
 # Roadmap
 
+La gouvernance opérationnelle passe désormais des sprints aux versions. Voir
+[VERSIONING.md](./VERSIONING.md). Les anciennes tranches ci-dessous restent une
+trace de planification et ne constituent plus une autorisation de développement.
+
+## Release en cours
+
+- `1.0.0-rc.1` : préparée, statut **NO-GO** ;
+- blocage : sauvegarde et restauration miroir non démontrées ;
+- aucune fonctionnalité nouvelle avant promotion ou rejet de la candidate.
+
 La roadmap produit officielle est définie dans
 `PRODUCT_BOOK_09_ROADMAP.md`. Son avancement réel est suivi dans
 `ROADMAP_TRACEABILITY.md`. Le présent document décrit les tranches techniques
