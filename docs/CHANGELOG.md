@@ -13,7 +13,8 @@ conventionnels du projet.
   animations est demandée.
 - Le Nid d’Été est désormais présenté par une photographie réelle de son
   intérieur ; la salle d’eau est mise en avant et la vue de cour vide a été
-  retirée, ainsi que le visuel générique « Voyager léger ».
+  retirée, ainsi que les visuels génériques « Voyager léger » et « Le confort
+  des longs séjours ».
 - Le bouton « Musique classique » diffuse *Le Printemps — II. Largo*, extrait
   des *Quatre Saisons* de Vivaldi, dans un enregistrement du domaine public et
   uniquement après action explicite du visiteur.
