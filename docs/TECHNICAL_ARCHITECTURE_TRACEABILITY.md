@@ -10,6 +10,7 @@ Référence :
 | Next.js 15, React 19, TypeScript strict | Conforme | stack et build validés |
 | Supabase et PostgreSQL | Conforme partiel | schéma riche, configuration locale inactive |
 | Supabase Auth | En cours | fondation du personnel dans la PR Auth |
+| Multi-tenant | Absent | stratégie et phases définies, aucun scope tenant en base |
 | Clean Architecture | Partiel | contrats et repositories dans `platform/` |
 | Feature First | Incomplet | modules racine et composants transverses encore nombreux |
 | Monorepo `apps/packages` | Cible | dépôt actuellement mono-application |
@@ -19,6 +20,7 @@ Référence :
 | API `/api/v1` | Absent | routes non versionnées à préserver pendant migration |
 | Format de réponse homogène | Partiel | erreurs et données varient selon les routes |
 | Rôles SaaS complets | Partiel | `admin`, `concierge`, `read_only` seulement |
+| Permissions déclaratives | Cible | catalogue défini, autorisation encore basée sur les rôles |
 | RLS | Conforme partiel | 55 tables protégées, revue globale encore nécessaire |
 | Storage administrable | Partiel | buckets privés présents, médias publics encore dans Git |
 | Observabilité | Incomplet | logs structurés locaux, aucun APM/alerting central |
@@ -48,6 +50,8 @@ Référence :
    migrer l’existant progressivement.
 8. Évaluer Tailwind et shadcn/ui au regard du Design System existant avant toute
    réécriture CSS.
+9. Introduire les fondations multi-tenant dans un sprint dédié, avec backfill et
+   tests anti-fuite avant toute activation.
 
 ## Garde-fous
 

@@ -60,3 +60,36 @@ test("le catalogue événementiel couvre tous les domaines officiels", () => {
   assert.match(catalog, /correlationId/);
   assert.match(catalog, /outbox transactionnelle/);
 });
+
+test("la stratégie multi-tenant interdit toute activation sans isolation", () => {
+  const strategy = readFileSync("docs/MULTI_TENANCY_STRATEGY.md", "utf8");
+  for (const foundation of [
+    "tenants",
+    "brands",
+    "accommodations",
+    "tenant_memberships",
+    "current_tenant_id",
+    "RLS tenant-aware",
+    "tests anti-fuite",
+  ]) {
+    assert.match(strategy, new RegExp(foundation, "i"));
+  }
+  assert.match(strategy, /préparée mais non activée/);
+  assert.match(strategy, /aucune valeur `tenant_id` acceptée directement/);
+});
+
+test("les permissions cibles sont déclaratives et conservent la compatibilité", () => {
+  const permissions = readFileSync("docs/PERMISSIONS_CATALOG.md", "utf8");
+  for (const permission of [
+    "reservation.read",
+    "payment.refund",
+    "crm.export",
+    "maintenance.assign",
+    "channel.manage",
+    "analytics.view",
+    "staff.manage",
+  ]) {
+    assert.match(permissions, new RegExp(permission.replace(".", "\\.")));
+  }
+  assert.match(permissions, /traduire les trois rôles actuels sans modifier leurs droits/);
+});

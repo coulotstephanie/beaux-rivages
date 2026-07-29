@@ -310,3 +310,130 @@ une journalisation, un monitoring et une Pull Request approuvée.
 Le cœur métier doit pouvoir servir plusieurs marques, propriétaires, équipes,
 langues, devises, pays, moteurs de réservation, canaux et applications clientes
 Web, Mobile et API, sans dépendre d’une technologie particulière.
+
+## 30. Architecture multi-tenant
+
+Hiérarchie cible :
+
+```text
+Tenant
+  ↓
+Brand
+  ↓
+Property
+  ↓
+Accommodation
+  ↓
+Reservation
+  ↓
+Guest
+```
+
+Les données possédées par une organisation sont reliées à `tenant_id` et, selon
+leur niveau, à `brand_id`, `property_id` ou `accommodation_id`. La RLS garantit
+l’isolation. La migration depuis le modèle mono-tenant suit
+`MULTI_TENANCY_STRATEGY.md` et ne peut pas être réduite à l’ajout de colonnes
+nullable.
+
+## 31. Architecture modulaire
+
+Les modules Auth, Reservation, Property, Pricing, Guest Journey, CRM,
+Housekeeping, Maintenance, Concierge, Payments, Accounting, Analytics,
+Dashboard, AI, Notifications, Storage, Maps, Media, Reviews, Loyalty,
+Marketing, Contracts, Calendar, Channel Manager, Revenue et Yield isolent UI,
+Application, Domain, Infrastructure, tests, documentation et migrations.
+
+Ils communiquent par API ou événements métier, jamais par dépendance
+d’infrastructure directe.
+
+## 32. Convention des modules
+
+```text
+reservation/
+  components/
+  hooks/
+  actions/
+  services/
+  repositories/
+  schemas/
+  types/
+  constants/
+  utils/
+  tests/
+  README.md
+```
+
+## 33. API Gateway, repositories et use cases
+
+```text
+Client → API → Validation → Permissions → Use Case → Repository → Supabase
+```
+
+React n’exécute aucune requête SQL. Les interfaces de repository ignorent
+Supabase. Les règles résident dans des use cases comme `CreateReservation`,
+`CancelReservation`, `GenerateContract`, `ScheduleCleaning` ou
+`CalculatePrice`.
+
+## 34. CQRS et événements persistés
+
+Les commands modifient les agrégats et produisent des événements. Les lectures
+utilisent des projections optimisées pour Dashboard, CRM et Analytics.
+
+La table cible `domain_events` contient l’identifiant, l’agrégat, le nom, la
+version, le payload, les dates, l’état, les tentatives et le contexte tenant.
+Tous les événements sont rejouables.
+
+## 35. Storage et moteur média
+
+Les originaux sont conservés et versionnés. Les miniatures et formats AVIF,
+WebP et JPEG sont générés automatiquement. Chaque média porte titre,
+description, alt SEO, auteur, date, propriété, catégorie, orientation, tags,
+GPS, compression, miniature et formats.
+
+## 36. Internationalisation et SEO
+
+Toutes les chaînes migrent vers des clés i18n contextualisées avec variables.
+Langues cibles : français, anglais, allemand, espagnol, néerlandais et italien.
+
+Chaque page possède title, description, OpenGraph, Twitter Card, Schema.org,
+canonical, sitemap, breadcrumb et JSON-LD.
+
+## 37. Cartographie
+
+Un composant cartographique unique affiche et filtre points d’intérêt,
+restaurants, marchés, plages, producteurs, pistes cyclables, Fort Boyard et
+ports.
+
+## 38. Notifications et templates
+
+Canaux : e-mail, SMS, push, WhatsApp futur et notifications internes. Chaque
+notification possède template, variables, langue, priorité, journal, statut,
+historique et stratégie de retry.
+
+Tous les messages utilisent le même moteur de templates et des variables
+normalisées, sans duplication éditoriale.
+
+## 39. Permissions déclaratives
+
+Les permissions utilisent des clés comme `reservation.read`,
+`reservation.create`, `payment.refund`, `crm.export`,
+`maintenance.assign` ou `analytics.view`. Les rôles composent ces permissions.
+La source officielle est `PERMISSIONS_CATALOG.md`.
+
+## 40. Audit, monitoring et scalabilité
+
+Les connexions, suppressions, paiements, contrats, exports, modifications et
+annulations enregistrent acteur, IP, navigateur, date, ancienne et nouvelle
+valeur.
+
+Le monitoring couvre temps de réponse, erreurs, disponibilité, paiements,
+synchronisations, e-mails, Storage, API et tâches planifiées.
+
+L’architecture vise 10 à 10 000 logements sans modification majeure, par
+partitionnement, projections, traitements asynchrones et observabilité mesurée.
+
+## 41. Gouvernance
+
+Chaque fonctionnalité doit être cohérente avec la vision, réutilisable,
+documentée, testée, conforme aux conventions, compatible avec les modules futurs
+et évolutive sans refonte.

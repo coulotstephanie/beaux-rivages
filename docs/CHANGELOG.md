@@ -18,6 +18,8 @@ conventionnels du projet.
   l’architecture SaaS cible.
 - Ajout du catalogue officiel des événements et des exigences d’automatisation,
   scheduler, cache, monitoring, sauvegarde et production.
+- Formalisation de la stratégie multi-tenant, des tests anti-fuite et du
+  catalogue cible des permissions déclaratives.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié

@@ -56,3 +56,13 @@ Le Product Book 08 définit la cible technique. Le dépôt actuel ne sera pas
 déplacé immédiatement en monorepo. Chaque domaine migrera verticalement avec
 compatibilité, mesures de performance et tests de non-régression. Cette décision
 évite une réécriture structurelle sans valeur métier immédiate.
+
+## ADR-005 — Multi-tenant préparé, non activé
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+Le modèle multi-tenant sera introduit par fondations, backfill, isolation RLS
+puis activation. Aucun simple ajout de colonnes nullable ne sera considéré
+suffisant. Les permissions deviendront déclaratives et seront rattachées aux
+memberships tenant.
