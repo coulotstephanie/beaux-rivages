@@ -46,3 +46,13 @@ Le Product Book 07 devient la référence fonctionnelle des transitions métier.
 Les prochains domaines seront migrés vers des machines à états typées et une
 outbox transactionnelle. Les statuts déjà persistés restent compatibles pendant
 la migration.
+
+## ADR-004 — Architecture cible adoptée par convergence
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+Le Product Book 08 définit la cible technique. Le dépôt actuel ne sera pas
+déplacé immédiatement en monorepo. Chaque domaine migrera verticalement avec
+compatibilité, mesures de performance et tests de non-régression. Cette décision
+évite une réécriture structurelle sans valeur métier immédiate.

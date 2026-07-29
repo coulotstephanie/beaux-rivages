@@ -14,6 +14,8 @@ conventionnels du projet.
   implicite de privilèges.
 - Documentation consolidée de la base, des API et des décisions d’architecture.
 - Intégration du Product Book 07 et de la matrice de traçabilité des workflows.
+- Intégration du Product Book 08 et de la matrice de convergence vers
+  l’architecture SaaS cible.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié

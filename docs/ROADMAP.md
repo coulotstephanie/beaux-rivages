@@ -22,6 +22,10 @@
 7. Migrer les textes vers les catalogues i18n.
 8. Mesurer Lighthouse et les Core Web Vitals en production.
 
+La convergence vers le monorepo, les API v1 et la stack frontend cible suit la
+matrice `TECHNICAL_ARCHITECTURE_TRACEABILITY.md`. Elle reste progressive afin de
+préserver le produit en production.
+
 ## Critères de sortie V1 commerciale
 
 - juridique et tarifs validés ;
