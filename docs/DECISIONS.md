@@ -85,3 +85,13 @@ Le Brand Book gouverne les chaînes visibles, la photographie, les interactions
 et les contenus. Les termes techniques internes peuvent conserver leur stabilité
 contractuelle, tandis que l’interface voyageur privilégie expériences,
 attentions, maisons et séjours.
+
+## ADR-008 — Developer Handbook comme norme de contribution
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+Le Developer Handbook gouverne toute nouvelle contribution. Les écarts de
+l’existant sont consignés dans une matrice de traçabilité et corrigés
+progressivement, domaine par domaine, sans réécriture globale ni déclaration de
+conformité non mesurée.

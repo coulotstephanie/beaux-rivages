@@ -24,6 +24,8 @@ conventionnels du projet.
   d’avancement réel.
 - Intégration du Brand Book et harmonisation des libellés voyageurs autour des
   expériences et attentions.
+- Intégration du Developer Handbook, de sa définition de Done et de la matrice
+  de conformité du dépôt.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
