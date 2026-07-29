@@ -17,6 +17,8 @@ conventionnels du projet.
   accessibles.
 - Rapport d’audit du dépôt, guides d’installation et de contribution, et points
   d’entrée documentaires demandés.
+- Kit de pilotage `/project-management` : cadre permanent, backlog, roadmap des
+  Sprints 01 à 20, modèles de PR/issues et checklists QA/release.
 - Connexion individuelle du personnel avec Supabase Auth et permissions
   centralisées par rôle pour toutes les API administratives.
 - Provisionnement automatique des profils liés à `auth.users`, sans attribution
