@@ -7,18 +7,36 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write \"{features,lib,hooks,types,services,components/providers,components/layouts,components/states}/**/*.{ts,tsx,md}\" \"components/ui/{Alert,Avatar,Badge,Button,Calendar,Card,Dialog,Dropdown,Footer,Input,Modal,Navbar,Table,Tabs,Textarea,Toast,Tooltip,index}.{ts,tsx}\" \"components/ui/*.test.tsx\" \"{app/forbidden,app/unauthorized,app/maintenance}/**/*.tsx\" \"app/{error,global-error,loading,layout}.tsx\" \"{playwright,vitest}.config.ts\" \"commitlint.config.cjs\" \"package.json\" \".github/**/*.yml\"",
+    "format:check": "prettier --check \"{features,lib,hooks,types,services,components/providers,components/layouts,components/states}/**/*.{ts,tsx,md}\" \"components/ui/{Alert,Avatar,Badge,Button,Calendar,Card,Dialog,Dropdown,Footer,Input,Modal,Navbar,Table,Tabs,Textarea,Toast,Tooltip,index}.{ts,tsx}\" \"components/ui/*.test.tsx\" \"{app/forbidden,app/unauthorized,app/maintenance}/**/*.tsx\" \"app/{error,global-error,loading,layout}.tsx\" \"{playwright,vitest}.config.ts\" \"commitlint.config.cjs\" \"package.json\" \".github/**/*.yml\"",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/project-integrity.test.mjs && tsx --test tests/contract-generator.test.ts tests/commercial-journey.test.ts tests/database-foundation.test.ts tests/guest-messaging.test.ts tests/revenue-marketing.test.ts tests/premium-backoffice.test.ts tests/channel-manager.test.ts tests/concierge-premium.test.ts tests/housekeeping-maintenance.test.ts tests/staff-auth.test.ts tests/workflow-reference.test.ts tests/technical-architecture-reference.test.ts tests/brand-book.test.ts tests/developer-handbook.test.ts tests/system-architecture.test.ts tests/business-rules-reference.test.ts tests/documentation-structure.test.ts tests/adr-reference.test.ts tests/adr-catalog.test.ts tests/feature-catalog.test.ts tests/product-requirements.test.ts tests/operations-documentation.test.ts tests/hospitality-playbook.test.ts",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:list": "playwright test --list",
     "test:site": "node tests/crawl-site.mjs",
     "db:push": "supabase db push --linked",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --linked --schema public > platform/database/database.types.ts",
     "db:backup": "bash scripts/backup-supabase.sh",
     "archives:search": "node scripts/search-archives.mjs",
-    "validate": "npm run lint && npm run typecheck && npm test && npm run build"
+    "prepare": "husky",
+    "validate": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run test:unit && npm run build"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.9",
+    "@tanstack/react-query": "^5.101.4",
     "framer-motion": "^12.42.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.27.0",
@@ -32,15 +50,26 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "@playwright/test": "^1.62.0",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/leaflet": "^1.9.21",
     "@types/node": "^22.10.2",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^6.0.4",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.22",
+    "husky": "^9.1.7",
+    "jsdom": "^30.0.1",
+    "lint-staged": "^17.2.0",
+    "prettier": "^3.9.6",
     "supabase": "^2.110.0",
     "tsx": "^4.23.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.10"
   }
 }

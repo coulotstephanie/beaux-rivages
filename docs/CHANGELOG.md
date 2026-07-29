@@ -8,6 +8,15 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Fondations du Sprint 1 : architecture Feature First progressive, Design
+  System étendu, layouts, providers et états transverses.
+- Outillage qualité avec Prettier, EditorConfig, Husky, lint-staged,
+  commitlint, Vitest, Testing Library et Playwright.
+- Pipeline GitHub Actions exécutant validation complète et tests E2E Chromium.
+- Pages système 401, 403, 500 et maintenance, avec chargement et reprise
+  accessibles.
+- Rapport d’audit du dépôt, guides d’installation et de contribution, et points
+  d’entrée documentaires demandés.
 - Connexion individuelle du personnel avec Supabase Auth et permissions
   centralisées par rôle pour toutes les API administratives.
 - Provisionnement automatique des profils liés à `auth.users`, sans attribution
@@ -83,7 +92,7 @@ conventionnels du projet.
   retirée, ainsi que les visuels génériques « Voyager léger » et « Le confort
   des longs séjours ». La photo technique de la boîte à clés est retirée de la
   galerie publique et, avec le plan vers D12, réservée à l’e-mail d’arrivée.
-- Le bouton « Musique classique » diffuse *Le Printemps — II. Largo*, extrait
-  des *Quatre Saisons* de Vivaldi, dans un enregistrement du domaine public et
+- Le bouton « Musique classique » diffuse _Le Printemps — II. Largo_, extrait
+  des _Quatre Saisons_ de Vivaldi, dans un enregistrement du domaine public et
   uniquement après action explicite du visiteur. Une version AAC/M4A assure
   désormais sa lecture sur Safari, avec OGG comme format alternatif.

@@ -34,6 +34,11 @@ npm run dev
 
 Puis ouvrir http://localhost:3000.
 
+La procédure détaillée se trouve dans
+[`docs/engineering/INSTALLATION.md`](docs/engineering/INSTALLATION.md). Les
+contributions suivent
+[`docs/engineering/CONTRIBUTING.md`](docs/engineering/CONTRIBUTING.md).
+
 ## Validation avant livraison
 
 ```bash
@@ -49,6 +54,10 @@ du site construit.
 ## Architecture de production
 
 - `components/ui` contient les primitives du Design System.
+- `features` accueille progressivement chaque domaine selon le gabarit Feature
+  First, sans déplacement global de l’existant.
+- `components/layouts`, `components/providers` et `components/states`
+  centralisent les compositions et comportements transverses.
 - `media/properties` contient un manifest typé par maison.
 - `media/site.ts` est le registre des médias partagés et des destinations.
 - `content/fr` constitue le point d’entrée éditorial français ; les futures

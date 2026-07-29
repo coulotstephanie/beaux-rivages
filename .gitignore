@@ -11,8 +11,9 @@ out/
 .DS_Store
 tsconfig.tsbuildinfo
 coverage/
+playwright-report/
+test-results/
 .tools/
-.github/workflows/
 .vercel
 .env*
 !.env.example

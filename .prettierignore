@@ -1,0 +1,12 @@
+.next
+node_modules
+coverage
+playwright-report
+test-results
+public
+app/globals.css
+source-images
+brand-kit
+film-kit
+platform/database/database.types.ts
+package-lock.json

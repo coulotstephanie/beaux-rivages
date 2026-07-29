@@ -8,12 +8,21 @@
   métier de référence.
 - `BUSINESS_RULES.md` : source unique de vérité des règles et invariants métier.
 - `app/` : routes Next.js App Router et composition des pages.
+- `features/` : destination Feature First des nouvelles capacités et gabarit
+  de migration verticale des domaines historiques.
 - `components/` : composants de présentation et interactions client.
+- `components/ui`, `components/layouts`, `components/providers` et
+  `components/states` : primitives partagées, compositions applicatives et
+  états transverses.
 - `content/`, `data.ts`, `experiences.ts`, `recommendations.ts` : contenu officiel actuel.
 - `media/` : registres typés ; une propriété ne peut référencer que ses médias.
 - `platform/` : contrats métier indépendants de Next.js et des fournisseurs.
 - `platform/auth/` : identité Supabase Auth, rôles et autorisation des API.
 - `i18n/` : locales cibles et premiers catalogues traduisibles.
+
+`platform/` n’est pas déplacé en masse. Chaque domaine est migré vers
+`features/` dans une PR atomique, en conservant temporairement ses exports
+publics pour protéger les fonctionnalités existantes.
 
 ## Frontières
 
