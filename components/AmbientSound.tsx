@@ -43,7 +43,8 @@ export function AmbientSound() {
     stop();
 
     const master = context.createGain();
-    master.gain.value = 0.12;
+    master.gain.setValueAtTime(0.0001, context.currentTime);
+    master.gain.exponentialRampToValueAtTime(0.13, context.currentTime + 0.8);
     master.connect(context.destination);
 
     const buffer = context.createBuffer(1, context.sampleRate * 8, context.sampleRate);
@@ -63,7 +64,7 @@ export function AmbientSound() {
     waveFilter.type = "lowpass";
     waveFilter.frequency.value = 620;
     waveFilter.Q.value = 0.8;
-    waveGain.gain.value = 0.18;
+    waveGain.gain.value = nextMode === "music" ? 0.075 : 0.18;
     waveMotion.frequency.value = 0.11;
     motionDepth.gain.value = 0.11;
 
@@ -75,16 +76,37 @@ export function AmbientSound() {
     nodesRef.current.push(waves, waveFilter, waveGain, waveMotion, motionDepth, master);
 
     if (nextMode === "music") {
-      const notes = [146.83, 220, 293.66];
+      const musicBus = context.createGain();
+      const musicMotion = context.createOscillator();
+      const musicDepth = context.createGain();
+      musicBus.gain.value = 0.72;
+      musicMotion.frequency.value = 0.065;
+      musicDepth.gain.value = 0.16;
+      musicMotion.connect(musicDepth).connect(musicBus.gain);
+      musicBus.connect(master);
+      musicMotion.start();
+      nodesRef.current.push(musicBus, musicMotion, musicDepth);
+
+      // A warm suspended chord, deliberately slow and discreet behind the surf.
+      const notes = [146.83, 220, 293.66, 369.99];
       notes.forEach((frequency, index) => {
         const oscillator = context.createOscillator();
         const gain = context.createGain();
-        oscillator.type = index === 1 ? "sine" : "triangle";
+        const filter = context.createBiquadFilter();
+        const drift = context.createOscillator();
+        const driftDepth = context.createGain();
+        oscillator.type = index % 2 ? "sine" : "triangle";
         oscillator.frequency.value = frequency;
-        gain.gain.value = index === 1 ? 0.018 : 0.012;
-        oscillator.connect(gain).connect(master);
+        gain.gain.value = index === 0 ? 0.08 : 0.052;
+        filter.type = "lowpass";
+        filter.frequency.value = 900;
+        drift.frequency.value = 0.025 + index * 0.009;
+        driftDepth.gain.value = 0.8 + index * 0.15;
+        drift.connect(driftDepth).connect(oscillator.detune);
+        oscillator.connect(filter).connect(gain).connect(musicBus);
         oscillator.start();
-        nodesRef.current.push(oscillator, gain);
+        drift.start();
+        nodesRef.current.push(oscillator, filter, gain, drift, driftDepth);
       });
     }
 
