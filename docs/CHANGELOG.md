@@ -10,6 +10,8 @@ conventionnels du projet.
 
 - Rapports de cohérence des migrations, sauvegarde/restauration et décision
   Go/No-Go, accompagnés d’un contrôle automatisé des paires up/down.
+- Rapport Backup Readiness comparant les sauvegardes gérées Supabase, CLI,
+  PostgreSQL natif et Docker, avec procédure miroir sans écriture en production.
 - Réintégration du Yield Management déjà présent dans Supabase afin de
   réconcilier l’historique local et distant avant production.
 - Audit complet de préparation production, score documenté, dette priorisée,
@@ -87,6 +89,8 @@ conventionnels du projet.
 
 ### Modifié
 
+- PostCSS et Sharp sont verrouillés sur leurs versions corrigées ; l’audit des
+  dépendances de production ne signale plus de vulnérabilité connue.
 - Playwright utilise un port local réservé et refuse de réutiliser un ancien
   serveur, afin que les E2E valident toujours le commit courant.
 - Le limiteur local purge ses entrées et borne sa mémoire ; la vidéo d’accueil

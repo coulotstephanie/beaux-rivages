@@ -16,6 +16,9 @@
 - limitation de débit bornée en mémoire ;
 - réponses administratives sensibles en `private, no-store` ;
 - secrets exclus du dépôt et aucune clé littérale détectée par les tests.
+- `npm audit --omit=dev --audit-level=high` ne relève aucune vulnérabilité de
+  production après verrouillage de PostCSS `8.5.25` et Sharp `0.35.3` ;
+  build, lint, types et tests restent verts avec ces versions.
 
 ## Risques ouverts
 
@@ -26,6 +29,7 @@
 | P1     | fallback `ADMIN_API_TOKEN` actif sauf désactivation explicite | migrer les comptes puis fixer `ADMIN_TOKEN_FALLBACK_ENABLED=false` |
 | P1     | rate limiting local non partagé entre instances Vercel        | utiliser un stockage distribué et fiable                           |
 | P1     | monitoring/alertes de sécurité non démontrés                  | centraliser erreurs, audit et alertes                              |
+| P2     | 13 alertes élevées dans l’outillage de développement          | examiner ESLint et les outils de test sans mise à jour forcée      |
 | P2     | rotation des secrets non attestée                             | créer un registre daté hors Git                                    |
 
 ## Lecture OWASP Top 10

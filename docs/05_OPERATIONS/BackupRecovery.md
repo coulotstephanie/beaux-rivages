@@ -13,3 +13,5 @@ audits, mesurer RTO/RPO et conserver le procès-verbal hors du dépôt public.
 La sauvegarde doit aussi couvrir Storage, Auth et l’inventaire des paramètres.
 Le détail et l’état de la dernière tentative figurent dans
 [BACKUP_REPORT_2026-07-29.md](./BACKUP_REPORT_2026-07-29.md).
+La comparaison des méthodes et la procédure retenue sont consignées dans
+[BACKUP_READINESS_REPORT_2026-07-29.md](./BACKUP_READINESS_REPORT_2026-07-29.md).
