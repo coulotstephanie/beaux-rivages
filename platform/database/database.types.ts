@@ -578,6 +578,249 @@ export type Database = {
           },
         ]
       }
+      concierge_categories: {
+        Row: {
+          code: string
+          created_at: string
+          description_de: string | null
+          description_en: string | null
+          description_fr: string | null
+          enabled: boolean
+          id: string
+          label_de: string
+          label_en: string
+          label_fr: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description_de?: string | null
+          description_en?: string | null
+          description_fr?: string | null
+          enabled?: boolean
+          id?: string
+          label_de: string
+          label_en: string
+          label_fr: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description_de?: string | null
+          description_en?: string | null
+          description_fr?: string | null
+          enabled?: boolean
+          id?: string
+          label_de?: string
+          label_en?: string
+          label_fr?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      concierge_experiences: {
+        Row: {
+          category_id: string
+          code: string
+          created_at: string
+          description_de: string
+          description_en: string
+          description_fr: string
+          enabled: boolean
+          id: string
+          image_path: string | null
+          inclusions: Json
+          price_cents: number
+          pricing_unit: string
+          requires_confirmation: boolean
+          sort_order: number
+          title_de: string
+          title_en: string
+          title_fr: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          code: string
+          created_at?: string
+          description_de: string
+          description_en: string
+          description_fr: string
+          enabled?: boolean
+          id?: string
+          image_path?: string | null
+          inclusions?: Json
+          price_cents: number
+          pricing_unit?: string
+          requires_confirmation?: boolean
+          sort_order?: number
+          title_de: string
+          title_en: string
+          title_fr: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          code?: string
+          created_at?: string
+          description_de?: string
+          description_en?: string
+          description_fr?: string
+          enabled?: boolean
+          id?: string
+          image_path?: string | null
+          inclusions?: Json
+          price_cents?: number
+          pricing_unit?: string
+          requires_confirmation?: boolean
+          sort_order?: number
+          title_de?: string
+          title_en?: string
+          title_fr?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "concierge_experiences_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "concierge_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      concierge_order_items: {
+        Row: {
+          created_at: string
+          customization: Json
+          experience_id: string
+          id: string
+          order_id: string
+          quantity: number
+          scheduled_for: string | null
+          status: string
+          total_cents: number | null
+          unit_price_cents: number
+        }
+        Insert: {
+          created_at?: string
+          customization?: Json
+          experience_id: string
+          id?: string
+          order_id: string
+          quantity?: number
+          scheduled_for?: string | null
+          status?: string
+          total_cents?: number | null
+          unit_price_cents: number
+        }
+        Update: {
+          created_at?: string
+          customization?: Json
+          experience_id?: string
+          id?: string
+          order_id?: string
+          quantity?: number
+          scheduled_for?: string | null
+          status?: string
+          total_cents?: number | null
+          unit_price_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "concierge_order_items_experience_id_fkey"
+            columns: ["experience_id"]
+            isOneToOne: false
+            referencedRelation: "concierge_experiences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "concierge_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "concierge_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      concierge_orders: {
+        Row: {
+          created_at: string
+          discount_cents: number
+          guest_id: string | null
+          guest_message: string | null
+          id: string
+          internal_notes: string | null
+          locale: string
+          payment_id: string | null
+          promotion_code: string | null
+          reservation_id: string
+          status: string
+          subtotal_cents: number
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          discount_cents?: number
+          guest_id?: string | null
+          guest_message?: string | null
+          id?: string
+          internal_notes?: string | null
+          locale?: string
+          payment_id?: string | null
+          promotion_code?: string | null
+          reservation_id: string
+          status?: string
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          discount_cents?: number
+          guest_id?: string | null
+          guest_message?: string | null
+          id?: string
+          internal_notes?: string | null
+          locale?: string
+          payment_id?: string | null
+          promotion_code?: string | null
+          reservation_id?: string
+          status?: string
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "concierge_orders_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "concierge_orders_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "concierge_orders_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       concierge_requests: {
         Row: {
           created_at: string
@@ -621,6 +864,60 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "concierge_requests_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      concierge_special_requests: {
+        Row: {
+          allergies: string | null
+          created_at: string
+          details: string
+          dietary_requirements: string | null
+          guest_id: string | null
+          id: string
+          occasion: string
+          reservation_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          allergies?: string | null
+          created_at?: string
+          details: string
+          dietary_requirements?: string | null
+          guest_id?: string | null
+          id?: string
+          occasion: string
+          reservation_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          allergies?: string | null
+          created_at?: string
+          details?: string
+          dietary_requirements?: string | null
+          guest_id?: string | null
+          id?: string
+          occasion?: string
+          reservation_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "concierge_special_requests_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "concierge_special_requests_reservation_id_fkey"
             columns: ["reservation_id"]
             isOneToOne: false
             referencedRelation: "reservations"

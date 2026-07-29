@@ -42,7 +42,7 @@ export class SupabaseBackOfficeRepository {
     const month = today.slice(0, 7);
     const yearStart = `${year}-01-01`;
     const yearEnd = `${year + 1}-01-01`;
-    const [propertiesResult, reservationsResult, linksResult, guestsResult, optionsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult] = await Promise.all([
+    const [propertiesResult, reservationsResult, linksResult, guestsResult, optionsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, conciergeOrdersResult, conciergeItemsResult, specialRequestsResult, depositsResult, notificationsResult, notesResult] = await Promise.all([
       this.client.from("properties").select("id,slug,name,status").order("name"),
       this.client.from("reservations").select("*").order("arrival", { ascending: false }).limit(5000),
       this.client.from("reservation_guests").select("reservation_id,guest_id,is_primary"),
@@ -58,11 +58,14 @@ export class SupabaseBackOfficeRepository {
       this.client.from("housekeeping_tasks").select("*").order("scheduled_for", { ascending: true }).limit(200),
       this.client.from("maintenance_incidents").select("*").order("created_at", { ascending: false }).limit(200),
       this.client.from("concierge_requests").select("*").order("created_at", { ascending: false }).limit(200),
+      this.client.from("concierge_orders").select("*").order("created_at", { ascending: false }).limit(200),
+      this.client.from("concierge_order_items").select("id,order_id").limit(2000),
+      this.client.from("concierge_special_requests").select("*").order("created_at", { ascending: false }).limit(200),
       this.client.from("security_deposits").select("*").order("updated_at", { ascending: false }).limit(200),
       this.client.from("back_office_notifications").select("*").is("dismissed_at", null).order("created_at", { ascending: false }).limit(100),
       this.client.from("reservation_notes").select("*").order("created_at", { ascending: false }).limit(500),
     ]);
-    const failed = [propertiesResult, reservationsResult, linksResult, guestsResult, optionsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult].find((result) => result.error);
+    const failed = [propertiesResult, reservationsResult, linksResult, guestsResult, optionsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, conciergeOrdersResult, conciergeItemsResult, specialRequestsResult, depositsResult, notificationsResult, notesResult].find((result) => result.error);
     if (failed?.error) throw new Error(`BACK_OFFICE_READ_FAILED:${failed.error.code}`);
 
     const propertyRows = (propertiesResult.data ?? []) as Row[];
@@ -201,6 +204,14 @@ export class SupabaseBackOfficeRepository {
             isSurprise: Boolean(row.is_surprise),
           };
         }),
+        conciergeOrders: ((conciergeOrdersResult.data ?? []) as Row[]).map((row) => {
+          const reservation=reservationById.get(String(row.reservation_id));
+          return { id:String(row.id),reservationReference:reservation?.reference??"—",guestName:reservation?.guestName??"Voyageur",status:String(row.status),locale:String(row.locale),totalCents:Number(row.total_cents),itemCount:((conciergeItemsResult.data??[]) as Row[]).filter((item)=>String(item.order_id)===String(row.id)).length,createdAt:String(row.created_at) };
+        }),
+        specialRequests: ((specialRequestsResult.data ?? []) as Row[]).map((row) => {
+          const reservation=reservationById.get(String(row.reservation_id));
+          return { id:String(row.id),reservationReference:reservation?.reference??"—",guestName:reservation?.guestName??"Voyageur",occasion:String(row.occasion),details:String(row.details),allergies:String(row.allergies??""),dietaryRequirements:String(row.dietary_requirements??""),status:String(row.status),createdAt:String(row.created_at) };
+        }),
         deposits: ((depositsResult.data ?? []) as Row[]).map((row) => {
           const reservation = reservationById.get(String(row.reservation_id));
           return {
@@ -322,6 +333,14 @@ export class SupabaseBackOfficeRepository {
       }).select("id").single();
       if (error) throw new Error(`RESERVATION_NOTE_WRITE_FAILED:${error.code}`);
       return data;
+    }
+    if (input.action === "update_concierge_order") {
+      const {data,error}=await this.client.from("concierge_orders").update({status:input.status}).eq("id",input.orderId).select("id").single();
+      if(error)throw new Error(`CONCIERGE_ORDER_UPDATE_FAILED:${error.code}`);return data;
+    }
+    if (input.action === "update_special_request") {
+      const {data,error}=await this.client.from("concierge_special_requests").update({status:input.status}).eq("id",input.requestId).select("id").single();
+      if(error)throw new Error(`CONCIERGE_REQUEST_UPDATE_FAILED:${error.code}`);return data;
     }
     const patch: Database["public"]["Tables"]["reservations"]["Update"] = { status: input.status };
     if (input.arrival) patch.arrival = input.arrival;

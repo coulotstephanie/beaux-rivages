@@ -156,6 +156,14 @@ export const adminReservationNoteSchema = z.object({
   content: z.string().trim().min(2).max(2000),
   pinned: z.boolean().default(false),
 }).strict();
+export const adminConciergeOrderUpdateSchema = z.object({
+  action:z.literal("update_concierge_order"),orderId:z.string().uuid(),
+  status:z.enum(["requested","confirmed","partially_confirmed","declined","payment_pending","paid","preparing","delivered","cancelled"]),
+}).strict();
+export const adminSpecialRequestUpdateSchema = z.object({
+  action:z.literal("update_special_request"),requestId:z.string().uuid(),
+  status:z.enum(["requested","reviewing","accepted","declined","completed"]),
+}).strict();
 
 export const adminOperationSchema = z.discriminatedUnion("action", [
   adminManualReservationSchema,
@@ -167,6 +175,8 @@ export const adminOperationSchema = z.discriminatedUnion("action", [
   adminConciergeCreateSchema,
   adminNotificationUpdateSchema,
   adminReservationNoteSchema,
+  adminConciergeOrderUpdateSchema,
+  adminSpecialRequestUpdateSchema,
 ]);
 
 export type AdminOperationInput = z.infer<typeof adminOperationSchema>;

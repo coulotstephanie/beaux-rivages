@@ -98,6 +98,14 @@ export type BackOfficeSnapshot = {
       kind: string; title: string; details: string; status: string; scheduledFor: string | null;
       isSurprise: boolean;
     }[];
+    conciergeOrders: {
+      id: string; reservationReference: string; guestName: string; status: string; locale: string;
+      totalCents: number; itemCount: number; createdAt: string;
+    }[];
+    specialRequests: {
+      id: string; reservationReference: string; guestName: string; occasion: string;
+      details: string; allergies: string; dietaryRequirements: string; status: string; createdAt: string;
+    }[];
     deposits: {
       id: string; reservationReference: string; guestName: string; amountCents: number;
       status: string; provider: string; updatedAt: string;
