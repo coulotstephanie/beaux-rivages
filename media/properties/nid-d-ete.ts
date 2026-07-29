@@ -27,7 +27,6 @@ const beach = asset("plage.jpeg", "Plage près du Nid d’Été", "Le sable au b
 const shade = asset("voile-ombrage.jpeg", "Dune fleurie et embarcations sur la plage", "La côte sauvage d’Oléron");
 const airbnbLivingRoom = [
   propertyAsset("airbnb-salon-1.jpeg", "Salon du Nid d’Été avec canapé convertible", "Le séjour, pensé pour se retrouver"),
-  propertyAsset("airbnb-salon-2.jpeg", "Salon et espace de vie du Nid d’Été", "Une maison simple à vivre"),
 ];
 const editorialLivingRoom = propertyAsset(
   "editorial/salon-aperitif.png",
@@ -85,7 +84,7 @@ const airbnbTerrace = [
 const airbnbDetails = [
   propertyAsset("airbnb-exterieur-3-1.jpeg", "Plan de la résidence La Maison Heureuse", "Se repérer dans la résidence"),
   propertyAsset("airbnb-exterieur-4-1.jpeg", "Environnement extérieur du Nid d’Été", "Entre résidence et plage"),
-  propertyAsset("airbnb-piece-a-theme-1.jpeg", "Accès vers la plage des Saumonards", "Le chemin vers l’océan"),
+  propertyAsset("airbnb-piece-a-theme-1.jpeg", "Décoration de Noël à la Maison Heureuse au sein du Nid d’Été", "Passer Noël à la Maison Heureuse au sein du Nid d’Été"),
   propertyAsset("airbnb-photos-supplementaires-1.jpeg", "Détail complémentaire du Nid d’Été", "L’esprit des vacances à Boyardville"),
 ];
 export const nidDEteMedia = {
