@@ -51,6 +51,12 @@ La première commande exécute lint, TypeScript strict, les tests d’intégrit�
 le build de production. La seconde validation parcourt toutes les URLs internes
 du site construit.
 
+La préparation réelle est suivie dans
+[`docs/PRODUCTION_READINESS_AUDIT_2026-07-29.md`](docs/PRODUCTION_READINESS_AUDIT_2026-07-29.md).
+Tout déploiement suit le
+[`Guide de déploiement`](docs/05_OPERATIONS/DeploymentGuide.md) et la
+[`Checklist Go Live`](docs/05_OPERATIONS/GO_LIVE_CHECKLIST.md).
+
 ## Architecture de production
 
 - `components/ui` contient les primitives du Design System.

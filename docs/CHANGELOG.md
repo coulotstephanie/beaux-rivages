@@ -8,6 +8,9 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Audit complet de préparation production, score documenté, dette priorisée,
+  guide de déploiement et checklist Go Live.
+- Sonde de santé sans cache destinée à la supervision de PostgreSQL.
 - ADR-0009 « Choix du fournisseur IA » : comparaison OpenAI, Azure OpenAI,
   Anthropic et Mistral, critères RGPD et protocole d’évaluation réversible.
 - Revenue Management : périodes tarifaires persistantes, garde-fous
@@ -80,6 +83,9 @@ conventionnels du projet.
 
 ### Modifié
 
+- Le limiteur local purge ses entrées et borne sa mémoire ; la vidéo d’accueil
+  ne précharge plus sur connexion contrainte.
+- Le sitemap ne publie plus de date de modification artificielle.
 - Le Back Office accepte désormais les sessions Supabase vérifiées côté serveur.
   Le jeton historique reste temporairement disponible comme filet de migration
   désactivable.

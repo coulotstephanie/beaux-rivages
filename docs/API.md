@@ -24,21 +24,27 @@ Authorization: Bearer <supabase-access-token>
 Pendant la migration, `ADMIN_API_TOKEN` reste accepté sauf lorsque
 `ADMIN_TOKEN_FALLBACK_ENABLED=false`.
 
+## Santé de la plateforme
+
+`GET /api/health` est une sonde publique sans cache. Elle retourne uniquement
+l’état et la latence base, avec `503` si la configuration manque ou si
+PostgreSQL est inaccessible, sans exposer l’erreur interne.
+
 ## Matrice administrative
 
-| Route | Lecture | Mutation |
-| --- | --- | --- |
-| `/api/admin/operations` | tous les rôles | `admin`, `concierge` |
-| `/api/admin/dashboard` | tous les rôles | — |
-| `/api/admin/channel-manager` | `admin`, `read_only` | `admin` |
-| `/api/admin/revenue` | tous les rôles | `admin` |
-| `/api/admin/housekeeping` | tous les rôles | `admin`, `concierge` |
-| `/api/admin/export` | `admin`, `read_only` | — |
-| `/api/admin/guest-messages/preview` | — | `admin`, `concierge` |
-| `/api/admin/payments/refund` | — | `admin` |
-| `/api/calendar/admin` | tous les rôles | `admin`, `concierge` |
-| `/api/rates` | public | `admin` |
-| `/api/promotions` | public | `admin` |
+| Route                               | Lecture              | Mutation             |
+| ----------------------------------- | -------------------- | -------------------- |
+| `/api/admin/operations`             | tous les rôles       | `admin`, `concierge` |
+| `/api/admin/dashboard`              | tous les rôles       | —                    |
+| `/api/admin/channel-manager`        | `admin`, `read_only` | `admin`              |
+| `/api/admin/revenue`                | tous les rôles       | `admin`              |
+| `/api/admin/housekeeping`           | tous les rôles       | `admin`, `concierge` |
+| `/api/admin/export`                 | `admin`, `read_only` | —                    |
+| `/api/admin/guest-messages/preview` | —                    | `admin`, `concierge` |
+| `/api/admin/payments/refund`        | —                    | `admin`              |
+| `/api/calendar/admin`               | tous les rôles       | `admin`, `concierge` |
+| `/api/rates`                        | public               | `admin`              |
+| `/api/promotions`                   | public               | `admin`              |
 
 Une authentification absente ou invalide produit `401`. Une identité valide sans
 permission produit `403`. Les routes publiques de réservation et de séjour ne

@@ -11,7 +11,12 @@ export type VideoSourceSet = {
   mobileWebm?: string;
 };
 
-export function HeroVideo({ sources, poster, priority = true, className = "" }: {
+export function HeroVideo({
+  sources,
+  poster,
+  priority = true,
+  className = "",
+}: {
   sources: VideoSourceSet;
   poster: string;
   priority?: boolean;
@@ -20,14 +25,18 @@ export function HeroVideo({ sources, poster, priority = true, className = "" }: 
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduceMotion = useReducedMotion();
   const [canAutoplay, setCanAutoplay] = useState(false);
+  const [constrainedConnection, setConstrainedConnection] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, .35], ["0%", "5%"]);
+  const y = useTransform(scrollYProgress, [0, 0.35], ["0%", "5%"]);
 
   useEffect(() => {
-    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const connection = (
+      navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }
+    ).connection;
     const constrained = connection?.saveData || connection?.effectiveType === "2g";
+    setConstrainedConnection(Boolean(constrained));
     setCanAutoplay(!reduceMotion && !constrained);
   }, [reduceMotion]);
 
@@ -52,7 +61,15 @@ export function HeroVideo({ sources, poster, priority = true, className = "" }: 
 
   return (
     <div className={`hero-video ${ready ? "is-ready" : ""} ${className}`}>
-      <Image src={poster} alt="" fill priority={priority} fetchPriority={priority ? "high" : "auto"} quality={90} sizes="100vw" />
+      <Image
+        src={poster}
+        alt=""
+        fill
+        priority={priority}
+        fetchPriority={priority ? "high" : "auto"}
+        quality={90}
+        sizes="100vw"
+      />
       <motion.video
         ref={videoRef}
         style={{ y }}
@@ -60,7 +77,7 @@ export function HeroVideo({ sources, poster, priority = true, className = "" }: 
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={constrainedConnection || reduceMotion ? "none" : "metadata"}
         poster={poster}
         aria-hidden="true"
         tabIndex={-1}
@@ -68,8 +85,12 @@ export function HeroVideo({ sources, poster, priority = true, className = "" }: 
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       >
-        {sources.mobileWebm && <source src={sources.mobileWebm} media="(max-width: 900px)" type="video/webm" />}
-        {sources.mobileMp4 && <source src={sources.mobileMp4} media="(max-width: 900px)" type="video/mp4" />}
+        {sources.mobileWebm && (
+          <source src={sources.mobileWebm} media="(max-width: 900px)" type="video/webm" />
+        )}
+        {sources.mobileMp4 && (
+          <source src={sources.mobileMp4} media="(max-width: 900px)" type="video/mp4" />
+        )}
         {sources.webm && <source src={sources.webm} type="video/webm" />}
         <source src={sources.mp4} type="video/mp4" />
       </motion.video>

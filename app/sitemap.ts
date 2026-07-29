@@ -11,8 +11,8 @@ const staticRoutes = [
   "/choisir",
   "/construisez-votre-sejour",
   "/avant-arrivee",
-    "/conseils",
-    "/mot-de-stephanie",
+  "/conseils",
+  "/mot-de-stephanie",
   "/avis",
   "/coulisses",
   "/destinations",
@@ -37,8 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticRoutes, ...propertyRoutes, ...guideRoutes, ...experienceRoutes].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : route.startsWith("/maisons") ? 0.9 : route.startsWith("/destinations/") || route.startsWith("/experiences/") ? 0.85 : 0.7,
+    priority:
+      route === ""
+        ? 1
+        : route.startsWith("/maisons")
+          ? 0.9
+          : route.startsWith("/destinations/") || route.startsWith("/experiences/")
+            ? 0.85
+            : 0.7,
   }));
 }

@@ -58,6 +58,12 @@ Le secret administrateur historique est un mécanisme de migration. Il doit êtr
 désactivé avec `ADMIN_TOKEN_FALLBACK_ENABLED=false` après activation des comptes
 individuels.
 
+## Disponibilité et limites
+
+`/api/health` est une sonde minimale de disponibilité et de latence base. Elle
+ne remplace pas un APM. Le rate limiting en mémoire est borné, mais reste propre
+à chaque instance : une limite distribuée est requise avant montée en charge.
+
 ## Événements métier
 
 `EVENT_CATALOG.md` définit les noms officiels. La cible utilise des machines à

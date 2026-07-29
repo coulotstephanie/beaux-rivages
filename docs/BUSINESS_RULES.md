@@ -190,3 +190,9 @@ La règle métier prime toujours sur la technique.
 Si une implémentation technique entre en conflit avec une règle métier validée,
 l’implémentation doit être adaptée, jamais l’inverse.
 
+## 17. Mise en production
+
+Les réservations réelles exigent que contrôles serveur et base, migrations,
+sauvegardes, paiements et audits soient vérifiés selon la Checklist Go Live. Un
+contrôle critique indisponible ferme l’écriture concernée au lieu de dégrader
+silencieusement une règle métier.
