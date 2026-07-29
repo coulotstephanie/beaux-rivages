@@ -339,56 +339,233 @@ export type Database = {
           },
         ]
       }
+      gift_card_uses: {
+        Row: {
+          amount_cents: number
+          gift_card_id: string
+          id: string
+          idempotency_key: string
+          reservation_id: string | null
+          used_at: string
+        }
+        Insert: {
+          amount_cents: number
+          gift_card_id: string
+          id?: string
+          idempotency_key: string
+          reservation_id?: string | null
+          used_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          gift_card_id?: string
+          id?: string
+          idempotency_key?: string
+          reservation_id?: string | null
+          used_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_card_uses_gift_card_id_fkey"
+            columns: ["gift_card_id"]
+            isOneToOne: false
+            referencedRelation: "gift_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_card_uses_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gift_cards: {
+        Row: {
+          activated_at: string | null
+          balance_cents: number
+          created_at: string
+          currency: string
+          expires_at: string
+          id: string
+          initial_amount_cents: number
+          public_code: string
+          purchaser_guest_id: string | null
+          qr_token_hash: string
+          recipient_email_hash: string | null
+          recipient_name: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          balance_cents: number
+          created_at?: string
+          currency?: string
+          expires_at: string
+          id?: string
+          initial_amount_cents: number
+          public_code: string
+          purchaser_guest_id?: string | null
+          qr_token_hash: string
+          recipient_email_hash?: string | null
+          recipient_name?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          balance_cents?: number
+          created_at?: string
+          currency?: string
+          expires_at?: string
+          id?: string
+          initial_amount_cents?: number
+          public_code?: string
+          purchaser_guest_id?: string | null
+          qr_token_hash?: string
+          recipient_email_hash?: string | null
+          recipient_name?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_cards_purchaser_guest_id_fkey"
+            columns: ["purchaser_guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guest_access_secrets: {
+        Row: {
+          available_from: string
+          created_at: string
+          key_box_code_ciphertext: string
+          pedestrian_gate_code_ciphertext: string | null
+          reservation_id: string
+          updated_at: string
+          wifi_name_ciphertext: string
+          wifi_password_ciphertext: string
+        }
+        Insert: {
+          available_from: string
+          created_at?: string
+          key_box_code_ciphertext: string
+          pedestrian_gate_code_ciphertext?: string | null
+          reservation_id: string
+          updated_at?: string
+          wifi_name_ciphertext: string
+          wifi_password_ciphertext: string
+        }
+        Update: {
+          available_from?: string
+          created_at?: string
+          key_box_code_ciphertext?: string
+          pedestrian_gate_code_ciphertext?: string | null
+          reservation_id?: string
+          updated_at?: string
+          wifi_name_ciphertext?: string
+          wifi_password_ciphertext?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_access_secrets_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: true
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guests: {
         Row: {
+          acquisition_channel: string
           address_line1: string | null
           address_line2: string | null
+          allergies: string | null
+          arrival_preferences: string | null
+          birthday: string | null
           city: string | null
           country_code: string | null
           created_at: string
           email: string
           first_name: string
           id: string
+          internal_notes: string | null
           last_name: string
           locale: string
           phone: string | null
           postal_code: string | null
+          preferred_experience_codes: string[]
+          preferred_property_id: string | null
+          sleeping_preferences: string | null
+          special_requests: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          acquisition_channel?: string
           address_line1?: string | null
           address_line2?: string | null
+          allergies?: string | null
+          arrival_preferences?: string | null
+          birthday?: string | null
           city?: string | null
           country_code?: string | null
           created_at?: string
           email: string
           first_name: string
           id?: string
+          internal_notes?: string | null
           last_name: string
           locale?: string
           phone?: string | null
           postal_code?: string | null
+          preferred_experience_codes?: string[]
+          preferred_property_id?: string | null
+          sleeping_preferences?: string | null
+          special_requests?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          acquisition_channel?: string
           address_line1?: string | null
           address_line2?: string | null
+          allergies?: string | null
+          arrival_preferences?: string | null
+          birthday?: string | null
           city?: string | null
           country_code?: string | null
           created_at?: string
           email?: string
           first_name?: string
           id?: string
+          internal_notes?: string | null
           last_name?: string
           locale?: string
           phone?: string | null
           postal_code?: string | null
+          preferred_experience_codes?: string[]
+          preferred_property_id?: string | null
+          sleeping_preferences?: string | null
+          special_requests?: string | null
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "guests_preferred_property_id_fkey"
+            columns: ["preferred_property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       invoices: {
         Row: {
@@ -442,6 +619,157 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      loyalty_accounts: {
+        Row: {
+          benefits: Json
+          evaluated_at: string
+          guest_id: string
+          qualifying_spend_cents: number
+          qualifying_stays: number
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          benefits?: Json
+          evaluated_at?: string
+          guest_id: string
+          qualifying_spend_cents?: number
+          qualifying_stays?: number
+          tier?: string
+          updated_at?: string
+        }
+        Update: {
+          benefits?: Json
+          evaluated_at?: string
+          guest_id?: string
+          qualifying_spend_cents?: number
+          qualifying_stays?: number
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_accounts_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: true
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketing_automations: {
+        Row: {
+          campaign_id: string | null
+          created_at: string
+          delay_days: number
+          enabled: boolean
+          id: string
+          last_run_at: string | null
+          name: string
+          next_run_at: string | null
+          rules: Json
+          trigger_type: string
+          updated_at: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          created_at?: string
+          delay_days?: number
+          enabled?: boolean
+          id?: string
+          last_run_at?: string | null
+          name: string
+          next_run_at?: string | null
+          rules?: Json
+          trigger_type: string
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string | null
+          created_at?: string
+          delay_days?: number
+          enabled?: boolean
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          next_run_at?: string | null
+          rules?: Json
+          trigger_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_automations_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketing_campaigns: {
+        Row: {
+          audience_rules: Json
+          booking_count: number
+          clicked_count: number
+          content_blocks: Json
+          created_at: string
+          delivered_count: number
+          id: string
+          kind: string
+          locale: string
+          name: string
+          opened_count: number
+          preheader: string | null
+          revenue_cents: number
+          scheduled_at: string | null
+          sent_count: number
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          audience_rules?: Json
+          booking_count?: number
+          clicked_count?: number
+          content_blocks?: Json
+          created_at?: string
+          delivered_count?: number
+          id?: string
+          kind: string
+          locale?: string
+          name: string
+          opened_count?: number
+          preheader?: string | null
+          revenue_cents?: number
+          scheduled_at?: string | null
+          sent_count?: number
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          audience_rules?: Json
+          booking_count?: number
+          clicked_count?: number
+          content_blocks?: Json
+          created_at?: string
+          delivered_count?: number
+          id?: string
+          kind?: string
+          locale?: string
+          name?: string
+          opened_count?: number
+          preheader?: string | null
+          revenue_cents?: number
+          scheduled_at?: string | null
+          sent_count?: number
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       occupancy_blocks: {
         Row: {
@@ -658,6 +986,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      premium_experiences: {
+        Row: {
+          code: string
+          created_at: string
+          description: string
+          enabled: boolean
+          id: string
+          image_path: string | null
+          label: string
+          price_cents: number
+          property_ids: string[]
+          rules: Json
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description: string
+          enabled?: boolean
+          id?: string
+          image_path?: string | null
+          label: string
+          price_cents: number
+          property_ids?: string[]
+          rules?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          image_path?: string | null
+          label?: string
+          price_cents?: number
+          property_ids?: string[]
+          rules?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       promotions: {
         Row: {
@@ -975,6 +1348,67 @@ export type Database = {
           },
         ]
       }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          qualified_reservation_id: string | null
+          referral_code: string
+          referred_benefit: Json
+          referred_guest_id: string | null
+          referrer_benefit: Json
+          referrer_guest_id: string
+          rewarded_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          qualified_reservation_id?: string | null
+          referral_code: string
+          referred_benefit: Json
+          referred_guest_id?: string | null
+          referrer_benefit: Json
+          referrer_guest_id: string
+          rewarded_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          qualified_reservation_id?: string | null
+          referral_code?: string
+          referred_benefit?: Json
+          referred_guest_id?: string | null
+          referrer_benefit?: Json
+          referrer_guest_id?: string
+          rewarded_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_qualified_reservation_id_fkey"
+            columns: ["qualified_reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referred_guest_id_fkey"
+            columns: ["referred_guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_guest_id_fkey"
+            columns: ["referrer_guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reservation_guests: {
         Row: {
           created_at: string
@@ -1166,6 +1600,119 @@ export type Database = {
           },
         ]
       }
+      revenue_promotions: {
+        Row: {
+          code: string
+          created_at: string
+          direct_only: boolean
+          discount_type: string
+          enabled: boolean
+          ends_at: string
+          id: string
+          label: string
+          low_season_only: boolean
+          minimum_stay_nights: number | null
+          property_ids: string[]
+          returning_guests_only: boolean
+          starts_at: string
+          updated_at: string
+          usage_count: number
+          usage_limit: number | null
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          direct_only?: boolean
+          discount_type: string
+          enabled?: boolean
+          ends_at: string
+          id?: string
+          label: string
+          low_season_only?: boolean
+          minimum_stay_nights?: number | null
+          property_ids?: string[]
+          returning_guests_only?: boolean
+          starts_at: string
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          direct_only?: boolean
+          discount_type?: string
+          enabled?: boolean
+          ends_at?: string
+          id?: string
+          label?: string
+          low_season_only?: boolean
+          minimum_stay_nights?: number | null
+          property_ids?: string[]
+          returning_guests_only?: boolean
+          starts_at?: string
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          value?: number
+        }
+        Relationships: []
+      }
+      review_requests: {
+        Row: {
+          created_at: string
+          id: string
+          idempotency_key: string
+          platform: string
+          rating: number | null
+          reservation_id: string
+          response_text: string | null
+          review_external_id: string | null
+          reviewed_at: string | null
+          scheduled_at: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          platform: string
+          rating?: number | null
+          reservation_id: string
+          response_text?: string | null
+          review_external_id?: string | null
+          reviewed_at?: string | null
+          scheduled_at: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          platform?: string
+          rating?: number | null
+          reservation_id?: string
+          response_text?: string | null
+          review_external_id?: string | null
+          reviewed_at?: string | null
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_requests_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seasons: {
         Row: {
           begins_on: string
@@ -1310,9 +1857,15 @@ export type Database = {
       transactional_emails: {
         Row: {
           attempts: number
+          cancelled_at: string | null
           created_at: string
+          custom_paragraph: string | null
           id: string
+          idempotency_key: string | null
           last_error: string | null
+          locale: string
+          manually_marked_sent_at: string | null
+          message_type: string | null
           provider: string
           provider_message_id: string | null
           recipient_hash: string
@@ -1325,9 +1878,15 @@ export type Database = {
         }
         Insert: {
           attempts?: number
+          cancelled_at?: string | null
           created_at?: string
+          custom_paragraph?: string | null
           id?: string
+          idempotency_key?: string | null
           last_error?: string | null
+          locale?: string
+          manually_marked_sent_at?: string | null
+          message_type?: string | null
           provider: string
           provider_message_id?: string | null
           recipient_hash: string
@@ -1340,9 +1899,15 @@ export type Database = {
         }
         Update: {
           attempts?: number
+          cancelled_at?: string | null
           created_at?: string
+          custom_paragraph?: string | null
           id?: string
+          idempotency_key?: string | null
           last_error?: string | null
+          locale?: string
+          manually_marked_sent_at?: string | null
+          message_type?: string | null
           provider?: string
           provider_message_id?: string | null
           recipient_hash?: string

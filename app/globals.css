@@ -2901,6 +2901,37 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .guest-message-preview-grid h3 { margin-top: 0; font: 400 1.5rem var(--font-serif); }
 .guest-message-preview-grid iframe { width: 100%; height: 720px; border: 1px solid #dce1df; }
 .guest-message-preview-grid pre { height: 720px; margin: 0; padding: 1rem; overflow: auto; white-space: pre-wrap; color: #263b38; background: #f4f0e7; font: 13px/1.6 ui-monospace,monospace; }
+.revenue-admin__nav { margin-bottom: 1.5rem; padding-bottom: .5rem; display: flex; gap: .4rem; overflow-x: auto; }
+.revenue-admin__nav button { min-height: 42px; padding: .6rem .8rem; border: 1px solid #bdc8c4; color: #294b45; background: white; white-space: nowrap; cursor: pointer; }
+.revenue-admin__nav button[aria-current="page"] { color: white; border-color: #173b3b; background: #173b3b; }
+.revenue-line { padding: .8rem 0; display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #e1e5e2; }
+.revenue-experiences { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+.revenue-experiences article { min-height: 430px; padding: 1.2rem; display: flex; flex-direction: column; background: white; border: 1px solid #e0e3df; }
+.revenue-experiences article > div { height: 190px; position: relative; margin: -1.2rem -1.2rem 1rem; overflow: hidden; background: #e8e1d4; }
+.revenue-experiences article img { object-fit: cover; }
+.revenue-experiences article > span { color: #8a713f; font-size: .65rem; letter-spacing: .09em; text-transform: uppercase; }
+.revenue-experiences h3 { margin: auto 0 .5rem; font: 400 1.6rem var(--font-serif); }
+.revenue-experiences p { color: #61726e; line-height: 1.55; }
+.revenue-experiences strong { margin-bottom: .8rem; }
+.revenue-experiences button,.commercial-advisor button { min-height: 42px; border: 1px solid #173b3b; color: white; background: #173b3b; cursor: pointer; }
+.loyalty-levels { display: grid; grid-template-columns: repeat(4,1fr); gap: .8rem; }
+.loyalty-levels article { min-height: 250px; padding: 1.4rem; display: flex; flex-direction: column; border-top: 3px solid #b9a16c; background: white; }
+.loyalty-levels h3 { margin: auto 0 .5rem; font: 400 1.6rem var(--font-serif); }
+.loyalty-levels p { color: #647570; line-height: 1.6; }
+.loyalty-levels strong { font-size: .8rem; }
+.loyalty-badge { padding: .3rem .55rem; display: inline-flex; color: #36514b; background: #e5ebe8; font-size: .72rem; white-space: nowrap; }
+.loyalty-badge--ambassadeur { color: #fff; background: #8a713f; }
+.loyalty-badge--grand-large { color: #fff; background: #406b66; }
+.gift-card-preview { margin: 1rem 0; padding: 1.2rem; display: flex; align-items: center; gap: 1.5rem; color: white; background: #173b3b; }
+.gift-card-preview img { width: 180px; height: 180px; padding: .5rem; background: white; }
+.gift-card-preview span,.gift-card-preview strong { display: block; }
+.gift-card-preview span { color: #d7c18e; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.gift-card-preview strong { margin: .5rem 0; font: 400 2rem var(--font-serif); }
+.commercial-advisor { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+.commercial-advisor article { min-height: 270px; padding: 1.5rem; display: flex; flex-direction: column; background: #f4eddd; border: 1px solid #d8ccb1; }
+.commercial-advisor article > span { color: #8a713f; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+.commercial-advisor h3 { margin: auto 0 .6rem; font: 400 1.6rem var(--font-serif); }
+.commercial-advisor p { color: #5d6f6a; line-height: 1.6; }
 .stay-portal__payments { margin-top: 1rem; padding-top: 1rem; display: grid; gap: .6rem; border-top: 1px solid var(--line); }
 .stay-portal__payments p { margin: 0; color: var(--muted); font-size: .8rem; }
 .stay-portal__payments button { min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--deep); color: white; background: var(--deep); cursor: pointer; }
@@ -2941,6 +2972,8 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .admin-form-grid { grid-template-columns: repeat(2,1fr); }
   .guest-message-controls { grid-template-columns: 1fr; }
   .guest-message-preview-grid { grid-template-columns: 1fr; }
+  .revenue-experiences,.commercial-advisor { grid-template-columns: 1fr 1fr; }
+  .loyalty-levels { grid-template-columns: 1fr 1fr; }
   .admin-login { grid-template-columns: 1fr; align-items: stretch; }
   .stephanie-letter { grid-template-columns: 1fr; }
   .stay-personal-guide > div { grid-template-columns: 1fr 1fr; }
@@ -2964,4 +2997,5 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .stephanie-letter__media { min-height: 130vw; }
   .stephanie-letter__media video { width: 92%; right: 0; }
   .stay-personal-guide > div { grid-template-columns: 1fr; }
+  .revenue-experiences,.commercial-advisor,.loyalty-levels { grid-template-columns: 1fr; }
 }

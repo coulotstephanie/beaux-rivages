@@ -3,12 +3,14 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { BackOfficeReservation, BackOfficeSnapshot } from "@/platform/admin/contracts";
 import { GuestMessagesAdmin } from "@/components/admin/GuestMessagesAdmin";
+import { RevenueMarketingAdmin } from "@/components/admin/RevenueMarketingAdmin";
 
-type View = "dashboard" | "reservations" | "messages" | "voyageurs" | "logements" | "documents" | "statistiques" | "pilotage";
+type View = "dashboard" | "reservations" | "messages" | "revenue" | "voyageurs" | "logements" | "documents" | "statistiques" | "pilotage";
 const views: { id: View; label: string }[] = [
   { id: "dashboard", label: "Aujourd’hui" },
   { id: "reservations", label: "Réservations" },
   { id: "messages", label: "Messages voyageurs" },
+  { id: "revenue", label: "Revenue & Marketing" },
   { id: "voyageurs", label: "Voyageurs" },
   { id: "logements", label: "Logements" },
   { id: "documents", label: "Documents" },
@@ -188,6 +190,7 @@ export function AdminDashboard() {
     </section>}
 
     {view === "messages" && <GuestMessagesAdmin token={token} notify={setMessage} reservations={data.reservations} />}
+    {view === "revenue" && <RevenueMarketingAdmin token={token} notify={setMessage} />}
 
     {view === "voyageurs" && <section className="admin-panel">
       <div className="admin-panel__heading"><div><p className="eyebrow">Relation voyageurs</p><h2>Historique et fidélité</h2></div><p>{data.guests.length} voyageur(s) connu(s)</p></div>
