@@ -13,6 +13,8 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
+  const override = plan.overrides?.find((candidate) => candidate.date === date);
+  if (override) return { rate: override.nightlyRate, season: "Yield validé", minimumNights: override.minimumNights ?? plan.minimumNights };
   const priority = { "public-holiday": 5, "school-holiday": 4, high: 3, mid: 2, low: 1 };
   const season = plan.seasons
     .filter((candidate) => date >= candidate.startsOn && date < candidate.endsOn)
