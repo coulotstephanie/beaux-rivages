@@ -23,14 +23,16 @@ export class SupabasePricingPlanReader {
       .select("id,slug,currency").eq("slug", propertySlug).single();
     if (propertyResult.error) throw new Error(`PRICING_PROPERTY_FAILED:${propertyResult.error.code}`);
     const property = propertyResult.data;
-    const [ratesResult, optionsResult, promotionsResult] = await Promise.all([
+    const [ratesResult, optionsResult, promotionsResult, overridesResult] = await Promise.all([
       client.from("rates").select("*,seasons(*)").eq("property_id", property.id).eq("enabled", true),
       client.from("property_options").select("price_cents,enabled,options(code)").eq("property_id", property.id),
       client.from("promotions").select("*").eq("property_id", property.id),
+      client.from("yield_rate_overrides").select("stay_date,nightly_rate_cents,minimum_nights").eq("property_id", property.id).eq("status", "active"),
     ]);
     if (ratesResult.error) throw new Error(`PRICING_RATES_FAILED:${ratesResult.error.code}`);
     if (optionsResult.error) throw new Error(`PRICING_OPTIONS_FAILED:${optionsResult.error.code}`);
     if (promotionsResult.error) throw new Error(`PRICING_PROMOTIONS_FAILED:${promotionsResult.error.code}`);
+    if (overridesResult.error) throw new Error(`PRICING_OVERRIDES_FAILED:${overridesResult.error.code}`);
 
     const rates = ratesResult.data;
     const baseRate = rates.find((rate) => !rate.season_id && rate.weekdays.includes(1));
@@ -92,6 +94,7 @@ export class SupabasePricingPlanReader {
       optionPrices,
       seasons,
       promotions,
+      overrides: overridesResult.data.map((item) => ({ date: item.stay_date, nightlyRate: item.nightly_rate_cents / 100, minimumNights: item.minimum_nights ?? undefined })),
     };
   }
 }
