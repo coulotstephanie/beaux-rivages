@@ -28,6 +28,12 @@ conventionnels du projet.
   de conformité du dépôt.
 - Intégration de l’architecture système officielle, de ses flux métier et de la
   traçabilité des infrastructures réellement activées.
+- Intégration des règles métier officielles et de la matrice des écarts de
+  statuts, contrats, disponibilité, historique et audit.
+- Création du portail documentaire structuré en huit espaces, avec liens vers
+  les sources canoniques et identification explicite des documents à construire.
+- Adoption de l’ADR-0001 qui formalise DDD, Clean Architecture, Feature First,
+  Repository Pattern, Event Driven, TypeScript Strict et Documentation First.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié

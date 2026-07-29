@@ -1,5 +1,9 @@
 # Décisions d’architecture
 
+> Ce registre historique est conservé pour compatibilité. La série formelle des
+> ADR commence avec
+> [ADR-0001 — Principes fondateurs](./03_ARCHITECTURE/decisions/ADR-0001-founding-principles.md).
+
 ## ADR-001 — Supabase Auth pour le personnel
 
 - **Statut :** accepté
@@ -106,3 +110,13 @@ d’infrastructure n’est toutefois considéré actif que lorsqu’il est confi
 testé et exploitable. La matrice de traçabilité distingue ainsi Cloudflare,
 Edge Functions, fournisseurs de notification et automatisations cibles des
 briques réellement déployées.
+
+## ADR-010 — Règles métier comme autorité sur l’implémentation
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+`BUSINESS_RULES.md` devient l’autorité fonctionnelle. Les écarts de statuts,
+transitions, immutabilité, suppression logique et audit sont enregistrés avant
+toute correction. La mise en conformité s’effectue par migrations additives et
+machines à états testées, sans supprimer brutalement les valeurs historiques.

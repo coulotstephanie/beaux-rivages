@@ -1,0 +1,6 @@
+# Workflows
+
+Source canonique :
+[PRODUCT_BOOK_07_WORKFLOWS.md](../PRODUCT_BOOK_07_WORKFLOWS.md).  
+Traçabilité : [WORKFLOW_TRACEABILITY.md](../WORKFLOW_TRACEABILITY.md).
+

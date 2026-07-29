@@ -1,0 +1,6 @@
+# System Architecture
+
+Source canonique : [SYSTEM_ARCHITECTURE.md](../SYSTEM_ARCHITECTURE.md).  
+État réel :
+[SYSTEM_ARCHITECTURE_TRACEABILITY.md](../SYSTEM_ARCHITECTURE_TRACEABILITY.md).
+

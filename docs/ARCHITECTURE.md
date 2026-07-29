@@ -6,6 +6,7 @@
   de Done.
 - `SYSTEM_ARCHITECTURE.md` : vue globale des couches, infrastructures et flux
   métier de référence.
+- `BUSINESS_RULES.md` : source unique de vérité des règles et invariants métier.
 - `app/` : routes Next.js App Router et composition des pages.
 - `components/` : composants de présentation et interactions client.
 - `content/`, `data.ts`, `experiences.ts`, `recommendations.ts` : contenu officiel actuel.

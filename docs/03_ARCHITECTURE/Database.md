@@ -1,0 +1,5 @@
+# Database
+
+Sources canoniques : [DATABASE.md](../DATABASE.md) et
+[SUPABASE_ENTERPRISE_ARCHITECTURE.md](../SUPABASE_ENTERPRISE_ARCHITECTURE.md).
+
