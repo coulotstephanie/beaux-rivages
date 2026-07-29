@@ -2,7 +2,7 @@
 
 ## Source produit
 
-La [Vision produit Beaux Rivages](product/PRODUCT_BOOK_01_VISION.md) est la référence stratégique. Une décision technique doit préserver l’hospitalité, l’authenticité, la simplicité, la fiabilité et l’évolutivité. Une fonctionnalité sans impact démontrable sur l’expérience, le temps, les revenus, les erreurs ou la qualité ne doit pas entrer dans la plateforme.
+Le [Product Book Beaux Rivages](product/README.md) est la référence stratégique et fonctionnelle. La Vision explique pourquoi la plateforme existe ; la Spécification UX décrit ses écrans et comportements. Une décision technique doit préserver l’hospitalité, l’authenticité, la simplicité, la fiabilité et l’évolutivité. Une fonctionnalité sans impact démontrable sur l’expérience, le temps, les revenus, les erreurs ou la qualité ne doit pas entrer dans la plateforme.
 
 ## Principes
 
