@@ -1,5 +1,9 @@
 # Architecture technique
 
+## Source produit
+
+La [Vision produit Beaux Rivages](product/PRODUCT_BOOK_01_VISION.md) est la référence stratégique. Une décision technique doit préserver l’hospitalité, l’authenticité, la simplicité, la fiabilité et l’évolutivité. Une fonctionnalité sans impact démontrable sur l’expérience, le temps, les revenus, les erreurs ou la qualité ne doit pas entrer dans la plateforme.
+
 ## Principes
 
 - `app/` : routes Next.js App Router et composition des pages.

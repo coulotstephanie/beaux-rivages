@@ -1,14 +1,26 @@
 # Roadmap
 
-## Prochaine tranche recommandée
+## Référence
 
-1. Choisir l’authentification et la base de données.
-2. Implémenter l’adaptateur writable du contenu et le journal d’audit.
-3. Ajouter une synchronisation iCal planifiée en lecture seule.
-4. Persister les demandes de réservation et créer les e-mails transactionnels.
-5. Ouvrir l’espace voyageur uniquement après authentification et règles d’accès.
-6. Migrer les textes par domaine vers les catalogues i18n.
-7. Mesurer Lighthouse sur le déploiement réel et corriger selon les données RUM.
+La roadmap applique la [Vision produit](product/PRODUCT_BOOK_01_VISION.md). Chaque sprint doit améliorer l’expérience, gagner du temps, augmenter les revenus, réduire les erreurs, simplifier le travail ou améliorer la qualité.
+
+## État des domaines
+
+- Site premium, réservation directe et Carnet : fondations livrées.
+- Guest Journey, Revenue & Marketing et Back Office : fondations livrées.
+- Channel Manager, Concierge et Housekeeping : fondations livrées, connecteurs externes à compléter.
+- Yield Management : en revue dans une Pull Request dédiée.
+
+## Prochains domaines
+
+1. Comptabilité et facturation.
+2. Business Intelligence.
+3. Application mobile et espace voyageur authentifié.
+4. Moteur d’automatisation.
+5. API et intégrations partenaires.
+6. Assistant IA Beaux Rivages.
+
+Les sprints restent atomiques et ne sont fusionnés qu’après revue.
 
 ## Critères de sortie V1 commerciale
 
