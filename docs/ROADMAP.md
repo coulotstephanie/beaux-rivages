@@ -18,6 +18,9 @@ immédiates.
 
 ## Prochaines tranches
 
+0. Réaliser un sprint d’optimisation transversal : performances, UX, WCAG,
+   SEO avancé, OWASP, qualité des tests et nettoyage ciblé.
+
 1. Ajouter Playwright, les tests UI, responsive et la couverture.
 2. Introduire le registre d’événements et les machines à états du Product Book 07.
 3. Découper le Back Office par fonctionnalités et introduire React Query.

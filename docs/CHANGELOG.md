@@ -8,6 +8,11 @@ conventionnels du projet.
 
 ### Ajouté
 
+- CMS éditorial versionné du Carnet Beaux Rivages : rubriques, médias,
+  coordonnées, horaires, recommandations, mises en avant et métadonnées SEO.
+- Recherche publique avec filtres combinables par texte, rubrique, destination
+  et favoris, utilisable au clavier.
+
 - Moteur de recherche de réservation Feature First : disponibilité, sélection
   des dates, tarification saisonnière et validation centralisée.
 - Repositories injectables, hook de calendrier et tests des chevauchements,

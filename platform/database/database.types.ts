@@ -278,6 +278,176 @@ export type Database = {
           },
         ]
       }
+      carnet_entries: {
+        Row: {
+          address: string | null
+          body: string
+          category: string
+          created_at: string
+          created_by: string | null
+          destination: string
+          featured: boolean
+          gallery_paths: string[]
+          google_maps_url: string | null
+          highlights: string[]
+          host_tip: string | null
+          id: string
+          image_alt: string | null
+          image_path: string | null
+          latitude: number | null
+          longitude: number | null
+          meta_description: string | null
+          meta_title: string | null
+          official_url: string | null
+          open_graph_image_path: string | null
+          opening_hours: Json
+          opening_period: string | null
+          phone: string | null
+          published_at: string | null
+          recommendation_level: number
+          seasonal_rules: Json
+          slug: string
+          sort_order: number
+          status: string
+          summary: string
+          tags: string[]
+          title: string
+          updated_at: string
+          updated_by: string | null
+          version: number
+          video_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          body?: string
+          category: string
+          created_at?: string
+          created_by?: string | null
+          destination: string
+          featured?: boolean
+          gallery_paths?: string[]
+          google_maps_url?: string | null
+          highlights?: string[]
+          host_tip?: string | null
+          id?: string
+          image_alt?: string | null
+          image_path?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
+          official_url?: string | null
+          open_graph_image_path?: string | null
+          opening_hours?: Json
+          opening_period?: string | null
+          phone?: string | null
+          published_at?: string | null
+          recommendation_level?: number
+          seasonal_rules?: Json
+          slug: string
+          sort_order?: number
+          status?: string
+          summary: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          video_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          body?: string
+          category?: string
+          destination?: string
+          featured?: boolean
+          gallery_paths?: string[]
+          google_maps_url?: string | null
+          highlights?: string[]
+          host_tip?: string | null
+          image_alt?: string | null
+          image_path?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
+          official_url?: string | null
+          open_graph_image_path?: string | null
+          opening_hours?: Json
+          opening_period?: string | null
+          phone?: string | null
+          published_at?: string | null
+          recommendation_level?: number
+          seasonal_rules?: Json
+          slug?: string
+          sort_order?: number
+          status?: string
+          summary?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      carnet_entry_versions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          entry_id: string
+          id: string
+          snapshot: Json
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          entry_id: string
+          id?: string
+          snapshot: Json
+          version: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          entry_id?: string
+          id?: string
+          snapshot?: Json
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carnet_entry_versions_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "carnet_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      carnet_favorites: {
+        Row: { created_at: string; entry_id: string; guest_id: string }
+        Insert: { created_at?: string; entry_id: string; guest_id: string }
+        Update: { created_at?: string; entry_id?: string; guest_id?: string }
+        Relationships: [
+          {
+            foreignKeyName: "carnet_favorites_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "carnet_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carnet_favorites_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channel_audit_logs: {
         Row: {
           action: string
