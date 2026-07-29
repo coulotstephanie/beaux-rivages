@@ -7,6 +7,7 @@
 - `content/`, `data.ts`, `experiences.ts`, `recommendations.ts` : contenu officiel actuel.
 - `media/` : registres typés ; une propriété ne peut référencer que ses médias.
 - `platform/` : contrats métier indépendants de Next.js et des fournisseurs.
+- `platform/auth/` : identité Supabase Auth, rôles et autorisation des API.
 - `i18n/` : locales cibles et premiers catalogues traduisibles.
 
 ## Frontières
@@ -25,6 +26,18 @@ Les connecteurs externes implémentent des interfaces :
 
 Cette séparation permet de changer de fournisseur sans modifier les composants
 publics.
+
+## Authentification administrative
+
+La route `/api/auth/staff` obtient une session auprès de Supabase Auth avec la
+clé publique et la place dans un cookie `HttpOnly`. `authorizeStaff()` vérifie
+ce jeton côté serveur, charge le rôle depuis `app_user_roles` et applique la
+permission avant l’utilisation du client Supabase privilégié. Le client
+d’authentification et le client privilégié restent deux instances séparées.
+
+Le secret administrateur historique est un mécanisme de migration. Il doit être
+désactivé avec `ADMIN_TOKEN_FALLBACK_ENABLED=false` après activation des comptes
+individuels.
 
 ## Rendu
 

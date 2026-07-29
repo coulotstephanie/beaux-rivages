@@ -29,7 +29,8 @@ test("la migration protège toutes les données opérationnelles", () => {
 
 test("l’API impose authentification, origine et audit", () => {
   const route = readFileSync("app/api/admin/operations/route.ts", "utf8");
-  assert.match(route, /requireAdmin\(request\)/);
+  assert.match(route, /authorizeStaff\(request/);
+  assert.match(route, /\["admin", "concierge"\]/);
   assert.match(route, /requireSameOrigin\(request\)/);
   assert.match(route, /SupabaseAuditRepository/);
 });

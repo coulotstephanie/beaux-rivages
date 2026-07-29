@@ -3,7 +3,8 @@ import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseAuditRepository } from "@/platform/database/operations";
 import { SupabaseBackOfficeRepository } from "@/platform/database/back-office";
 import { adminOperationSchema } from "@/platform/database/schemas";
-import { noStoreJson, rateLimit, requireAdmin, requireSameOrigin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 
 function failure(error: unknown) {
   const message = error instanceof Error ? error.message : "UNKNOWN";
@@ -15,7 +16,7 @@ function failure(error: unknown) {
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 15);
   if (limited) return limited;
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
   if (!isDatabaseConfigured()) return noStoreJson({ error: "Base de données non configurée." }, { status: 503 });
   try {
     return noStoreJson(await new SupabaseBackOfficeRepository().snapshot());
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 10);
   if (limited) return limited;
   if (!requireSameOrigin(request)) return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request, ["admin", "concierge"])) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   if (!isDatabaseConfigured()) return noStoreJson({ error: "Base de données non configurée." }, { status: 503 });
   const parsed = adminOperationSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return noStoreJson({ error: "Données invalides.", details: parsed.error.flatten() }, { status: 400 });

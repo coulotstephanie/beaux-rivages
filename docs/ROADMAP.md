@@ -1,14 +1,26 @@
 # Roadmap
 
-## Prochaine tranche recommandée
+## Sprint en cours — Auth Foundation
 
-1. Choisir l’authentification et la base de données.
-2. Implémenter l’adaptateur writable du contenu et le journal d’audit.
-3. Ajouter une synchronisation iCal planifiée en lecture seule.
-4. Persister les demandes de réservation et créer les e-mails transactionnels.
-5. Ouvrir l’espace voyageur uniquement après authentification et règles d’accès.
-6. Migrer les textes par domaine vers les catalogues i18n.
-7. Mesurer Lighthouse sur le déploiement réel et corriger selon les données RUM.
+- [x] choisir Supabase Auth comme identité du personnel ;
+- [x] centraliser la vérification serveur des sessions et rôles ;
+- [x] conserver une transition réversible depuis le jeton historique ;
+- [x] provisionner les profils sans permission implicite ;
+- [x] documenter la base, les API et les décisions ;
+- [ ] appliquer la migration au projet Supabase de production ;
+- [ ] créer les comptes individuels et attribuer leurs rôles ;
+- [ ] désactiver définitivement le jeton historique.
+
+## Prochaines tranches
+
+1. Ajouter Playwright, les tests UI, responsive et la couverture.
+2. Introduire le registre d’événements et les machines à états du Product Book 07.
+3. Découper le Back Office par fonctionnalités et introduire React Query.
+4. Connecter les e-mails transactionnels et automatiser le Guest Journey.
+5. Raccorder Stripe TEST et effectuer la recette avant tout paiement réel.
+6. Brancher les APIs partenaires officielles du Channel Manager.
+7. Migrer les textes vers les catalogues i18n.
+8. Mesurer Lighthouse et les Core Web Vitals en production.
 
 ## Critères de sortie V1 commerciale
 

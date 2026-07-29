@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { demoGuestMessageData } from "@/platform/guest-messaging/demo";
 import { renderGuestMessage } from "@/platform/guest-messaging/templates";
-import { noStoreJson, rateLimit, requireAdmin, requireSameOrigin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 
 const schema = z.object({
   propertyId: z.enum(["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]),
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 20);
   if (limited) return limited;
   if (!requireSameOrigin(request)) return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request, ["admin", "concierge"])) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return noStoreJson({ error: "Prévisualisation invalide." }, { status: 400 });
   const data = parsed.data.data ? {

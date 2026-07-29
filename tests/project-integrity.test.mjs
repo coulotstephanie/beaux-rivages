@@ -272,7 +272,7 @@ test("Stripe TEST verifies signatures and handles the complete payment lifecycle
     assert.match(webhook, new RegExp(event.replaceAll(".", "\\.")), `Missing Stripe event ${event}`);
   }
   assert.match(webhook, /claimEvent/);
-  assert.match(refund, /requireAdmin/);
+  assert.match(refund, /authorizeStaff/);
   assert.match(refund, /requireSameOrigin/);
 });
 
@@ -395,7 +395,7 @@ test("availability and pricing APIs are documented and protected", () => {
   }
   const security = read("platform/http/security.ts");
   assert.match(security, /rateLimit/);
-  assert.match(security, /requireAdmin/);
+  assert.match(read("platform/auth/server.ts"), /authorizeStaff/);
   assert.match(read("docs/PRICING_AND_AVAILABILITY_API.md"), /Aucun\s+scraping/);
   assert.match(read("components/AvailabilityCalendar.tsx"), /api\/calendar/);
   assert.match(read("components/PriceSummary.tsx"), /api\/pricing/);

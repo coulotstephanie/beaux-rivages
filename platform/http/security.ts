@@ -18,12 +18,6 @@ export function rateLimit(request: NextRequest, limit = 40, windowMs = 60_000) {
   return NextResponse.json({ error: "Trop de requêtes. Réessayez dans un instant." }, { status: 429, headers: { "Retry-After": String(Math.ceil((bucket.resetAt - now) / 1000)) } });
 }
 
-export function requireAdmin(request: NextRequest) {
-  const configured = process.env.ADMIN_API_TOKEN;
-  const supplied = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  return Boolean(configured && supplied && supplied.length === configured.length && supplied === configured);
-}
-
 export function noStoreJson(body: unknown, init?: ResponseInit) {
   return NextResponse.json(body, { ...init, headers: { "Cache-Control": "private, no-store", ...(init?.headers ?? {}) } });
 }

@@ -6,6 +6,22 @@ conventionnels du projet.
 
 ## Non publié
 
+### Ajouté
+
+- Connexion individuelle du personnel avec Supabase Auth et permissions
+  centralisées par rôle pour toutes les API administratives.
+- Provisionnement automatique des profils liés à `auth.users`, sans attribution
+  implicite de privilèges.
+- Documentation consolidée de la base, des API et des décisions d’architecture.
+- Intégration du Product Book 07 et de la matrice de traçabilité des workflows.
+- Quatre tests dédiés à l’authentification et à la protection des routes.
+
+### Modifié
+
+- Le Back Office accepte désormais les sessions Supabase vérifiées côté serveur.
+  Le jeton historique reste temporairement disponible comme filet de migration
+  désactivable.
+
 ### Corrigé
 
 - La photographie principale « Le séjour, pensé pour se retrouver » du Nid

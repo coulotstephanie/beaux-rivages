@@ -17,13 +17,23 @@ Le Back Office est accessible depuis `/administration`. Il centralise les réser
 
 ## Sécurité et données
 
-Les écritures passent exclusivement par `/api/admin/operations`, qui impose le jeton administrateur, une origine identique, la validation Zod et un journal d’audit. Les six tables opérationnelles disposent de RLS et de politiques réservées aux rôles internes. Les montants sont stockés en centimes et aucune donnée sensible n’est conservée dans le navigateur hors du jeton de session.
+Les écritures passent exclusivement par `/api/admin/operations`, qui impose une
+session Supabase Auth et un rôle autorisé, une origine identique, la validation
+Zod et un journal d’audit. Les tables opérationnelles disposent de RLS et de
+politiques réservées aux rôles internes. Les montants sont stockés en centimes.
 
 Migration : `20260729124500_premium_back_office.sql`.
 
 ## Exploitation
 
-Configurer en production `SUPABASE_URL`, `SUPABASE_SECRET_KEY` et `ADMIN_API_TOKEN`. La clé Supabase serveur ne doit jamais être exposée au navigateur. Après une évolution de schéma :
+Configurer en production `SUPABASE_URL`, `SUPABASE_SECRET_KEY`,
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. La clé
+serveur ne doit jamais être exposée au navigateur.
+
+`ADMIN_API_TOKEN` n’est conservé que pendant la transition. Après validation des
+comptes individuels, définir `ADMIN_TOKEN_FALLBACK_ENABLED=false`.
+
+Après une évolution de schéma :
 
 ```bash
 npm run db:push

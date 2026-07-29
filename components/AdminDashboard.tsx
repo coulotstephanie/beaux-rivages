@@ -7,6 +7,7 @@ import { RevenueMarketingAdmin } from "@/components/admin/RevenueMarketingAdmin"
 import { PremiumOperations } from "@/components/admin/PremiumOperations";
 import { ChannelManagerAdmin } from "@/components/admin/ChannelManagerAdmin";
 import { HousekeepingAdmin } from "@/components/admin/HousekeepingAdmin";
+import { StaffAccess } from "@/components/admin/StaffAccess";
 
 type View = "dashboard" | "calendrier" | "reservations" | "messages" | "revenue" | "channel" | "housekeeping" | "voyageurs" | "logements" | "documents" | "paiements" | "conciergerie" | "menage" | "maintenance" | "statistiques" | "pilotage" | "parametres";
 const views: { id: View; label: string }[] = [
@@ -81,31 +82,37 @@ export function AdminDashboard() {
   const [reservationMode, setReservationMode] = useState<"list" | "create" | "block">("list");
 
   useEffect(() => {
-    const saved = window.sessionStorage.getItem("beaux-rivages-admin-token");
-    if (saved) setToken(saved);
     setDark(window.localStorage.getItem("beaux-rivages-admin-theme") === "dark");
   }, []);
 
-  const call = async (path: string, init?: RequestInit) => fetch(path, {
+  const call = async (path: string, init?: RequestInit, accessToken = token) => fetch(path, {
     ...init,
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json", ...(init?.headers ?? {}) },
   });
 
-  const load = async () => {
+  const load = async (accessToken = token) => {
     setBusy(true);
     try {
-      const response = await call("/api/admin/operations");
+      const response = await call("/api/admin/operations", undefined, accessToken);
       const payload = await response.json() as BackOfficeSnapshot & { error?: string };
       if (!response.ok) {
         setData(null);
         return setMessage(payload.error ?? "Accès impossible.");
       }
-      window.sessionStorage.setItem("beaux-rivages-admin-token", token);
+      setToken(accessToken);
       setData(payload);
       setMessage(`Données actualisées à ${new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit" }).format(new Date(payload.generatedAt))}.`);
     } finally {
       setBusy(false);
     }
+  };
+
+  const signOut = async () => {
+    await fetch("/api/auth/staff", { method: "DELETE" });
+    window.sessionStorage.removeItem("beaux-rivages-admin-token");
+    setToken("");
+    setData(null);
+    setMessage("Vous êtes déconnecté du Back Office.");
   };
 
   const operate = async (payload: Record<string, unknown>) => {
@@ -116,7 +123,7 @@ export function AdminDashboard() {
       if (!response.ok) return setMessage(result.error ?? "Opération impossible.");
       setMessage("Opération enregistrée et journalisée.");
       setReservationMode("list");
-      await load();
+      await load(token);
     } finally {
       setBusy(false);
     }
@@ -143,7 +150,7 @@ export function AdminDashboard() {
       const payload = await response.json() as { error?: string };
       if (!response.ok) return setMessage(payload.error ?? "Remboursement impossible.");
       setMessage("Remboursement Stripe TEST demandé. Le webhook mettra le statut à jour.");
-      await load();
+      await load(token);
     } finally {
       setBusy(false);
     }
@@ -167,21 +174,14 @@ export function AdminDashboard() {
   }, [data, query]);
   const selectedReservation = data?.reservations.find((item) => item.id === selectedReservationId) ?? null;
 
-  if (!data) return <section className="admin-login" aria-labelledby="admin-login-title">
-    <div><p className="eyebrow">Accès sécurisé</p><h2 id="admin-login-title">Ouvrir le Back Office</h2><p>Le jeton reste uniquement dans cette session de navigateur.</p></div>
-    <form onSubmit={(event) => { event.preventDefault(); void load(); }}>
-      <label htmlFor="dashboard-token">Jeton administrateur</label>
-      <input id="dashboard-token" autoComplete="current-password" type="password" value={token} onChange={(event) => setToken(event.target.value)} required />
-      <button type="submit" disabled={busy}>{busy ? "Ouverture…" : "Ouvrir le Back Office"}</button>
-    </form>
-    <p role="status">{message}</p>
-  </section>;
+  if (!data) return <StaffAccess busy={busy} message={message} onAuthenticated={load} />;
 
   return <div className={`admin-workspace${dark ? " admin-workspace--dark" : ""}`}>
     <div className="admin-workspace__bar">
       <nav aria-label="Rubriques du Back Office">{views.map((item) => <button key={item.id} type="button" aria-current={view === item.id ? "page" : undefined} onClick={() => setView(item.id)}>{item.label}</button>)}</nav>
       <div className="admin-global-search"><input aria-label="Recherche globale" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher partout…" />{globalResults.length > 0 && <div>{globalResults.map((result) => <button type="button" key={`${result.view}-${result.id}`} onClick={() => { setView(result.view); setSelectedReservationId(result.view === "reservations" ? result.id : null); }}>{result.label}</button>)}</div>}</div>
       <button type="button" className="admin-theme" aria-label={dark ? "Activer le mode clair" : "Activer le mode sombre"} onClick={() => { const next = !dark; setDark(next); window.localStorage.setItem("beaux-rivages-admin-theme", next ? "dark" : "light"); }}>{dark ? "☀ Clair" : "☾ Sombre"}</button>
+      <button type="button" className="admin-theme" onClick={() => void signOut()}>Se déconnecter</button>
       <button type="button" className="admin-refresh" disabled={busy} onClick={() => void load()}>{busy ? "Actualisation…" : "Actualiser"}</button>
     </div>
     <p className="admin-live-status" role="status">{message}</p>
