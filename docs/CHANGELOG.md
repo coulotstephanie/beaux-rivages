@@ -48,6 +48,9 @@ conventionnels du projet.
 - Création du Beaux Rivages Hospitality Playbook : standards d’accueil,
   moments de service, communication, résolution, rituels, transmission et
   registre des pratiques restant à valider par Stéphanie & Bruno.
+- Enrichissement du Playbook avec la philosophie, les dix engagements, les
+  standards invisibles, les attentions, la cartographie émotionnelle et la
+  promesse Beaux Rivages ; ajout du blueprint de la future Academy.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
