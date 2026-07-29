@@ -54,9 +54,11 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   assert.doesNotMatch(manifest, /propertyAsset\("airbnb-arriere-cour-3\.jpeg"/);
   assert.doesNotMatch(manifest, /airbnb-buanderie-1-1\.jpeg/);
   assert.doesNotMatch(manifest, /airbnb-buanderie-2-1\.jpeg/);
+  assert.doesNotMatch(manifest, /airbnb-arriere-cour-5\.jpeg/);
+  assert.match(manifest, /airbnb-toilettes\.jpeg/);
   assert.match(manifest, /arrival: \[arrivalEntrance, arrivalPlan\]/);
   assert.doesNotMatch(manifest, /"Les repères de l’arrivée autonome"/);
-  assert.match(manifest, /\.\.\.airbnbBathroom,[\s\S]*\.\.\.airbnbBedrooms/);
+  assert.match(manifest, /\.\.\.airbnbBedrooms,[\s\S]*\.\.\.airbnbBathroom/);
   assert.match(propertiesPage, /image=\{property\.hero\}/);
 });
 
@@ -64,6 +66,36 @@ test("the Chai ocean pause uses a sharp destination visual", () => {
   const manifest = read("media/properties/chai-des-tortues.ts");
   assert.match(manifest, /destinationMedia\.oceanBreakfast/);
   assert.doesNotMatch(manifest, /terrasse-plage\.jpeg/);
+});
+
+test("the Chai gallery follows the guest journey through the house", () => {
+  const manifest = read("media/properties/chai-des-tortues.ts");
+  const gallery = manifest.slice(manifest.indexOf("const propertyGallery"), manifest.indexOf("export const chaiDesTortuesMedia"));
+  const sections = [
+    "// Ouverture et arrivée",
+    "// Pièce de vie",
+    "// Cuisine et grande table",
+    "// Chambres",
+    "// Salles d’eau",
+    "// Matières et détails",
+  ];
+  let previous = -1;
+  for (const section of sections) {
+    const position = gallery.indexOf(section);
+    assert.ok(position > previous, `${section} must follow the previous gallery section`);
+    previous = position;
+  }
+});
+
+test("all property galleries expose practical spaces in a logical sequence", () => {
+  const chai = read("media/properties/chai-des-tortues.ts");
+  const villa = read("media/properties/villa-raie-manta.ts");
+  const nid = read("media/properties/nid-d-ete.ts");
+  assert.match(chai, /utilities\/toilettes\.jpeg/);
+  assert.match(chai, /utilities\/buanderie\.jpeg/);
+  assert.match(villa, /\/\/ Salles d’eau et toilettes[\s\S]*\.\.\.airbnbBathrooms/);
+  assert.doesNotMatch(villa, /airbnb-photos-supplementaires-1\.jpeg/);
+  assert.match(nid, /\/\/ Salle d’eau et toilettes[\s\S]*\.\.\.airbnbBathroom/);
 });
 
 test("the ambient player uses the credited public-domain Vivaldi recording", () => {

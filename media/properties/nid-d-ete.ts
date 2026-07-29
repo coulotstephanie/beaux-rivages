@@ -68,6 +68,7 @@ const airbnbBedrooms = [
 ];
 const airbnbBathroom = [
   propertyAsset("airbnb-salle-de-bain-1.jpeg", "Salle d’eau avec douche à l’italienne", "La salle d’eau"),
+  propertyAsset("airbnb-toilettes.jpeg", "Toilettes suspendues du Nid d’Été", "Les toilettes de la salle d’eau"),
 ];
 const arrivalEntrance = propertyAsset(
   "airbnb-cour-d-entree-1.jpeg",
@@ -88,7 +89,6 @@ const airbnbExterior = [
 const airbnbTerrace = [
   propertyAsset("airbnb-arriere-cour-2.jpeg", "Équipements de la terrasse du Nid d’Été", "Les détails de la vie dehors"),
   propertyAsset("airbnb-arriere-cour-4.jpeg", "Transats disponibles au Nid d’Été", "Prendre le temps au soleil"),
-  propertyAsset("airbnb-arriere-cour-5.jpeg", "Table pour six sous la voile d’ombrage", "Déjeuner à l’ombre"),
 ];
 const airbnbDetails = [
   propertyAsset("airbnb-exterieur-4-1.jpeg", "Environnement extérieur du Nid d’Été", "Entre résidence et plage"),
@@ -109,15 +109,22 @@ export const nidDEteMedia = {
   lifestyle: [access, beachView, ocean, poplars, family, sunset, beach, shade, fortBoyard],
   videos: [],
   gallery: [
+    // Ouverture et pièces de vie
     ...airbnbLivingRoom,
-    ...airbnbBathroom,
-    ...airbnbBedrooms,
     ...airbnbKitchen,
     editorialLivingRoom,
     editorialBreakfast,
+
+    // Chambres
+    ...airbnbBedrooms,
     editorialBedroom,
     editorialChildrenBirthday,
     editorialFamilyGames,
+
+    // Salle d’eau et toilettes
+    ...airbnbBathroom,
+
+    // Extérieur et terrasse
     airbnbExterior[0],
     airbnbExterior[1],
     airbnbExterior[2],

@@ -10,6 +10,15 @@ conventionnels du projet.
 
 - Le visuel basse définition « Une pause face à l’océan » du Chai des Tortues
   est remplacé par une photographie nette adaptée aux écrans haute définition.
+- La galerie du Chai suit désormais une visite naturelle : arrivée, extérieur,
+  pièce de vie, cuisine, chambres, salles d’eau, détails puis découverte de
+  l’Île de Ré.
+- Les galeries des trois maisons suivent la même logique de visite. Les
+  toilettes sont désormais visibles pour chaque maison lorsque l’annonce
+  Airbnb fournit un visuel dédié ; la buanderie du Chai est également ajoutée.
+- Le visuel flou « L’art de vivre face à l’océan » de Villa Raie Manta est
+  remplacé par sa vue réelle et nette sur l’océan.
+- La photo « Déjeuner à l’ombre » est retirée de la galerie du Nid d’Été.
 - La vidéo d’accueil reste disponible avec un bouton Lecture/Pause lorsque
   l’autoplay est refusé, l’économie de données est active ou la réduction des
   animations est demandée.

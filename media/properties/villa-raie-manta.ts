@@ -29,7 +29,7 @@ const editorialFamilyGames = asset("editorial/table-jeux-famille.png", "Jeu de s
 const editorialChildrenRoom = asset("editorial/chambre-enfants-famille.png", "Chambre à lits superposés préparée pour les enfants", "Le refuge des petits voyageurs");
 const editorialRomance = asset("editorial/chambre-romance.png", "Suite romantique avec cœur de pétales, bouteille et deux flûtes", "Une soirée à deux");
 const editorialBalineseLounger = asset("editorial/transat-balinais.png", "Transat balinais préparé pour une fin d’après-midi à la Villa", "L’heure douce sur le transat balinais");
-const ocean = asset("vue-ocean.jpeg", "Vue sur l’océan depuis Villa Raie Manta", "L’océan dans le séjour");
+const ocean = asset("vue-ocean.jpeg", "Vue sur l’océan depuis Villa Raie Manta", "L’art de vivre face à l’océan");
 const kitchen = asset("cuisine.jpeg", "Cuisine contemporaine", "Cuisine et salle à manger");
 const childrenRoom = asset("chambre-enfants.jpeg", "Chambre avec lits superposés", "La chambre des enfants");
 const bathroom = asset("salle-eau.jpeg", "Salle d’eau contemporaine", "Des lignes sobres et actuelles");
@@ -65,7 +65,6 @@ const airbnbExterior = [
 const airbnbLeisure = [
   asset("airbnb-salle-de-jeux-pour-enfants-1.jpeg", "Jeux et équipements pour les enfants", "Une maison accueillante pour les familles"),
   asset("airbnb-salle-de-jeux-1.jpeg", "Jeux de société et loisirs de la villa", "Les soirées à la maison"),
-  asset("airbnb-photos-supplementaires-1.jpeg", "Détail complémentaire de Villa Raie Manta", "L’art de vivre face à l’océan"),
 ];
 
 export const villaRaieMantaMedia = {
@@ -82,34 +81,45 @@ export const villaRaieMantaMedia = {
   lifestyle: [ocean, editorialBalineseLounger, editorialFamilyGames, familyTable],
   videos: [],
   gallery: [
+    // Ouverture et arrivée
     editorialSalon,
-    editorialIsland,
-    editorialSeafood,
-    editorialBirthday,
-    editorialNewYear,
-    editorialBedroom,
-    editorialBirthdayBedroom,
-    editorialFamilyGames,
-    editorialChildrenRoom,
-    editorialRomance,
-    editorialBalineseLounger,
+    ...airbnbExterior,
+    ocean,
+
+    // Salon panoramique
     salonSea,
     airbnbLivingRoom[0],
     airbnbLivingRoom[1],
-    ocean,
+    brightSalon,
+
+    // Cuisine et repas
     kitchen,
+    editorialIsland,
     ...airbnbKitchen,
+    editorialBirthday,
+    editorialNewYear,
+    editorialFamilyGames,
+    familyTable,
+
+    // Chambres
     airbnbBedrooms[0],
     airbnbBedrooms[1],
     airbnbBedrooms[2],
     airbnbBedrooms[3],
     airbnbBedrooms[4],
-    bathroom,
-    airbnbBathrooms[0],
-    ...airbnbExterior,
-    brightSalon,
-    familyTable,
     doubleRoom,
+    editorialBedroom,
+    editorialBirthdayBedroom,
+    editorialChildrenRoom,
+    editorialRomance,
+
+    // Salles d’eau et toilettes
+    bathroom,
+    ...airbnbBathrooms,
+
+    // Terrasse et loisirs
+    editorialSeafood,
+    editorialBalineseLounger,
     ...airbnbLeisure,
   ],
 } satisfies PropertyMediaManifest;

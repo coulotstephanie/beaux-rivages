@@ -257,6 +257,19 @@ const bathrooms = [
   ),
 ];
 
+const utilities = [
+  propertyAsset(
+    "utilities/toilettes.jpeg",
+    "Toilettes indépendantes du Chai des Tortues avec décoration murale",
+    "Les toilettes indépendantes",
+  ),
+  propertyAsset(
+    "utilities/buanderie.jpeg",
+    "Buanderie du Chai des Tortues avec lave-linge séchant",
+    "La buanderie et ses équipements",
+  ),
+];
+
 const details = [
   propertyAsset(
     "professional/palier-pierre.jpg",
@@ -316,46 +329,61 @@ const pastries = destinationAsset(
 );
 
 const propertyGallery = [
+  // Ouverture et arrivée
   hero,
-  editorialAperitif,
-  editorialIsland,
-  editorialCelebration,
-  editorialChristmas,
-  editorialMorningCoffee,
   editorialBicycleArrival,
-  editorialBedroom,
-  editorialHoneymoon,
-  editorialFamilyGames,
+  exterior[2],
+  exterior[3],
+  exterior[1],
+  editorialMorningCoffee,
+
+  // Pièce de vie
   livingRoom[1],
   livingRoom[2],
   livingRoom[3],
+  originalHero,
+  livingRoom[5],
+  livingRoom[6],
+  livingRoom[7],
+  editorialAperitif,
+  editorialFamilyGames,
+
+  // Cuisine et grande table
   kitchen[1],
+  editorialIsland,
+  kitchen[2],
+  kitchen[3],
+  kitchen[4],
+  kitchen[5],
+  kitchen[6],
+  editorialCelebration,
+  editorialChristmas,
+
+  // Chambres
   bedrooms[2],
   bedrooms[3],
   bedrooms[4],
   bedrooms[5],
+  editorialBedroom,
+  editorialHoneymoon,
+
+  // Salles d’eau
   bathrooms[0],
   bathrooms[1],
-  exterior[1],
-  details[0],
-  originalHero,
-  livingRoom[5],
-  kitchen[2],
-  exterior[2],
-  livingRoom[6],
-  kitchen[3],
   bathrooms[2],
-  details[1],
-  kitchen[6],
-  bathrooms[4],
-  details[3],
-  exterior[3],
-  livingRoom[7],
-  kitchen[4],
-  kitchen[5],
   bathrooms[3],
+  bathrooms[4],
   bathrooms[5],
+
+  // Espaces pratiques
+  utilities[0],
+  utilities[1],
+
+  // Matières et détails
+  details[0],
+  details[1],
   details[2],
+  details[3],
   details[4],
   details[5],
   details[6],
@@ -369,9 +397,9 @@ export const chaiDesTortuesMedia = {
   livingRoom,
   kitchen,
   bedrooms,
-  bathrooms,
+  bathrooms: [...bathrooms, utilities[0]],
   terrace: [editorialMorningCoffee],
-  details,
+  details: [...details, utilities[1]],
   lifestyle: [
     bicycle,
     port,
@@ -403,7 +431,13 @@ export const chaiDesTortuesMedia = {
       owner: "chai-des-tortues",
     },
   ],
-  gallery: [...propertyGallery, bicycle, port, beachTerrace],
+  gallery: [
+    ...propertyGallery,
+    // L’Île de Ré autour de la maison
+    bicycle,
+    port,
+    beachTerrace,
+  ],
   editorial: {
     breakfast: pastries,
     aperitif: beachTerrace,
