@@ -72,11 +72,14 @@ export function AdminDashboard() {
   const [message, setMessage] = useState("Saisissez le jeton administrateur pour ouvrir le Back Office.");
   const [busy, setBusy] = useState(false);
   const [query, setQuery] = useState("");
+  const [dark, setDark] = useState(false);
+  const [selectedReservationId, setSelectedReservationId] = useState<string | null>(null);
   const [reservationMode, setReservationMode] = useState<"list" | "create" | "block">("list");
 
   useEffect(() => {
     const saved = window.sessionStorage.getItem("beaux-rivages-admin-token");
     if (saved) setToken(saved);
+    setDark(window.localStorage.getItem("beaux-rivages-admin-theme") === "dark");
   }, []);
 
   const call = async (path: string, init?: RequestInit) => fetch(path, {
@@ -149,6 +152,16 @@ export function AdminDashboard() {
       reservation.guestName, reservation.guestEmail, reservation.reference, reservation.propertyName, reservation.channel,
     ].some((value) => value.toLowerCase().includes(normalized)));
   }, [data, query]);
+  const globalResults = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!data || normalized.length < 2) return [];
+    return [
+      ...data.reservations.filter((item) => [item.reference, item.guestName, item.guestEmail, item.propertyName].some((value) => value.toLowerCase().includes(normalized))).slice(0, 5).map((item) => ({ id: item.id, label: `${item.reference} · ${item.guestName}`, view: "reservations" as View })),
+      ...data.documents.contracts.filter((item) => `${item.number} ${item.reservationReference}`.toLowerCase().includes(normalized)).slice(0, 3).map((item) => ({ id: item.id, label: `Contrat ${item.number}`, view: "documents" as View })),
+      ...data.documents.invoices.filter((item) => `${item.number} ${item.reservationReference}`.toLowerCase().includes(normalized)).slice(0, 3).map((item) => ({ id: item.id, label: `Facture ${item.number}`, view: "documents" as View })),
+    ];
+  }, [data, query]);
+  const selectedReservation = data?.reservations.find((item) => item.id === selectedReservationId) ?? null;
 
   if (!data) return <section className="admin-login" aria-labelledby="admin-login-title">
     <div><p className="eyebrow">Accès sécurisé</p><h2 id="admin-login-title">Ouvrir le Back Office</h2><p>Le jeton reste uniquement dans cette session de navigateur.</p></div>
@@ -160,9 +173,11 @@ export function AdminDashboard() {
     <p role="status">{message}</p>
   </section>;
 
-  return <div className="admin-workspace">
+  return <div className={`admin-workspace${dark ? " admin-workspace--dark" : ""}`}>
     <div className="admin-workspace__bar">
       <nav aria-label="Rubriques du Back Office">{views.map((item) => <button key={item.id} type="button" aria-current={view === item.id ? "page" : undefined} onClick={() => setView(item.id)}>{item.label}</button>)}</nav>
+      <div className="admin-global-search"><input aria-label="Recherche globale" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher partout…" />{globalResults.length > 0 && <div>{globalResults.map((result) => <button type="button" key={`${result.view}-${result.id}`} onClick={() => { setView(result.view); setSelectedReservationId(result.view === "reservations" ? result.id : null); }}>{result.label}</button>)}</div>}</div>
+      <button type="button" className="admin-theme" aria-label={dark ? "Activer le mode clair" : "Activer le mode sombre"} onClick={() => { const next = !dark; setDark(next); window.localStorage.setItem("beaux-rivages-admin-theme", next ? "dark" : "light"); }}>{dark ? "☀ Clair" : "☾ Sombre"}</button>
       <button type="button" className="admin-refresh" disabled={busy} onClick={() => void load()}>{busy ? "Actualisation…" : "Actualiser"}</button>
     </div>
     <p className="admin-live-status" role="status">{message}</p>
@@ -170,6 +185,12 @@ export function AdminDashboard() {
     {view === "dashboard" && <section className="admin-panel">
       <div className="admin-panel__heading"><div><p className="eyebrow">{shortDate(data.today)}</p><h2>La journée en un regard</h2></div><p>Les priorités opérationnelles, mises à jour depuis Supabase.</p></div>
       <div className="admin-kpis">
+        <article><span>Réservations</span><strong>{data.reservations.length}</strong><small>tous canaux</small></article>
+        <article><span>CA du mois</span><strong>{money(data.metrics.revenueMonthCents)}</strong></article>
+        <article><span>CA annuel</span><strong>{money(data.metrics.revenueYearCents)}</strong></article>
+        <article><span>Panier moyen</span><strong>{money(data.reservations.length ? Math.round(data.reservations.reduce((sum, item) => sum + item.totalCents, 0) / data.reservations.length) : 0)}</strong></article>
+        <article><span>Part directe</span><strong>{data.metrics.directShare} %</strong></article>
+        <article><span>Séjour moyen</span><strong>{data.metrics.averageStayNights}</strong><small>nuits</small></article>
         <article><span>Arrivées</span><strong>{data.operational.arrivals.length}</strong><small>aujourd’hui</small></article>
         <article><span>Départs</span><strong>{data.operational.departures.length}</strong><small>aujourd’hui</small></article>
         <article><span>Sur place</span><strong>{data.operational.inHouse.length}</strong><small>séjour en cours</small></article>
@@ -196,7 +217,8 @@ export function AdminDashboard() {
       {reservationMode === "list" && <>
         <div className="admin-search"><label htmlFor="reservation-search">Rechercher par voyageur, référence ou logement</label><input id="reservation-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ex. Dupont ou BR-2026…" /></div>
         <div className="admin-calendar-strip" aria-label="Prochaines réservations">{filteredReservations.filter((row) => row.departure >= data.today && row.status !== "cancelled").slice(0, 8).map((row) => <article key={row.id}><span>{shortDate(row.arrival)}</span><strong>{row.propertyName}</strong><small>{row.guestName}</small></article>)}</div>
-        <div className="admin-table-wrap"><table><thead><tr><th>Voyageur</th><th>Séjour</th><th>Logement</th><th>Origine</th><th>Statut</th><th>Total</th><th>Action</th></tr></thead><tbody>{filteredReservations.map((reservation) => <tr key={reservation.id}><td><strong>{reservation.guestName}</strong><small>{reservation.reference}</small></td><td>{shortDate(reservation.arrival)} → {shortDate(reservation.departure)}<small>{nights(reservation)} nuit(s)</small></td><td>{reservation.propertyName}</td><td>{reservation.channel}</td><td><Status value={reservation.status} /></td><td>{money(reservation.totalCents)}</td><td><ReservationActions reservation={reservation} busy={busy} onSubmit={operate} /></td></tr>)}</tbody></table></div>
+        <div className="admin-table-wrap"><table><thead><tr><th>Voyageur</th><th>Séjour</th><th>Logement</th><th>Origine</th><th>Statut</th><th>Total</th><th>Action</th></tr></thead><tbody>{filteredReservations.map((reservation) => <tr key={reservation.id}><td><strong>{reservation.guestName}</strong><small>{reservation.reference}</small></td><td>{shortDate(reservation.arrival)} → {shortDate(reservation.departure)}<small>{nights(reservation)} nuit(s)</small></td><td>{reservation.propertyName}</td><td>{reservation.channel}</td><td><Status value={reservation.status} /></td><td>{money(reservation.totalCents)}</td><td><button type="button" className="admin-link-button" onClick={() => setSelectedReservationId(reservation.id)}>Ouvrir</button><ReservationActions reservation={reservation} busy={busy} onSubmit={operate} /></td></tr>)}</tbody></table></div>
+        {selectedReservation && <ReservationDetail reservation={selectedReservation} payments={data.pilotage.recentPayments.filter((item) => item.reservationReference === selectedReservation.reference)} deposits={data.operations.deposits.filter((item) => item.reservationReference === selectedReservation.reference)} onClose={() => setSelectedReservationId(null)} />}
       </>}
     </section>}
 
@@ -280,6 +302,24 @@ function ReservationActions({ reservation, busy, onSubmit }: { reservation: Back
   const [open, setOpen] = useState(false);
   if (!open) return <button type="button" className="admin-link-button" onClick={() => setOpen(true)}>Modifier</button>;
   return <div className="admin-row-actions"><select aria-label={`Statut de ${reservation.reference}`} defaultValue={reservation.status} onChange={(event) => { void onSubmit({ action: "update_reservation", reservationId: reservation.id, status: event.target.value }); setOpen(false); }} disabled={busy}>{["requested", "pending_payment", "confirmed", "completed", "cancelled", "declined"].map((status) => <option value={status} key={status}>{statusLabels[status]}</option>)}</select><button type="button" onClick={() => setOpen(false)}>Fermer</button></div>;
+}
+
+function ReservationDetail({ reservation, payments, deposits, onClose }: {
+  reservation: BackOfficeReservation;
+  payments: BackOfficeSnapshot["pilotage"]["recentPayments"];
+  deposits: BackOfficeSnapshot["operations"]["deposits"];
+  onClose: () => void;
+}) {
+  const paid = payments.filter((item) => ["paid", "authorized", "partially_refunded"].includes(item.status)).reduce((sum, item) => sum + item.amountCents - item.refundedCents, 0);
+  return <aside className="admin-reservation-detail" aria-labelledby="reservation-detail-title">
+    <div className="admin-panel__heading"><div><p className="eyebrow">{reservation.reference}</p><h2 id="reservation-detail-title">{reservation.guestName}</h2></div><button type="button" onClick={onClose}>Fermer</button></div>
+    <div className="admin-detail-grid">
+      <article><h3>Séjour</h3><dl><div><dt>Maison</dt><dd>{reservation.propertyName}</dd></div><div><dt>Plateforme</dt><dd>{reservation.channel}</dd></div><div><dt>Arrivée</dt><dd>{shortDate(reservation.arrival)}</dd></div><div><dt>Départ</dt><dd>{shortDate(reservation.departure)}</dd></div><div><dt>Durée</dt><dd>{nights(reservation)} nuits</dd></div><div><dt>Voyageurs</dt><dd>{reservation.adults} adulte(s), {reservation.children} enfant(s), {reservation.babies} bébé(s), {reservation.pets} animal(aux)</dd></div></dl></article>
+      <article><h3>Coordonnées</h3><a href={`mailto:${reservation.guestEmail}`}>{reservation.guestEmail || "E-mail non renseigné"}</a><a href={`tel:${reservation.guestPhone}`}>{reservation.guestPhone || "Téléphone non renseigné"}</a></article>
+      <article><h3>Finances</h3><dl><div><dt>Prix du séjour</dt><dd>{money(reservation.totalCents)}</dd></div><div><dt>Taxe de séjour</dt><dd>{money(reservation.touristTaxCents)}</dd></div><div><dt>Acompte prévu</dt><dd>{money(reservation.depositDueCents)}</dd></div><div><dt>Paiements reçus</dt><dd>{money(paid)}</dd></div><div><dt>Restant</dt><dd>{money(Math.max(0, reservation.totalCents - paid))}</dd></div><div><dt>Caution</dt><dd>{deposits.length ? deposits.map((item) => `${money(item.amountCents)} · ${item.status}`).join(", ") : "Non enregistrée"}</dd></div></dl></article>
+      <article><h3>Options réservées</h3>{reservation.options.length ? <ul>{reservation.options.map((item) => <li key={item.code}>{item.label} × {item.quantity} · {money(item.totalCents)}</li>)}</ul> : <p className="admin-empty">Aucune option réservée.</p>}</article>
+    </div>
+  </aside>;
 }
 
 function DocumentList({ rows }: { rows: { id: string; number: string; status: string; reservationReference: string; updatedAt: string }[] }) {

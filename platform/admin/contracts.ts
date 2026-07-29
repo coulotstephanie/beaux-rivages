@@ -27,6 +27,8 @@ export type BackOfficeReservation = {
   totalCents: number;
   depositDueCents: number;
   balanceDueCents: number;
+  touristTaxCents: number;
+  options: { code: string; label: string; quantity: number; totalCents: number }[];
   guestId: string | null;
   guestName: string;
   guestEmail: string;

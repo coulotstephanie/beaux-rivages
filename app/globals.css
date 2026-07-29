@@ -2819,6 +2819,21 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-checklist input { width:1.1rem; height:1.1rem; }
 .admin-notification { width:100%; display:grid; gap:.2rem; margin:.4rem 0; padding:.75rem; text-align:left; border:1px solid rgba(22,56,50,.12); background:#fff; cursor:pointer; }
 .admin-editor--compact { margin-bottom:1.5rem; }
+.admin-global-search { position:relative; min-width:220px; }
+.admin-global-search input { width:100%; min-height:42px; padding:.6rem .75rem; border:1px solid rgba(255,255,255,.3); color:#163832; background:#fff; }
+.admin-global-search > div { position:absolute; z-index:20; top:calc(100% + .25rem); width:100%; padding:.25rem; background:#fff; box-shadow:0 12px 30px rgba(0,0,0,.2); }
+.admin-global-search > div button { width:100%; padding:.55rem; border:0; text-align:left; color:#163832; background:#fff; cursor:pointer; }
+.admin-theme { min-height:42px; padding:.5rem .7rem; white-space:nowrap; border:1px solid #d6c18f; color:#fff; background:transparent; cursor:pointer; }
+.admin-reservation-detail { position:fixed; z-index:50; inset:2rem 2rem 2rem auto; width:min(720px,calc(100vw - 2rem)); padding:clamp(1rem,3vw,2rem); overflow:auto; color:#163832; background:#faf8f3; box-shadow:0 20px 80px rgba(0,0,0,.35); }
+.admin-detail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+.admin-detail-grid article { padding:1rem; background:#fff; border:1px solid #e3e2dc; }
+.admin-detail-grid article > a { display:block; margin:.5rem 0; overflow-wrap:anywhere; }
+.admin-detail-grid dl div { display:flex; justify-content:space-between; gap:1rem; padding:.4rem 0; border-bottom:1px solid #e9e8e2; }
+.admin-detail-grid dd { margin:0; text-align:right; }
+.admin-workspace--dark { color:#e8eeeb; background:#132723; }
+.admin-workspace--dark .admin-panel,.admin-workspace--dark .admin-live-status { color:#e8eeeb; background:#132723; }
+.admin-workspace--dark .admin-card,.admin-workspace--dark .admin-kpis article,.admin-workspace--dark .admin-health-grid article,.admin-workspace--dark .admin-property-grid article,.admin-workspace--dark .admin-calendar-board > article { color:#e8eeeb; border-color:#36504a; background:#1d3732; }
+.admin-workspace--dark .admin-card span,.admin-workspace--dark .admin-panel p,.admin-workspace--dark small { color:#afc1bc; }
 .admin-workspace__bar { padding: .8rem; display: flex; gap: 1rem; justify-content: space-between; align-items: center; background: #163832; }
 .admin-workspace__bar nav { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: thin; }
 .admin-workspace__bar nav button { min-height: 44px; padding: .6rem .85rem; flex: 0 0 auto; border: 0; border-radius: 2px; color: #dfe9e5; background: transparent; cursor: pointer; }
@@ -2991,6 +3006,9 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 }
 @media (max-width: 600px) {
   .admin-calendar-board { grid-template-columns:1fr; }
+  .admin-global-search { min-width:100%; }
+  .admin-detail-grid { grid-template-columns:1fr; }
+  .admin-reservation-detail { inset:.5rem; width:auto; }
   .admin-dashboard > form { align-items: stretch; flex-direction: column; }
   .admin-dashboard__totals { grid-template-columns: 1fr; }
   .admin-dashboard-page > header { align-items: flex-start; flex-direction: column; }

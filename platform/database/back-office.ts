@@ -42,11 +42,12 @@ export class SupabaseBackOfficeRepository {
     const month = today.slice(0, 7);
     const yearStart = `${year}-01-01`;
     const yearEnd = `${year + 1}-01-01`;
-    const [propertiesResult, reservationsResult, linksResult, guestsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult] = await Promise.all([
+    const [propertiesResult, reservationsResult, linksResult, guestsResult, optionsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult] = await Promise.all([
       this.client.from("properties").select("id,slug,name,status").order("name"),
       this.client.from("reservations").select("*").order("arrival", { ascending: false }).limit(5000),
       this.client.from("reservation_guests").select("reservation_id,guest_id,is_primary"),
       this.client.from("guests").select("id,first_name,last_name,email,phone").order("last_name"),
+      this.client.from("reservation_options").select("reservation_id,option_code,label,quantity,total_cents"),
       this.client.from("payments").select("id,reservation_id,kind,status,amount_cents,refunded_cents,provider_payment_id,paid_at,created_at").order("created_at", { ascending: false }),
       this.client.from("contracts").select("id,reservation_id,number,status,updated_at").order("updated_at", { ascending: false }).limit(500),
       this.client.from("invoices").select("id,reservation_id,number,status,total_cents,updated_at").order("updated_at", { ascending: false }).limit(500),
@@ -61,7 +62,7 @@ export class SupabaseBackOfficeRepository {
       this.client.from("back_office_notifications").select("*").is("dismissed_at", null).order("created_at", { ascending: false }).limit(100),
       this.client.from("reservation_notes").select("*").order("created_at", { ascending: false }).limit(500),
     ]);
-    const failed = [propertiesResult, reservationsResult, linksResult, guestsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult].find((result) => result.error);
+    const failed = [propertiesResult, reservationsResult, linksResult, guestsResult, optionsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult].find((result) => result.error);
     if (failed?.error) throw new Error(`BACK_OFFICE_READ_FAILED:${failed.error.code}`);
 
     const propertyRows = (propertiesResult.data ?? []) as Row[];
@@ -69,6 +70,7 @@ export class SupabaseBackOfficeRepository {
     const guestRows = (guestsResult.data ?? []) as Row[];
     const guestById = new Map(guestRows.map((row) => [String(row.id), row]));
     const links = (linksResult.data ?? []) as Row[];
+    const optionRows = (optionsResult.data ?? []) as Row[];
     const primaryGuestByReservation = new Map(links.filter((row) => row.is_primary).map((row) => [String(row.reservation_id), String(row.guest_id)]));
     const reservations = ((reservationsResult.data ?? []) as Row[]).map((row): BackOfficeReservation => {
       const property = propertyById.get(String(row.property_id));
@@ -81,6 +83,10 @@ export class SupabaseBackOfficeRepository {
         arrival: String(row.arrival), departure: String(row.departure),
         adults: Number(row.adults), children: Number(row.children), babies: Number(row.babies), pets: Number(row.pets),
         totalCents: Number(row.total_cents), depositDueCents: Number(row.deposit_due_cents), balanceDueCents: Number(row.balance_due_cents),
+        touristTaxCents: Number(row.tourist_tax_cents),
+        options: optionRows.filter((option) => String(option.reservation_id) === String(row.id)).map((option) => ({
+          code: String(option.option_code), label: String(option.label), quantity: Number(option.quantity), totalCents: Number(option.total_cents),
+        })),
         guestId, guestName: guest ? `${guest.first_name} ${guest.last_name}` : "Voyageur non renseigné",
         guestEmail: String(guest?.email ?? ""), guestPhone: String(guest?.phone ?? ""), createdAt: String(row.created_at),
       };
