@@ -8,6 +8,8 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Certification unique de préparation production 1.0, avec statut et preuve
+  pour chaque domaine, risques ouverts et conditions strictes de promotion.
 - Release Candidate documentaire `1.0.0-rc.1`, gel de périmètre, critères de
   promotion vers `v1.0.0` et gouvernance future par versions sémantiques.
 - Rapports de cohérence des migrations, sauvegarde/restauration et décision
