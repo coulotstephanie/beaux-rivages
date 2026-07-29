@@ -1,7 +1,9 @@
 # Incident Response
 
-Statut : à formaliser.
+**Statut : Vérifié — cadre documenté. Exercices réels : Non vérifié.**
 
-Le processus cible couvrira détection, qualification, confinement,
-communication, résolution, restauration et retour d’expérience.
+Le processus complet de détection, qualification, confinement, communication,
+rollback, restauration, reprise et retour d’expérience est maintenu dans
+[Runbooks.md](./Runbooks.md#5-gestion-des-incidents).
 
+Les contacts et règles d’escalade appartiennent au manuel confidentiel.
