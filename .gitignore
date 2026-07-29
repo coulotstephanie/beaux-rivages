@@ -17,3 +17,6 @@ coverage/
 .env*
 !.env.example
 supabase/.temp/
+
+# Documentation opérationnelle confidentielle — jamais versionnée dans ce dépôt public
+/docs-private/

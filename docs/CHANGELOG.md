@@ -42,6 +42,9 @@ conventionnels du projet.
 - Formalisation des user stories US-0010 à US-0200 et des critères
   d’acceptation associés, avec séparation entre preuves acquises et validations
   restant nécessaires avant la production.
+- Ajout du portail public du manuel d’exploitation, de la politique de
+  classification et d’un garde-fou empêchant la publication accidentelle de la
+  documentation opérationnelle confidentielle.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
