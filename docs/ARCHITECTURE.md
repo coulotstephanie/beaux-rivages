@@ -39,6 +39,14 @@ Le secret administrateur historique est un mécanisme de migration. Il doit êtr
 désactivé avec `ADMIN_TOKEN_FALLBACK_ENABLED=false` après activation des comptes
 individuels.
 
+## Événements métier
+
+`EVENT_CATALOG.md` définit les noms officiels. La cible utilise des machines à
+états dans le domaine et une outbox PostgreSQL transactionnelle. Les
+consommateurs sont indépendants, idempotents et rejouables. Cette couche n’est
+pas encore implémentée : les appels existants restent en place jusqu’à leur
+migration verticale et testée.
+
 ## Rendu
 
 Le contenu éditorial reste rendu côté serveur et pré-généré autant que possible.

@@ -39,3 +39,24 @@ test("la convergence technique documente les écarts sans réécriture globale",
   assert.match(traceability, /aucun déplacement global/);
   assert.match(traceability, /aucune rupture des URL publiques/);
 });
+
+test("le catalogue événementiel couvre tous les domaines officiels", () => {
+  const catalog = readFileSync("docs/EVENT_CATALOG.md", "utf8");
+  for (const event of [
+    "ReservationCreated",
+    "ReservationCancelled",
+    "PaymentSucceeded",
+    "ContractSigned",
+    "GuestJourneyStarted",
+    "GuestSegmentChanged",
+    "CleaningCompleted",
+    "MaintenanceTicketCreated",
+    "PackSignaturePurchased",
+    "DailyReportGenerated",
+  ]) {
+    assert.match(catalog, new RegExp(event));
+  }
+  assert.match(catalog, /idempotencyKey/);
+  assert.match(catalog, /correlationId/);
+  assert.match(catalog, /outbox transactionnelle/);
+});

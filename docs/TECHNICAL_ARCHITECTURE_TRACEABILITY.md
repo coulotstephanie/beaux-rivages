@@ -22,6 +22,10 @@ Référence :
 | RLS | Conforme partiel | 55 tables protégées, revue globale encore nécessaire |
 | Storage administrable | Partiel | buckets privés présents, médias publics encore dans Git |
 | Observabilité | Incomplet | logs structurés locaux, aucun APM/alerting central |
+| Architecture événementielle | Cible | catalogue défini, aucun bus/outbox commun |
+| Moteur d’automatisation | Partiel | planifications métier dispersées |
+| Scheduler central | Absent | aucune orchestration unique ni registre d’exécution |
+| Cache documenté | Partiel | cache Next/images présent, politique par donnée absente |
 | Couverture ≥ 80 % | Non mesuré | aucun outil de couverture configuré |
 | E2E et accessibilité automatisés | Absent | aucun runner navigateur |
 | GitHub Actions | Partiel | validation définie, exécution PR à fiabiliser |
@@ -34,13 +38,15 @@ Référence :
    déplacements d’architecture.
 3. Créer les machines à états et événements du Product Book 07 dans une couche
    métier indépendante.
-4. Migrer un premier domaine vertical vers `features/` et mesurer le coût avant
+4. Ajouter l’outbox, le registre d’exécution et un premier consommateur
+   idempotent sur `ReservationCreated`.
+5. Migrer un premier domaine vertical vers `features/` et mesurer le coût avant
    de décider du passage en monorepo.
-5. Versionner les nouvelles API sous `/api/v1` et maintenir des adaptateurs pour
+6. Versionner les nouvelles API sous `/api/v1` et maintenir des adaptateurs pour
    les routes actuelles.
-6. Introduire TanStack Query et React Hook Form sur les nouveaux écrans, puis
+7. Introduire TanStack Query et React Hook Form sur les nouveaux écrans, puis
    migrer l’existant progressivement.
-7. Évaluer Tailwind et shadcn/ui au regard du Design System existant avant toute
+8. Évaluer Tailwind et shadcn/ui au regard du Design System existant avant toute
    réécriture CSS.
 
 ## Garde-fous

@@ -204,3 +204,109 @@ production.
 Une fonctionnalité est terminée lorsque le code est relu, les tests passent, la
 documentation et les migrations sont à jour, les performances et la sécurité
 sont validées, l’accessibilité est conforme et la Pull Request est approuvée.
+
+## 20. Architecture événementielle
+
+Chaque action métier importante produit un événement. Un module ne doit pas
+appeler directement un autre domaine lorsqu’un événement permet de les
+découpler.
+
+```text
+ReservationCreated
+  ├─ CRM
+  ├─ Guest Journey
+  ├─ Analytics
+  ├─ Revenue Management
+  └─ Notifications
+```
+
+Le catalogue officiel est maintenu dans
+`EVENT_CATALOG.md`. Les événements sont versionnés, traçables, idempotents et
+rejouables.
+
+## 21. Moteur d’automatisation
+
+Une règle est composée d’un déclencheur, de conditions, d’actions et d’une
+journalisation. Les règles sont configurables. Une confirmation de réservation
+peut ainsi créer le contrat, la facture, le Guest Journey et les opérations CRM
+sans couplage direct entre ces domaines.
+
+## 22. Scheduler
+
+Les tâches planifiées sont centralisées :
+
+- quotidien 7 h : météo, marées et suggestions ;
+- quotidien 2 h : Revenue, Dashboard et rapports ;
+- horaire : Channel Manager, calendriers et paiements.
+
+Chaque exécution possède une clé d’idempotence, un état, un historique, une
+politique de nouvelle tentative et une alerte en cas d’échec.
+
+## 23. Cache et performances
+
+La stratégie combine cache navigateur, TanStack Query, cache Next.js, Supabase
+et PostgreSQL. Chaque donnée possède une durée de vie explicite.
+
+Objectifs :
+
+| Mesure | Cible |
+| --- | --- |
+| ouverture | moins de 2 secondes |
+| navigation | moins de 300 ms |
+| recherche | moins de 500 ms |
+| dashboard | moins de 1 seconde |
+
+Les images utilisent AVIF ou WebP, chargement progressif et lazy loading. Les
+Server Components, le streaming et la mesure réelle sont privilégiés.
+
+## 24. Monitoring et sauvegardes
+
+Les erreurs API et JavaScript, les performances et les opérations critiques sont
+centralisées et reliées à des alertes administratives.
+
+Les sauvegardes sont quotidiennes avec conservation de 30 jours, snapshots
+hebdomadaires et mensuels, et procédure de restauration testée.
+
+## 25. Sécurité avancée
+
+Toutes les API appliquent rate limiting, JWT, permissions et audit. Les
+opérations sensibles nécessitent une double validation. Les connexions sont
+historisées et les activités inhabituelles détectées.
+
+## 26. Design System technique
+
+Les interfaces partagent Button, Card, Badge, Dialog, Drawer, Popover, Tooltip,
+Tabs, Table, Calendar, DatePicker, Uploader, Gallery, Map, Timeline et Charts.
+Aucun style spécifique ne doit être ajouté directement dans une page lorsqu’un
+composant ou variant partagé peut porter cette responsabilité.
+
+## 27. Conventions
+
+- TypeScript strict, jamais de `any`, préférer `unknown` et les types métier ;
+- Zod pour les entrées externes ;
+- un composant React, une responsabilité, maximum recommandé de 250 lignes ;
+- hooks, providers et composants métier réutilisables ;
+- Tailwind factorisé en composants et variants ;
+- branches `feature/`, `fix/`, `docs/`, `refactor/`, `release/` ;
+- Conventional Commits.
+
+Toute évolution actualise Changelog, Roadmap, Database, API, Architecture et
+Workflows.
+
+## 28. Déploiement et qualité
+
+```text
+Local → Preview → Staging → Production
+```
+
+Aucun déploiement manuel en production. Chaque Pull Request contrôle lint,
+TypeScript, tests, accessibilité, responsive, performances et documentation.
+Une fonctionnalité Production Ready possède une couverture supérieure à 80 %,
+un Lighthouse validé, une accessibilité WCAG AA, une migration et un rollback,
+une journalisation, un monitoring et une Pull Request approuvée.
+
+## 29. Vision d’évolution
+
+Le cœur métier doit pouvoir servir plusieurs marques, propriétaires, équipes,
+langues, devises, pays, moteurs de réservation, canaux et applications clientes
+Web, Mobile et API, sans dépendre d’une technologie particulière.

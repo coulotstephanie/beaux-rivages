@@ -16,6 +16,8 @@ conventionnels du projet.
 - Intégration du Product Book 07 et de la matrice de traçabilité des workflows.
 - Intégration du Product Book 08 et de la matrice de convergence vers
   l’architecture SaaS cible.
+- Ajout du catalogue officiel des événements et des exigences d’automatisation,
+  scheduler, cache, monitoring, sauvegarde et production.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
