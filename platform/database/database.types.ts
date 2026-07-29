@@ -1253,6 +1253,50 @@ export type Database = {
           },
         ]
       }
+      housekeeping_inspections: {
+        Row: {
+          created_at: string
+          id: string
+          inspected_at: string | null
+          inspector: string
+          rating: number | null
+          remarks: string | null
+          status: string
+          task_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          inspected_at?: string | null
+          inspector: string
+          rating?: number | null
+          remarks?: string | null
+          status?: string
+          task_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          inspected_at?: string | null
+          inspector?: string
+          rating?: number | null
+          remarks?: string | null
+          status?: string
+          task_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "housekeeping_inspections_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "housekeeping_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       housekeeping_tasks: {
         Row: {
           assignee: string | null
@@ -1261,9 +1305,13 @@ export type Database = {
           created_at: string
           id: string
           notes: string | null
+          offline_revision: number
+          operational_status: string
           property_id: string
           reservation_id: string | null
           scheduled_for: string
+          signature_path: string | null
+          started_at: string | null
           status: string
           updated_at: string
           verified_at: string | null
@@ -1275,9 +1323,13 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          offline_revision?: number
+          operational_status?: string
           property_id: string
           reservation_id?: string | null
           scheduled_for: string
+          signature_path?: string | null
+          started_at?: string | null
           status?: string
           updated_at?: string
           verified_at?: string | null
@@ -1289,9 +1341,13 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          offline_revision?: number
+          operational_status?: string
           property_id?: string
           reservation_id?: string | null
           scheduled_for?: string
+          signature_path?: string | null
+          started_at?: string | null
           status?: string
           updated_at?: string
           verified_at?: string | null
@@ -1309,6 +1365,62 @@ export type Database = {
             columns: ["reservation_id"]
             isOneToOne: false
             referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory_items: {
+        Row: {
+          category: string
+          condition: string
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          property_id: string
+          purchased_on: string | null
+          quantity: number
+          room: string
+          unit_value_cents: number
+          updated_at: string
+          warranty_until: string | null
+        }
+        Insert: {
+          category: string
+          condition?: string
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          property_id: string
+          purchased_on?: string | null
+          quantity?: number
+          room: string
+          unit_value_cents?: number
+          updated_at?: string
+          warranty_until?: string | null
+        }
+        Update: {
+          category?: string
+          condition?: string
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          property_id?: string
+          purchased_on?: string | null
+          quantity?: number
+          room?: string
+          unit_value_cents?: number
+          updated_at?: string
+          warranty_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_items_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
         ]
@@ -1466,6 +1578,56 @@ export type Database = {
             columns: ["reservation_id"]
             isOneToOne: false
             referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_interventions: {
+        Row: {
+          assignee: string | null
+          completed_at: string | null
+          cost_cents: number
+          created_at: string
+          id: string
+          incident_id: string
+          notes: string | null
+          planned_for: string | null
+          provider: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          completed_at?: string | null
+          cost_cents?: number
+          created_at?: string
+          id?: string
+          incident_id: string
+          notes?: string | null
+          planned_for?: string | null
+          provider?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          completed_at?: string | null
+          cost_cents?: number
+          created_at?: string
+          id?: string
+          incident_id?: string
+          notes?: string | null
+          planned_for?: string | null
+          provider?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_interventions_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_incidents"
             referencedColumns: ["id"]
           },
         ]
@@ -1634,6 +1796,115 @@ export type Database = {
             columns: ["reservation_id"]
             isOneToOne: true
             referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      operational_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          housekeeping_task_id: string | null
+          id: string
+          kind: string
+          maintenance_incident_id: string | null
+          property_id: string
+          reservation_id: string | null
+          storage_path: string
+          taken_at: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          housekeeping_task_id?: string | null
+          id?: string
+          kind: string
+          maintenance_incident_id?: string | null
+          property_id: string
+          reservation_id?: string | null
+          storage_path: string
+          taken_at?: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          housekeeping_task_id?: string | null
+          id?: string
+          kind?: string
+          maintenance_incident_id?: string | null
+          property_id?: string
+          reservation_id?: string | null
+          storage_path?: string
+          taken_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_photos_housekeeping_task_id_fkey"
+            columns: ["housekeeping_task_id"]
+            isOneToOne: false
+            referencedRelation: "housekeeping_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_photos_maintenance_incident_id_fkey"
+            columns: ["maintenance_incident_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_incidents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_photos_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_photos_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      operational_reports: {
+        Row: {
+          created_at: string
+          id: string
+          metrics: Json
+          period_end: string
+          period_start: string
+          property_id: string | null
+          report_type: string
+          summary: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metrics?: Json
+          period_end: string
+          period_start: string
+          property_id?: string | null
+          report_type: string
+          summary?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metrics?: Json
+          period_end?: string
+          period_start?: string
+          property_id?: string | null
+          report_type?: string
+          summary?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_reports_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
         ]
@@ -2706,6 +2977,59 @@ export type Database = {
             columns: ["contract_id"]
             isOneToOne: false
             referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_items: {
+        Row: {
+          alert_threshold: number
+          category: string
+          created_at: string
+          id: string
+          last_restocked_at: string | null
+          name: string
+          property_id: string | null
+          quantity: number
+          target_quantity: number
+          unit: string
+          unit_cost_cents: number
+          updated_at: string
+        }
+        Insert: {
+          alert_threshold?: number
+          category: string
+          created_at?: string
+          id?: string
+          last_restocked_at?: string | null
+          name: string
+          property_id?: string | null
+          quantity?: number
+          target_quantity?: number
+          unit?: string
+          unit_cost_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          alert_threshold?: number
+          category?: string
+          created_at?: string
+          id?: string
+          last_restocked_at?: string | null
+          name?: string
+          property_id?: string | null
+          quantity?: number
+          target_quantity?: number
+          unit?: string
+          unit_cost_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_items_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
         ]

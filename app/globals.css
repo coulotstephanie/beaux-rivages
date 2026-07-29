@@ -2869,6 +2869,17 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .concierge-cart__total { display:block; margin:1.5rem 0; font:400 2rem/1 var(--font-serif); text-align:right; }
 .concierge-cart form { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
 .concierge-cart form label:nth-last-of-type(-n+2) { grid-column:1/-1; }
+.network-state { padding:.4rem .7rem; border-radius:99px; background:#e3ece8; }
+.network-state.offline { color:#7b3f2f; background:#f4ded6; }
+.housekeeping-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+.housekeeping-task { padding:1.2rem; background:#fff; border:1px solid #dce2df; }
+.housekeeping-task > div:first-child { display:grid; gap:.25rem; }
+.housekeeping-task h3 { margin:.25rem 0; font:400 1.6rem/1 var(--font-serif); }
+.housekeeping-task > select { width:100%; min-height:42px; margin:.8rem 0; }
+.stock-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+.stock-grid article { padding:1.2rem; border-top:3px solid #77998f; background:#fff; }
+.stock-grid article.low-stock { border-color:#b25d42; background:#fff5f1; }
+.stock-grid input { width:100%; min-height:42px; padding:.5rem; }
 .admin-workspace__bar { padding: .8rem; display: flex; gap: 1rem; justify-content: space-between; align-items: center; background: #163832; }
 .admin-workspace__bar nav { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: thin; }
 .admin-workspace__bar nav button { min-height: 44px; padding: .6rem .85rem; flex: 0 0 auto; border: 0; border-radius: 2px; color: #dfe9e5; background: transparent; cursor: pointer; }
@@ -3050,6 +3061,7 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .concierge-special,.concierge-cart form { grid-template-columns:1fr; }
   .concierge-special h2,.concierge-special .eyebrow,.concierge-special p,.concierge-cart form label:nth-last-of-type(-n+2) { grid-column:auto; }
   .concierge-cart > div { grid-template-columns:1fr 70px; }
+  .housekeeping-board,.stock-grid { grid-template-columns:1fr; }
   .admin-dashboard > form { align-items: stretch; flex-direction: column; }
   .admin-dashboard__totals { grid-template-columns: 1fr; }
   .admin-dashboard-page > header { align-items: flex-start; flex-direction: column; }
