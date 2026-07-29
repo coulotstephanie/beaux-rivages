@@ -64,7 +64,7 @@ test("les décisions sont strictement validées", () => {
 test("un tarif n’entre dans le devis qu’après acceptation", () => {
   const repository = readFileSync("platform/yield-management/repository.ts", "utf8");
   const pricing = readFileSync("platform/database/pricing.ts", "utf8");
-  assert.ok(repository.includes('input.decision==="accepted"'));
+  assert.match(repository, /input\.decision\s*===\s*"accepted"/);
   assert.match(repository, /yield_rate_overrides/);
   assert.ok(pricing.includes('.eq("status", "active")'));
 });
@@ -77,7 +77,7 @@ test("la migration applique RLS, contraintes et audit", () => {
 });
 test("l’API exige authentification et origine identique", () => {
   const route = readFileSync("app/api/admin/yield/route.ts", "utf8");
-  assert.match(route, /requireAdmin/);
+  assert.match(route, /authorizeStaff\(r, \["admin"\]\)/);
   assert.match(route, /requireSameOrigin/);
   assert.match(route, /yieldActionSchema/);
 });

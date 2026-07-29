@@ -1,12 +1,14 @@
 import { NextRequest } from "next/server";
+import { authorizeStaff } from "@/platform/auth/server";
 import { isDatabaseConfigured } from "@/platform/database/client";
-import { noStoreJson, rateLimit, requireAdmin, requireSameOrigin } from "@/platform/http/security";
+import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { YieldRepository } from "@/platform/yield-management/repository";
 import { yieldActionSchema } from "@/platform/yield-management/schemas";
 export async function GET(r: NextRequest) {
   const l = rateLimit(r, 15);
   if (l) return l;
-  if (!requireAdmin(r)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!(await authorizeStaff(r)))
+    return noStoreJson({ error: "Authentification requise." }, { status: 401 });
   if (!isDatabaseConfigured())
     return noStoreJson({ error: "Base non configurée." }, { status: 503 });
   try {
@@ -26,7 +28,10 @@ export async function POST(r: NextRequest) {
   if (l) return l;
   if (!requireSameOrigin(r))
     return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
-  if (!requireAdmin(r)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!(await authorizeStaff(r, ["admin"])))
+    return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
+  if (!isDatabaseConfigured())
+    return noStoreJson({ error: "Base non configurée." }, { status: 503 });
   const p = yieldActionSchema.safeParse(await r.json().catch(() => null));
   if (!p.success)
     return noStoreJson(
