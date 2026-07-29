@@ -52,6 +52,7 @@ export type BackOfficeSnapshot = {
     requests: BackOfficeReservation[];
     pendingPayments: BackOfficeReservation[];
     unsignedContracts: BackOfficeReservation[];
+    upcoming7Days: BackOfficeReservation[];
   };
   reservations: BackOfficeReservation[];
   guests: {
@@ -78,6 +79,35 @@ export type BackOfficeSnapshot = {
   documents: {
     contracts: { id: string; number: string; status: string; reservationReference: string; updatedAt: string }[];
     invoices: { id: string; number: string; status: string; reservationReference: string; totalCents: number; updatedAt: string }[];
+  };
+  operations: {
+    housekeeping: {
+      id: string; propertyId: string; propertyName: string; reservationReference: string | null;
+      scheduledFor: string; assignee: string; status: string;
+      checklist: { id: string; label: string; done: boolean }[]; notes: string;
+    }[];
+    maintenance: {
+      id: string; propertyId: string; propertyName: string; reservationReference: string | null;
+      title: string; description: string; priority: string; status: string; assignee: string;
+      costCents: number; dueAt: string | null; createdAt: string;
+    }[];
+    concierge: {
+      id: string; reservationId: string; reservationReference: string; guestName: string;
+      kind: string; title: string; details: string; status: string; scheduledFor: string | null;
+      isSurprise: boolean;
+    }[];
+    deposits: {
+      id: string; reservationReference: string; guestName: string; amountCents: number;
+      status: string; provider: string; updatedAt: string;
+    }[];
+    notifications: {
+      id: string; kind: string; title: string; body: string; priority: string;
+      entityType: string | null; entityId: string | null; readAt: string | null; createdAt: string;
+    }[];
+    notes: {
+      id: string; reservationId: string; category: string; content: string;
+      pinned: boolean; createdAt: string;
+    }[];
   };
   pilotage: {
     calendarSources: { id: string; property: string; provider: string; status: string; lastSyncedAt: string | null }[];

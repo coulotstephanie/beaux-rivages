@@ -4,18 +4,25 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { BackOfficeReservation, BackOfficeSnapshot } from "@/platform/admin/contracts";
 import { GuestMessagesAdmin } from "@/components/admin/GuestMessagesAdmin";
 import { RevenueMarketingAdmin } from "@/components/admin/RevenueMarketingAdmin";
+import { PremiumOperations } from "@/components/admin/PremiumOperations";
 
-type View = "dashboard" | "reservations" | "messages" | "revenue" | "voyageurs" | "logements" | "documents" | "statistiques" | "pilotage";
+type View = "dashboard" | "calendrier" | "reservations" | "messages" | "revenue" | "voyageurs" | "logements" | "documents" | "paiements" | "conciergerie" | "menage" | "maintenance" | "statistiques" | "pilotage" | "parametres";
 const views: { id: View; label: string }[] = [
   { id: "dashboard", label: "Aujourd’hui" },
+  { id: "calendrier", label: "Calendrier" },
   { id: "reservations", label: "Réservations" },
   { id: "messages", label: "Messages voyageurs" },
   { id: "revenue", label: "Revenue & Marketing" },
   { id: "voyageurs", label: "Voyageurs" },
   { id: "logements", label: "Logements" },
   { id: "documents", label: "Documents" },
+  { id: "paiements", label: "Paiements" },
+  { id: "conciergerie", label: "Conciergerie" },
+  { id: "menage", label: "Ménage" },
+  { id: "maintenance", label: "Maintenance" },
   { id: "statistiques", label: "Statistiques" },
   { id: "pilotage", label: "Pilotage" },
+  { id: "parametres", label: "Paramètres" },
 ];
 
 const statusLabels: Record<string, string> = {
@@ -169,12 +176,16 @@ export function AdminDashboard() {
         <article className={data.operational.requests.length ? "needs-attention" : ""}><span>Demandes</span><strong>{data.operational.requests.length}</strong><small>à traiter</small></article>
         <article className={data.operational.pendingPayments.length ? "needs-attention" : ""}><span>Paiements</span><strong>{data.operational.pendingPayments.length}</strong><small>{money(data.metrics.pendingPaymentsCents)} à suivre</small></article>
         <article className={data.operational.unsignedContracts.length ? "needs-attention" : ""}><span>Contrats</span><strong>{data.operational.unsignedContracts.length}</strong><small>non signés</small></article>
+        <article className={data.operations.maintenance.some((item) => !["resolved", "closed"].includes(item.status)) ? "needs-attention" : ""}><span>Maintenance</span><strong>{data.operations.maintenance.filter((item) => !["resolved", "closed"].includes(item.status)).length}</strong><small>incident(s) ouvert(s)</small></article>
+        <article><span>Notifications</span><strong>{data.operations.notifications.filter((item) => !item.readAt).length}</strong><small>non lue(s)</small></article>
       </div>
       <div className="admin-two-columns">
         <article className="admin-card"><h3>Arrivées aujourd’hui</h3><ReservationList rows={data.operational.arrivals} empty="Aucune arrivée aujourd’hui." /></article>
         <article className="admin-card"><h3>Départs aujourd’hui</h3><ReservationList rows={data.operational.departures} empty="Aucun départ aujourd’hui." /></article>
         <article className="admin-card"><h3>Voyageurs actuellement présents</h3><ReservationList rows={data.operational.inHouse} empty="Aucun séjour direct en cours." /></article>
         <article className="admin-card"><h3>Demandes à traiter</h3><ReservationList rows={data.operational.requests} empty="Toutes les demandes sont traitées." /></article>
+        <article className="admin-card"><h3>Les 7 prochains jours</h3><ReservationList rows={data.operational.upcoming7Days} empty="Aucune arrivée prévue." /></article>
+        <article className="admin-card"><h3>Préparations des maisons</h3>{data.operations.housekeeping.slice(0, 6).map((task) => <div className="admin-health-row" key={task.id}><div><strong>{task.propertyName}</strong><span>{dateTime(task.scheduledFor)} · {task.checklist.filter((item) => item.done).length}/{task.checklist.length} contrôles</span></div><Status value={task.status} /></div>)}</article>
       </div>
     </section>}
 
@@ -191,6 +202,7 @@ export function AdminDashboard() {
 
     {view === "messages" && <GuestMessagesAdmin token={token} notify={setMessage} reservations={data.reservations} />}
     {view === "revenue" && <RevenueMarketingAdmin token={token} notify={setMessage} />}
+    {(view === "calendrier" || view === "paiements" || view === "conciergerie" || view === "menage" || view === "maintenance" || view === "parametres") && <PremiumOperations data={data} view={view} busy={busy} onSubmit={operate} />}
 
     {view === "voyageurs" && <section className="admin-panel">
       <div className="admin-panel__heading"><div><p className="eyebrow">Relation voyageurs</p><h2>Historique et fidélité</h2></div><p>{data.guests.length} voyageur(s) connu(s)</p></div>

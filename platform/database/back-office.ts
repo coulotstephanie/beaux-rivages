@@ -42,7 +42,7 @@ export class SupabaseBackOfficeRepository {
     const month = today.slice(0, 7);
     const yearStart = `${year}-01-01`;
     const yearEnd = `${year + 1}-01-01`;
-    const [propertiesResult, reservationsResult, linksResult, guestsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult] = await Promise.all([
+    const [propertiesResult, reservationsResult, linksResult, guestsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult] = await Promise.all([
       this.client.from("properties").select("id,slug,name,status").order("name"),
       this.client.from("reservations").select("*").order("arrival", { ascending: false }).limit(5000),
       this.client.from("reservation_guests").select("reservation_id,guest_id,is_primary"),
@@ -54,8 +54,14 @@ export class SupabaseBackOfficeRepository {
       this.client.from("calendar_sources").select("id,property_id,provider,status,last_synced_at").order("updated_at", { ascending: false }),
       this.client.from("sync_runs").select("id,source_id,status,imported_count,error_count,error_details,started_at").order("started_at", { ascending: false }).limit(40),
       this.client.from("transactional_emails").select("status,last_error,updated_at").order("updated_at", { ascending: false }).limit(500),
+      this.client.from("housekeeping_tasks").select("*").order("scheduled_for", { ascending: true }).limit(200),
+      this.client.from("maintenance_incidents").select("*").order("created_at", { ascending: false }).limit(200),
+      this.client.from("concierge_requests").select("*").order("created_at", { ascending: false }).limit(200),
+      this.client.from("security_deposits").select("*").order("updated_at", { ascending: false }).limit(200),
+      this.client.from("back_office_notifications").select("*").is("dismissed_at", null).order("created_at", { ascending: false }).limit(100),
+      this.client.from("reservation_notes").select("*").order("created_at", { ascending: false }).limit(500),
     ]);
-    const failed = [propertiesResult, reservationsResult, linksResult, guestsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult].find((result) => result.error);
+    const failed = [propertiesResult, reservationsResult, linksResult, guestsResult, paymentsResult, contractsResult, invoicesResult, blocksResult, sourcesResult, syncsResult, emailsResult, housekeepingResult, maintenanceResult, conciergeResult, depositsResult, notificationsResult, notesResult].find((result) => result.error);
     if (failed?.error) throw new Error(`BACK_OFFICE_READ_FAILED:${failed.error.code}`);
 
     const propertyRows = (propertiesResult.data ?? []) as Row[];
@@ -92,6 +98,9 @@ export class SupabaseBackOfficeRepository {
     const confirmedThisYear = confirmed.filter((reservation) => reservation.arrival >= yearStart && reservation.arrival < yearEnd);
     const revenueFor = (prefix: string) => confirmedThisYear.filter((reservation) => reservation.arrival.startsWith(prefix)).reduce((sum, reservation) => sum + reservation.totalCents, 0);
     const reservationById = new Map(reservations.map((reservation) => [reservation.id, reservation]));
+    const sevenDays = new Date(`${today}T12:00:00Z`);
+    sevenDays.setUTCDate(sevenDays.getUTCDate() + 7);
+    const sevenDaysEnd = sevenDays.toISOString().slice(0, 10);
     const currentMonthEnd = new Date(`${month}-01T12:00:00Z`);
     currentMonthEnd.setUTCMonth(currentMonthEnd.getUTCMonth() + 1);
     const guestSummaries = guestRows.map((guest) => {
@@ -150,6 +159,7 @@ export class SupabaseBackOfficeRepository {
         requests: active.filter((reservation) => ["draft", "requested"].includes(reservation.status)),
         pendingPayments: active.filter((reservation) => (paidByReservation.get(reservation.id) ?? 0) < reservation.totalCents),
         unsignedContracts: active.filter((reservation) => contractByReservation.get(reservation.id)?.status !== "signed"),
+        upcoming7Days: active.filter((reservation) => reservation.arrival >= today && reservation.arrival < sevenDaysEnd),
       },
       reservations: reservations.sort((a, b) => b.arrival.localeCompare(a.arrival)),
       guests: guestSummaries.sort((a, b) => b.stays - a.stays),
@@ -157,6 +167,52 @@ export class SupabaseBackOfficeRepository {
       documents: {
         contracts: contractRows.map((row) => ({ id: String(row.id), number: String(row.number), status: String(row.status), reservationReference: reservationById.get(String(row.reservation_id))?.reference ?? "—", updatedAt: String(row.updated_at) })),
         invoices: ((invoicesResult.data ?? []) as Row[]).map((row) => ({ id: String(row.id), number: String(row.number), status: String(row.status), reservationReference: reservationById.get(String(row.reservation_id))?.reference ?? "—", totalCents: Number(row.total_cents), updatedAt: String(row.updated_at) })),
+      },
+      operations: {
+        housekeeping: ((housekeepingResult.data ?? []) as Row[]).map((row) => ({
+          id: String(row.id), propertyId: String(row.property_id),
+          propertyName: String(propertyById.get(String(row.property_id))?.name ?? "Logement"),
+          reservationReference: reservationById.get(String(row.reservation_id))?.reference ?? null,
+          scheduledFor: String(row.scheduled_for), assignee: String(row.assignee ?? ""), status: String(row.status),
+          checklist: Array.isArray(row.checklist) ? row.checklist as { id: string; label: string; done: boolean }[] : [],
+          notes: String(row.notes ?? ""),
+        })),
+        maintenance: ((maintenanceResult.data ?? []) as Row[]).map((row) => ({
+          id: String(row.id), propertyId: String(row.property_id),
+          propertyName: String(propertyById.get(String(row.property_id))?.name ?? "Logement"),
+          reservationReference: reservationById.get(String(row.reservation_id))?.reference ?? null,
+          title: String(row.title), description: String(row.description ?? ""), priority: String(row.priority),
+          status: String(row.status), assignee: String(row.assignee ?? ""), costCents: Number(row.cost_cents),
+          dueAt: row.due_at ? String(row.due_at) : null, createdAt: String(row.created_at),
+        })),
+        concierge: ((conciergeResult.data ?? []) as Row[]).map((row) => {
+          const reservation = reservationById.get(String(row.reservation_id));
+          return {
+            id: String(row.id), reservationId: String(row.reservation_id),
+            reservationReference: reservation?.reference ?? "—", guestName: reservation?.guestName ?? "Voyageur",
+            kind: String(row.kind), title: String(row.title), details: String(row.details ?? ""),
+            status: String(row.status), scheduledFor: row.scheduled_for ? String(row.scheduled_for) : null,
+            isSurprise: Boolean(row.is_surprise),
+          };
+        }),
+        deposits: ((depositsResult.data ?? []) as Row[]).map((row) => {
+          const reservation = reservationById.get(String(row.reservation_id));
+          return {
+            id: String(row.id), reservationReference: reservation?.reference ?? "—",
+            guestName: reservation?.guestName ?? "Voyageur", amountCents: Number(row.amount_cents),
+            status: String(row.status), provider: String(row.provider ?? "—"), updatedAt: String(row.updated_at),
+          };
+        }),
+        notifications: ((notificationsResult.data ?? []) as Row[]).map((row) => ({
+          id: String(row.id), kind: String(row.kind), title: String(row.title), body: String(row.body ?? ""),
+          priority: String(row.priority), entityType: row.entity_type ? String(row.entity_type) : null,
+          entityId: row.entity_id ? String(row.entity_id) : null, readAt: row.read_at ? String(row.read_at) : null,
+          createdAt: String(row.created_at),
+        })),
+        notes: ((notesResult.data ?? []) as Row[]).map((row) => ({
+          id: String(row.id), reservationId: String(row.reservation_id), category: String(row.category),
+          content: String(row.content), pinned: Boolean(row.pinned), createdAt: String(row.created_at),
+        })),
       },
       pilotage: {
         calendarSources: sourceRows.map((row) => ({ id: String(row.id), property: String(propertyById.get(String(row.property_id))?.name ?? "Logement"), provider: String(row.provider), status: String(row.status), lastSyncedAt: row.last_synced_at ? String(row.last_synced_at) : null })),
@@ -213,6 +269,53 @@ export class SupabaseBackOfficeRepository {
       }).select("id").single();
       if (error) throw new Error(`BLOCK_WRITE_FAILED:${error.code}`);
       return { id: data.id };
+    }
+    if (input.action === "update_housekeeping") {
+      const completed = ["completed", "verified"].includes(input.status);
+      const { data, error } = await this.client.from("housekeeping_tasks").update({
+        status: input.status, checklist: input.checklist,
+        completed_at: completed ? new Date().toISOString() : null,
+        verified_at: input.status === "verified" ? new Date().toISOString() : null,
+      }).eq("id", input.taskId).select("id").single();
+      if (error) throw new Error(`HOUSEKEEPING_UPDATE_FAILED:${error.code}`);
+      return data;
+    }
+    if (input.action === "create_maintenance") {
+      const { data, error } = await this.client.from("maintenance_incidents").insert({
+        property_id: input.propertyId, reservation_id: input.reservationId ?? null, title: input.title,
+        description: input.description ?? null, priority: input.priority, assignee: input.assignee ?? null,
+      }).select("id").single();
+      if (error) throw new Error(`MAINTENANCE_WRITE_FAILED:${error.code}`);
+      return data;
+    }
+    if (input.action === "update_maintenance") {
+      const { data, error } = await this.client.from("maintenance_incidents").update({
+        status: input.status, resolved_at: ["resolved", "closed"].includes(input.status) ? new Date().toISOString() : null,
+      }).eq("id", input.incidentId).select("id").single();
+      if (error) throw new Error(`MAINTENANCE_UPDATE_FAILED:${error.code}`);
+      return data;
+    }
+    if (input.action === "create_concierge") {
+      const { data, error } = await this.client.from("concierge_requests").insert({
+        reservation_id: input.reservationId, kind: input.kind, title: input.title,
+        details: input.details ?? null, scheduled_for: input.scheduledFor ?? null, is_surprise: input.isSurprise,
+      }).select("id").single();
+      if (error) throw new Error(`CONCIERGE_WRITE_FAILED:${error.code}`);
+      return data;
+    }
+    if (input.action === "update_notification") {
+      const { data, error } = await this.client.from("back_office_notifications").update({
+        read_at: input.read ? new Date().toISOString() : null,
+      }).eq("id", input.notificationId).select("id").single();
+      if (error) throw new Error(`NOTIFICATION_UPDATE_FAILED:${error.code}`);
+      return data;
+    }
+    if (input.action === "create_reservation_note") {
+      const { data, error } = await this.client.from("reservation_notes").insert({
+        reservation_id: input.reservationId, category: input.category, content: input.content, pinned: input.pinned,
+      }).select("id").single();
+      if (error) throw new Error(`RESERVATION_NOTE_WRITE_FAILED:${error.code}`);
+      return data;
     }
     const patch: Database["public"]["Tables"]["reservations"]["Update"] = { status: input.status };
     if (input.arrival) patch.arrival = input.arrival;

@@ -132,6 +132,45 @@ export type Database = {
           },
         ]
       }
+      back_office_notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          dismissed_at: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          kind: string
+          priority: string
+          read_at: string | null
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          dismissed_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          kind: string
+          priority?: string
+          read_at?: string | null
+          title: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          dismissed_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          kind?: string
+          priority?: string
+          read_at?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       calendar_events: {
         Row: {
           arrival: string
@@ -235,6 +274,56 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      concierge_requests: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          internal_only_details: string | null
+          is_surprise: boolean
+          kind: string
+          reservation_id: string
+          scheduled_for: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          internal_only_details?: string | null
+          is_surprise?: boolean
+          kind: string
+          reservation_id: string
+          scheduled_for?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          internal_only_details?: string | null
+          is_surprise?: boolean
+          kind?: string
+          reservation_id?: string
+          scheduled_for?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "concierge_requests_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
             referencedColumns: ["id"]
           },
         ]
@@ -567,6 +656,66 @@ export type Database = {
           },
         ]
       }
+      housekeeping_tasks: {
+        Row: {
+          assignee: string | null
+          checklist: Json
+          completed_at: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          property_id: string
+          reservation_id: string | null
+          scheduled_for: string
+          status: string
+          updated_at: string
+          verified_at: string | null
+        }
+        Insert: {
+          assignee?: string | null
+          checklist?: Json
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_id: string
+          reservation_id?: string | null
+          scheduled_for: string
+          status?: string
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Update: {
+          assignee?: string | null
+          checklist?: Json
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_id?: string
+          reservation_id?: string | null
+          scheduled_for?: string
+          status?: string
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "housekeeping_tasks_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "housekeeping_tasks_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoices: {
         Row: {
           created_at: string
@@ -654,6 +803,72 @@ export type Database = {
             columns: ["guest_id"]
             isOneToOne: true
             referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_incidents: {
+        Row: {
+          assignee: string | null
+          cost_cents: number
+          created_at: string
+          description: string | null
+          due_at: string | null
+          id: string
+          photo_paths: string[]
+          priority: string
+          property_id: string
+          reservation_id: string | null
+          resolved_at: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          cost_cents?: number
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          photo_paths?: string[]
+          priority?: string
+          property_id: string
+          reservation_id?: string | null
+          resolved_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          cost_cents?: number
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          photo_paths?: string[]
+          priority?: string
+          property_id?: string
+          reservation_id?: string | null
+          resolved_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_incidents_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_incidents_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
             referencedColumns: ["id"]
           },
         ]
@@ -1445,6 +1660,44 @@ export type Database = {
           },
         ]
       }
+      reservation_notes: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          pinned: boolean
+          reservation_id: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          pinned?: boolean
+          reservation_id: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          pinned?: boolean
+          reservation_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservation_notes_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reservation_options: {
         Row: {
           created_at: string
@@ -1759,6 +2012,53 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_deposits: {
+        Row: {
+          amount_cents: number
+          authorized_at: string | null
+          created_at: string
+          id: string
+          provider: string | null
+          provider_reference: string | null
+          released_at: string | null
+          reservation_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          authorized_at?: string | null
+          created_at?: string
+          id?: string
+          provider?: string | null
+          provider_reference?: string | null
+          released_at?: string | null
+          reservation_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          authorized_at?: string | null
+          created_at?: string
+          id?: string
+          provider?: string | null
+          provider_reference?: string | null
+          released_at?: string | null
+          reservation_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_deposits_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: true
+            referencedRelation: "reservations"
             referencedColumns: ["id"]
           },
         ]

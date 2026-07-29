@@ -104,10 +104,69 @@ export const adminReservationUpdateSchema = z.object({
   }
 });
 
+const checklistItemSchema = z.object({
+  id: z.string().trim().min(1).max(80),
+  label: z.string().trim().min(1).max(150),
+  done: z.boolean(),
+}).strict();
+
+export const adminHousekeepingUpdateSchema = z.object({
+  action: z.literal("update_housekeeping"),
+  taskId: z.string().uuid(),
+  status: z.enum(["todo", "in_progress", "blocked", "completed", "verified"]),
+  checklist: z.array(checklistItemSchema).max(40),
+}).strict();
+
+export const adminMaintenanceCreateSchema = z.object({
+  action: z.literal("create_maintenance"),
+  propertyId: z.string().uuid(),
+  reservationId: z.string().uuid().optional(),
+  title: z.string().trim().min(2).max(180),
+  description: z.string().trim().max(2000).optional(),
+  priority: z.enum(["low", "normal", "high", "urgent"]).default("normal"),
+  assignee: z.string().trim().max(120).optional(),
+}).strict();
+
+export const adminMaintenanceUpdateSchema = z.object({
+  action: z.literal("update_maintenance"),
+  incidentId: z.string().uuid(),
+  status: z.enum(["open", "assigned", "in_progress", "waiting", "resolved", "closed"]),
+}).strict();
+
+export const adminConciergeCreateSchema = z.object({
+  action: z.literal("create_concierge"),
+  reservationId: z.string().uuid(),
+  kind: z.string().trim().min(2).max(80),
+  title: z.string().trim().min(2).max(180),
+  details: z.string().trim().max(2000).optional(),
+  scheduledFor: z.string().datetime().optional(),
+  isSurprise: z.boolean().default(false),
+}).strict();
+
+export const adminNotificationUpdateSchema = z.object({
+  action: z.literal("update_notification"),
+  notificationId: z.string().uuid(),
+  read: z.boolean(),
+}).strict();
+
+export const adminReservationNoteSchema = z.object({
+  action: z.literal("create_reservation_note"),
+  reservationId: z.string().uuid(),
+  category: z.enum(["general", "arrival", "departure", "payment", "concierge", "incident"]).default("general"),
+  content: z.string().trim().min(2).max(2000),
+  pinned: z.boolean().default(false),
+}).strict();
+
 export const adminOperationSchema = z.discriminatedUnion("action", [
   adminManualReservationSchema,
   adminBlockDatesSchema,
   adminReservationUpdateSchema,
+  adminHousekeepingUpdateSchema,
+  adminMaintenanceCreateSchema,
+  adminMaintenanceUpdateSchema,
+  adminConciergeCreateSchema,
+  adminNotificationUpdateSchema,
+  adminReservationNoteSchema,
 ]);
 
 export type AdminOperationInput = z.infer<typeof adminOperationSchema>;
