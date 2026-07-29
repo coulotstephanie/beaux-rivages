@@ -25,13 +25,21 @@ export function rateForDate(plan: PropertyRatePlan, date: string) {
   const season = plan.seasons
     .filter((candidate) => date >= candidate.startsOn && date < candidate.endsOn)
     .sort((a, b) => priority[b.kind] - priority[a.kind])[0];
+  const acceptedYield = plan.overrides?.find((override) => override.date === date);
+  const explicitManualRate = season?.kind === "manual";
   const day = new Date(`${date}T12:00:00Z`).getUTCDay();
   return {
     rate:
+      (explicitManualRate ? season.nightlyRate : acceptedYield?.nightlyRate) ??
       season?.nightlyRate ??
       (day === 5 || day === 6 ? plan.weekendNightlyRate : plan.baseNightlyRate),
-    season: season?.label ?? (day === 5 || day === 6 ? "Week-end" : "Tarif standard"),
-    minimumNights: season?.minimumNights ?? plan.minimumNights,
+    season:
+      (explicitManualRate ? season.label : acceptedYield ? "Yield validé" : season?.label) ??
+      (day === 5 || day === 6 ? "Week-end" : "Tarif standard"),
+    minimumNights:
+      (explicitManualRate ? season.minimumNights : acceptedYield?.minimumNights) ??
+      season?.minimumNights ??
+      plan.minimumNights,
   };
 }
 

@@ -69,6 +69,7 @@ export type PropertyRatePlan = {
   optionPrices: Partial<Record<StayOptionId, number>>;
   seasons: SeasonRule[];
   promotions: Promotion[];
+  overrides?: { date: string; nightlyRate: number; minimumNights?: number }[];
 };
 
 export type QuoteRequest = {

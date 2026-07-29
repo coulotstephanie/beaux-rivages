@@ -1,0 +1,83 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+import { recommendRate } from "../platform/yield-management/engine";
+import { yieldActionSchema } from "../platform/yield-management/schemas";
+const base = {
+  baseRateCents: 20000,
+  minimumRateCents: 15000,
+  maximumRateCents: 30000,
+  targetOccupancy: 75,
+  leadDays: 45,
+  isWeekend: false,
+  eventImpactPercentage: 0,
+  maximumIncreasePercentage: 30,
+  maximumDecreasePercentage: 20,
+  occupancyWeight: 1,
+  leadTimeWeight: 1,
+  eventWeight: 1,
+};
+test("une forte occupation augmente un prix dans les garde-fous", () => {
+  const result = recommendRate({ ...base, occupancyRate: 95 });
+  assert.ok(result.recommendedRateCents > base.baseRateCents);
+  assert.ok(result.recommendedRateCents <= base.maximumRateCents);
+  assert.ok(result.factors.some((f) => f.code === "occupancy"));
+});
+test("la dernière minute réduit sans franchir le plancher", () => {
+  const result = recommendRate({ ...base, occupancyRate: 20, leadDays: 2 });
+  assert.equal(result.recommendedRateCents, 16000);
+  assert.ok(result.factors.some((f) => f.code === "lead_time"));
+});
+test("les événements et week-ends produisent une recommandation explicable", () => {
+  const result = recommendRate({
+    ...base,
+    occupancyRate: 75,
+    isWeekend: true,
+    eventImpactPercentage: 20,
+    eventName: "Festival",
+  });
+  assert.equal(result.recommendedRateCents, 25000);
+  assert.deepEqual(
+    result.factors.map((f) => f.code),
+    ["weekend", "event"],
+  );
+});
+test("les décisions sont strictement validées", () => {
+  assert.equal(
+    yieldActionSchema.safeParse({
+      action: "decide",
+      recommendationId: "53ef6a99-9a31-4557-bd7b-64de7beb7620",
+      decision: "accepted",
+      note: "Validé",
+    }).success,
+    true,
+  );
+  assert.equal(
+    yieldActionSchema.safeParse({
+      action: "decide",
+      recommendationId: "bad",
+      decision: "published",
+    }).success,
+    false,
+  );
+});
+test("un tarif n’entre dans le devis qu’après acceptation", () => {
+  const repository = readFileSync("platform/yield-management/repository.ts", "utf8");
+  const pricing = readFileSync("platform/database/pricing.ts", "utf8");
+  assert.ok(repository.includes('input.decision==="accepted"'));
+  assert.match(repository, /yield_rate_overrides/);
+  assert.ok(pricing.includes('.eq("status", "active")'));
+});
+test("la migration applique RLS, contraintes et audit", () => {
+  const sql = readFileSync("supabase/migrations/20260729153000_yield_management.sql", "utf8");
+  assert.match(sql, /maximum_rate_cents>=minimum_rate_cents/);
+  assert.match(sql, /enable row level security/g);
+  assert.match(sql, /yield_decision_logs/);
+  assert.match(sql, /yield_overrides_date_idx/);
+});
+test("l’API exige authentification et origine identique", () => {
+  const route = readFileSync("app/api/admin/yield/route.ts", "utf8");
+  assert.match(route, /requireAdmin/);
+  assert.match(route, /requireSameOrigin/);
+  assert.match(route, /yieldActionSchema/);
+});

@@ -8,6 +8,8 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Réintégration du Yield Management déjà présent dans Supabase afin de
+  réconcilier l’historique local et distant avant production.
 - Audit complet de préparation production, score documenté, dette priorisée,
   guide de déploiement et checklist Go Live.
 - Sonde de santé sans cache destinée à la supervision de PostgreSQL.

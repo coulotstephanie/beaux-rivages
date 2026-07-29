@@ -30,6 +30,13 @@ Pendant la migration, `ADMIN_API_TOKEN` reste accepté sauf lorsque
 l’état et la latence base, avec `503` si la configuration manque ou si
 PostgreSQL est inaccessible, sans exposer l’erreur interne.
 
+## Yield Management
+
+`GET /api/admin/yield` expose stratégies, recommandations et décisions au
+personnel authentifié. `POST /api/admin/yield` reste réservé aux administrateurs
+et exige une origine fiable. Une recommandation n’affecte le prix qu’après
+acceptation humaine explicite.
+
 ## Matrice administrative
 
 | Route                               | Lecture              | Mutation             |

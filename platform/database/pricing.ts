@@ -27,31 +27,40 @@ export class SupabasePricingPlanReader {
     if (propertyResult.error)
       throw new Error(`PRICING_PROPERTY_FAILED:${propertyResult.error.code}`);
     const property = propertyResult.data;
-    const [ratesResult, optionsResult, promotionsResult, overridesResult, guardrailsResult] =
-      await Promise.all([
-        client
-          .from("rates")
-          .select("*,seasons(*)")
-          .eq("property_id", property.id)
-          .eq("enabled", true),
-        client
-          .from("property_options")
-          .select("price_cents,enabled,options(code)")
-          .eq("property_id", property.id),
-        client.from("promotions").select("*").eq("property_id", property.id),
-        client
-          .from("rate_overrides")
-          .select("*")
-          .eq("property_id", property.id)
-          .eq("enabled", true),
-        client.from("rate_guardrails").select("*").eq("property_id", property.id).maybeSingle(),
-      ]);
+    const [
+      ratesResult,
+      optionsResult,
+      promotionsResult,
+      overridesResult,
+      yieldOverridesResult,
+      guardrailsResult,
+    ] = await Promise.all([
+      client
+        .from("rates")
+        .select("*,seasons(*)")
+        .eq("property_id", property.id)
+        .eq("enabled", true),
+      client
+        .from("property_options")
+        .select("price_cents,enabled,options(code)")
+        .eq("property_id", property.id),
+      client.from("promotions").select("*").eq("property_id", property.id),
+      client.from("rate_overrides").select("*").eq("property_id", property.id).eq("enabled", true),
+      client
+        .from("yield_rate_overrides")
+        .select("stay_date,nightly_rate_cents,minimum_nights")
+        .eq("property_id", property.id)
+        .eq("status", "active"),
+      client.from("rate_guardrails").select("*").eq("property_id", property.id).maybeSingle(),
+    ]);
     if (ratesResult.error) throw new Error(`PRICING_RATES_FAILED:${ratesResult.error.code}`);
     if (optionsResult.error) throw new Error(`PRICING_OPTIONS_FAILED:${optionsResult.error.code}`);
     if (promotionsResult.error)
       throw new Error(`PRICING_PROMOTIONS_FAILED:${promotionsResult.error.code}`);
     if (overridesResult.error)
       throw new Error(`PRICING_OVERRIDES_FAILED:${overridesResult.error.code}`);
+    if (yieldOverridesResult.error)
+      throw new Error(`PRICING_YIELD_OVERRIDES_FAILED:${yieldOverridesResult.error.code}`);
     if (guardrailsResult.error)
       throw new Error(`PRICING_GUARDRAILS_FAILED:${guardrailsResult.error.code}`);
 
@@ -156,6 +165,11 @@ export class SupabasePricingPlanReader {
       optionPrices,
       seasons,
       promotions,
+      overrides: yieldOverridesResult.data.map((override) => ({
+        date: override.stay_date,
+        nightlyRate: override.nightly_rate_cents / 100,
+        minimumNights: override.minimum_nights ?? undefined,
+      })),
     };
   }
 }

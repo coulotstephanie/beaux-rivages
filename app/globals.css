@@ -2891,6 +2891,19 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .stock-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
 .stock-grid article { padding:1.2rem; border-top:3px solid #77998f; background:#fff; }
 .stock-grid article.low-stock { border-color:#b25d42; background:#fff5f1; }
+.yield-list { display:grid; gap:1rem; }
+.yield-recommendation { padding:1.2rem; display:grid; grid-template-columns:minmax(180px,.8fr) minmax(260px,1.5fr) auto; gap:1rem; align-items:center; border:1px solid #dce2df; background:#fff; }
+.yield-recommendation h3 { margin:.3rem 0; font:400 1.6rem/1 var(--font-serif); }
+.yield-recommendation ul { margin:0; padding:0; list-style:none; }
+.yield-recommendation li { display:grid; margin:.35rem 0; }
+.yield-recommendation li span { color:#667a74; font-size:.8rem; }
+.yield-recommendation > div:last-child { display:flex; gap:.4rem; }
+.yield-recommendation button { min-height:42px; padding:.55rem .75rem; border:1px solid #163832; background:transparent; cursor:pointer; }
+.yield-recommendation button:last-child { color:#fff; background:#163832; }
+.yield-calendar { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.4rem; }
+.yield-calendar article { min-height:105px; padding:.65rem; display:grid; align-content:space-between; border-top:3px solid #aebbb7; background:#fff; }
+.yield-calendar article.increase { border-color:#2d7769; }.yield-calendar article.decrease { border-color:#b58748; }
+.yield-calendar strong { font:400 1.3rem/1 var(--font-serif); }
 .stock-grid input { width:100%; min-height:42px; padding:.5rem; }
 .admin-workspace__bar { padding: .8rem; display: flex; gap: 1rem; justify-content: space-between; align-items: center; background: #163832; }
 .admin-workspace__bar nav { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: thin; }
@@ -3074,6 +3087,8 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .concierge-special h2,.concierge-special .eyebrow,.concierge-special p,.concierge-cart form label:nth-last-of-type(-n+2) { grid-column:auto; }
   .concierge-cart > div { grid-template-columns:1fr 70px; }
   .housekeeping-board,.stock-grid { grid-template-columns:1fr; }
+  .yield-recommendation { grid-template-columns:1fr; }
+  .yield-calendar { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .admin-dashboard > form { align-items: stretch; flex-direction: column; }
   .admin-dashboard__totals { grid-template-columns: 1fr; }
   .admin-dashboard-page > header { align-items: flex-start; flex-direction: column; }

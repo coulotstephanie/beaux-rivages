@@ -9,6 +9,7 @@ import { ChannelManagerAdmin } from "@/components/admin/ChannelManagerAdmin";
 import { HousekeepingAdmin } from "@/components/admin/HousekeepingAdmin";
 import { CarnetCmsAdmin } from "@/components/admin/CarnetCmsAdmin";
 import { StaffAccess } from "@/components/admin/StaffAccess";
+import { YieldManagementAdmin } from "@/components/admin/YieldManagementAdmin";
 
 type View =
   | "dashboard"
@@ -16,6 +17,7 @@ type View =
   | "reservations"
   | "messages"
   | "revenue"
+  | "yield"
   | "channel"
   | "housekeeping"
   | "carnet"
@@ -35,6 +37,7 @@ const views: { id: View; label: string }[] = [
   { id: "reservations", label: "Réservations" },
   { id: "messages", label: "Messages voyageurs" },
   { id: "revenue", label: "Revenue & Marketing" },
+  { id: "yield", label: "Yield Management" },
   { id: "channel", label: "Channel Manager" },
   { id: "housekeeping", label: "Housekeeping" },
   { id: "carnet", label: "Carnet CMS" },
@@ -648,6 +651,7 @@ export function AdminDashboard() {
         <GuestMessagesAdmin token={token} notify={setMessage} reservations={data.reservations} />
       )}
       {view === "revenue" && <RevenueMarketingAdmin token={token} notify={setMessage} />}
+      {view === "yield" && <YieldManagementAdmin token={token} notify={setMessage} />}
       {view === "channel" && (
         <ChannelManagerAdmin token={token} properties={data.properties} notify={setMessage} />
       )}

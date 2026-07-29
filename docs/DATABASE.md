@@ -1,5 +1,13 @@
 # Base de données
 
+## Yield Management
+
+Les tables `yield_strategies`, `demand_events`, `yield_recommendations`,
+`yield_rate_overrides` et `yield_decision_logs` conservent les propositions,
+leurs facteurs et la décision humaine. Elles sont protégées par RLS. La
+migration `20260729153000` est la source locale correspondant au schéma déjà
+appliqué dans Supabase.
+
 ## Source de vérité
 
 Le schéma PostgreSQL est défini exclusivement dans `supabase/migrations/`.
@@ -20,11 +28,11 @@ maintenance, stocks, notifications et journaux d’audit.
 `public.users`. Les permissions sont attribuées séparément dans
 `public.app_user_roles`.
 
-| Rôle | Usage |
-| --- | --- |
-| `admin` | administration complète et opérations sensibles |
-| `concierge` | gestion des séjours et opérations quotidiennes |
-| `read_only` | consultation et exports autorisés |
+| Rôle        | Usage                                           |
+| ----------- | ----------------------------------------------- |
+| `admin`     | administration complète et opérations sensibles |
+| `concierge` | gestion des séjours et opérations quotidiennes  |
+| `read_only` | consultation et exports autorisés               |
 
 La création d’un compte n’accorde aucun rôle implicitement. L’accès reste refusé
 tant qu’une attribution explicite n’a pas été livrée par une migration de

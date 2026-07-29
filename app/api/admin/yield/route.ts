@@ -1,0 +1,50 @@
+import { NextRequest } from "next/server";
+import { isDatabaseConfigured } from "@/platform/database/client";
+import { noStoreJson, rateLimit, requireAdmin, requireSameOrigin } from "@/platform/http/security";
+import { YieldRepository } from "@/platform/yield-management/repository";
+import { yieldActionSchema } from "@/platform/yield-management/schemas";
+export async function GET(r: NextRequest) {
+  const l = rateLimit(r, 15);
+  if (l) return l;
+  if (!requireAdmin(r)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!isDatabaseConfigured())
+    return noStoreJson({ error: "Base non configurée." }, { status: 503 });
+  try {
+    return noStoreJson(await new YieldRepository().snapshot());
+  } catch (e) {
+    return noStoreJson(
+      {
+        error: "Yield Management indisponible.",
+        code: e instanceof Error ? e.message.split(":")[0] : "UNKNOWN",
+      },
+      { status: 500 },
+    );
+  }
+}
+export async function POST(r: NextRequest) {
+  const l = rateLimit(r, 8);
+  if (l) return l;
+  if (!requireSameOrigin(r))
+    return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
+  if (!requireAdmin(r)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  const p = yieldActionSchema.safeParse(await r.json().catch(() => null));
+  if (!p.success)
+    return noStoreJson(
+      { error: "Données invalides.", details: p.error.flatten() },
+      { status: 400 },
+    );
+  try {
+    return noStoreJson(
+      { ok: true, result: await new YieldRepository().execute(p.data) },
+      { status: 201 },
+    );
+  } catch (e) {
+    return noStoreJson(
+      {
+        error: "Action tarifaire impossible.",
+        code: e instanceof Error ? e.message.split(":")[0] : "UNKNOWN",
+      },
+      { status: 500 },
+    );
+  }
+}
