@@ -6,6 +6,19 @@ La production n’a pas été modifiée. Aucun dump complet ni exercice de
 restauration n’a encore abouti. Une seule instance Supabase est visible depuis
 la CLI ; aucun environnement miroir n’existe actuellement.
 
+## Configuration réelle vérifiée
+
+- projet : `ydqtqfkzmovjdkmldhqr` ;
+- état : `ACTIVE_HEALTHY` ;
+- région : `eu-west-1` ;
+- PostgreSQL : `17.6.1.147`, canal GA ;
+- projets visibles : un seul ;
+- plan : **non exposé par la CLI et non vérifiable sans accès au Dashboard**.
+
+Le plan ne sera pas déduit de la date de création ou des fonctions observées.
+Le propriétaire doit joindre une capture expurgée de **Organization > Billing**
+et **Database > Backups**.
+
 ## Comparaison des solutions
 
 | Méthode                      | Couverture                                    | Avantages                                           | Limites                                                                             | Décision                    |
@@ -127,3 +140,6 @@ requiert une validation explicite. La voie CLI locale reste bloquée par
 l’absence de Docker/`pg_dump` et de mot de passe DB.
 
 Le P0 Backup & Restore reste donc ouvert.
+
+La procédure réutilisable est publiée dans
+[BackupRestoreSOP.md](./BackupRestoreSOP.md).

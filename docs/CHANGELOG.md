@@ -12,6 +12,8 @@ conventionnels du projet.
   Go/No-Go, accompagnés d’un contrôle automatisé des paires up/down.
 - Rapport Backup Readiness comparant les sauvegardes gérées Supabase, CLI,
   PostgreSQL natif et Docker, avec procédure miroir sans écriture en production.
+- Procédure d’exploitation Backup & Restore réutilisable avant chaque migration,
+  avec contrôles d’intégrité, recette miroir et critères Go/No-Go.
 - Réintégration du Yield Management déjà présent dans Supabase afin de
   réconcilier l’historique local et distant avant production.
 - Audit complet de préparation production, score documenté, dette priorisée,
