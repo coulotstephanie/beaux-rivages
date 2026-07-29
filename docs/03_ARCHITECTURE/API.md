@@ -3,6 +3,14 @@
 Source canonique : [API.md](../API.md). Les contrats spécialisés restent
 référencés depuis cette source.
 
+## Revenue Management
+
+- `GET /api/rates` — calendrier annuel calculé par logement et année.
+- `PUT /api/rates` — création validée d’une période, réservée aux
+  administrateurs et protégée par contrôle d’origine.
+- `GET /api/admin/revenue-management` — revenu, nuits, occupation, ADR et
+  RevPAR annuels par logement, réservé au personnel autorisé.
+
 ## Carnet CMS
 
 - `GET /api/admin/carnet` — liste éditoriale complète, personnel authentifié.

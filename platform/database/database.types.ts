@@ -2601,6 +2601,101 @@ export type Database = {
           },
         ]
       }
+      rate_guardrails: {
+        Row: {
+          maximum_rate_cents: number
+          minimum_rate_cents: number
+          occupancy_pricing_enabled: boolean
+          property_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          maximum_rate_cents: number
+          minimum_rate_cents: number
+          occupancy_pricing_enabled?: boolean
+          property_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          maximum_rate_cents?: number
+          minimum_rate_cents?: number
+          occupancy_pricing_enabled?: boolean
+          property_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_guardrails_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rate_overrides: {
+        Row: {
+          begins_on: string
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          ends_on: string
+          id: string
+          kind: string
+          minimum_nights: number | null
+          name: string
+          nightly_rate_cents: number
+          priority: number
+          property_id: string
+          source: string
+          stay_range: unknown
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          begins_on: string
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          ends_on: string
+          id?: string
+          kind: string
+          minimum_nights?: number | null
+          name: string
+          nightly_rate_cents: number
+          priority?: number
+          property_id: string
+          source?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          begins_on?: string
+          enabled?: boolean
+          ends_on?: string
+          kind?: string
+          minimum_nights?: number | null
+          name?: string
+          nightly_rate_cents?: number
+          priority?: number
+          property_id?: string
+          source?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_overrides_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referrals: {
         Row: {
           created_at: string

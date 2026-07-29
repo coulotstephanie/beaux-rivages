@@ -8,6 +8,9 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Revenue Management : périodes tarifaires persistantes, garde-fous
+  minimum/maximum, calendrier visuel et prise en charge des événements locaux.
+- Indicateurs annuels par maison : revenu, occupation, ADR et RevPAR.
 - CMS éditorial versionné du Carnet Beaux Rivages : rubriques, médias,
   coordonnées, horaires, recommandations, mises en avant et métadonnées SEO.
 - Recherche publique avec filtres combinables par texte, rubrique, destination
