@@ -22,6 +22,16 @@
 | 18     | Mobile                | Carnet, notifications et opérations hors ligne  |
 | 19     | Multi-tenant          | Isolation des organisations et des marques      |
 | 20     | Marketplace           | Partenaires et expériences locales              |
+| 21     | Sécurité              | Conformité, secrets, MFA et anti-abus           |
+| 22     | Observabilité         | Logs, métriques, alertes et reprise             |
+| 23     | API publique          | Contrats versionnés et webhooks signés          |
+| 24     | Automatisation        | Orchestrations idempotentes et rejouables       |
+| 25     | Avis                  | Réputation, satisfaction et actions correctives |
+| 26     | Conversion directe    | Parcours performant et accessible               |
+| 27     | Internationalisation  | Langues, devises et territoires                 |
+| 28     | SaaS                  | Onboarding autonome et abonnements              |
+| 29     | Support               | Centre d’aide et Academy                        |
+| 30     | Release Candidate     | Validation et déploiement de la V1.0            |
 
 Chaque sprint dépend de la validation du précédent lorsqu’il consomme ses
 contrats. Aucun paiement n’est développé dans le Sprint 02.
