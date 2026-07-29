@@ -5,14 +5,16 @@ import type { BackOfficeReservation, BackOfficeSnapshot } from "@/platform/admin
 import { GuestMessagesAdmin } from "@/components/admin/GuestMessagesAdmin";
 import { RevenueMarketingAdmin } from "@/components/admin/RevenueMarketingAdmin";
 import { PremiumOperations } from "@/components/admin/PremiumOperations";
+import { ChannelManagerAdmin } from "@/components/admin/ChannelManagerAdmin";
 
-type View = "dashboard" | "calendrier" | "reservations" | "messages" | "revenue" | "voyageurs" | "logements" | "documents" | "paiements" | "conciergerie" | "menage" | "maintenance" | "statistiques" | "pilotage" | "parametres";
+type View = "dashboard" | "calendrier" | "reservations" | "messages" | "revenue" | "channel" | "voyageurs" | "logements" | "documents" | "paiements" | "conciergerie" | "menage" | "maintenance" | "statistiques" | "pilotage" | "parametres";
 const views: { id: View; label: string }[] = [
   { id: "dashboard", label: "Aujourd’hui" },
   { id: "calendrier", label: "Calendrier" },
   { id: "reservations", label: "Réservations" },
   { id: "messages", label: "Messages voyageurs" },
   { id: "revenue", label: "Revenue & Marketing" },
+  { id: "channel", label: "Channel Manager" },
   { id: "voyageurs", label: "Voyageurs" },
   { id: "logements", label: "Logements" },
   { id: "documents", label: "Documents" },
@@ -224,6 +226,7 @@ export function AdminDashboard() {
 
     {view === "messages" && <GuestMessagesAdmin token={token} notify={setMessage} reservations={data.reservations} />}
     {view === "revenue" && <RevenueMarketingAdmin token={token} notify={setMessage} />}
+    {view === "channel" && <ChannelManagerAdmin token={token} properties={data.properties} notify={setMessage} />}
     {(view === "calendrier" || view === "paiements" || view === "conciergerie" || view === "menage" || view === "maintenance" || view === "parametres") && <PremiumOperations data={data} view={view} busy={busy} onSubmit={operate} />}
 
     {view === "voyageurs" && <section className="admin-panel">

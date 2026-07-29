@@ -278,6 +278,306 @@ export type Database = {
           },
         ]
       }
+      channel_audit_logs: {
+        Row: {
+          action: string
+          actor: string
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          job_id: string | null
+          provider: string | null
+          reversible: boolean
+        }
+        Insert: {
+          action: string
+          actor?: string
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          job_id?: string | null
+          provider?: string | null
+          reversible?: boolean
+        }
+        Update: {
+          action?: string
+          actor?: string
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          job_id?: string | null
+          provider?: string | null
+          reversible?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_audit_logs_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "channel_sync_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_conflicts: {
+        Row: {
+          conflict_type: string
+          created_at: string
+          details: Json
+          external_reference: string | null
+          id: string
+          property_id: string
+          proposed_resolution: string | null
+          provider: string
+          reservation_id: string | null
+          resolution: string | null
+          resolved_at: string | null
+          severity: string
+          status: string
+          stay_range: unknown
+          updated_at: string
+        }
+        Insert: {
+          conflict_type: string
+          created_at?: string
+          details?: Json
+          external_reference?: string | null
+          id?: string
+          property_id: string
+          proposed_resolution?: string | null
+          provider: string
+          reservation_id?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          stay_range: unknown
+          updated_at?: string
+        }
+        Update: {
+          conflict_type?: string
+          created_at?: string
+          details?: Json
+          external_reference?: string | null
+          id?: string
+          property_id?: string
+          proposed_resolution?: string | null
+          provider?: string
+          reservation_id?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          stay_range?: unknown
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_conflicts_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channel_conflicts_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_connections: {
+        Row: {
+          capabilities: string[]
+          created_at: string
+          credentials_reference: string | null
+          id: string
+          last_checked_at: string | null
+          last_error: string | null
+          mode: string
+          name: string
+          provider: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          capabilities?: string[]
+          created_at?: string
+          credentials_reference?: string | null
+          id?: string
+          last_checked_at?: string | null
+          last_error?: string | null
+          mode?: string
+          name: string
+          provider: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          capabilities?: string[]
+          created_at?: string
+          credentials_reference?: string | null
+          id?: string
+          last_checked_at?: string | null
+          last_error?: string | null
+          mode?: string
+          name?: string
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      channel_listing_mappings: {
+        Row: {
+          connection_id: string
+          created_at: string
+          external_listing_id: string
+          external_listing_name: string | null
+          id: string
+          property_id: string
+          settings: Json
+          status: string
+          sync_availability: boolean
+          sync_prices: boolean
+          sync_reservations: boolean
+          updated_at: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          external_listing_id: string
+          external_listing_name?: string | null
+          id?: string
+          property_id: string
+          settings?: Json
+          status?: string
+          sync_availability?: boolean
+          sync_prices?: boolean
+          sync_reservations?: boolean
+          updated_at?: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          external_listing_id?: string
+          external_listing_name?: string | null
+          id?: string
+          property_id?: string
+          settings?: Json
+          status?: string
+          sync_availability?: boolean
+          sync_prices?: boolean
+          sync_reservations?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_listing_mappings_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "channel_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channel_listing_mappings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_sync_jobs: {
+        Row: {
+          attempt: number
+          connection_id: string | null
+          created_at: string
+          direction: string
+          error_code: string | null
+          error_message: string | null
+          finished_at: string | null
+          id: string
+          idempotency_key: string
+          mapping_id: string | null
+          payload: Json
+          resource: string
+          result: Json
+          rollback_of: string | null
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          attempt?: number
+          connection_id?: string | null
+          created_at?: string
+          direction: string
+          error_code?: string | null
+          error_message?: string | null
+          finished_at?: string | null
+          id?: string
+          idempotency_key: string
+          mapping_id?: string | null
+          payload?: Json
+          resource: string
+          result?: Json
+          rollback_of?: string | null
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempt?: number
+          connection_id?: string | null
+          created_at?: string
+          direction?: string
+          error_code?: string | null
+          error_message?: string | null
+          finished_at?: string | null
+          id?: string
+          idempotency_key?: string
+          mapping_id?: string | null
+          payload?: Json
+          resource?: string
+          result?: Json
+          rollback_of?: string | null
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_sync_jobs_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "channel_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channel_sync_jobs_mapping_id_fkey"
+            columns: ["mapping_id"]
+            isOneToOne: false
+            referencedRelation: "channel_listing_mappings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channel_sync_jobs_rollback_of_fkey"
+            columns: ["rollback_of"]
+            isOneToOne: false
+            referencedRelation: "channel_sync_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       concierge_requests: {
         Row: {
           created_at: string

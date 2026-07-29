@@ -2834,6 +2834,10 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-workspace--dark .admin-panel,.admin-workspace--dark .admin-live-status { color:#e8eeeb; background:#132723; }
 .admin-workspace--dark .admin-card,.admin-workspace--dark .admin-kpis article,.admin-workspace--dark .admin-health-grid article,.admin-workspace--dark .admin-property-grid article,.admin-workspace--dark .admin-calendar-board > article { color:#e8eeeb; border-color:#36504a; background:#1d3732; }
 .admin-workspace--dark .admin-card span,.admin-workspace--dark .admin-panel p,.admin-workspace--dark small { color:#afc1bc; }
+.channel-mapping { display:grid; gap:.45rem; margin-top:1rem; padding-top:1rem; border-top:1px solid #dde2df; }
+.channel-mapping input { min-height:40px; padding:.5rem; border:1px solid #c9d0cc; }
+.channel-mapping label { display:flex; gap:.45rem; align-items:center; font-size:.82rem; }
+.channel-mapping label input { min-height:auto; }
 .admin-workspace__bar { padding: .8rem; display: flex; gap: 1rem; justify-content: space-between; align-items: center; background: #163832; }
 .admin-workspace__bar nav { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: thin; }
 .admin-workspace__bar nav button { min-height: 44px; padding: .6rem .85rem; flex: 0 0 auto; border: 0; border-radius: 2px; color: #dfe9e5; background: transparent; cursor: pointer; }
