@@ -83,7 +83,6 @@ const airbnbTerrace = [
   propertyAsset("airbnb-arriere-cour-5.jpeg", "Table pour six sous la voile d’ombrage", "Déjeuner à l’ombre"),
 ];
 const airbnbDetails = [
-  propertyAsset("airbnb-buanderie-1-1.jpeg", "Rangements et équipements pratiques du Nid d’Été", "Voyager léger"),
   propertyAsset("airbnb-buanderie-2-1.jpeg", "Buanderie avec lave-linge", "Le confort des longs séjours"),
   propertyAsset("airbnb-exterieur-3-1.jpeg", "Plan de la résidence La Maison Heureuse", "Se repérer dans la résidence"),
   propertyAsset("airbnb-exterieur-4-1.jpeg", "Environnement extérieur du Nid d’Été", "Entre résidence et plage"),
@@ -121,8 +120,7 @@ export const nidDEteMedia = {
     editorialTerraceLunch,
     ...airbnbTerrace,
     airbnbDetails[0],
-    airbnbDetails[1],
-    airbnbDetails[4],
+    airbnbDetails[3],
     access,
     beachView,
     ocean,
