@@ -34,7 +34,11 @@ test("all public routes have a page and centralized SEO configuration", () => {
   for (const route of routes) {
     const page = route === "/" ? "app/page.tsx" : `app${route}/page.tsx`;
     assert.ok(existsSync(join(root, page)), `Missing page for ${route}`);
-    assert.match(seoConfig, new RegExp(`"${route === "/" ? "\\/" : route}"\\s*:`), `Missing SEO config for ${route}`);
+    assert.match(
+      seoConfig,
+      new RegExp(`"${route === "/" ? "\\/" : route}"\\s*:`),
+      `Missing SEO config for ${route}`,
+    );
   }
 });
 
@@ -43,7 +47,10 @@ test("property routes use the central property SEO and media manifests", () => {
     const page = read(`app/maisons/${slug}/page.tsx`);
     const manifest = read(`media/properties/${slug}.ts`);
     assert.match(page, /createPropertySeo\(property\)/);
-    assert.doesNotMatch(manifest, new RegExp(`/properties/(?!${slug.replaceAll("-", "\\-")})[^/]+/`));
+    assert.doesNotMatch(
+      manifest,
+      new RegExp(`/properties/(?!${slug.replaceAll("-", "\\-")})[^/]+/`),
+    );
   }
 });
 
@@ -72,7 +79,10 @@ test("the Chai ocean pause uses a sharp destination visual", () => {
 
 test("the Chai gallery follows the guest journey through the house", () => {
   const manifest = read("media/properties/chai-des-tortues.ts");
-  const gallery = manifest.slice(manifest.indexOf("const propertyGallery"), manifest.indexOf("export const chaiDesTortuesMedia"));
+  const gallery = manifest.slice(
+    manifest.indexOf("const propertyGallery"),
+    manifest.indexOf("export const chaiDesTortuesMedia"),
+  );
   const sections = [
     "// Ouverture et arrivée",
     "// Pièce de vie",
@@ -125,9 +135,17 @@ test("the homepage video remains manually playable when autoplay is unavailable"
 test("every property manifest exclusively references its own media directory", () => {
   for (const slug of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
     const manifest = read(`media/properties/${slug}.ts`);
-    const propertyPaths = [...manifest.matchAll(/\/images\/properties\/([^/]+)\//g)].map((match) => match[1]);
-    assert.ok(propertyPaths.every((owner) => owner === slug), `${slug} contains a foreign property media path`);
-    assert.match(manifest, new RegExp(`owner:\\s*"${slug}"|owner:\\s*slug|owner:\\s*["']${slug}["']`));
+    const propertyPaths = [...manifest.matchAll(/\/images\/properties\/([^/]+)\//g)].map(
+      (match) => match[1],
+    );
+    assert.ok(
+      propertyPaths.every((owner) => owner === slug),
+      `${slug} contains a foreign property media path`,
+    );
+    assert.match(
+      manifest,
+      new RegExp(`owner:\\s*"${slug}"|owner:\\s*slug|owner:\\s*["']${slug}["']`),
+    );
   }
   const propertyPage = read("components/PropertyPage.tsx");
   assert.match(propertyPage, /Media owned by another property/);
@@ -144,8 +162,9 @@ test("every media filename declared by a manifest exists in public", () => {
 
   for (const [manifestPath, mediaDirectory] of manifests) {
     const source = read(manifestPath);
-    const filenames = [...source.matchAll(/["'`]([^"'`/]+\.(?:avif|webp|jpe?g|png|mp4))["'`]/gi)]
-      .map((match) => match[1]);
+    const filenames = [
+      ...source.matchAll(/["'`]([^"'`/]+\.(?:avif|webp|jpe?g|png|mp4))["'`]/gi),
+    ].map((match) => match[1]);
     for (const filename of filenames) {
       assert.ok(
         existsSync(join(root, mediaDirectory, filename)),
@@ -181,7 +200,10 @@ test("all repository media are represented by the centralized media layer", () =
 
 test("the canonical origin remains absolute and unique", () => {
   const seo = read("seo.ts");
-  assert.equal((seo.match(/export const SITE_URL = "https:\/\/www\.beaux-rivages\.com"/g) ?? []).length, 1);
+  assert.equal(
+    (seo.match(/export const SITE_URL = "https:\/\/www\.beaux-rivages\.com"/g) ?? []).length,
+    1,
+  );
   assert.match(seo, /alternates: \{ canonical \}/);
 });
 
@@ -189,8 +211,14 @@ test("the Carnet exposes premium guides, interactive maps and ideal days", () =>
   const data = read("carnetPremiumData.ts");
   const page = read("app/carnet/page.tsx");
   const categories = [
-    "restaurants", "plages", "producteurs", "fort-boyard",
-    "marches", "velo", "parkings", "bornes-electriques",
+    "restaurants",
+    "plages",
+    "producteurs",
+    "fort-boyard",
+    "marches",
+    "velo",
+    "parkings",
+    "bornes-electriques",
   ];
   for (const category of categories) {
     assert.match(data, new RegExp(`id: "${category}"`), `Missing Carnet category ${category}`);
@@ -205,9 +233,18 @@ test("the premium experience collection includes all requested experiences", () 
   const data = read("experiences.ts");
   const page = read("app/experiences/page.tsx");
   const slugs = [
-    "pack-signature", "romance", "anniversaire", "demande-en-mariage",
-    "plateau-fruits-de-mer", "atelier-macarons", "lever-de-soleil",
-    "coucher-de-soleil", "peche-a-pied", "balade-velo", "bien-etre", "famille",
+    "pack-signature",
+    "romance",
+    "anniversaire",
+    "demande-en-mariage",
+    "plateau-fruits-de-mer",
+    "atelier-macarons",
+    "lever-de-soleil",
+    "coucher-de-soleil",
+    "peche-a-pied",
+    "balade-velo",
+    "bien-etre",
+    "famille",
   ];
   for (const slug of slugs) {
     assert.match(data, new RegExp(`slug: "${slug}"`), `Missing experience ${slug}`);
@@ -219,19 +256,31 @@ test("the premium experience collection includes all requested experiences", () 
 test("every Carnet link to an experience anchor targets an existing experience", () => {
   const carnet = read("carnetData.ts");
   const experienceData = read("experiences.ts");
-  const linkedSlugs = [...carnet.matchAll(/href:\s*"\/experiences#([^"]+)"/g)].map((match) => match[1]);
+  const linkedSlugs = [...carnet.matchAll(/href:\s*"\/experiences#([^"]+)"/g)].map(
+    (match) => match[1],
+  );
   for (const slug of linkedSlugs) {
-    assert.match(experienceData, new RegExp(`slug: "${slug}"`), `Broken Carnet experience anchor ${slug}`);
+    assert.match(
+      experienceData,
+      new RegExp(`slug: "${slug}"`),
+      `Broken Carnet experience anchor ${slug}`,
+    );
   }
 });
 
 test("the sitemap includes every centralized static route", () => {
   const sitemap = read("app/sitemap.ts");
-  for (const route of routes.filter((route) => route !== "/" && !redirectedRoutes.includes(route))) {
+  for (const route of routes.filter(
+    (route) => route !== "/" && !redirectedRoutes.includes(route),
+  )) {
     assert.match(sitemap, new RegExp(`"${route}"`), `Sitemap missing ${route}`);
   }
   for (const route of redirectedRoutes) {
-    assert.doesNotMatch(sitemap, new RegExp(`"${route}"`), `Redirected route should not be indexed: ${route}`);
+    assert.doesNotMatch(
+      sitemap,
+      new RegExp(`"${route}"`),
+      `Redirected route should not be indexed: ${route}`,
+    );
   }
 });
 
@@ -268,8 +317,18 @@ test("Stripe TEST verifies signatures and handles the complete payment lifecycle
   assert.match(adapter, /payment_intent_data/);
   assert.match(checkout, /payableReservation/);
   assert.match(checkout, /amountDue/);
-  for (const event of ["checkout.session.completed", "checkout.session.expired", "payment_intent.succeeded", "payment_intent.payment_failed", "charge.refunded"]) {
-    assert.match(webhook, new RegExp(event.replaceAll(".", "\\.")), `Missing Stripe event ${event}`);
+  for (const event of [
+    "checkout.session.completed",
+    "checkout.session.expired",
+    "payment_intent.succeeded",
+    "payment_intent.payment_failed",
+    "charge.refunded",
+  ]) {
+    assert.match(
+      webhook,
+      new RegExp(event.replaceAll(".", "\\.")),
+      `Missing Stripe event ${event}`,
+    );
   }
   assert.match(webhook, /claimEvent/);
   assert.match(refund, /authorizeStaff/);
@@ -292,7 +351,11 @@ test("deployment configuration never commits local secrets", () => {
   assert.match(ignored, /^\.env$/m);
   assert.match(ignored, /^\.env\.local$/m);
   for (const secretKey of ["AUTH_SECRET", "DATABASE_URL", "PAYMENT_PROVIDER_SECRET"]) {
-    assert.match(example, new RegExp(`^${secretKey}=$`, "m"), `${secretKey} must stay empty in .env.example`);
+    assert.match(
+      example,
+      new RegExp(`^${secretKey}=$`, "m"),
+      `${secretKey} must stay empty in .env.example`,
+    );
   }
   assert.match(workflow, /npm ci/);
   assert.match(workflow, /npm run validate/);
@@ -362,7 +425,14 @@ test("pricing plans configure every house without platform scraping", () => {
   assert.equal(configuration.plans.length, 3);
   for (const plan of configuration.plans) {
     expected.delete(plan.propertySlug);
-    for (const key of ["baseNightlyRate", "weekendNightlyRate", "minimumNights", "maximumNights", "cleaningFee", "securityDeposit"]) {
+    for (const key of [
+      "baseNightlyRate",
+      "weekendNightlyRate",
+      "minimumNights",
+      "maximumNights",
+      "cleaningFee",
+      "securityDeposit",
+    ]) {
       assert.equal(typeof plan[key], "number", `${plan.propertySlug}.${key} should be numeric`);
       assert.ok(plan[key] >= 0, `${plan.propertySlug}.${key} should be positive`);
     }
@@ -378,7 +448,16 @@ test("pricing plans configure every house without platform scraping", () => {
 test("pricing engine supports daily rates, stay rules, fees and promotions", () => {
   const contracts = read("platform/pricing/contracts.ts");
   const service = read("platform/pricing/service.ts");
-  for (const capability of ["baseNightlyRate", "weekendNightlyRate", "minimumNights", "maximumNights", "cleaningFee", "securityDeposit", "touristTax", "optionPrices"]) {
+  for (const capability of [
+    "baseNightlyRate",
+    "weekendNightlyRate",
+    "minimumNights",
+    "maximumNights",
+    "cleaningFee",
+    "securityDeposit",
+    "touristTax",
+    "optionPrices",
+  ]) {
     assert.match(contracts, new RegExp(capability));
   }
   for (const promotion of ["long-stay", "last-minute", "early-booking", "code", "seasonal"]) {
@@ -390,13 +469,24 @@ test("pricing engine supports daily rates, stay rules, fees and promotions", () 
 });
 
 test("availability and pricing APIs are documented and protected", () => {
-  for (const route of ["calendar", "availability", "reservation", "pricing", "options", "ical", "rates", "promotions", "quote"]) {
+  for (const route of [
+    "calendar",
+    "availability",
+    "reservation",
+    "pricing",
+    "options",
+    "ical",
+    "rates",
+    "promotions",
+    "quote",
+  ]) {
     assert.ok(existsSync(join(root, "app", "api", route, "route.ts")), `missing /api/${route}`);
   }
   const security = read("platform/http/security.ts");
   assert.match(security, /rateLimit/);
   assert.match(read("platform/auth/server.ts"), /authorizeStaff/);
   assert.match(read("docs/PRICING_AND_AVAILABILITY_API.md"), /Aucun\s+scraping/);
-  assert.match(read("components/AvailabilityCalendar.tsx"), /api\/calendar/);
+  assert.match(read("components/AvailabilityCalendar.tsx"), /features\/reservations\/components/);
+  assert.match(read("features/reservations/hooks/use-availability-calendar.ts"), /api\/calendar/);
   assert.match(read("components/PriceSummary.tsx"), /api\/pricing/);
 });

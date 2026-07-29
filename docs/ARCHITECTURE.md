@@ -24,6 +24,11 @@
 `features/` dans une PR atomique, en conservant temporairement ses exports
 publics pour protéger les fonctionnalités existantes.
 
+`features/reservations` constitue la première migration verticale : la feature
+orchestre les calendriers et la tarification historiques derrière des
+repositories injectables. L’ancien import du calendrier reste un export de
+compatibilité pendant la convergence.
+
 ## Frontières
 
 Les pages publiques peuvent lire les snapshots officiels. Elles ne doivent jamais

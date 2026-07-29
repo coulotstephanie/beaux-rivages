@@ -8,6 +8,10 @@ conventionnels du projet.
 
 ### Ajouté
 
+- Moteur de recherche de réservation Feature First : disponibilité, sélection
+  des dates, tarification saisonnière et validation centralisée.
+- Repositories injectables, hook de calendrier et tests des chevauchements,
+  dates et identifiants de séjour.
 - Fondations du Sprint 1 : architecture Feature First progressive, Design
   System étendu, layouts, providers et états transverses.
 - Outillage qualité avec Prettier, EditorConfig, Husky, lint-staged,
