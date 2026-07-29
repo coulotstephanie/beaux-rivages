@@ -32,6 +32,16 @@
 | 28     | SaaS                  | Onboarding autonome et abonnements              |
 | 29     | Support               | Centre d’aide et Academy                        |
 | 30     | Release Candidate     | Validation et déploiement de la V1.0            |
+| 31     | Performance           | Capacité, cache et budgets de performance       |
+| 32     | Accessibilité         | Conformité WCAG AA de bout en bout              |
+| 33     | Contenus              | Gouvernance éditoriale et médiathèque           |
+| 34     | Data Platform         | Modèles analytiques et qualité des données      |
+| 35     | Prévisions            | Revenus, occupation et charge opérationnelle    |
+| 36     | Automatisations       | Workflows configurables et sécurisés            |
+| 37     | Écosystème            | SDK, extensions et intégrations partenaires     |
+| 38     | Entreprise            | Administration multi-marques avancée            |
+| 39     | Résilience            | Continuité et fonctionnement dégradé            |
+| 40     | General Availability  | Ouverture SaaS progressive                      |
 
 Chaque sprint dépend de la validation du précédent lorsqu’il consomme ses
 contrats. Aucun paiement n’est développé dans le Sprint 02.
