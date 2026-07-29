@@ -45,6 +45,9 @@ conventionnels du projet.
 - Ajout du portail public du manuel d’exploitation, de la politique de
   classification et d’un garde-fou empêchant la publication accidentelle de la
   documentation opérationnelle confidentielle.
+- Création du Beaux Rivages Hospitality Playbook : standards d’accueil,
+  moments de service, communication, résolution, rituels, transmission et
+  registre des pratiques restant à valider par Stéphanie & Bruno.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
