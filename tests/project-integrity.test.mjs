@@ -56,14 +56,24 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   assert.match(propertiesPage, /image=\{property\.hero\}/);
 });
 
-test("the ambient player uses the credited public-domain classical recording", () => {
+test("the ambient player uses the credited public-domain Vivaldi recording", () => {
   const component = read("components/AmbientSound.tsx");
   const credits = read("public/audio/README.md");
-  assert.match(component, /bach-air-on-the-g-string\.ogg/);
+  assert.match(component, /vivaldi-spring-largo\.ogg/);
+  assert.match(component, /Vivaldi · Le Printemps/);
   assert.match(component, /preload="none"/);
   assert.match(component, /Musique classique/);
   assert.match(credits, /domaine public/i);
-  assert.ok(existsSync(join(root, "public/audio/bach-air-on-the-g-string.ogg")));
+  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.ogg")));
+});
+
+test("the homepage video remains manually playable when autoplay is unavailable", () => {
+  const component = read("components/media/HeroVideo.tsx");
+  const styles = read("app/globals.css");
+  assert.match(component, /className="hero-video__control"/);
+  assert.match(component, /Lire la vidéo d’accueil/);
+  assert.match(component, /<motion\.video[\s\S]*autoPlay=\{canAutoplay\}/);
+  assert.doesNotMatch(styles, /\.hero-video video\{display:none\}/);
 });
 
 test("every property manifest exclusively references its own media directory", () => {

@@ -7,7 +7,7 @@ type SoundMode = "off" | "waves" | "music";
 const labels: Record<SoundMode, string> = {
   off: "Ambiance sonore",
   waves: "Vagues",
-  music: "Bach · Air",
+  music: "Vivaldi · Le Printemps",
 };
 
 export function AmbientSound() {
@@ -117,7 +117,7 @@ export function AmbientSound() {
     <aside className="ambient-sound" aria-label="Ambiance sonore">
       <audio
         ref={musicRef}
-        src="/audio/bach-air-on-the-g-string.ogg"
+        src="/audio/vivaldi-spring-largo.ogg"
         preload="none"
         loop
       />
@@ -137,7 +137,7 @@ export function AmbientSound() {
           className={mode === "music" ? "is-active" : ""}
           onClick={() => void choose(mode === "music" ? "off" : "music")}
           aria-pressed={mode === "music"}
-          title="Jean-Sébastien Bach, Air sur la corde de sol · Enregistrement du domaine public"
+          title="Antonio Vivaldi, Le Printemps — II. Largo · Modena Chamber Orchestra · Domaine public"
         >
           Musique classique
         </button>
