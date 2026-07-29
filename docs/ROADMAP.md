@@ -5,7 +5,15 @@ La roadmap produit officielle est définie dans
 `ROADMAP_TRACEABILITY.md`. Le présent document décrit les tranches techniques
 immédiates.
 
-## Sprint en cours — Auth Foundation
+## Sprint terminé — Revenue Management
+
+- [x] consolider le moteur tarifaire existant ;
+- [x] rendre les périodes tarifaires persistantes et auditables ;
+- [x] ajouter les garde-fous minimum et maximum ;
+- [x] afficher occupation, ADR, RevPAR et revenu par logement ;
+- [x] préparer sans l’activer la tarification selon l’occupation.
+
+## Socle d’authentification à finaliser en production
 
 - [x] choisir Supabase Auth comme identité du personnel ;
 - [x] centraliser la vérification serveur des sessions et rôles ;
@@ -18,7 +26,7 @@ immédiates.
 
 ## Prochaines tranches
 
-0. Réaliser un sprint d’optimisation transversal : performances, UX, WCAG,
+0. Réaliser le prochain sprint d’optimisation transversal : performances, UX, WCAG,
    SEO avancé, OWASP, qualité des tests et nettoyage ciblé.
 
 1. Ajouter Playwright, les tests UI, responsive et la couverture.
