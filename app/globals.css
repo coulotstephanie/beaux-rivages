@@ -2886,6 +2886,19 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-export-stack { display: grid; gap: .6rem; }
 .admin-payment-actions { display: flex; align-items: center; gap: .5rem; }
 .admin-payment-actions button { min-height: 38px; padding: .4rem .65rem; border: 1px solid #8b372d; color: #8b372d; background: transparent; cursor: pointer; }
+.guest-message-controls { margin-bottom: 1rem; padding: 1.2rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; background: white; }
+.guest-message-controls label,.guest-message-override { display: grid; gap: .4rem; color: #5d716c; font-size: .8rem; }
+.guest-message-controls select,.guest-message-controls input,.guest-message-override textarea { min-height: 44px; padding: .65rem; border: 1px solid #ccd3d0; background: white; font: inherit; }
+.guest-message-actions { margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.guest-message-actions button { min-height: 42px; padding: .65rem .8rem; border: 1px solid #173b3b; color: #173b3b; background: white; cursor: pointer; }
+.guest-message-actions button:first-child { color: white; background: #173b3b; }
+.guest-message-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.guest-message-override { margin: 1rem 0; }
+.guest-message-preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.guest-message-preview-grid article { min-width: 0; padding: 1rem; background: white; }
+.guest-message-preview-grid h3 { margin-top: 0; font: 400 1.5rem var(--font-serif); }
+.guest-message-preview-grid iframe { width: 100%; height: 720px; border: 1px solid #dce1df; }
+.guest-message-preview-grid pre { height: 720px; margin: 0; padding: 1rem; overflow: auto; white-space: pre-wrap; color: #263b38; background: #f4f0e7; font: 13px/1.6 ui-monospace,monospace; }
 .stay-portal__payments { margin-top: 1rem; padding-top: 1rem; display: grid; gap: .6rem; border-top: 1px solid var(--line); }
 .stay-portal__payments p { margin: 0; color: var(--muted); font-size: .8rem; }
 .stay-portal__payments button { min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--deep); color: white; background: var(--deep); cursor: pointer; }
@@ -2924,6 +2937,8 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .admin-health-grid,.admin-calendar-strip { grid-template-columns: repeat(2,1fr); }
   .admin-guest-grid,.admin-property-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .admin-form-grid { grid-template-columns: repeat(2,1fr); }
+  .guest-message-controls { grid-template-columns: 1fr; }
+  .guest-message-preview-grid { grid-template-columns: 1fr; }
   .admin-login { grid-template-columns: 1fr; align-items: stretch; }
   .stephanie-letter { grid-template-columns: 1fr; }
   .stay-personal-guide > div { grid-template-columns: 1fr 1fr; }

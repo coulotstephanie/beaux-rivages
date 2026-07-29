@@ -2,11 +2,13 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { BackOfficeReservation, BackOfficeSnapshot } from "@/platform/admin/contracts";
+import { GuestMessagesAdmin } from "@/components/admin/GuestMessagesAdmin";
 
-type View = "dashboard" | "reservations" | "voyageurs" | "logements" | "documents" | "statistiques" | "pilotage";
+type View = "dashboard" | "reservations" | "messages" | "voyageurs" | "logements" | "documents" | "statistiques" | "pilotage";
 const views: { id: View; label: string }[] = [
   { id: "dashboard", label: "Aujourd’hui" },
   { id: "reservations", label: "Réservations" },
+  { id: "messages", label: "Messages voyageurs" },
   { id: "voyageurs", label: "Voyageurs" },
   { id: "logements", label: "Logements" },
   { id: "documents", label: "Documents" },
@@ -184,6 +186,8 @@ export function AdminDashboard() {
         <div className="admin-table-wrap"><table><thead><tr><th>Voyageur</th><th>Séjour</th><th>Logement</th><th>Origine</th><th>Statut</th><th>Total</th><th>Action</th></tr></thead><tbody>{filteredReservations.map((reservation) => <tr key={reservation.id}><td><strong>{reservation.guestName}</strong><small>{reservation.reference}</small></td><td>{shortDate(reservation.arrival)} → {shortDate(reservation.departure)}<small>{nights(reservation)} nuit(s)</small></td><td>{reservation.propertyName}</td><td>{reservation.channel}</td><td><Status value={reservation.status} /></td><td>{money(reservation.totalCents)}</td><td><ReservationActions reservation={reservation} busy={busy} onSubmit={operate} /></td></tr>)}</tbody></table></div>
       </>}
     </section>}
+
+    {view === "messages" && <GuestMessagesAdmin token={token} notify={setMessage} reservations={data.reservations} />}
 
     {view === "voyageurs" && <section className="admin-panel">
       <div className="admin-panel__heading"><div><p className="eyebrow">Relation voyageurs</p><h2>Historique et fidélité</h2></div><p>{data.guests.length} voyageur(s) connu(s)</p></div>
