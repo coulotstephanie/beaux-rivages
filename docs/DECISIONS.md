@@ -66,3 +66,12 @@ Le modèle multi-tenant sera introduit par fondations, backfill, isolation RLS
 puis activation. Aucun simple ajout de colonnes nullable ne sera considéré
 suffisant. Les permissions deviendront déclaratives et seront rattachées aux
 memberships tenant.
+
+## ADR-006 — Roadmap gouvernée par des critères de sortie
+
+- **Statut :** accepté
+- **Date :** 29 juillet 2026
+
+Le Product Book 09 définit l’ordre produit. Une version n’est pas considérée
+terminée parce que ses écrans existent : ses fournisseurs, automatisations,
+tests, procédures et critères de production doivent être effectivement validés.

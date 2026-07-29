@@ -20,6 +20,8 @@ conventionnels du projet.
   scheduler, cache, monitoring, sauvegarde et production.
 - Formalisation de la stratégie multi-tenant, des tests anti-fuite et du
   catalogue cible des permissions déclaratives.
+- Intégration de la roadmap produit officielle V1 à V10 et de sa matrice
+  d’avancement réel.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié

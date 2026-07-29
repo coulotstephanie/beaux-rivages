@@ -1,5 +1,10 @@
 # Roadmap
 
+La roadmap produit officielle est définie dans
+`PRODUCT_BOOK_09_ROADMAP.md`. Son avancement réel est suivi dans
+`ROADMAP_TRACEABILITY.md`. Le présent document décrit les tranches techniques
+immédiates.
+
 ## Sprint en cours — Auth Foundation
 
 - [x] choisir Supabase Auth comme identité du personnel ;

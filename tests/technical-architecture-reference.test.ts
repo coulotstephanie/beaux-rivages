@@ -93,3 +93,18 @@ test("les permissions cibles sont déclaratives et conservent la compatibilité"
   }
   assert.match(permissions, /traduire les trois rôles actuels sans modifier leurs droits/);
 });
+
+test("la roadmap officielle conserve les dix versions et les blocages V1", () => {
+  const roadmap = readFileSync("docs/PRODUCT_BOOK_09_ROADMAP.md", "utf8");
+  const traceability = readFileSync("docs/ROADMAP_TRACEABILITY.md", "utf8");
+  for (let version = 1; version <= 10; version += 1) {
+    assert.match(roadmap, new RegExp(`Version ${version}`));
+  }
+  for (const priority of ["P0", "P1", "P2", "P3"]) {
+    assert.match(roadmap, new RegExp(priority));
+  }
+  assert.match(traceability, /Blocages de sortie V1/);
+  assert.match(traceability, /Stripe TEST/);
+  assert.match(traceability, /fournisseur d’e-mails transactionnels/);
+  assert.match(traceability, /sauvegarde et exercice de restauration/);
+});
