@@ -25,8 +25,13 @@ const sunset = asset("coucher-soleil.jpeg", "Coucher de soleil sur l’océan", 
 const fortBoyard = asset("fort-boyard-saumonards.jpg", "Fort Boyard vu depuis la plage des Saumonards", "Fort Boyard à l’horizon");
 const beach = asset("plage.jpeg", "Plage près du Nid d’Été", "Le sable au bout du chemin");
 const shade = asset("voile-ombrage.jpeg", "Dune fleurie et embarcations sur la plage", "La côte sauvage d’Oléron");
+const originalLivingRoom = propertyAsset(
+  "airbnb-salon-1.jpeg",
+  "Salon d’origine du Nid d’Été avec canapé convertible",
+  "Photographie originale du séjour",
+);
 const airbnbLivingRoom = [
-  propertyAsset("airbnb-salon-1.jpeg", "Salon du Nid d’Été avec canapé convertible", "Le séjour, pensé pour se retrouver"),
+  propertyAsset("salon-retouche-premium.png", "Salon lumineux du Nid d’Été avec canapé convertible", "Le séjour, pensé pour se retrouver"),
 ];
 const editorialLivingRoom = propertyAsset(
   "editorial/salon-aperitif.png",
@@ -142,4 +147,7 @@ export const nidDEteMedia = {
     beach,
     shade,
   ],
+  editorial: {
+    originalLivingRoom,
+  },
 } satisfies PropertyMediaManifest;

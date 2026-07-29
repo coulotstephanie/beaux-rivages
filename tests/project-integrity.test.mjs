@@ -51,6 +51,8 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   const manifest = read("media/properties/nid-d-ete.ts");
   const propertiesPage = read("app/maisons/page.tsx");
   assert.match(manifest, /hero: airbnbLivingRoom\[0\]/);
+  assert.match(manifest, /salon-retouche-premium\.png/);
+  assert.match(manifest, /originalLivingRoom/);
   assert.doesNotMatch(manifest, /propertyAsset\("airbnb-arriere-cour-3\.jpeg"/);
   assert.doesNotMatch(manifest, /airbnb-buanderie-1-1\.jpeg/);
   assert.doesNotMatch(manifest, /airbnb-buanderie-2-1\.jpeg/);
