@@ -47,6 +47,79 @@ test("property routes use the central property SEO and media manifests", () => {
   }
 });
 
+test("Le Nid d’Été opens on the real interior and excludes the empty garden", () => {
+  const manifest = read("media/properties/nid-d-ete.ts");
+  const propertiesPage = read("app/maisons/page.tsx");
+  assert.match(manifest, /hero: airbnbLivingRoom\[0\]/);
+  assert.doesNotMatch(manifest, /propertyAsset\("airbnb-arriere-cour-3\.jpeg"/);
+  assert.doesNotMatch(manifest, /airbnb-buanderie-1-1\.jpeg/);
+  assert.doesNotMatch(manifest, /airbnb-buanderie-2-1\.jpeg/);
+  assert.doesNotMatch(manifest, /airbnb-arriere-cour-5\.jpeg/);
+  assert.match(manifest, /airbnb-toilettes\.jpeg/);
+  assert.match(manifest, /arrival: \[arrivalEntrance, arrivalPlan\]/);
+  assert.doesNotMatch(manifest, /"Les repères de l’arrivée autonome"/);
+  assert.match(manifest, /\.\.\.airbnbBedrooms,[\s\S]*\.\.\.airbnbBathroom/);
+  assert.match(propertiesPage, /image=\{property\.hero\}/);
+});
+
+test("the Chai ocean pause uses a sharp destination visual", () => {
+  const manifest = read("media/properties/chai-des-tortues.ts");
+  assert.match(manifest, /destinationMedia\.oceanBreakfast/);
+  assert.doesNotMatch(manifest, /terrasse-plage\.jpeg/);
+});
+
+test("the Chai gallery follows the guest journey through the house", () => {
+  const manifest = read("media/properties/chai-des-tortues.ts");
+  const gallery = manifest.slice(manifest.indexOf("const propertyGallery"), manifest.indexOf("export const chaiDesTortuesMedia"));
+  const sections = [
+    "// Ouverture et arrivée",
+    "// Pièce de vie",
+    "// Cuisine et grande table",
+    "// Chambres",
+    "// Salles d’eau",
+    "// Matières et détails",
+  ];
+  let previous = -1;
+  for (const section of sections) {
+    const position = gallery.indexOf(section);
+    assert.ok(position > previous, `${section} must follow the previous gallery section`);
+    previous = position;
+  }
+});
+
+test("all property galleries expose practical spaces in a logical sequence", () => {
+  const chai = read("media/properties/chai-des-tortues.ts");
+  const villa = read("media/properties/villa-raie-manta.ts");
+  const nid = read("media/properties/nid-d-ete.ts");
+  assert.match(chai, /utilities\/toilettes\.jpeg/);
+  assert.match(chai, /utilities\/buanderie\.jpeg/);
+  assert.match(villa, /\/\/ Salles d’eau et toilettes[\s\S]*\.\.\.airbnbBathrooms/);
+  assert.doesNotMatch(villa, /airbnb-photos-supplementaires-1\.jpeg/);
+  assert.match(nid, /\/\/ Salle d’eau et toilettes[\s\S]*\.\.\.airbnbBathroom/);
+});
+
+test("the ambient player uses the credited public-domain Vivaldi recording", () => {
+  const component = read("components/AmbientSound.tsx");
+  const credits = read("public/audio/README.md");
+  assert.match(component, /vivaldi-spring-largo\.m4a/);
+  assert.match(component, /vivaldi-spring-largo\.ogg/);
+  assert.match(component, /Vivaldi · Le Printemps/);
+  assert.match(component, /preload="metadata"/);
+  assert.match(component, /Musique classique/);
+  assert.match(credits, /domaine public/i);
+  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.m4a")));
+  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.ogg")));
+});
+
+test("the homepage video remains manually playable when autoplay is unavailable", () => {
+  const component = read("components/media/HeroVideo.tsx");
+  const styles = read("app/globals.css");
+  assert.match(component, /className="hero-video__control"/);
+  assert.match(component, /Lire la vidéo d’accueil/);
+  assert.match(component, /<motion\.video[\s\S]*autoPlay=\{canAutoplay\}/);
+  assert.doesNotMatch(styles, /\.hero-video video\{display:none\}/);
+});
+
 test("every property manifest exclusively references its own media directory", () => {
   for (const slug of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
     const manifest = read(`media/properties/${slug}.ts`);

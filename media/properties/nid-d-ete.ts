@@ -27,7 +27,6 @@ const beach = asset("plage.jpeg", "Plage près du Nid d’Été", "Le sable au b
 const shade = asset("voile-ombrage.jpeg", "Dune fleurie et embarcations sur la plage", "La côte sauvage d’Oléron");
 const airbnbLivingRoom = [
   propertyAsset("airbnb-salon-1.jpeg", "Salon du Nid d’Été avec canapé convertible", "Le séjour, pensé pour se retrouver"),
-  propertyAsset("airbnb-salon-2.jpeg", "Salon et espace de vie du Nid d’Été", "Une maison simple à vivre"),
 ];
 const editorialLivingRoom = propertyAsset(
   "editorial/salon-aperitif.png",
@@ -69,32 +68,37 @@ const airbnbBedrooms = [
 ];
 const airbnbBathroom = [
   propertyAsset("airbnb-salle-de-bain-1.jpeg", "Salle d’eau avec douche à l’italienne", "La salle d’eau"),
+  propertyAsset("airbnb-toilettes.jpeg", "Toilettes suspendues du Nid d’Été", "Les toilettes de la salle d’eau"),
 ];
+const arrivalEntrance = propertyAsset(
+  "airbnb-cour-d-entree-1.jpeg",
+  "Façade du Nid d’Été et emplacement de la boîte à clés",
+  "Repérer la boîte à clés à votre arrivée",
+);
+const arrivalPlan = propertyAsset(
+  "airbnb-exterieur-3-1.jpeg",
+  "Plan d’accès au Nid d’Été dans la résidence La Maison Heureuse",
+  "Du portillon piéton à l’appartement D12",
+);
 const airbnbExterior = [
   propertyAsset("airbnb-arriere-cour-1.jpeg", "Terrasse et jardin clos du Nid d’Été", "Déjeuner dehors, sous les arbres"),
-  propertyAsset("airbnb-cour-d-entree-1.jpeg", "Façade du Nid d’Été et emplacement de la boîte à clés", "Les repères de l’arrivée autonome"),
   propertyAsset("airbnb-exterieur-1-1.jpeg", "Façade historique de la Maison Heureuse", "L’élégance balnéaire de la résidence"),
   propertyAsset("airbnb-exterieur-1-2.jpeg", "Allée arborée de la Maison Heureuse", "Sous les arbres de la résidence"),
   propertyAsset("airbnb-exterieur-2-1.jpeg", "Résidence sécurisée autour du Nid d’Été", "Le calme de la résidence"),
 ];
 const airbnbTerrace = [
   propertyAsset("airbnb-arriere-cour-2.jpeg", "Équipements de la terrasse du Nid d’Été", "Les détails de la vie dehors"),
-  propertyAsset("airbnb-arriere-cour-3.jpeg", "Mobilier extérieur du Nid d’Été", "La terrasse en pratique"),
   propertyAsset("airbnb-arriere-cour-4.jpeg", "Transats disponibles au Nid d’Été", "Prendre le temps au soleil"),
-  propertyAsset("airbnb-arriere-cour-5.jpeg", "Table pour six sous la voile d’ombrage", "Déjeuner à l’ombre"),
 ];
 const airbnbDetails = [
-  propertyAsset("airbnb-buanderie-1-1.jpeg", "Rangements et équipements pratiques du Nid d’Été", "Voyager léger"),
-  propertyAsset("airbnb-buanderie-2-1.jpeg", "Buanderie avec lave-linge", "Le confort des longs séjours"),
-  propertyAsset("airbnb-exterieur-3-1.jpeg", "Plan de la résidence La Maison Heureuse", "Se repérer dans la résidence"),
   propertyAsset("airbnb-exterieur-4-1.jpeg", "Environnement extérieur du Nid d’Été", "Entre résidence et plage"),
-  propertyAsset("airbnb-piece-a-theme-1.jpeg", "Accès vers la plage des Saumonards", "Le chemin vers l’océan"),
+  propertyAsset("airbnb-piece-a-theme-1.jpeg", "Décoration de Noël à la Maison Heureuse au sein du Nid d’Été", "Passer Noël à la Maison Heureuse au sein du Nid d’Été"),
   propertyAsset("airbnb-photos-supplementaires-1.jpeg", "Détail complémentaire du Nid d’Été", "L’esprit des vacances à Boyardville"),
 ];
 export const nidDEteMedia = {
   slug: "nid-d-ete",
-  hero: access,
-  arrival: [airbnbExterior[1]],
+  hero: airbnbLivingRoom[0],
+  arrival: [arrivalEntrance, arrivalPlan],
   exterior: airbnbExterior,
   livingRoom: [editorialLivingRoom, ...airbnbLivingRoom],
   kitchen: [editorialBreakfast, editorialFamilyGames, ...airbnbKitchen],
@@ -105,27 +109,30 @@ export const nidDEteMedia = {
   lifestyle: [access, beachView, ocean, poplars, family, sunset, beach, shade, fortBoyard],
   videos: [],
   gallery: [
-    access,
-    editorialLivingRoom,
+    // Ouverture et pièces de vie
     ...airbnbLivingRoom,
+    ...airbnbKitchen,
+    editorialLivingRoom,
     editorialBreakfast,
+
+    // Chambres
+    ...airbnbBedrooms,
     editorialBedroom,
     editorialChildrenBirthday,
     editorialFamilyGames,
-    airbnbKitchen[0],
-    airbnbKitchen[1],
-    ...airbnbBedrooms,
+
+    // Salle d’eau et toilettes
     ...airbnbBathroom,
+
+    // Extérieur et terrasse
     airbnbExterior[0],
     airbnbExterior[1],
     airbnbExterior[2],
     airbnbExterior[3],
-    airbnbExterior[4],
     editorialTerraceLunch,
     ...airbnbTerrace,
-    airbnbDetails[0],
     airbnbDetails[1],
-    airbnbDetails[4],
+    access,
     beachView,
     ocean,
     poplars,

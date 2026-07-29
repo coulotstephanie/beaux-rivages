@@ -7,21 +7,25 @@ type SoundMode = "off" | "waves" | "music";
 const labels: Record<SoundMode, string> = {
   off: "Ambiance sonore",
   waves: "Vagues",
-  music: "Musique & vagues",
+  music: "Vivaldi · Le Printemps",
 };
 
 export function AmbientSound() {
   const [mode, setMode] = useState<SoundMode>("off");
+  const [error, setError] = useState("");
   const audioRef = useRef<AudioContext | null>(null);
+  const musicRef = useRef<HTMLAudioElement | null>(null);
   const nodesRef = useRef<AudioNode[]>([]);
 
   useEffect(() => {
+    const music = musicRef.current;
     return () => {
+      music?.pause();
       void audioRef.current?.close();
     };
   }, []);
 
-  const stop = () => {
+  const stopNodes = () => {
     for (const node of nodesRef.current) {
       if ("stop" in node) {
         try {
@@ -35,7 +39,15 @@ export function AmbientSound() {
     nodesRef.current = [];
   };
 
-  const play = async (nextMode: Exclude<SoundMode, "off">) => {
+  const stop = () => {
+    stopNodes();
+    if (musicRef.current) {
+      musicRef.current.pause();
+      musicRef.current.currentTime = 0;
+    }
+  };
+
+  const playWaves = async () => {
     const AudioContextClass = window.AudioContext;
     const context = audioRef.current ?? new AudioContextClass();
     audioRef.current = context;
@@ -64,7 +76,7 @@ export function AmbientSound() {
     waveFilter.type = "lowpass";
     waveFilter.frequency.value = 620;
     waveFilter.Q.value = 0.8;
-    waveGain.gain.value = nextMode === "music" ? 0.075 : 0.18;
+    waveGain.gain.value = 0.18;
     waveMotion.frequency.value = 0.11;
     motionDepth.gain.value = 0.11;
 
@@ -74,62 +86,50 @@ export function AmbientSound() {
     waveMotion.start();
 
     nodesRef.current.push(waves, waveFilter, waveGain, waveMotion, motionDepth, master);
-
-    if (nextMode === "music") {
-      const musicBus = context.createGain();
-      const musicMotion = context.createOscillator();
-      const musicDepth = context.createGain();
-      musicBus.gain.value = 0.72;
-      musicMotion.frequency.value = 0.065;
-      musicDepth.gain.value = 0.16;
-      musicMotion.connect(musicDepth).connect(musicBus.gain);
-      musicBus.connect(master);
-      musicMotion.start();
-      nodesRef.current.push(musicBus, musicMotion, musicDepth);
-
-      // A warm suspended chord, deliberately slow and discreet behind the surf.
-      const notes = [146.83, 220, 293.66, 369.99];
-      notes.forEach((frequency, index) => {
-        const oscillator = context.createOscillator();
-        const gain = context.createGain();
-        const filter = context.createBiquadFilter();
-        const drift = context.createOscillator();
-        const driftDepth = context.createGain();
-        oscillator.type = index % 2 ? "sine" : "triangle";
-        oscillator.frequency.value = frequency;
-        gain.gain.value = index === 0 ? 0.08 : 0.052;
-        filter.type = "lowpass";
-        filter.frequency.value = 900;
-        drift.frequency.value = 0.025 + index * 0.009;
-        driftDepth.gain.value = 0.8 + index * 0.15;
-        drift.connect(driftDepth).connect(oscillator.detune);
-        oscillator.connect(filter).connect(gain).connect(musicBus);
-        oscillator.start();
-        drift.start();
-        nodesRef.current.push(oscillator, filter, gain, drift, driftDepth);
-      });
-    }
-
-    setMode(nextMode);
+    setMode("waves");
   };
 
-  const choose = (nextMode: SoundMode) => {
+  const choose = async (nextMode: SoundMode) => {
+    setError("");
     if (nextMode === "off") {
       stop();
       setMode("off");
       return;
     }
-    void play(nextMode);
+    try {
+      if (nextMode === "waves") {
+        await playWaves();
+        return;
+      }
+      stop();
+      if (!musicRef.current) return;
+      musicRef.current.volume = 0.28;
+      await musicRef.current.play();
+      setMode("music");
+    } catch {
+      stop();
+      setMode("off");
+      setError("La musique n’a pas pu démarrer. Réessayez.");
+    }
   };
 
   return (
     <aside className="ambient-sound" aria-label="Ambiance sonore">
+      <audio
+        ref={musicRef}
+        preload="metadata"
+        loop
+      >
+        <source src="/audio/vivaldi-spring-largo.m4a" type="audio/mp4" />
+        <source src="/audio/vivaldi-spring-largo.ogg" type="audio/ogg" />
+      </audio>
       <span className="ambient-sound__label">{labels[mode]}</span>
+      {error && <span className="sr-only" role="status">{error}</span>}
       <div className="ambient-sound__controls">
         <button
           type="button"
           className={mode === "waves" ? "is-active" : ""}
-          onClick={() => choose(mode === "waves" ? "off" : "waves")}
+          onClick={() => void choose(mode === "waves" ? "off" : "waves")}
           aria-pressed={mode === "waves"}
         >
           Vagues
@@ -137,10 +137,11 @@ export function AmbientSound() {
         <button
           type="button"
           className={mode === "music" ? "is-active" : ""}
-          onClick={() => choose(mode === "music" ? "off" : "music")}
+          onClick={() => void choose(mode === "music" ? "off" : "music")}
           aria-pressed={mode === "music"}
+          title="Antonio Vivaldi, Le Printemps — II. Largo · Modena Chamber Orchestra · Domaine public"
         >
-          Musique douce
+          Musique classique
         </button>
       </div>
     </aside>

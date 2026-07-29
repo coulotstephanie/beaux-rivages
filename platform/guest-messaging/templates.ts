@@ -1,6 +1,7 @@
 import type { ArrivalSecrets, GuestMessage, GuestMessageData, MessageType, PropertyId } from "./contracts";
 
 const logo = "https://www.beaux-rivages.com/brand/logo-horizontal-blanc.svg";
+const publicOrigin = "https://www.beaux-rivages.com";
 const e = (value: string | number) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!);
 const textDate = (value: string, locale: GuestMessageData["locale"] = "fr") =>
   new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : locale === "de" ? "de-DE" : "en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" }).format(new Date(`${value}T12:00:00+02:00`));
@@ -82,6 +83,22 @@ const arrivalPractical = (data: GuestMessageData, secrets: ArrivalSecrets) => {
 };
 
 const paragraphs = (value: string) => value.split("\n\n").map((part) => `<p style="margin:0 0 18px;line-height:1.7">${e(part).replace(/\n/g, "<br>")}</p>`).join("");
+const nidArrivalMapUrl = "https://www.google.com/maps/search/?api=1&query=355%20route%20des%20Saumonards%2C%2017190%20Saint-Georges-d%27Ol%C3%A9ron";
+const nidArrivalGuideText = () => `\n\nCARTE ET PLAN D’ACCÈS\nOuvrir l’itinéraire : ${nidArrivalMapUrl}\nPhoto de la boîte à clés : ${publicOrigin}/images/properties/nid-d-ete/airbnb-cour-d-entree-1.jpeg\nPlan de la résidence vers D12 : ${publicOrigin}/images/properties/nid-d-ete/airbnb-exterieur-3-1.jpeg`;
+const nidArrivalGuideHtml = () => `
+    <div style="margin:28px 0;padding:22px;background:#f4f0e7;border-left:3px solid #b89a60">
+      <h2 style="margin:0 0 12px;font:400 24px Georgia,serif">Carte et plan d’accès</h2>
+      <p style="margin:0 0 18px;line-height:1.7">Suivez le plan depuis le portillon piéton jusqu’à l’appartement D12. Les places privées 28 et 29 y sont également indiquées.</p>
+      <p style="margin:0 0 20px"><a href="${nidArrivalMapUrl}" style="display:inline-block;padding:12px 18px;background:#173b3b;color:#fff;text-decoration:none">Ouvrir l’itinéraire</a></p>
+      <figure style="margin:0 0 22px">
+        <img src="${publicOrigin}/images/properties/nid-d-ete/airbnb-exterieur-3-1.jpeg" width="596" alt="Plan d’accès au Nid d’Été dans la résidence La Maison Heureuse" style="display:block;width:100%;height:auto;border:0">
+        <figcaption style="margin-top:8px;color:#5c6664;font-size:13px">Du portillon piéton à l’appartement D12 et aux parkings 28–29.</figcaption>
+      </figure>
+      <figure style="margin:0">
+        <img src="${publicOrigin}/images/properties/nid-d-ete/airbnb-cour-d-entree-1.jpeg" width="596" alt="Emplacement de la boîte à clés du Nid d’Été" style="display:block;width:100%;height:auto;border:0">
+        <figcaption style="margin-top:8px;color:#5c6664;font-size:13px">La boîte à clés se trouve à droite de l’appartement, sur le piquet en bois.</figcaption>
+      </figure>
+    </div>`;
 const htmlShell = (data: GuestMessageData, title: string, preheader: string, body: string) => {
   const p = properties[data.propertyId];
   return `<!doctype html><html lang="${data.locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${e(title)}</title></head><body style="margin:0;background:#f4f0e7;color:#173b3b;font-family:Arial,sans-serif"><div style="display:none;max-height:0;overflow:hidden">${e(preheader)}</div><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:18px 10px"><table role="presentation" width="100%" style="max-width:640px;background:#fff" cellspacing="0" cellpadding="0"><tr><td style="padding:28px;background:#173b3b;color:#fff"><img src="${logo}" width="280" alt="Beaux Rivages" style="display:block;max-width:100%;height:auto"><p style="margin:18px 0 0;font-size:14px">${e(p.name)}<br><span style="color:#d7c18e">Une maison Beaux Rivages</span></p></td></tr><tr><td style="padding:clamp(24px,6vw,44px)">${body}</td></tr><tr><td style="padding:25px;background:#173b3b;color:#fff;line-height:1.6">Stéphanie et Bruno<br><span style="color:#d7c18e">Vos hôtes Beaux Rivages</span></td></tr></table></td></tr></table></body></html>`;
@@ -125,7 +142,7 @@ export function renderGuestMessage(data: GuestMessageData, type: MessageType, se
   const subject = data.propertyId === "chai-des-tortues" ? "Bienvenue au Chai des Tortues 🌊🐢" : data.propertyId === "villa-raie-manta" ? "Bienvenue à la Villa Raie Manta ✨🌊" : "Bienvenue au Nid d’Été, à La Maison Heureuse 🌊☀️";
   const intro = `Votre arrivée approche à grands pas et nous sommes très heureux de vous accueillir prochainement ${data.propertyId === "nid-d-ete" ? "au Nid d’Été" : `à ${p.name}`}.\n\nNous avons préparé la maison avec soin afin que votre installation se déroule en toute simplicité et sérénité.`;
   const practical = arrivalPractical(data, secrets);
-  const text = `Bonjour ${data.guestFirstName},\n\n${intro}\n\nVOTRE SÉJOUR\n${cardText(data)}\n\nADRESSE ET INFORMATIONS PRATIQUES\n${practical}\n\n${conditionalCopy(data).join("\n\n")}\n\nBESOIN D’AIDE\nStéphanie · 06 17 26 00 94${data.propertyId === "nid-d-ete" ? "\nMarion Têteart · +33 6 81 02 46 02" : ""}\n\nNous vous souhaitons une excellente route, une arrivée en toute sérénité et un merveilleux séjour.\n\nStéphanie et Bruno\nVos hôtes Beaux Rivages`;
-  const body = `<p>Bonjour ${e(data.guestFirstName)},</p><h1 style="font:400 34px Georgia,serif">${e(subject)}</h1>${paragraphs(intro)}${stayCardHtml(data)}${paragraphs(practical)}${paragraphs(conditionalCopy(data).join("\n\n"))}${paragraphs(`BESOIN D’AIDE\nStéphanie · 06 17 26 00 94${data.propertyId === "nid-d-ete" ? "\nMarion Têteart · +33 6 81 02 46 02" : ""}\n\nNous vous souhaitons une excellente route, une arrivée en toute sérénité et un merveilleux séjour.`)}`;
+  const text = `Bonjour ${data.guestFirstName},\n\n${intro}\n\nVOTRE SÉJOUR\n${cardText(data)}\n\nADRESSE ET INFORMATIONS PRATIQUES\n${practical}${data.propertyId === "nid-d-ete" ? nidArrivalGuideText() : ""}\n\n${conditionalCopy(data).join("\n\n")}\n\nBESOIN D’AIDE\nStéphanie · 06 17 26 00 94${data.propertyId === "nid-d-ete" ? "\nMarion Têteart · +33 6 81 02 46 02" : ""}\n\nNous vous souhaitons une excellente route, une arrivée en toute sérénité et un merveilleux séjour.\n\nStéphanie et Bruno\nVos hôtes Beaux Rivages`;
+  const body = `<p>Bonjour ${e(data.guestFirstName)},</p><h1 style="font:400 34px Georgia,serif">${e(subject)}</h1>${paragraphs(intro)}${stayCardHtml(data)}${paragraphs(practical)}${data.propertyId === "nid-d-ete" ? nidArrivalGuideHtml() : ""}${paragraphs(conditionalCopy(data).join("\n\n"))}${paragraphs(`BESOIN D’AIDE\nStéphanie · 06 17 26 00 94${data.propertyId === "nid-d-ete" ? "\nMarion Têteart · +33 6 81 02 46 02" : ""}\n\nNous vous souhaitons une excellente route, une arrivée en toute sérénité et un merveilleux séjour.`)}`;
   return { type, subject, preheader: `Toutes les informations pour votre arrivée à ${p.name}`, text, html: htmlShell(data, subject, `Votre arrivée à ${p.name}`, body), idempotencyKey };
 }
