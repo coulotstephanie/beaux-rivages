@@ -41,9 +41,7 @@ export default function PropertiesPage() {
               title={property.title}
               subtitle={property.intro}
               href={`/maisons/${property.slug}`}
-              image={property.slug === "nid-d-ete"
-                ? siteMedia.properties["nid-d-ete"].exterior[2].src
-                : property.hero}
+              image={property.hero}
               location={property.location}
             />
           ))}

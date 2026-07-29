@@ -47,6 +47,25 @@ test("property routes use the central property SEO and media manifests", () => {
   }
 });
 
+test("Le Nid d’Été opens on the real interior and excludes the empty garden", () => {
+  const manifest = read("media/properties/nid-d-ete.ts");
+  const propertiesPage = read("app/maisons/page.tsx");
+  assert.match(manifest, /hero: airbnbLivingRoom\[0\]/);
+  assert.doesNotMatch(manifest, /propertyAsset\("airbnb-arriere-cour-3\.jpeg"/);
+  assert.match(manifest, /\.\.\.airbnbBathroom,[\s\S]*\.\.\.airbnbBedrooms/);
+  assert.match(propertiesPage, /image=\{property\.hero\}/);
+});
+
+test("the ambient player uses the credited public-domain classical recording", () => {
+  const component = read("components/AmbientSound.tsx");
+  const credits = read("public/audio/README.md");
+  assert.match(component, /bach-air-on-the-g-string\.ogg/);
+  assert.match(component, /preload="none"/);
+  assert.match(component, /Musique classique/);
+  assert.match(credits, /domaine public/i);
+  assert.ok(existsSync(join(root, "public/audio/bach-air-on-the-g-string.ogg")));
+});
+
 test("every property manifest exclusively references its own media directory", () => {
   for (const slug of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
     const manifest = read(`media/properties/${slug}.ts`);
