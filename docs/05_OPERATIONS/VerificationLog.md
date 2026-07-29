@@ -4,9 +4,10 @@ Ce registre ne contient aucune donnée sensible. Les preuves détaillées sont
 conservées dans l’espace d’exploitation approuvé, puis référencées par un
 identifiant non secret.
 
-| Date UTC   | Version / commit                           | Responsable | Sauvegarde validée | Restauration testée | Tests                                                                        | Décision  | Référence des preuves |
-| ---------- | ------------------------------------------ | ----------- | ------------------ | ------------------- | ---------------------------------------------------------------------------- | --------- | --------------------- |
-| 2026-07-29 | `3392de6231e48f6779ba15dc4c8f30462f3d54dd` | Non vérifié | Non                | Non                 | Local : 121 intégration, 20 unitaires, 10 E2E, build ; CI finale à confirmer | **NO-GO** | `GO_NO_GO_2026-07-29` |
+| Date UTC   | Version / commit                           | Responsable              | Sauvegarde validée                      | Restauration testée | Tests                                                                        | Décision  | Référence des preuves     |
+| ---------- | ------------------------------------------ | ------------------------ | --------------------------------------- | ------------------- | ---------------------------------------------------------------------------- | --------- | ------------------------- |
+| 2026-07-29 | `3392de6231e48f6779ba15dc4c8f30462f3d54dd` | Non vérifié              | Non                                     | Non                 | Local : 121 intégration, 20 unitaires, 10 E2E, build ; CI finale à confirmer | **NO-GO** | `GO_NO_GO_2026-07-29`     |
+| 2026-07-29 | `1.0.0-rc.1`                               | Production Certification | Non : aucune sauvegarde physique listée | Non                 | contrôle P0 en lecture seule                                                 | **NO-GO** | `BACKUP_CHECK_2026-07-29` |
 
 ## Modèle à recopier
 

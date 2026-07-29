@@ -134,10 +134,21 @@ projet. Aucun secret ou dump ne doit entrer dans Git.
 
 ## Résultat du test
 
-**Non exécuté.** Le Dashboard Supabase doit confirmer le plan et proposer
-« Restore to a New Project ». La création est potentiellement facturable et
-requiert une validation explicite. La voie CLI locale reste bloquée par
-l’absence de Docker/`pg_dump` et de mot de passe DB.
+Le contrôle en lecture seule du 29 juillet 2026 retourne :
+
+- `backups: null` ;
+- `physical_backup_data: {}` ;
+- `pitr_enabled: false` ;
+- `walg_enabled: true`.
+
+La preuve expurgée est conservée dans
+[BACKUP_CHECK_2026-07-29.md](./evidence/BACKUP_CHECK_2026-07-29.md).
+
+**Restauration non exécutée.** Le Dashboard Supabase doit confirmer le plan et
+l’existence éventuelle d’une sauvegarde logique ou proposer « Restore to a New
+Project ». La création est potentiellement facturable et requiert une validation
+explicite. La voie CLI locale reste bloquée par l’absence de Docker, `pg_dump`,
+`pg_restore` et `psql`.
 
 Le P0 Backup & Restore reste donc ouvert.
 

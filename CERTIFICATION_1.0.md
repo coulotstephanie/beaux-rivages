@@ -15,38 +15,52 @@ L’absence de preuve vaut `FAIL`; elle n’est jamais remplacée par une hypoth
 
 ## Synthèse certifiée
 
-| Domaine                           | Statut   | Preuve                                                                                             | Écart restant                                                              |
-| --------------------------------- | -------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| Architecture applicative          | **PASS** | [Architecture](./docs/03_ARCHITECTURE/SystemArchitecture.md), build Next.js réussi, audit du dépôt | convergence SaaS future hors périmètre 1.0                                 |
-| Qualité automatisée               | **PASS** | CI run `30491613818`, job `quality` : `npm ci` et `npm run validate` réussis                       | aucun écart bloquant automatisé                                            |
-| Tests d’intégration               | **PASS** | 121 tests réussis sur RC1                                                                          | recette miroir séparée                                                     |
-| Tests unitaires                   | **PASS** | 20 tests Vitest réussis sur RC1                                                                    | couverture chiffrée globale non publiée                                    |
-| Tests E2E automatisés             | **PASS** | CI run `30491613818`, job `e2e-smoke` réussi ; 10 scénarios desktop/mobile réussis localement      | Safari, Firefox et appareils réels non signés                              |
-| Recette métier complète           | **FAIL** | [Recette préproduction](./docs/05_OPERATIONS/PREPRODUCTION_ACCEPTANCE_2026-07-29.md)               | miroir, multilingue et scénarios manuels non validés                       |
-| Documentation                     | **PASS** | Runbook, SOP Backup & Restore, Architecture, API, règles métier, Changelog et notes RC1 présents   | propriétaires opérationnels à confirmer                                    |
-| CI                                | **PASS** | GitHub Actions run `30491613818`, jobs `quality` et `e2e-smoke` : succès                           | aucun                                                                      |
-| CD / déploiement                  | **FAIL** | [Guide de déploiement](./docs/05_OPERATIONS/DeploymentGuide.md) uniquement                         | rollback et déploiement de production non exercés                          |
-| Supabase — disponibilité actuelle | **PASS** | projet lié `ydqtqfkzmovjdkmldhqr`, `ACTIVE_HEALTHY`, PostgreSQL 17.6, lint distant sans erreur     | le plan reste non vérifié                                                  |
-| Supabase — cohérence cible        | **FAIL** | [Rapport migrations](./docs/05_OPERATIONS/MIGRATION_COHERENCE_REPORT_2026-07-29.md)                | trois migrations locales non appliquées ; schéma Git et distant différents |
-| Migrations et rollbacks dans Git  | **PASS** | `npm run db:verify-migrations` : 15 migrations, 15 rollbacks, aucun orphelin                       | exécution sur base vierge non prouvée                                      |
-| RLS du schéma déjà distant        | **PASS** | tests SQL, migrations versionnées et `supabase db lint --linked` sans erreur                       | ne couvre pas les trois migrations en attente                              |
-| RLS de la cible 1.0               | **FAIL** | [Rapport OWASP](./docs/04_ENGINEERING/SECURITY_OWASP_REPORT_2026-07-29.md)                         | tests par rôle sur miroir non exécutés                                     |
-| Stripe — conception               | **PASS** | signature webhook, idempotence, contrôle serveur des montants et journalisation testés             | aucun pour la conception                                                   |
-| Stripe — recette TEST réelle      | **FAIL** | [Rapport Stripe](./docs/05_OPERATIONS/STRIPE_TEST_ACCEPTANCE_2026-07-29.md)                        | clés TEST et webhooks réels non recettés                                   |
-| OWASP / sécurité globale          | **FAIL** | [Rapport OWASP](./docs/04_ENGINEERING/SECURITY_OWASP_REPORT_2026-07-29.md)                         | CSP, rate limiting distribué, monitoring et fermeture du token historique  |
-| Dépendances de production         | **PASS** | `npm audit --omit=dev --audit-level=high` : 0 vulnérabilité signalée                               | alertes de développement à traiter séparément                              |
-| Sauvegarde PostgreSQL             | **FAIL** | [Backup Readiness](./docs/05_OPERATIONS/BACKUP_READINESS_REPORT_2026-07-29.md)                     | aucun dump complet vérifié                                                 |
-| Sauvegarde Storage/Auth/config    | **FAIL** | [SOP Backup & Restore](./docs/05_OPERATIONS/BackupRestoreSOP.md)                                   | inventaires et copies non réalisés                                         |
-| Test de restauration              | **FAIL** | [Rapport sauvegarde](./docs/05_OPERATIONS/BACKUP_REPORT_2026-07-29.md)                             | aucun miroir restauré                                                      |
-| Retour arrière < 10 minutes       | **FAIL** | [Runbook](./docs/05_OPERATIONS/Runbooks.md)                                                        | exercice chronométré absent                                                |
-| Monitoring et alertes             | **FAIL** | `/api/health` existe ; [Monitoring](./docs/05_OPERATIONS/Monitoring.md)                            | moniteur externe, APM et destinataires non démontrés                       |
-| Go Live Checklist                 | **FAIL** | [Checklist](./docs/05_OPERATIONS/GO_LIVE_CHECKLIST.md)                                             | plusieurs P0/P1 ouverts                                                    |
+| Domaine                           | Statut   | Preuve                                                                                                                                                        | Écart restant                                                              |
+| --------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Architecture applicative          | **PASS** | [Architecture](./docs/03_ARCHITECTURE/SystemArchitecture.md), build Next.js réussi, audit du dépôt                                                            | convergence SaaS future hors périmètre 1.0                                 |
+| Qualité automatisée               | **PASS** | CI run `30491613818`, job `quality` : `npm ci` et `npm run validate` réussis                                                                                  | aucun écart bloquant automatisé                                            |
+| Tests d’intégration               | **PASS** | 121 tests réussis sur RC1                                                                                                                                     | recette miroir séparée                                                     |
+| Tests unitaires                   | **PASS** | 20 tests Vitest réussis sur RC1                                                                                                                               | couverture chiffrée globale non publiée                                    |
+| Tests E2E automatisés             | **PASS** | CI run `30491613818`, job `e2e-smoke` réussi ; 10 scénarios desktop/mobile réussis localement                                                                 | Safari, Firefox et appareils réels non signés                              |
+| Recette métier complète           | **FAIL** | [Recette préproduction](./docs/05_OPERATIONS/PREPRODUCTION_ACCEPTANCE_2026-07-29.md)                                                                          | miroir, multilingue et scénarios manuels non validés                       |
+| Documentation                     | **PASS** | Runbook, SOP Backup & Restore, Architecture, API, règles métier, Changelog et notes RC1 présents                                                              | propriétaires opérationnels à confirmer                                    |
+| CI                                | **PASS** | GitHub Actions run `30491613818`, jobs `quality` et `e2e-smoke` : succès                                                                                      | aucun                                                                      |
+| CD / déploiement                  | **FAIL** | [Guide de déploiement](./docs/05_OPERATIONS/DeploymentGuide.md) uniquement                                                                                    | rollback et déploiement de production non exercés                          |
+| Supabase — disponibilité actuelle | **PASS** | projet lié `ydqtqfkzmovjdkmldhqr`, `ACTIVE_HEALTHY`, PostgreSQL 17.6, lint distant sans erreur                                                                | le plan reste non vérifié                                                  |
+| Supabase — cohérence cible        | **FAIL** | [Rapport migrations](./docs/05_OPERATIONS/MIGRATION_COHERENCE_REPORT_2026-07-29.md)                                                                           | trois migrations locales non appliquées ; schéma Git et distant différents |
+| Migrations et rollbacks dans Git  | **PASS** | `npm run db:verify-migrations` : 15 migrations, 15 rollbacks, aucun orphelin                                                                                  | exécution sur base vierge non prouvée                                      |
+| RLS du schéma déjà distant        | **PASS** | tests SQL, migrations versionnées et `supabase db lint --linked` sans erreur                                                                                  | ne couvre pas les trois migrations en attente                              |
+| RLS de la cible 1.0               | **FAIL** | [Rapport OWASP](./docs/04_ENGINEERING/SECURITY_OWASP_REPORT_2026-07-29.md)                                                                                    | tests par rôle sur miroir non exécutés                                     |
+| Stripe — conception               | **PASS** | signature webhook, idempotence, contrôle serveur des montants et journalisation testés                                                                        | aucun pour la conception                                                   |
+| Stripe — recette TEST réelle      | **FAIL** | [Rapport Stripe](./docs/05_OPERATIONS/STRIPE_TEST_ACCEPTANCE_2026-07-29.md)                                                                                   | clés TEST et webhooks réels non recettés                                   |
+| OWASP / sécurité globale          | **FAIL** | [Rapport OWASP](./docs/04_ENGINEERING/SECURITY_OWASP_REPORT_2026-07-29.md)                                                                                    | CSP, rate limiting distribué, monitoring et fermeture du token historique  |
+| Dépendances de production         | **PASS** | `npm audit --omit=dev --audit-level=high` : 0 vulnérabilité signalée                                                                                          | alertes de développement à traiter séparément                              |
+| Sauvegarde PostgreSQL             | **FAIL** | [Contrôle en lecture seule](./docs/05_OPERATIONS/evidence/BACKUP_CHECK_2026-07-29.md) : aucune sauvegarde physique listée, PITR désactivé, aucun dump produit | vérifier le Dashboard ou produire un dump complet                          |
+| Sauvegarde Storage/Auth/config    | **FAIL** | [SOP Backup & Restore](./docs/05_OPERATIONS/BackupRestoreSOP.md)                                                                                              | inventaires et copies non réalisés                                         |
+| Test de restauration              | **FAIL** | [Rapport sauvegarde](./docs/05_OPERATIONS/BACKUP_REPORT_2026-07-29.md)                                                                                        | aucun miroir restauré                                                      |
+| Retour arrière < 10 minutes       | **FAIL** | [Runbook](./docs/05_OPERATIONS/Runbooks.md)                                                                                                                   | exercice chronométré absent                                                |
+| Monitoring et alertes             | **FAIL** | `/api/health` existe ; [Monitoring](./docs/05_OPERATIONS/Monitoring.md)                                                                                       | moniteur externe, APM et destinataires non démontrés                       |
+| Go Live Checklist                 | **FAIL** | [Checklist](./docs/05_OPERATIONS/GO_LIVE_CHECKLIST.md)                                                                                                        | plusieurs P0/P1 ouverts                                                    |
 
 ## P0 bloquant
 
 La sauvegarde complète et la restauration sur un environnement miroir n’ont pas
 été démontrées. Aucune migration distante, fusion, création de tag stable ou
 mise en production n’est autorisée.
+
+### Traitement P0 — étape 1
+
+- ce qui manque : un backup complet accessible, daté et intègre ;
+- méthode officielle : sauvegarde Supabase vérifiée ou dump PostgreSQL complet,
+  complétés par Storage/Auth/configuration ;
+- vérification non destructive réalisée : inventaire local, liste des backups
+  physiques, état PITR et dry-run du dump ;
+- résultat : aucune sauvegarde physique listée et outillage de dump absent ;
+- passage à PASS : **non**.
+
+Prochaine preuve requise : capture expurgée de **Database > Backups** et
+**Organization > Billing**, ou installation contrôlée des outils PostgreSQL
+avec accès DB pour produire le dump.
 
 ## Autres risques ouverts
 
