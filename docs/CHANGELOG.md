@@ -8,6 +8,8 @@ conventionnels du projet.
 
 ### Ajouté
 
+- ADR-0009 « Choix du fournisseur IA » : comparaison OpenAI, Azure OpenAI,
+  Anthropic et Mistral, critères RGPD et protocole d’évaluation réversible.
 - Revenue Management : périodes tarifaires persistantes, garde-fous
   minimum/maximum, calendrier visuel et prise en charge des événements locaux.
 - Indicateurs annuels par maison : revenu, occupation, ADR et RevPAR.
