@@ -20,6 +20,7 @@
     "db:push": "supabase db push --linked",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --linked --schema public > platform/database/database.types.ts",
+    "db:verify-migrations": "node scripts/verify-migration-integrity.mjs",
     "db:backup": "bash scripts/backup-supabase.sh",
     "archives:search": "node scripts/search-archives.mjs",
     "prepare": "husky",
