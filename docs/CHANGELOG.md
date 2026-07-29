@@ -39,6 +39,9 @@ conventionnels du projet.
   accompagnés d’une matrice d’application réelle.
 - Création du Feature Catalog officiel, avec identifiants stables, priorités,
   états observables, dépendances et preuves de tests et documentation.
+- Formalisation des user stories US-0010 à US-0200 et des critères
+  d’acceptation associés, avec séparation entre preuves acquises et validations
+  restant nécessaires avant la production.
 - Quatre tests dédiés à l’authentification et à la protection des routes.
 
 ### Modifié
