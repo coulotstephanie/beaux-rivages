@@ -3,6 +3,7 @@ import { AmbientSound } from "@/components/AmbientSound";
 import { PremiumUX } from "@/components/PremiumUX";
 import { Analytics } from "@/components/Analytics";
 import { AppProviders } from "@/components/providers";
+import { LanguageExperience } from "@/components/LanguageExperience";
 import "./globals.css";
 import "./foundations.css";
 import "leaflet/dist/leaflet.css";
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <PremiumUX />
           <AmbientSound />
           <Analytics />
+          <LanguageExperience />
         </AppProviders>
       </body>
     </html>

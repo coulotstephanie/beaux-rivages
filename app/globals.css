@@ -959,6 +959,23 @@ body.menu-open { overflow: hidden; }
   .premium-footer__bottom { flex-direction: column; gap: 8px; }
 }
 
+.language-selector { position: relative; z-index: 20; }
+.language-selector button { border: 0; color: inherit; background: transparent; font: inherit; cursor: pointer; }
+.language-selector__current { min-height: 44px; padding: .45rem .65rem; display: inline-flex; align-items: center; gap: .4rem; font-size: .75rem!important; }
+.language-selector__current span:last-child { max-width: 0; overflow: hidden; opacity: 0; transition: max-width .25s ease, opacity .25s ease; }
+.language-selector:hover .language-selector__current span:last-child,
+.language-selector:focus-within .language-selector__current span:last-child { max-width: 6rem; opacity: 1; }
+.language-selector__menu { min-width: 150px; padding: .4rem; position: absolute; top: calc(100% - .1rem); right: 0; display: grid; visibility: hidden; opacity: 0; border: 1px solid rgba(22,53,74,.15); border-radius: 2px; color: var(--deep); background: rgba(255,255,255,.98); box-shadow: var(--shadow-soft); transform: translateY(-.3rem); transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+.language-selector:hover .language-selector__menu,
+.language-selector:focus-within .language-selector__menu { visibility: visible; opacity: 1; transform: translateY(0); }
+.language-selector__menu button { min-height: 40px; padding: .5rem .65rem; display: flex; align-items: center; gap: .55rem; text-align: left; }
+.language-selector__menu button:hover,
+.language-selector__menu button[aria-checked="true"] { background: var(--sand); }
+@media (max-width: 700px) {
+  .language-selector__current span:last-child { display: none; }
+  .language-selector__menu { position: fixed; top: 72px; right: 1rem; }
+}
+
 /* EPIC 6–9 — conciergerie, conditions du jour et inspiration */
 .concierge-section { padding: clamp(5rem,9vw,9rem) 0; }
 .concierge-planner__intro { max-width: 760px; }

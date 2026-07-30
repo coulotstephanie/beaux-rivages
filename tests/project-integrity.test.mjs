@@ -361,12 +361,28 @@ test("deployment configuration never commits local secrets", () => {
   assert.match(workflow, /npm run validate/);
 });
 
-test("internationalization declares target locales without prematurely publishing them", () => {
+test("internationalization publishes the four complete public locales", () => {
   const config = read("i18n/config.ts");
   const messages = read("i18n/messages.ts");
-  assert.match(config, /\["fr", "en", "de"\]/);
-  assert.match(config, /productionLocales[^=]*=\s*\["fr"\]/);
+  const middleware = read("middleware.ts");
+  const selector = read("components/LanguageSelector.tsx");
+  assert.match(config, /\["fr", "en", "de", "es"\]/);
+  assert.match(config, /productionLocales[^=]*=\s*\["fr", "en", "de", "es"\]/);
   assert.match(messages, /Record<SupportedLocale, MessageCatalog>/);
+  assert.match(middleware, /NextResponse\.rewrite/);
+  assert.match(selector, /🇫🇷/);
+  assert.match(selector, /🇬🇧/);
+  assert.match(selector, /🇩🇪/);
+  assert.match(selector, /🇪🇸/);
+  for (const locale of ["en", "de", "es"]) {
+    const catalog = JSON.parse(read(`i18n/translations/${locale}.json`));
+    assert.ok(
+      Object.keys(catalog).length > 2_400,
+      `${locale} catalog must cover the complete public site`,
+    );
+    assert.ok(catalog["Préparer votre séjour"]);
+    assert.ok(catalog["Nos maisons"]);
+  }
 });
 
 test("booking review prevents invalid navigation and capacity overflow", () => {
