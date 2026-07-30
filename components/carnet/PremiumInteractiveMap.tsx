@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { divIcon } from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
+import type { LatLngBoundsExpression } from "leaflet";
+import { ImageOverlay, MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 import {
   premiumMapCategories,
   premiumPlaces,
@@ -12,6 +13,36 @@ import {
 } from "@/carnetPremiumData";
 
 const destinations: PremiumDestination[] = ["Île de Ré", "Île d’Oléron", "La Rochelle"];
+const localFallbackTiles: { src: string; bounds: LatLngBoundsExpression }[] = [
+  {
+    src: "/images/maps/carnet-fallback-z9-x253-y181.png",
+    bounds: [
+      [46.07323062540836, -2.109375],
+      [46.55886030311718, -1.40625],
+    ],
+  },
+  {
+    src: "/images/maps/carnet-fallback-z9-x253-y182.png",
+    bounds: [
+      [45.58328975600631, -2.109375],
+      [46.07323062540836, -1.40625],
+    ],
+  },
+  {
+    src: "/images/maps/carnet-fallback-z9-x254-y181.png",
+    bounds: [
+      [46.07323062540836, -1.40625],
+      [46.55886030311718, -0.703125],
+    ],
+  },
+  {
+    src: "/images/maps/carnet-fallback-z9-x254-y182.png",
+    bounds: [
+      [45.58328975600631, -1.40625],
+      [46.07323062540836, -0.703125],
+    ],
+  },
+];
 const tileProviders = {
   carto: {
     attribution:
@@ -145,6 +176,15 @@ export function PremiumInteractiveMap() {
           className="premium-leaflet-map"
           aria-label="Carte interactive du Carnet Beaux Rivages"
         >
+          {localFallbackTiles.map((tile) => (
+            <ImageOverlay
+              key={tile.src}
+              url={tile.src}
+              bounds={tile.bounds}
+              interactive={false}
+              opacity={1}
+            />
+          ))}
           <TileLayer
             key={tileProvider}
             attribution={provider.attribution}
