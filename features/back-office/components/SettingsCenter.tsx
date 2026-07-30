@@ -73,10 +73,14 @@ export function SettingsCenter() {
           </>}
 
           {active === "equipe" && <>
-            <div className="bo-card__heading"><div><h2>Utilisateurs & rôles</h2><p className="bo-muted">Préparation de la future gestion des autorisations.</p></div></div>
+            <div className="bo-card__heading"><div><h2>Utilisateurs & permissions</h2><p className="bo-muted">Définissez précisément les droits de chaque rôle.</p></div></div>
             <div className="bo-settings-list">
               <article><span><Users /><strong>Stéphanie</strong><small>Administratrice</small></span><i>Actif</i><button type="button">Gérer</button></article>
               <article><span><Users /><strong>Bruno</strong><small>Administrateur</small></span><i>Actif</i><button type="button">Gérer</button></article>
+            </div>
+            <div className="bo-permission-matrix" role="table" aria-label="Permissions par rôle">
+              <div role="row"><strong>Permission</strong><strong>Administrateur</strong><strong>Exploitation</strong><strong>Lecture</strong></div>
+              {["Réservations", "Tarifs", "Voyageurs", "Communications", "CMS", "Paramètres"].map((permission, index) => <div role="row" key={permission}><span>{permission}</span><input aria-label={`${permission} administrateur`} type="checkbox" defaultChecked /><input aria-label={`${permission} exploitation`} type="checkbox" defaultChecked={index < 4} /><input aria-label={`${permission} lecture`} type="checkbox" defaultChecked={index !== 1 && index !== 5} /></div>)}
             </div>
             <button className="bo-secondary" type="button">Inviter un utilisateur</button>
           </>}

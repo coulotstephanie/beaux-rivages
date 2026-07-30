@@ -43,3 +43,12 @@ test("les intégrations sensibles restent explicitement non connectées", () => 
   assert.match(settings, /Les secrets ne sont jamais affichés/);
   assert.doesNotMatch(settings + communications, /createClient|STRIPE_SECRET|SUPABASE_SERVICE_ROLE/);
 });
+
+test("communication et paramètres couvrent envois et permissions", () => {
+  const communication = readFileSync("features/back-office/components/CommunicationCenter.tsx", "utf8");
+  const settings = readFileSync("features/back-office/components/SettingsCenter.tsx", "utf8");
+  assert.match(communication, /Envoi individuel/);
+  assert.match(communication, /Envoi groupé/);
+  assert.match(settings, /Permissions par rôle/);
+  for (const permission of ["Réservations", "Tarifs", "Voyageurs", "Communications", "CMS", "Paramètres"]) assert.match(settings, new RegExp(permission));
+});

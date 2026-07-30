@@ -23,6 +23,7 @@ export function CommunicationCenter() {
   const [channel, setChannel] = useState<Channel>("email");
   const [templateId, setTemplateId] = useState("arrival");
   const [segment, setSegment] = useState("Arrivées demain");
+  const [audienceMode, setAudienceMode] = useState<"individual" | "group">("group");
   const [prepared, setPrepared] = useState(false);
   const template = templates.find((item) => item.id === templateId) ?? templates[0];
   const recipients = segments.find(([label]) => label === segment)?.[1] ?? 0;
@@ -42,12 +43,13 @@ export function CommunicationCenter() {
       <section className="bo-card bo-template-list"><div className="bo-card__heading"><div><p className="bo-eyebrow">Bibliothèque</p><h2>Modèles</h2></div></div>{templates.map((item) => <button type="button" key={item.id} className={templateId === item.id ? "is-active" : ""} onClick={() => { setTemplateId(item.id); setPrepared(false); }}><Mail /><span><strong>{item.label}</strong><small>{item.subject}</small></span><Check /></button>)}</section>
       <section className="bo-card bo-composer">
         <div className="bo-card__heading"><div><p className="bo-eyebrow">Composer</p><h2>{template.label}</h2></div><span className="bo-state is-active">Brouillon</span></div>
-        <label>Destinataires<select value={segment} onChange={(e) => { setSegment(e.target.value); setPrepared(false); }}>{segments.map(([label, count]) => <option key={label}>{label} · {count}</option>)}</select></label>
+        <div className="bo-segmented" role="group" aria-label="Type d’envoi"><button type="button" aria-pressed={audienceMode === "individual"} onClick={() => { setAudienceMode("individual"); setPrepared(false); }}>Envoi individuel</button><button type="button" aria-pressed={audienceMode === "group"} onClick={() => { setAudienceMode("group"); setPrepared(false); }}>Envoi groupé</button></div>
+        {audienceMode === "individual" ? <label>Voyageur<input defaultValue="Élodie Martin · elodie.martin@example.com" /></label> : <label>Liste dynamique<select value={segment} onChange={(e) => { setSegment(e.target.value); setPrepared(false); }}>{segments.map(([label, count]) => <option key={label}>{label} · {count}</option>)}</select></label>}
         <label>Objet<input value={template.subject} readOnly /></label>
         <label>Message<textarea value={template.body} readOnly rows={7} /></label>
         <div className="bo-variables"><small>Variables disponibles</small>{["{{prénom}}", "{{maison}}", "{{date_arrivée}}", "{{code_accès}}", "{{niveau_fidélité}}"].map((item) => <button type="button" key={item}>{item}</button>)}</div>
-        <div className="bo-send-summary"><Users /><span><strong>{recipients} destinataires</strong><small>Les doublons et désabonnements seront exclus lors d’une future connexion fournisseur.</small></span></div>
-        <button className="bo-primary bo-send" type="button" onClick={() => setPrepared(true)} disabled={channel === "sms"}><Send />{channel === "sms" ? "Fournisseur SMS non connecté" : "Préparer l’envoi groupé"}</button>
+        <div className="bo-send-summary"><Users /><span><strong>{audienceMode === "individual" ? "1 destinataire" : `${recipients} destinataires`}</strong><small>Les doublons et désabonnements seront exclus lors d’une future connexion fournisseur.</small></span></div>
+        <button className="bo-primary bo-send" type="button" onClick={() => setPrepared(true)} disabled={channel === "sms"}><Send />{channel === "sms" ? "Fournisseur SMS non connecté" : `Préparer l’envoi ${audienceMode === "individual" ? "individuel" : "groupé"}`}</button>
         {prepared && <p className="bo-prepared" role="status"><Check /> Envoi simulé et prêt pour validation humaine. Aucun message n’a été transmis.</p>}
       </section>
       <aside className="bo-card bo-preview"><p className="bo-eyebrow">Aperçu personnalisé</p><div><small>À : Élodie Martin</small><strong>{template.subject.replace("{{prénom}}", "Élodie")}</strong><p>{preview}</p><footer>Stéphanie & Bruno<br />Beaux Rivages</footer></div><p><Bell /> Chaque envoi réel nécessitera une confirmation explicite.</p></aside>
