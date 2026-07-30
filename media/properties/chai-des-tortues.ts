@@ -1,11 +1,7 @@
 import type { MediaAsset, PropertyMediaManifest } from "@/media/types";
 import { destinationMedia } from "@/media/destinations";
 
-const propertyAsset = (
-  path: string,
-  alt: string,
-  caption: string,
-): MediaAsset => ({
+const propertyAsset = (path: string, alt: string, caption: string): MediaAsset => ({
   src: `/images/properties/chai-des-tortues/${path}`,
   alt,
   caption,
@@ -13,11 +9,7 @@ const propertyAsset = (
   owner: "chai-des-tortues",
 });
 
-const destinationAsset = (
-  file: string,
-  alt: string,
-  caption: string,
-): MediaAsset => ({
+const destinationAsset = (file: string, alt: string, caption: string): MediaAsset => ({
   src: `/images/properties/chai-des-tortues/${file}`,
   alt,
   caption,
@@ -79,10 +71,33 @@ const editorialFamilyGames = propertyAsset(
   "Jeu de société en famille autour de la table ronde du Chai",
   "Une partie sous les pierres",
 );
+const editorialMarketCouple = propertyAsset(
+  "editorial/retour-marche-en-couple.png",
+  "Un couple préparant le dîner avec les produits du marché dans la grande pièce du Chai",
+  "Le dîner se prépare à deux",
+);
+const editorialFamilyCat = propertyAsset(
+  "editorial/matin-en-famille-chat.png",
+  "Parents, enfants, bébé et chat réunis dans la pièce de vie du Chai",
+  "Un matin pour toute la famille",
+);
+const editorialCandlelightDinner = propertyAsset(
+  "editorial/diner-romantique-aux-chandelles.png",
+  "Dîner romantique aux chandelles dans la grande pièce du Chai",
+  "Un dîner à deux sous les poutres",
+);
+const editorialMultigenerationalChristmas = propertyAsset(
+  "editorial/noel-multigenerationnel.png",
+  "Plusieurs générations réunies autour de la table de Noël du Chai avec un bébé et un chat",
+  "Noël réunit toutes les générations",
+);
+const editorialFamilyTable = propertyAsset(
+  "editorial/grande-table-en-famille.png",
+  "Grands-parents, parents, enfants et bébé partageant un grand repas dans le Chai",
+  "Le grand déjeuner sous les poutres",
+);
 
-const arrival = [
-  editorialBicycleArrival,
-];
+const arrival = [editorialBicycleArrival];
 
 const exterior = [
   editorialMorningCoffee,
@@ -347,6 +362,11 @@ const propertyGallery = [
   livingRoom[7],
   editorialAperitif,
   editorialFamilyGames,
+  editorialMarketCouple,
+  editorialFamilyCat,
+  editorialCandlelightDinner,
+  editorialMultigenerationalChristmas,
+  editorialFamilyTable,
 
   // Cuisine et grande table
   kitchen[1],
@@ -401,6 +421,11 @@ export const chaiDesTortuesMedia = {
   terrace: [editorialMorningCoffee],
   details: [...details, utilities[1]],
   lifestyle: [
+    editorialMarketCouple,
+    editorialFamilyCat,
+    editorialCandlelightDinner,
+    editorialMultigenerationalChristmas,
+    editorialFamilyTable,
     bicycle,
     port,
     destinationMedia.food,
