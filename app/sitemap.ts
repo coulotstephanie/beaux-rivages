@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { properties } from "@/data";
 import { destinationGuides } from "@/destinationGuides";
 import { experiences } from "@/experiences";
+import { productionLocales } from "@/i18n/config";
 
 const staticRoutes = [
   "",
@@ -35,16 +36,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const guideRoutes = destinationGuides.map((guide) => `/destinations/${guide.slug}`);
   const experienceRoutes = experiences.map((experience) => `/experiences/${experience.slug}`);
 
-  return [...staticRoutes, ...propertyRoutes, ...guideRoutes, ...experienceRoutes].map((route) => ({
-    url: `${baseUrl}${route}`,
-    changeFrequency: route === "" ? "weekly" : "monthly",
-    priority:
-      route === ""
-        ? 1
-        : route.startsWith("/maisons")
-          ? 0.9
-          : route.startsWith("/destinations/") || route.startsWith("/experiences/")
-            ? 0.85
-            : 0.7,
-  }));
+  return [...staticRoutes, ...propertyRoutes, ...guideRoutes, ...experienceRoutes].flatMap(
+    (route) => {
+      const languages = Object.fromEntries(
+        productionLocales.map((locale) => [
+          locale,
+          `${baseUrl}${locale === "fr" ? "" : `/${locale}`}${route}`,
+        ]),
+      );
+      return productionLocales.map((locale) => ({
+        url: languages[locale],
+        alternates: { languages: { ...languages, "x-default": `${baseUrl}${route}` } },
+        changeFrequency: (route === "" ? "weekly" : "monthly") as "weekly" | "monthly",
+        priority:
+          route === ""
+            ? 1
+            : route.startsWith("/maisons")
+              ? 0.9
+              : route.startsWith("/destinations/") || route.startsWith("/experiences/")
+                ? 0.85
+                : 0.7,
+      }));
+    },
+  );
 }
