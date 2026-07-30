@@ -57,7 +57,7 @@ const curatedPhotoOrder = [
   // Villa Raie Manta — lumière, océan et maison de famille
   "/images/properties/villa-raie-manta/editorial/salon-aperitif.png",
   "/images/properties/villa-raie-manta/editorial/enfants-bebe-et-chien.png",
-  "/images/properties/villa-raie-manta/editorial/retour-plage-en-couple.png",
+  "/images/properties/villa-raie-manta/editorial/retour-plage-en-couple-fenetre-etage.png",
   "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
   "/images/properties/villa-raie-manta/cuisine.jpeg",
   "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
