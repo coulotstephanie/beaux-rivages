@@ -78,7 +78,7 @@ const editorialBalineseLounger = asset(
   "L’heure douce sur le transat balinais",
 );
 const editorialBeachReturn = asset(
-  "editorial/retour-plage-en-couple.png",
+  "editorial/retour-plage-en-couple-fenetre-etage.png",
   "Un couple de retour de plage dans le salon à l’étage de Villa Raie Manta",
   "Le retour de la plage",
 );
