@@ -6,4 +6,8 @@ export { GuestCrm } from "./components/GuestCrm";
 export { CommunicationCenter } from "./components/CommunicationCenter";
 export { InternalCms } from "./components/InternalCms";
 export { SettingsCenter } from "./components/SettingsCenter";
+export { MyDay } from "./components/MyDay";
+export { OperationsTasks } from "./components/OperationsTasks";
+export { OperationsTimeline } from "./components/OperationsTimeline";
+export { CommandCenter } from "./components/CommandCenter";
 export type * from "./types";

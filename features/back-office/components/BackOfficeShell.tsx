@@ -4,9 +4,12 @@ import {
   CalendarDays,
   Bell,
   BookOpenText,
+  CheckSquare,
   ChevronLeft,
   Command,
+  History,
   Gauge,
+  LayoutDashboard,
   Menu,
   MessagesSquare,
   Moon,
@@ -23,6 +26,10 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const navigation = [
   { href: "/administration", label: "Tableau de bord", icon: Gauge },
+  { href: "/administration/ma-journee", label: "Ma journée", icon: CheckSquare },
+  { href: "/administration/taches", label: "Tâches & checklists", icon: CheckSquare },
+  { href: "/administration/activite", label: "Historique", icon: History },
+  { href: "/administration/supervision", label: "Command Center", icon: LayoutDashboard },
   { href: "/administration/calendriers", label: "Calendrier", icon: CalendarDays },
   { href: "/administration/tarifs", label: "Tarifs & offres", icon: Tags },
   { href: "/administration/voyageurs", label: "Voyageurs CRM", icon: Users },
@@ -37,6 +44,7 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
   const [dark, setDark] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -108,7 +116,7 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
           </button>
           <label className="bo-search" onFocus={() => setSearchOpen(true)}>
             <Search aria-hidden="true" />
-            <input ref={searchRef} type="search" placeholder="Rechercher partout…" aria-label="Recherche globale" />
+            <input ref={searchRef} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher voyageurs, réservations, documents…" aria-label="Recherche globale" />
             <kbd>⌘ K</kbd>
           </label>
           <button className="bo-icon-button" type="button" onClick={toggleTheme} aria-label={dark ? "Activer le mode clair" : "Activer le mode sombre"}>
@@ -133,18 +141,20 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
               <span>Accès rapide</span>
               <button type="button" onClick={() => setSearchOpen(false)}>Échap</button>
             </div>
-            <Link href="/administration/voyageurs" onClick={() => setSearchOpen(false)}><Users /> Rechercher un voyageur</Link>
-            <Link href="/administration/calendriers" onClick={() => setSearchOpen(false)}><CalendarDays /> Ouvrir le calendrier</Link>
-            <Link href="/administration/communications" onClick={() => setSearchOpen(false)}><MessagesSquare /> Préparer un message</Link>
-            <Link href="/administration/parametres" onClick={() => setSearchOpen(false)}><Settings /> Modifier les paramètres</Link>
+            <p>{query ? `Résultats pour « ${query} »` : "Suggestions"}</p>
+            <Link href="/administration/voyageurs" onClick={() => setSearchOpen(false)}><Users /><span><strong>Élodie & Thomas Martin</strong><small>Voyageur · Le Chai des Tortues</small></span></Link>
+            <Link href="/administration/calendriers" onClick={() => setSearchOpen(false)}><CalendarDays /><span><strong>BR-2026-084</strong><small>Réservation · 3 au 10 août</small></span></Link>
+            <Link href="/administration/contenus" onClick={() => setSearchOpen(false)}><BookOpenText /><span><strong>Les marchés de l’île</strong><small>Article du Carnet</small></span></Link>
+            <Link href="/administration/activite" onClick={() => setSearchOpen(false)}><History /><span><strong>Contrat BR-2026-084</strong><small>Document signé</small></span></Link>
           </div>
         )}
         {notificationsOpen && (
           <aside className="bo-notifications" aria-label="Notifications importantes">
-            <header><strong>Notifications</strong><small>3 importantes</small></header>
+            <header><strong>Centre de notifications</strong><small>3 importantes</small></header>
             <button type="button"><span>Paiement à relancer</span><small>Villa Raie Manta · aujourd’hui</small></button>
-            <button type="button"><span>Contrat non signé</span><small>Le Nid d’Été · arrivée demain</small></button>
-            <button type="button"><span>Maintenance à confirmer</span><small>Le Chai des Tortues · 16 h</small></button>
+            <button type="button"><span>Nouvelle réservation</span><small>Le Nid d’Été · il y a 12 min</small></button>
+            <button type="button"><span>Erreur de synchronisation</span><small>Airbnb · Le Chai des Tortues</small></button>
+            <Link href="/administration/activite">Voir toutes les notifications</Link>
           </aside>
         )}
         {children}

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
-const routes = ["", "calendriers", "tarifs", "voyageurs", "communications", "contenus", "parametres"];
+const routes = ["", "ma-journee", "taches", "activite", "supervision", "calendriers", "tarifs", "voyageurs", "communications", "contenus", "parametres"];
 const components = [
   "PremiumDashboard",
   "ProfessionalCalendar",
@@ -11,9 +11,13 @@ const components = [
   "CommunicationCenter",
   "InternalCms",
   "SettingsCenter",
+  "MyDay",
+  "OperationsTasks",
+  "OperationsTimeline",
+  "CommandCenter",
 ];
 
-test("les sept écrans du Back Office 1.1 sont disponibles", () => {
+test("les onze écrans du Back Office 1.1 sont disponibles", () => {
   for (const route of routes) {
     assert.equal(existsSync(`app/administration/${route ? `${route}/` : ""}page.tsx`), true);
   }
