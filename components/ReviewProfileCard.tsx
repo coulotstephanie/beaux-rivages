@@ -21,7 +21,10 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
       {profile.accolade && <p className="review-accolade">{profile.accolade}</p>}
       <p className="review-summary">{profile.summary}</p>
 
-      <div className="review-theme-list" aria-label={`Thèmes les plus cités pour ${profile.property}`}>
+      <div
+        className="review-theme-list"
+        aria-label={`Thèmes les plus cités pour ${profile.property}`}
+      >
         {profile.themes.map((theme) => (
           <div className="review-theme" key={theme.label}>
             <div className="review-theme-label">
@@ -36,8 +39,21 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
       </div>
 
       <div className="review-card-actions">
-        <Link href={`/maisons/${profile.slug}`}>Découvrir la maison <span>→</span></Link>
-        <a href={profile.sourceUrl} target="_blank" rel="noreferrer">Voir sur Airbnb</a>
+        <Link href={`/maisons/${profile.slug}`}>
+          Découvrir la maison <span>→</span>
+        </Link>
+        <div>
+          <a href={profile.sourceUrl} target="_blank" rel="noreferrer">
+            Voir sur Airbnb
+          </a>
+          {profile.otherSources?.map((source) => (
+            <a href={source.sourceUrl} target="_blank" rel="noreferrer" key={source.platform}>
+              {source.rating && source.scale && source.reviewCount
+                ? `${source.rating}/${source.scale} · ${source.reviewCount} avis sur ${source.platform}`
+                : `Voir sur ${source.platform}`}
+            </a>
+          ))}
+        </div>
       </div>
     </article>
   );
