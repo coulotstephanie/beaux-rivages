@@ -1,10 +1,14 @@
+"use client";
+
 import {
   AlertTriangle,
   ArrowRight,
   CloudSun,
   Droplets,
   MessageCircle,
+  SlidersHorizontal,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { dashboardMetrics, properties } from "../demo-data";
 
 const priorities = [
@@ -15,6 +19,22 @@ const priorities = [
 ];
 
 export function PremiumDashboard() {
+  const [configuring, setConfiguring] = useState(false);
+  const [widgets, setWidgets] = useState({ weather: true, metrics: true, agenda: true, houses: true, priorities: true });
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("br-dashboard-widgets");
+    if (stored) setWidgets(JSON.parse(stored) as typeof widgets);
+  }, []);
+
+  const toggleWidget = (name: keyof typeof widgets) => {
+    setWidgets((current) => {
+      const next = { ...current, [name]: !current[name] };
+      window.localStorage.setItem("br-dashboard-widgets", JSON.stringify(next));
+      return next;
+    });
+  };
+
   return (
     <div className="bo-page">
       <div className="bo-page__heading">
@@ -23,10 +43,11 @@ export function PremiumDashboard() {
           <h1>Bonjour Stéphanie.</h1>
           <p>Voici l’essentiel de votre journée, sans rien laisser passer.</p>
         </div>
-        <button className="bo-primary" type="button">+ Nouvelle réservation</button>
+        <div className="bo-heading-actions"><button type="button" onClick={() => setConfiguring((value) => !value)}><SlidersHorizontal /> Widgets</button><button className="bo-primary" type="button">+ Nouvelle réservation</button></div>
       </div>
+      {configuring && <section className="bo-widget-config" aria-label="Widgets configurables"><strong>Personnaliser le tableau de bord</strong>{Object.entries({ weather: "Météo & marées", metrics: "Indicateurs", agenda: "Agenda", houses: "Occupation", priorities: "Priorités" }).map(([id, label]) => <label key={id}><input type="checkbox" checked={widgets[id as keyof typeof widgets]} onChange={() => toggleWidget(id as keyof typeof widgets)} />{label}</label>)}</section>}
 
-      <section className="bo-weather-grid" aria-label="Météo et marées">
+      {widgets.weather && <section className="bo-weather-grid" aria-label="Météo et marées">
         <article>
           <CloudSun aria-hidden="true" />
           <div><small>Île de Ré</small><strong>24 °C · Ensoleillé</strong></div>
@@ -37,9 +58,9 @@ export function PremiumDashboard() {
           <div><small>Marées</small><strong>Haute à 11:42</strong></div>
           <span>Basse à 17:58</span>
         </article>
-      </section>
+      </section>}
 
-      <section className="bo-metrics" aria-label="Indicateurs du jour">
+      {widgets.metrics && <section className="bo-metrics" aria-label="Indicateurs du jour">
         {dashboardMetrics.map((metric) => (
           <article key={metric.label} data-tone={metric.tone ?? "default"}>
             <span>{metric.label}</span>
@@ -47,10 +68,10 @@ export function PremiumDashboard() {
             <small>{metric.detail}</small>
           </article>
         ))}
-      </section>
+      </section>}
 
       <div className="bo-dashboard-grid">
-        <section className="bo-card bo-agenda">
+        {widgets.agenda && <section className="bo-card bo-agenda">
           <div className="bo-card__heading">
             <div><p className="bo-eyebrow">Aujourd’hui</p><h2>Les temps forts</h2></div>
             <button type="button">Voir le calendrier <ArrowRight /></button>
@@ -64,9 +85,9 @@ export function PremiumDashboard() {
               </li>
             ))}
           </ol>
-        </section>
+        </section>}
 
-        <section className="bo-card">
+        {widgets.houses && <section className="bo-card">
           <div className="bo-card__heading">
             <div><p className="bo-eyebrow">Maisons</p><h2>Occupation</h2></div>
           </div>
@@ -79,15 +100,15 @@ export function PremiumDashboard() {
               </article>
             ))}
           </div>
-        </section>
+        </section>}
 
-        <section className="bo-card bo-attention">
+        {widgets.priorities && <section className="bo-card bo-attention">
           <div className="bo-card__heading">
             <div><p className="bo-eyebrow">À traiter</p><h2>Priorités</h2></div>
           </div>
           <button type="button"><AlertTriangle /><span><strong>1 incident ouvert</strong><small>Chauffe-eau · Nid d’Été</small></span><ArrowRight /></button>
           <button type="button"><MessageCircle /><span><strong>7 messages non lus</strong><small>2 attendent une réponse rapide</small></span><ArrowRight /></button>
-        </section>
+        </section>}
       </div>
     </div>
   );

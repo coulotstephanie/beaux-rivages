@@ -15,6 +15,7 @@ import {
   Moon,
   Search,
   Settings,
+  Star,
   Sun,
   Tags,
   Users,
@@ -22,7 +23,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 const navigation = [
   { href: "/administration", label: "Tableau de bord", icon: Gauge },
@@ -38,6 +39,13 @@ const navigation = [
   { href: "/administration/parametres", label: "Paramètres", icon: Settings },
 ];
 
+const commandItems = [
+  { id: "guest", href: "/administration/voyageurs", label: "Élodie & Thomas Martin", detail: "Voyageur · Le Chai des Tortues", icon: Users },
+  { id: "booking", href: "/administration/calendriers", label: "BR-2026-084", detail: "Réservation · 3 au 10 août", icon: CalendarDays },
+  { id: "article", href: "/administration/contenus", label: "Les marchés de l’île", detail: "Article du Carnet", icon: BookOpenText },
+  { id: "contract", href: "/administration/activite", label: "Contrat BR-2026-084", detail: "Document signé", icon: History },
+];
+
 export function BackOfficeShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -45,12 +53,14 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [favorites, setFavorites] = useState<string[]>([]);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const storedTheme = window.localStorage.getItem("br-back-office-theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     setDark(storedTheme ? storedTheme === "dark" : prefersDark);
+    setFavorites(JSON.parse(window.localStorage.getItem("br-back-office-favorites") ?? "[]") as string[]);
   }, []);
 
   useEffect(() => {
@@ -65,6 +75,9 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
         setNotificationsOpen(false);
         setOpen(false);
       }
+      if (event.altKey && event.key === "1") window.location.assign("/administration/ma-journee");
+      if (event.altKey && event.key === "2") window.location.assign("/administration/calendriers");
+      if (event.altKey && event.key === "3") window.location.assign("/administration/voyageurs");
     };
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
@@ -75,6 +88,19 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
     setDark(nextTheme);
     window.localStorage.setItem("br-back-office-theme", nextTheme ? "dark" : "light");
   };
+  const toggleFavorite = (id: string) => {
+    setFavorites((current) => {
+      const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      window.localStorage.setItem("br-back-office-favorites", JSON.stringify(next));
+      return next;
+    });
+  };
+  const visibleCommands = useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase("fr");
+    return commandItems
+      .filter((item) => !normalized || `${item.label} ${item.detail}`.toLocaleLowerCase("fr").includes(normalized))
+      .sort((left, right) => Number(favorites.includes(right.id)) - Number(favorites.includes(left.id)));
+  }, [favorites, query]);
 
   return (
     <div className="bo-shell" data-theme={dark ? "dark" : "light"}>
@@ -141,11 +167,10 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
               <span>Accès rapide</span>
               <button type="button" onClick={() => setSearchOpen(false)}>Échap</button>
             </div>
-            <p>{query ? `Résultats pour « ${query} »` : "Suggestions"}</p>
-            <Link href="/administration/voyageurs" onClick={() => setSearchOpen(false)}><Users /><span><strong>Élodie & Thomas Martin</strong><small>Voyageur · Le Chai des Tortues</small></span></Link>
-            <Link href="/administration/calendriers" onClick={() => setSearchOpen(false)}><CalendarDays /><span><strong>BR-2026-084</strong><small>Réservation · 3 au 10 août</small></span></Link>
-            <Link href="/administration/contenus" onClick={() => setSearchOpen(false)}><BookOpenText /><span><strong>Les marchés de l’île</strong><small>Article du Carnet</small></span></Link>
-            <Link href="/administration/activite" onClick={() => setSearchOpen(false)}><History /><span><strong>Contrat BR-2026-084</strong><small>Document signé</small></span></Link>
+            <p>{query ? `Résultats pour « ${query} »` : favorites.length ? "Favoris et suggestions" : "Suggestions"}</p>
+            {visibleCommands.map(({ id, href, label, detail, icon: Icon }) => <div className="bo-command-result" key={id}><Link href={href} onClick={() => setSearchOpen(false)}><Icon /><span><strong>{label}</strong><small>{detail}</small></span></Link><button type="button" className={favorites.includes(id) ? "is-favorite" : ""} onClick={() => toggleFavorite(id)} aria-label={`${favorites.includes(id) ? "Retirer des" : "Ajouter aux"} favoris`}><Star /></button></div>)}
+            {!visibleCommands.length && <p className="bo-empty">Aucun résultat. Essayez un nom, une réservation ou un document.</p>}
+            <footer><span>Alt+1 Ma journée</span><span>Alt+2 Calendrier</span><span>Alt+3 Voyageurs</span></footer>
           </div>
         )}
         {notificationsOpen && (
