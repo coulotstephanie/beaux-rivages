@@ -93,6 +93,7 @@ export function SettingsCenter() {
               <article><Database /><div><strong>Calendriers externes</strong><small>Airbnb · Booking · Abritel</small></div><i>Prévu</i></article>
               <article><Smartphone /><div><strong>Fournisseur SMS</strong><small>Aucun fournisseur connecté</small></div><i>Inactif</i></article>
             </div>
+            <div className="bo-settings-links"><a href="/administration/parametres/integrations">Ouvrir le centre des intégrations</a></div>
           </>}
         </section>
       </div>

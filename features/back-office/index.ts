@@ -10,4 +10,5 @@ export { MyDay } from "./components/MyDay";
 export { OperationsTasks } from "./components/OperationsTasks";
 export { OperationsTimeline } from "./components/OperationsTimeline";
 export { CommandCenter } from "./components/CommandCenter";
+export { IntegrationSettings } from "./components/IntegrationSettings";
 export type * from "./types";
