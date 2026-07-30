@@ -26,7 +26,7 @@ L’absence de preuve vaut `FAIL`; elle n’est jamais remplacée par une hypoth
 | Documentation                     | **PASS** | Runbook, SOP Backup & Restore, Architecture, API, règles métier, Changelog et notes RC1 présents                                                              | propriétaires opérationnels à confirmer                                    |
 | CI                                | **PASS** | GitHub Actions run `30491613818`, jobs `quality` et `e2e-smoke` : succès                                                                                      | aucun                                                                      |
 | CD / déploiement                  | **FAIL** | [Guide de déploiement](./docs/05_OPERATIONS/DeploymentGuide.md) uniquement                                                                                    | rollback et déploiement de production non exercés                          |
-| Supabase — disponibilité actuelle | **PASS** | projet lié `ydqtqfkzmovjdkmldhqr`, `ACTIVE_HEALTHY`, PostgreSQL 17.6, lint distant sans erreur                                                                | le plan reste non vérifié                                                  |
+| Supabase — disponibilité actuelle | **PASS** | projet lié `ydqtqfkzmovjdkmldhqr`, `ACTIVE_HEALTHY`, PostgreSQL 17.6, plan Free confirmé, lint distant sans erreur                                            | sauvegarde externe requise                                                 |
 | Supabase — cohérence cible        | **FAIL** | [Rapport migrations](./docs/05_OPERATIONS/MIGRATION_COHERENCE_REPORT_2026-07-29.md)                                                                           | trois migrations locales non appliquées ; schéma Git et distant différents |
 | Migrations et rollbacks dans Git  | **PASS** | `npm run db:verify-migrations` : 15 migrations, 15 rollbacks, aucun orphelin                                                                                  | exécution sur base vierge non prouvée                                      |
 | RLS du schéma déjà distant        | **PASS** | tests SQL, migrations versionnées et `supabase db lint --linked` sans erreur                                                                                  | ne couvre pas les trois migrations en attente                              |
@@ -58,9 +58,8 @@ mise en production n’est autorisée.
 - résultat : aucune sauvegarde physique listée et outillage de dump absent ;
 - passage à PASS : **non**.
 
-Prochaine preuve requise : capture expurgée de **Database > Backups** et
-**Organization > Billing**, ou installation contrôlée des outils PostgreSQL
-avec accès DB pour produire le dump.
+Prochaine preuve requise : installation contrôlée de PostgreSQL 17 ou Docker,
+puis export officiel `supabase db dump`, checksum et conservation hors site.
 
 ## Autres risques ouverts
 

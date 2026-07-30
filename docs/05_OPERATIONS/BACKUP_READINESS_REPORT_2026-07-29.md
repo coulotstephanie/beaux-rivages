@@ -13,22 +13,22 @@ la CLI ; aucun environnement miroir n’existe actuellement.
 - région : `eu-west-1` ;
 - PostgreSQL : `17.6.1.147`, canal GA ;
 - projets visibles : un seul ;
-- plan : **non exposé par la CLI et non vérifiable sans accès au Dashboard**.
+- plan : **Free, confirmé par la propriétaire le 30 juillet 2026**.
 
-Le plan ne sera pas déduit de la date de création ou des fonctions observées.
-Le propriétaire doit joindre une capture expurgée de **Organization > Billing**
-et **Database > Backups**.
+La documentation officielle confirme que les sauvegardes automatiques et le
+PITR ne sont pas inclus dans le plan Free. Elle recommande `supabase db dump`
+avec conservation hors site.
 
 ## Comparaison des solutions
 
 | Méthode                      | Couverture                                    | Avantages                                           | Limites                                                                             | Décision                    |
 | ---------------------------- | --------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------------------- |
-| Restore to a New Project     | base complète, rôles et Auth                  | méthode gérée, isolée, fidèle, sans écriture source | plan payant + sauvegarde physique, projet facturable, Storage/config à compléter    | **retenue en priorité**     |
+| Restore to a New Project     | base complète, rôles et Auth                  | méthode gérée, isolée, fidèle, sans écriture source | indisponible sur le plan Free sans évolution facturable                             | non retenue actuellement    |
 | Sauvegarde Dashboard logique | base selon disponibilité                      | téléchargement simple                               | réservée à certains anciens projets logiques ; paramètres et objets Storage absents | secours                     |
-| Supabase CLI `db dump`       | public par défaut, données/rôles avec options | reproductible et versionnable hors Git              | Docker requis ; `auth` et `storage` exclus par défaut                               | complément                  |
-| `pg_dump` PostgreSQL natif   | schémas sélectionnés et données               | contrôle fin, aucun Docker                          | client et mot de passe DB requis ; restauration plus délicate                       | complément recommandé       |
+| Supabase CLI `db dump`       | public par défaut, données/rôles avec options | méthode officiellement recommandée pour Free        | Docker requis ; `auth` et `storage` exclus par défaut                               | **retenue**                 |
+| `pg_dump` PostgreSQL natif   | schémas sélectionnés et données               | contrôle fin, aucun Docker                          | client et mot de passe DB requis ; restauration plus délicate                       | alternative officielle      |
 | Docker + CLI                 | identique à CLI                               | versions PostgreSQL maîtrisées                      | Docker indisponible sur le poste actuel                                             | non exécutable actuellement |
-| sauvegardes automatiques     | base quotidienne selon plan                   | gérées et surveillées par Supabase                  | rétention dépend du plan ; Storage exclu ; état du plan non visible via CLI         | à vérifier au Dashboard     |
+| sauvegardes automatiques     | base quotidienne selon plan                   | gérées et surveillées par Supabase                  | non incluses dans le plan Free                                                      | indisponible actuellement   |
 
 Supabase indique que les sauvegardes quotidiennes sont disponibles sur les
 plans Pro, Team et Enterprise, avec respectivement 7, 14 et jusqu’à 30 jours de

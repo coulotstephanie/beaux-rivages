@@ -28,34 +28,29 @@ fonctionnalités de sauvegarde, sans clé ni chaîne de connexion.
 
 ### Plan Supabase
 
-**Statut : Non vérifié**
+**Statut : Vérifié par confirmation écrite de la propriétaire — Free**
 
-Identifier précisément le plan réellement utilisé : Free, Pro, Team ou
-Enterprise. Ne pas le déduire des fonctions visibles ou de l’âge du projet.
+Confirmation reçue le 30 juillet 2026. La documentation officielle Supabase
+indique que les sauvegardes automatiques et le PITR ne sont pas inclus dans le
+plan Free.
 
-Preuves attendues :
+Références :
 
-- nom du plan dans Billing ;
-- rétention annoncée ;
-- disponibilité des sauvegardes logiques ou physiques ;
-- disponibilité de « Restore to a New Project » ;
-- coût éventuel du projet miroir.
+- [Database Backups](https://supabase.com/docs/guides/platform/backups) ;
+- [Supabase Pricing](https://supabase.com/pricing).
 
 ### Backups
 
-**Statut : Vérifié — aucune sauvegarde physique listée par la CLI**
+**Statut : Vérifié — aucune sauvegarde automatique incluse dans le plan Free et
+aucune sauvegarde physique listée par la CLI**
 
 Le contrôle du 29 juillet 2026 retourne `backups: null` et
 `physical_backup_data: {}`. Cela ne prouve pas l’absence d’une sauvegarde
-logique visible uniquement dans le Dashboard.
+logique visible uniquement dans le Dashboard. Supabase recommande aux projets
+Free d’effectuer régulièrement un export avec `supabase db dump` et de conserver
+les sauvegardes hors site.
 
-Preuves encore attendues :
-
-- date et heure UTC du dernier backup réussi ;
-- type de backup ;
-- taille ou périmètre ;
-- rétention ;
-- possibilité de téléchargement ou de restauration.
+Preuve encore attendue : un dump complet daté, intègre et restaurable.
 
 ### PITR
 
@@ -63,8 +58,9 @@ Preuves encore attendues :
 
 La CLI retourne `pitr_enabled: false`.
 
-Une activation éventuelle est une décision d’infrastructure potentiellement
-facturable. Elle ne doit pas être effectuée automatiquement.
+Le PITR n’est pas inclus dans le plan Free. Une évolution du plan ou une
+activation éventuelle est une décision d’infrastructure facturable. Elle ne doit
+pas être effectuée automatiquement.
 
 ### Connexion PostgreSQL
 
@@ -102,15 +98,15 @@ Preuves attendues :
 
 ## 3. Procédure de levée du P0
 
-### Étape A — qualifier l’offre Supabase
+### Étape A — qualification obtenue
 
-1. ouvrir Billing et Database > Backups ;
-2. relever plan, type, date, rétention, PITR et capacité de clone ;
-3. produire des captures expurgées ;
-4. consigner le coût éventuel ;
-5. choisir uniquement une méthode officiellement supportée.
+1. plan Free confirmé par la propriétaire ;
+2. absence de sauvegardes automatiques sur Free confirmée par la documentation ;
+3. PITR désactivé confirmé par la CLI ;
+4. voie retenue : export officiel `supabase db dump`, exécuté via Docker ou avec
+   les outils PostgreSQL officiels compatibles.
 
-Critère de réussite : une sauvegarde récente et exploitable est identifiée.
+Critère restant : produire une sauvegarde récente et exploitable.
 
 ### Étape B — préparer la sauvegarde complète
 
