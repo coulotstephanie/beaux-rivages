@@ -129,7 +129,7 @@ test("the homepage video remains manually playable when autoplay is unavailable"
   assert.match(component, /className="hero-video__control"/);
   assert.match(component, /Lire la vidéo d’accueil/);
   assert.match(component, /<motion\.video[\s\S]*autoPlay=\{canAutoplay\}/);
-  assert.doesNotMatch(styles, /\.hero-video video\{display:none\}/);
+  assert.doesNotMatch(styles, /\.premium-hero video\s*\{\s*display:\s*none/);
 });
 
 test("every property manifest exclusively references its own media directory", () => {

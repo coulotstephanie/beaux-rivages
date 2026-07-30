@@ -1020,7 +1020,7 @@ body.menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *,*::before,*::after { animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
-  .premium-hero video { display: none; }
+  .premium-hero video { transform: none; }
   .ux-enhanced .ux-reveal { opacity: 1!important; transform: none!important; }
   .ux-image-shell img { opacity: 1!important; filter: none!important; transform: none!important; }
   body::after { display: none; }
