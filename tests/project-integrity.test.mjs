@@ -395,6 +395,32 @@ test("booking review prevents invalid navigation and capacity overflow", () => {
   assert.match(guests, /countedGuests >= maxGuests/);
 });
 
+test("public review claims stay sourced and the direct request stays payment-free", () => {
+  const reviews = read("reviews.ts");
+  const reviewPage = read("app/avis/page.tsx");
+  const bookingTrust = read("components/BookingTrustPanel.tsx");
+  assert.match(reviews, /booking\.com\/hotel\/fr\/maison-vue-mer-ile-de-re-rivedoux-plage/);
+  assert.match(reviews, /booking\.com\/hotel\/fr\/chai-renove-ile-de-re-250-m-de-la-plage/);
+  assert.match(
+    reviews,
+    /booking\.com\/hotel\/fr\/maison-acces-plage-2-a-personnes-saint-georges-d-oleron/,
+  );
+  assert.match(reviews, /reviewsVerifiedOn/);
+  assert.doesNotMatch(reviewPage, /99 %|98 %|97 %/);
+  assert.match(bookingTrust, /Aucun paiement n’est demandé par ce formulaire/);
+  assert.match(bookingTrust, /totalPublicPlatformReviews/);
+});
+
+test("premium concierge renders native German and Spanish dynamic content", () => {
+  const concierge = read("components/ConciergePremium.tsx");
+  assert.match(concierge, /option value="de"/);
+  assert.match(concierge, /option value="es"/);
+  assert.match(concierge, /const experienceDe/);
+  assert.match(concierge, /const experienceEs/);
+  assert.match(concierge, /pageLocale\(pathname/);
+  assert.match(concierge, /data-no-translate/);
+});
+
 test("booking handoff clearly uses a native email action", () => {
   const button = read("components/ui/Button.tsx");
   const journey = read("components/BookingExperience.tsx");

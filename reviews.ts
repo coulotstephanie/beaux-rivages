@@ -13,7 +13,16 @@ export type PropertyReviewProfile = {
   summary: string;
   themes: ReviewTheme[];
   sourceUrl: string;
+  otherSources?: {
+    platform: "Booking.com" | "Abritel";
+    rating?: string;
+    scale?: 10 | 5;
+    reviewCount?: number;
+    sourceUrl: string;
+  }[];
 };
+
+export const reviewsVerifiedOn = "30 juillet 2026";
 
 export const reviewProfiles: PropertyReviewProfile[] = [
   {
@@ -34,6 +43,16 @@ export const reviewProfiles: PropertyReviewProfile[] = [
       { label: "Confort", count: 10 },
     ],
     sourceUrl: "https://www.airbnb.fr/rooms/1346326704165406766",
+    otherSources: [
+      {
+        platform: "Booking.com",
+        rating: "9,3",
+        scale: 10,
+        reviewCount: 21,
+        sourceUrl:
+          "https://www.booking.com/hotel/fr/chai-renove-ile-de-re-250-m-de-la-plage-rivedoux-plage.fr.html",
+      },
+    ],
   },
   {
     slug: "villa-raie-manta",
@@ -52,6 +71,16 @@ export const reviewProfiles: PropertyReviewProfile[] = [
       { label: "Espaces intérieurs", count: 5 },
     ],
     sourceUrl: "https://www.airbnb.fr/rooms/1352690589369037929",
+    otherSources: [
+      {
+        platform: "Booking.com",
+        rating: "9,1",
+        scale: 10,
+        reviewCount: 29,
+        sourceUrl:
+          "https://www.booking.com/hotel/fr/maison-vue-mer-ile-de-re-rivedoux-plage.fr.html",
+      },
+    ],
   },
   {
     slug: "nid-d-ete",
@@ -71,6 +100,13 @@ export const reviewProfiles: PropertyReviewProfile[] = [
       { label: "Calme", count: 22 },
     ],
     sourceUrl: "https://www.airbnb.fr/rooms/1189663838436081529",
+    otherSources: [
+      {
+        platform: "Booking.com",
+        sourceUrl:
+          "https://www.booking.com/hotel/fr/maison-acces-plage-2-a-personnes-saint-georges-d-oleron.fr.html",
+      },
+    ],
   },
 ];
 
@@ -78,3 +114,22 @@ export const totalAirbnbReviews = reviewProfiles.reduce(
   (total, profile) => total + profile.airbnbReviewCount,
   0,
 );
+
+export const totalPublicPlatformReviews = reviewProfiles.reduce(
+  (total, profile) =>
+    total +
+    profile.airbnbReviewCount +
+    (profile.otherSources?.reduce((subtotal, source) => subtotal + (source.reviewCount ?? 0), 0) ??
+      0),
+  0,
+);
+
+export const weightedAirbnbRating = (
+  reviewProfiles.reduce(
+    (total, profile) =>
+      total + Number(profile.airbnbRating.replace(",", ".")) * profile.airbnbReviewCount,
+    0,
+  ) / totalAirbnbReviews
+)
+  .toFixed(2)
+  .replace(".", ",");
