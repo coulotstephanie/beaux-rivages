@@ -2,20 +2,24 @@
 
 import {
   CalendarDays,
+  Bell,
   BookOpenText,
   ChevronLeft,
+  Command,
   Gauge,
   Menu,
   MessagesSquare,
+  Moon,
   Search,
   Settings,
+  Sun,
   Tags,
   Users,
   X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const navigation = [
   { href: "/administration", label: "Tableau de bord", icon: Gauge },
@@ -24,14 +28,48 @@ const navigation = [
   { href: "/administration/voyageurs", label: "Voyageurs CRM", icon: Users },
   { href: "/administration/communications", label: "Communications", icon: MessagesSquare },
   { href: "/administration/contenus", label: "CMS & Carnet", icon: BookOpenText },
+  { href: "/administration/parametres", label: "Paramètres", icon: Settings },
 ];
 
 export function BackOfficeShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("br-back-office-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setDark(storedTheme ? storedTheme === "dark" : prefersDark);
+  }, []);
+
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+        searchRef.current?.focus();
+      }
+      if (event.key === "Escape") {
+        setSearchOpen(false);
+        setNotificationsOpen(false);
+        setOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = !dark;
+    setDark(nextTheme);
+    window.localStorage.setItem("br-back-office-theme", nextTheme ? "dark" : "light");
+  };
 
   return (
-    <div className="bo-shell">
+    <div className="bo-shell" data-theme={dark ? "dark" : "light"}>
       <aside className={`bo-sidebar${open ? " is-open" : ""}`}>
         <div className="bo-brand">
           <span>BR</span>
@@ -61,10 +99,6 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
             <ChevronLeft aria-hidden="true" />
             Voir le site
           </Link>
-          <button type="button">
-            <Settings aria-hidden="true" />
-            Paramètres
-          </button>
         </div>
       </aside>
       <div className="bo-main">
@@ -72,10 +106,18 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
           <button className="bo-menu" type="button" onClick={() => setOpen(true)} aria-label="Ouvrir le menu">
             <Menu />
           </button>
-          <label className="bo-search">
+          <label className="bo-search" onFocus={() => setSearchOpen(true)}>
             <Search aria-hidden="true" />
-            <input type="search" placeholder="Rechercher un voyageur, une réservation…" />
+            <input ref={searchRef} type="search" placeholder="Rechercher partout…" aria-label="Recherche globale" />
+            <kbd>⌘ K</kbd>
           </label>
+          <button className="bo-icon-button" type="button" onClick={toggleTheme} aria-label={dark ? "Activer le mode clair" : "Activer le mode sombre"}>
+            {dark ? <Sun /> : <Moon />}
+          </button>
+          <button className="bo-icon-button bo-notification-button" type="button" onClick={() => setNotificationsOpen((value) => !value)} aria-label="Afficher les notifications" aria-expanded={notificationsOpen}>
+            <Bell />
+            <i aria-label="3 notifications">3</i>
+          </button>
           <div className="bo-user">
             <span>SB</span>
             <div>
@@ -84,6 +126,27 @@ export function BackOfficeShell({ children }: { children: ReactNode }) {
             </div>
           </div>
         </header>
+        {searchOpen && (
+          <div className="bo-command" role="dialog" aria-label="Recherche globale">
+            <div>
+              <Command aria-hidden="true" />
+              <span>Accès rapide</span>
+              <button type="button" onClick={() => setSearchOpen(false)}>Échap</button>
+            </div>
+            <Link href="/administration/voyageurs" onClick={() => setSearchOpen(false)}><Users /> Rechercher un voyageur</Link>
+            <Link href="/administration/calendriers" onClick={() => setSearchOpen(false)}><CalendarDays /> Ouvrir le calendrier</Link>
+            <Link href="/administration/communications" onClick={() => setSearchOpen(false)}><MessagesSquare /> Préparer un message</Link>
+            <Link href="/administration/parametres" onClick={() => setSearchOpen(false)}><Settings /> Modifier les paramètres</Link>
+          </div>
+        )}
+        {notificationsOpen && (
+          <aside className="bo-notifications" aria-label="Notifications importantes">
+            <header><strong>Notifications</strong><small>3 importantes</small></header>
+            <button type="button"><span>Paiement à relancer</span><small>Villa Raie Manta · aujourd’hui</small></button>
+            <button type="button"><span>Contrat non signé</span><small>Le Nid d’Été · arrivée demain</small></button>
+            <button type="button"><span>Maintenance à confirmer</span><small>Le Chai des Tortues · 16 h</small></button>
+          </aside>
+        )}
         {children}
       </div>
       {open && <button className="bo-backdrop" type="button" onClick={() => setOpen(false)} aria-label="Fermer le menu" />}
