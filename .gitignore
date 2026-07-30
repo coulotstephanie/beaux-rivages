@@ -12,7 +12,6 @@ out/
 tsconfig.tsbuildinfo
 coverage/
 .tools/
-.github/workflows/
 .vercel
 .env*
 !.env.example
