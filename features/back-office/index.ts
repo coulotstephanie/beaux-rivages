@@ -1,0 +1,14 @@
+export { BackOfficeShell } from "./components/BackOfficeShell";
+export { PremiumDashboard } from "./components/PremiumDashboard";
+export { PricingStudio } from "./components/PricingStudio";
+export { ProfessionalCalendar } from "./components/ProfessionalCalendar";
+export { GuestCrm } from "./components/GuestCrm";
+export { CommunicationCenter } from "./components/CommunicationCenter";
+export { InternalCms } from "./components/InternalCms";
+export { SettingsCenter } from "./components/SettingsCenter";
+export { MyDay } from "./components/MyDay";
+export { OperationsTasks } from "./components/OperationsTasks";
+export { OperationsTimeline } from "./components/OperationsTimeline";
+export { CommandCenter } from "./components/CommandCenter";
+export { IntegrationSettings } from "./components/IntegrationSettings";
+export type * from "./types";

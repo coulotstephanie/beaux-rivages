@@ -5,9 +5,12 @@ export interface TransactionalEmailProvider {
 
 export class ConfigurableEmailProvider implements TransactionalEmailProvider {
   async send(input: { to: string; subject: string; html: string; idempotencyKey: string }): Promise<{ messageId: string; status: "queued" | "sent" }> {
-    void input;
     const provider = process.env.EMAIL_PROVIDER as TransactionalEmailProviderName | undefined;
     if (!provider) throw new Error("Transactional email provider is not configured.");
+    if (provider === "resend") {
+      const { ResendEmailAdapter } = await import("./resend");
+      return new ResendEmailAdapter().send(input);
+    }
     throw new Error(`${provider} adapter credentials are not configured.`);
   }
 }
