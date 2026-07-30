@@ -402,9 +402,25 @@ test("the Signature experience exposes its weather, planning and arrival journey
   for (const property of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
     assert.match(comparison, new RegExp(property), `comparison should include ${property}`);
   }
+  assert.doesNotMatch(
+    comparison,
+    /label: "Surface"/,
+    "comparison should omit unavailable property surfaces",
+  );
   assert.match(arrival, /ArrivalChecklist/);
   assert.match(arrival, /SmartWeatherAdvisor/);
   assert.match(arrival, /PremiumInteractiveMap/);
+});
+
+test("the Carnet map keeps addresses available when a tile provider fails", () => {
+  const map = read("components/carnet/PremiumInteractiveMap.tsx");
+  const loader = read("components/carnet/PremiumInteractiveMapLoader.tsx");
+
+  assert.match(map, /tileerror/);
+  assert.match(map, /tile\.openstreetmap\.org/);
+  assert.match(map, /Toutes les adresses restent disponibles/);
+  assert.match(loader, /MapRecoveryBoundary/);
+  assert.match(loader, /premiumPlaces\.slice/);
 });
 
 test("premium media remains operable with keyboard, touch, zoom and video", () => {

@@ -16,22 +16,54 @@ const asset = (
 const propertyAsset = (file: string, alt: string, caption?: string) =>
   asset(file, alt, caption, "property");
 
-const access = asset("acces-plage.jpeg", "Plage des Saumonards derrière les ganivelles", "La plage au bout du chemin");
-const beachView = asset("vue-plage.jpeg", "Vue sur la plage des Saumonards", "La plage au bout du portail");
+const access = asset(
+  "acces-plage.jpeg",
+  "Plage des Saumonards derrière les ganivelles",
+  "La plage au bout du chemin",
+);
+const beachView = asset(
+  "vue-plage.jpeg",
+  "Vue sur la plage des Saumonards",
+  "La plage au bout du portail",
+);
 const ocean = asset("ocean.jpeg", "Océan derrière les ganivelles", "Face à l’Atlantique");
-const poplars = asset("peupliers.jpeg", "Pinède et aire de promenade près de la plage", "La forêt des Saumonards");
-const family = asset("famille-plage.jpeg", "Jeux d’enfants sur la plage", "Des vacances en famille");
-const sunset = asset("coucher-soleil.jpeg", "Coucher de soleil sur l’océan", "Les soirées face à la mer");
-const fortBoyard = asset("fort-boyard-saumonards.jpg", "Fort Boyard vu depuis la plage des Saumonards", "Fort Boyard à l’horizon");
+const poplars = asset(
+  "peupliers.jpeg",
+  "Pinède et aire de promenade près de la plage",
+  "La forêt des Saumonards",
+);
+const family = asset(
+  "famille-plage.jpeg",
+  "Jeux d’enfants sur la plage",
+  "Des vacances en famille",
+);
+const sunset = asset(
+  "coucher-soleil.jpeg",
+  "Coucher de soleil sur l’océan",
+  "Les soirées face à la mer",
+);
+const fortBoyard = asset(
+  "fort-boyard-saumonards.jpg",
+  "Fort Boyard vu depuis la plage des Saumonards",
+  "Fort Boyard à l’horizon",
+);
 const beach = asset("plage.jpeg", "Plage près du Nid d’Été", "Le sable au bout du chemin");
-const shade = asset("voile-ombrage.jpeg", "Dune fleurie et embarcations sur la plage", "La côte sauvage d’Oléron");
+const shade = asset(
+  "voile-ombrage.jpeg",
+  "Dune fleurie et embarcations sur la plage",
+  "La côte sauvage d’Oléron",
+);
 const originalLivingRoom = propertyAsset(
   "airbnb-salon-1.jpeg",
   "Salon d’origine du Nid d’Été avec canapé convertible",
   "Photographie originale du séjour",
 );
 const airbnbLivingRoom = [
-  propertyAsset("salon-retouche-premium.png", "Salon lumineux du Nid d’Été avec canapé convertible", "Le séjour, pensé pour se retrouver"),
+  propertyAsset(
+    "salon-retouche-premium.png",
+    "Salon lumineux du Nid d’Été avec canapé convertible",
+    "Le séjour, pensé pour se retrouver",
+  ),
 ];
 const editorialLivingRoom = propertyAsset(
   "editorial/salon-aperitif.png",
@@ -63,17 +95,63 @@ const editorialFamilyGames = propertyAsset(
   "Jeu de société en famille sur la grande table du Nid d’Été",
   "Les parties qui prolongent les vacances",
 );
+const editorialBeachReturn = propertyAsset(
+  "editorial/retour-plage-en-famille.png",
+  "Une famille préparant un goûter après la plage dans le salon du Nid d’Été",
+  "Le goûter au retour de la plage",
+);
+const editorialFamilyCat = propertyAsset(
+  "editorial/lecture-bebe-et-chat.png",
+  "Parents, enfants, bébé et chat réunis pour lire dans le salon du Nid d’Été",
+  "Une histoire tous ensemble",
+);
+const editorialCandlelightDinner = propertyAsset(
+  "editorial/diner-romantique.png",
+  "Dîner romantique aux chandelles dans le salon du Nid d’Été",
+  "Une soirée douce au Nid",
+);
+const editorialMultigenerationalEaster = propertyAsset(
+  "editorial/paques-multigenerationnel.png",
+  "Grands-parents, parent, enfants, bébé et chien réunis pour le déjeuner de Pâques",
+  "Pâques avec toutes les générations",
+);
+const editorialFamilyTable = propertyAsset(
+  "editorial/table-en-famille.png",
+  "Grands-parents, parent, enfants et bébé partageant un repas au Nid d’Été",
+  "Le dîner de famille au Nid",
+);
+const editorialFamilyTerraceAperitif = propertyAsset(
+  "editorial/aperitif-famille-en-terrasse.png",
+  "Plusieurs générations réunies avec un bébé et un chat autour de la table de la terrasse",
+  "L’apéritif en famille sous la voile",
+);
 const airbnbKitchen = [
-  propertyAsset("airbnb-cuisine-entiere-2.jpeg", "Équipements de la cuisine du Nid d’Été", "Tout le nécessaire pour cuisiner"),
+  propertyAsset(
+    "airbnb-cuisine-entiere-2.jpeg",
+    "Équipements de la cuisine du Nid d’Été",
+    "Tout le nécessaire pour cuisiner",
+  ),
   propertyAsset("airbnb-espace-repas-1.jpeg", "Espace repas du Nid d’Été", "La table des vacances"),
 ];
 const airbnbBedrooms = [
-  propertyAsset("airbnb-chambre-1-2.jpeg", "Rangements de la chambre principale", "Le confort dans les détails"),
+  propertyAsset(
+    "airbnb-chambre-1-2.jpeg",
+    "Rangements de la chambre principale",
+    "Le confort dans les détails",
+  ),
   propertyAsset("airbnb-chambre-2-1.jpeg", "Seconde chambre avec lit double", "La seconde chambre"),
 ];
 const airbnbBathroom = [
-  propertyAsset("airbnb-salle-de-bain-1.jpeg", "Salle d’eau avec douche à l’italienne", "La salle d’eau"),
-  propertyAsset("airbnb-toilettes.jpeg", "Toilettes suspendues du Nid d’Été", "Les toilettes de la salle d’eau"),
+  propertyAsset(
+    "airbnb-salle-de-bain-1.jpeg",
+    "Salle d’eau avec douche à l’italienne",
+    "La salle d’eau",
+  ),
+  propertyAsset(
+    "airbnb-toilettes.jpeg",
+    "Toilettes suspendues du Nid d’Été",
+    "Les toilettes de la salle d’eau",
+  ),
 ];
 const arrivalEntrance = propertyAsset(
   "airbnb-cour-d-entree-1.jpeg",
@@ -86,38 +164,101 @@ const arrivalPlan = propertyAsset(
   "Du portillon piéton à l’appartement D12",
 );
 const airbnbExterior = [
-  propertyAsset("airbnb-arriere-cour-1.jpeg", "Terrasse et jardin clos du Nid d’Été", "Déjeuner dehors, sous les arbres"),
-  propertyAsset("airbnb-exterieur-1-1.jpeg", "Façade historique de la Maison Heureuse", "L’élégance balnéaire de la résidence"),
-  propertyAsset("airbnb-exterieur-1-2.jpeg", "Allée arborée de la Maison Heureuse", "Sous les arbres de la résidence"),
-  propertyAsset("airbnb-exterieur-2-1.jpeg", "Résidence sécurisée autour du Nid d’Été", "Le calme de la résidence"),
+  propertyAsset(
+    "airbnb-arriere-cour-1.jpeg",
+    "Terrasse et jardin clos du Nid d’Été",
+    "Déjeuner dehors, sous les arbres",
+  ),
+  propertyAsset(
+    "airbnb-exterieur-1-1.jpeg",
+    "Façade historique de la Maison Heureuse",
+    "L’élégance balnéaire de la résidence",
+  ),
+  propertyAsset(
+    "airbnb-exterieur-1-2.jpeg",
+    "Allée arborée de la Maison Heureuse",
+    "Sous les arbres de la résidence",
+  ),
+  propertyAsset(
+    "airbnb-exterieur-2-1.jpeg",
+    "Résidence sécurisée autour du Nid d’Été",
+    "Le calme de la résidence",
+  ),
 ];
 const airbnbTerrace = [
-  propertyAsset("airbnb-arriere-cour-2.jpeg", "Équipements de la terrasse du Nid d’Été", "Les détails de la vie dehors"),
-  propertyAsset("airbnb-arriere-cour-4.jpeg", "Transats disponibles au Nid d’Été", "Prendre le temps au soleil"),
+  propertyAsset(
+    "airbnb-arriere-cour-2.jpeg",
+    "Équipements de la terrasse du Nid d’Été",
+    "Les détails de la vie dehors",
+  ),
+  propertyAsset(
+    "airbnb-arriere-cour-4.jpeg",
+    "Transats disponibles au Nid d’Été",
+    "Prendre le temps au soleil",
+  ),
 ];
 const airbnbDetails = [
-  propertyAsset("airbnb-exterieur-4-1.jpeg", "Environnement extérieur du Nid d’Été", "Entre résidence et plage"),
-  propertyAsset("airbnb-piece-a-theme-1.jpeg", "Décoration de Noël à la Maison Heureuse au sein du Nid d’Été", "Passer Noël à la Maison Heureuse au sein du Nid d’Été"),
-  propertyAsset("airbnb-photos-supplementaires-1.jpeg", "Détail complémentaire du Nid d’Été", "L’esprit des vacances à Boyardville"),
+  propertyAsset(
+    "airbnb-exterieur-4-1.jpeg",
+    "Environnement extérieur du Nid d’Été",
+    "Entre résidence et plage",
+  ),
+  propertyAsset(
+    "airbnb-piece-a-theme-1.jpeg",
+    "Décoration de Noël à la Maison Heureuse au sein du Nid d’Été",
+    "Passer Noël à la Maison Heureuse au sein du Nid d’Été",
+  ),
+  propertyAsset(
+    "airbnb-photos-supplementaires-1.jpeg",
+    "Détail complémentaire du Nid d’Été",
+    "L’esprit des vacances à Boyardville",
+  ),
 ];
 export const nidDEteMedia = {
   slug: "nid-d-ete",
   hero: airbnbLivingRoom[0],
   arrival: [arrivalEntrance, arrivalPlan],
   exterior: airbnbExterior,
-  livingRoom: [editorialLivingRoom, ...airbnbLivingRoom],
+  livingRoom: [editorialLivingRoom, editorialBeachReturn, editorialFamilyCat, ...airbnbLivingRoom],
   kitchen: [editorialBreakfast, editorialFamilyGames, ...airbnbKitchen],
   bedrooms: [editorialBedroom, editorialChildrenBirthday, ...airbnbBedrooms],
   bathrooms: airbnbBathroom,
-  terrace: [editorialTerraceLunch, airbnbExterior[0], ...airbnbTerrace],
+  terrace: [
+    editorialFamilyTerraceAperitif,
+    editorialTerraceLunch,
+    airbnbExterior[0],
+    ...airbnbTerrace,
+  ],
   details: [...airbnbDetails, ...airbnbTerrace.slice(0, 3)],
-  lifestyle: [access, beachView, ocean, poplars, family, sunset, beach, shade, fortBoyard],
+  lifestyle: [
+    editorialBeachReturn,
+    editorialFamilyCat,
+    editorialCandlelightDinner,
+    editorialMultigenerationalEaster,
+    editorialFamilyTable,
+    editorialFamilyTerraceAperitif,
+    access,
+    beachView,
+    ocean,
+    poplars,
+    family,
+    sunset,
+    beach,
+    shade,
+    fortBoyard,
+  ],
   videos: [],
   gallery: [
     // Ouverture et pièces de vie
     ...airbnbLivingRoom,
     ...airbnbKitchen,
     editorialLivingRoom,
+    editorialBeachReturn,
+    editorialFamilyCat,
+    editorialCandlelightDinner,
+    editorialMultigenerationalEaster,
+    editorialFamilyTable,
+    editorialFamilyTerraceAperitif,
     editorialBreakfast,
 
     // Chambres
