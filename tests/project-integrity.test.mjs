@@ -416,6 +416,7 @@ test("the Carnet map keeps addresses available when a tile provider fails", () =
   const map = read("components/carnet/PremiumInteractiveMap.tsx");
   const loader = read("components/carnet/PremiumInteractiveMapLoader.tsx");
 
+  assert.match(map, /rastertiles\/voyager/);
   assert.match(map, /tileerror/);
   assert.match(map, /tile\.openstreetmap\.org/);
   assert.match(map, /Toutes les adresses restent disponibles/);
