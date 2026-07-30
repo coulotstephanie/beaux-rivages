@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { StaffAccess } from "@/components/admin/StaffAccess";
 
 const houses = [
   { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
@@ -33,6 +34,7 @@ const monthNames = [
 ];
 
 export function RatesAdmin() {
+  const [authenticated, setAuthenticated] = useState(false);
   const [property, setProperty] = useState<(typeof houses)[number]["slug"]>("chai-des-tortues");
   const [year, setYear] = useState(new Date().getFullYear());
   const [days, setDays] = useState<RateDay[]>([]);
@@ -45,7 +47,6 @@ export function RatesAdmin() {
   const [rateKind, setRateKind] = useState("manual");
   const [minimumNights, setMinimumNights] = useState("");
   const [kpis, setKpis] = useState<RevenueKpi[]>([]);
-  const [token, setToken] = useState("");
   const [message, setMessage] = useState(
     "Sélectionnez une plage pour préparer une modification groupée.",
   );
@@ -60,17 +61,16 @@ export function RatesAdmin() {
   }, [property, year]);
 
   useEffect(() => {
-    if (!token) return;
+    if (!authenticated) return;
     const controller = new AbortController();
     fetch(`/api/admin/revenue-management?year=${year}`, {
-      headers: { Authorization: `Bearer ${token}` },
       signal: controller.signal,
     })
       .then((response) => response.json() as Promise<{ properties?: RevenueKpi[] }>)
       .then((payload) => setKpis(payload.properties ?? []))
       .catch(() => setKpis([]));
     return () => controller.abort();
-  }, [token, year]);
+  }, [authenticated, year]);
 
   const months = useMemo(
     () =>
@@ -93,7 +93,7 @@ export function RatesAdmin() {
   const save = async () => {
     const response = await fetch("/api/rates", {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         propertySlug: property,
         name: rateName,
@@ -110,6 +110,21 @@ export function RatesAdmin() {
     const refreshed = await fetch(`/api/rates?property=${property}&year=${year}`);
     setDays(((await refreshed.json()) as { days: RateDay[] }).days);
   };
+
+  const open = async () => {
+    const response = await fetch(`/api/admin/revenue-management?year=${year}`);
+    if (!response.ok) {
+      setMessage("Accès au moteur tarifaire impossible.");
+      return;
+    }
+    const payload = (await response.json()) as { properties?: RevenueKpi[] };
+    setKpis(payload.properties ?? []);
+    setAuthenticated(true);
+  };
+
+  if (!authenticated) {
+    return <StaffAccess busy={false} message={message} onAuthenticated={open} />;
+  }
 
   return (
     <div className="rates-admin">
@@ -170,13 +185,9 @@ export function RatesAdmin() {
             onChange={(event) => setMinimumNights(event.target.value)}
           />
         </label>
-        <label>
-          Jeton administrateur
-          <input type="password" value={token} onChange={(event) => setToken(event.target.value)} />
-        </label>
         <button
           type="button"
-          disabled={!selection.start || !selection.end || !bulkRate || !token}
+          disabled={!selection.start || !selection.end || !bulkRate}
           onClick={() => void save()}
         >
           Appliquer à la plage

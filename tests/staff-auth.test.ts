@@ -1,11 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import {
-  isStaffRole,
-  staffRolePriority,
-  staffRoles,
-} from "../platform/auth/contracts";
+import { isStaffRole, staffRolePriority, staffRoles } from "../platform/auth/contracts";
 
 test("les rôles du Back Office sont fermés et priorisés", () => {
   assert.deepEqual(staffRoles, ["admin", "concierge", "read_only"]);
@@ -19,8 +15,7 @@ test("l’autorisation vérifie le JWT Supabase et le rôle interne", () => {
   const source = readFileSync("platform/auth/server.ts", "utf8");
   assert.match(source, /auth\.getUser\(token\)/);
   assert.match(source, /\.from\("app_user_roles"\)/);
-  assert.match(source, /timingSafeEqual/);
-  assert.match(source, /ADMIN_TOKEN_FALLBACK_ENABLED/);
+  assert.doesNotMatch(source, /ADMIN_API_TOKEN|ADMIN_TOKEN_FALLBACK_ENABLED|legacy-token/);
   assert.doesNotMatch(source, /NEXT_PUBLIC_.*(SECRET|TOKEN)/);
 });
 
@@ -33,11 +28,34 @@ test("la connexion n’altère jamais le client Supabase privilégié", () => {
   assert.match(provider, /persistSession: false/);
 });
 
+test("les trois interfaces utilisent uniquement la session Supabase", () => {
+  const access = readFileSync("components/admin/StaffAccess.tsx", "utf8");
+  const dashboard = readFileSync("components/AdminDashboard.tsx", "utf8");
+  const calendars = readFileSync("components/CalendarAdmin.tsx", "utf8");
+  const rates = readFileSync("components/RatesAdmin.tsx", "utf8");
+  const environment = readFileSync(".env.example", "utf8");
+
+  for (const [name, source] of Object.entries({
+    access,
+    dashboard,
+    calendars,
+    rates,
+    environment,
+  })) {
+    assert.doesNotMatch(
+      source,
+      /ADMIN_API_TOKEN|ADMIN_TOKEN_FALLBACK_ENABLED|beaux-rivages-admin-token|Jeton administrateur/,
+      `${name} conserve une référence au jeton partagé`,
+    );
+  }
+  assert.match(calendars, /<StaffAccess/);
+  assert.match(rates, /<StaffAccess/);
+  assert.doesNotMatch(calendars, /Authorization:\s*`Bearer/);
+  assert.doesNotMatch(rates, /Authorization:\s*`Bearer/);
+});
+
 test("la migration provisionne les profils sans attribuer de rôle implicitement", () => {
-  const sql = readFileSync(
-    "supabase/migrations/20260729160000_staff_auth_foundation.sql",
-    "utf8",
-  );
+  const sql = readFileSync("supabase/migrations/20260729160000_staff_auth_foundation.sql", "utf8");
   assert.match(sql, /create or replace function public\.handle_new_auth_user/);
   assert.match(sql, /after insert on auth\.users/);
   assert.match(sql, /insert into public\.users/);

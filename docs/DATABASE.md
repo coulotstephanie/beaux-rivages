@@ -35,8 +35,8 @@ maintenance, stocks, notifications et journaux d’audit.
 | `read_only` | consultation et exports autorisés               |
 
 La création d’un compte n’accorde aucun rôle implicitement. L’accès reste refusé
-tant qu’une attribution explicite n’a pas été livrée par une migration de
-données contrôlée.
+tant qu’une attribution explicite n’a pas été réalisée par une opération de
+provisionnement contrôlée.
 
 ## RLS et accès serveur
 
@@ -61,5 +61,4 @@ comptes Auth existants, indexe les rôles et documente les objets
 d’autorisation.
 
 Après application, créer les comptes professionnels dans Supabase Auth puis
-livrer leur rôle dans une migration de données dédiée. Après validation de tous
-les comptes, définir `ADMIN_TOKEN_FALLBACK_ENABLED=false`.
+attribuer leur rôle par une opération de provisionnement contrôlée.

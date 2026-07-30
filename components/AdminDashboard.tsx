@@ -195,7 +195,6 @@ export function AdminDashboard() {
 
   const signOut = async () => {
     await fetch("/api/auth/staff", { method: "DELETE" });
-    window.sessionStorage.removeItem("beaux-rivages-admin-token");
     setToken("");
     setData(null);
     setMessage("Vous êtes déconnecté du Back Office.");

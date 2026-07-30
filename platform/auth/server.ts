@@ -1,6 +1,5 @@
 import "server-only";
 
-import { timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { getDatabaseClient, isDatabaseConfigured } from "@/platform/database/client";
 import {
@@ -13,27 +12,14 @@ import {
 export const staffAccessCookie = "br-staff-access";
 
 function bearerToken(request: NextRequest) {
-  return request.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1]?.trim()
-    ?? request.cookies.get(staffAccessCookie)?.value
-    ?? null;
-}
-
-function securelyEquals(left: string, right: string) {
-  const leftBuffer = Buffer.from(left);
-  const rightBuffer = Buffer.from(right);
-  return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
-}
-
-function legacyIdentity(token: string): StaffIdentity | null {
-  const configured = process.env.ADMIN_API_TOKEN;
-  if (!configured || process.env.ADMIN_TOKEN_FALLBACK_ENABLED === "false") return null;
-  if (!securelyEquals(token, configured)) return null;
-  return {
-    userId: "legacy-admin-token",
-    email: null,
-    role: "admin",
-    authentication: "legacy-token",
-  };
+  return (
+    request.headers
+      .get("authorization")
+      ?.match(/^Bearer\s+(.+)$/i)?.[1]
+      ?.trim() ??
+    request.cookies.get(staffAccessCookie)?.value ??
+    null
+  );
 }
 
 export async function authorizeStaffToken(
@@ -41,9 +27,6 @@ export async function authorizeStaffToken(
   allowedRoles: readonly StaffRole[] = ["admin", "concierge", "read_only"],
 ): Promise<StaffIdentity | null> {
   if (token.length > 8_000) return null;
-
-  const legacy = legacyIdentity(token);
-  if (legacy) return allowedRoles.includes(legacy.role) ? legacy : null;
   if (!isDatabaseConfigured()) return null;
 
   const client = getDatabaseClient();

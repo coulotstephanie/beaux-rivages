@@ -21,8 +21,9 @@ Authorization: Bearer <supabase-access-token>
 
 `authorizeStaff()` lit le cookie ou l’en-tête, vérifie le JWT avec Supabase Auth, charge
 `app_user_roles`, choisit le rôle prioritaire et contrôle la permission.
-Pendant la migration, `ADMIN_API_TOKEN` reste accepté sauf lorsque
-`ADMIN_TOKEN_FALLBACK_ENABLED=false`.
+Le secret administrateur partagé historique n’est plus accepté. Toutes les
+routes d’administration exigent une session Supabase Auth et un rôle interne
+dans `app_user_roles`.
 
 ## Santé de la plateforme
 

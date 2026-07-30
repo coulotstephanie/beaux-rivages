@@ -1,17 +1,15 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import {
-  authorizeStaff,
-  authorizeStaffToken,
-  staffAccessCookie,
-} from "@/platform/auth/server";
+import { authorizeStaff, authorizeStaffToken, staffAccessCookie } from "@/platform/auth/server";
 import { getStaffAuthClient, isStaffAuthConfigured } from "@/platform/auth/provider";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 
-const signInSchema = z.object({
-  email: z.string().trim().email().max(254),
-  password: z.string().min(8).max(1_024),
-}).strict();
+const signInSchema = z
+  .object({
+    email: z.string().trim().email().max(254),
+    password: z.string().min(8).max(1_024),
+  })
+  .strict();
 
 const cookieOptions = {
   httpOnly: true,
@@ -25,10 +23,7 @@ export async function GET(request: NextRequest) {
   if (limited) return limited;
   const identity = await authorizeStaff(request);
   if (!identity) {
-    return noStoreJson({
-      authenticated: false,
-      supabaseConfigured: isStaffAuthConfigured(),
-    }, { status: 401 });
+    return noStoreJson({ authenticated: false }, { status: 401 });
   }
   return noStoreJson({
     authenticated: true,
@@ -58,7 +53,10 @@ export async function POST(request: NextRequest) {
   }
   const identity = await authorizeStaffToken(data.session.access_token);
   if (!identity) {
-    return noStoreJson({ error: "Ce compte ne possède aucun accès au Back Office." }, { status: 403 });
+    return noStoreJson(
+      { error: "Ce compte ne possède aucun accès au Back Office." },
+      { status: 403 },
+    );
   }
 
   const response = noStoreJson({

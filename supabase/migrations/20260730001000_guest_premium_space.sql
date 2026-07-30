@@ -66,9 +66,17 @@ create table public.carnet_entry_versions (
 );
 
 create index carnet_entries_publication_idx on public.carnet_entries (status, destination, category, sort_order);
+create function public.carnet_tags_search_text(value text[])
+returns text
+language sql
+immutable
+strict
+set search_path = ''
+as $$ select pg_catalog.array_to_string(value, ' ') $$;
 create index carnet_entries_search_idx on public.carnet_entries using gin (
   to_tsvector('french', title || ' ' || summary || ' ' || body || ' ' ||
-    coalesce(address, '') || ' ' || coalesce(host_tip, '') || ' ' || array_to_string(tags, ' '))
+    coalesce(address, '') || ' ' || coalesce(host_tip, '') || ' ' ||
+    public.carnet_tags_search_text(tags))
 );
 create index carnet_entries_tags_idx on public.carnet_entries using gin (tags);
 create index carnet_entries_highlights_idx on public.carnet_entries using gin (highlights);

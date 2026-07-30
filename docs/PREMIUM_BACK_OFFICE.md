@@ -30,8 +30,8 @@ Configurer en production `SUPABASE_URL`, `SUPABASE_SECRET_KEY`,
 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. La clé
 serveur ne doit jamais être exposée au navigateur.
 
-`ADMIN_API_TOKEN` n’est conservé que pendant la transition. Après validation des
-comptes individuels, définir `ADMIN_TOKEN_FALLBACK_ENABLED=false`.
+Le Back Office utilise exclusivement les comptes individuels Supabase Auth et
+les rôles internes. Aucun secret administrateur partagé n’est accepté.
 
 Après une évolution de schéma :
 

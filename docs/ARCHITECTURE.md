@@ -54,9 +54,8 @@ ce jeton côté serveur, charge le rôle depuis `app_user_roles` et applique la
 permission avant l’utilisation du client Supabase privilégié. Le client
 d’authentification et le client privilégié restent deux instances séparées.
 
-Le secret administrateur historique est un mécanisme de migration. Il doit être
-désactivé avec `ADMIN_TOKEN_FALLBACK_ENABLED=false` après activation des comptes
-individuels.
+Le secret administrateur historique a été supprimé après activation des comptes
+individuels Supabase Auth.
 
 ## Disponibilité et limites
 

@@ -6,7 +6,7 @@ export type StaffIdentity = {
   userId: string;
   email: string | null;
   role: StaffRole;
-  authentication: "supabase" | "legacy-token";
+  authentication: "supabase";
 };
 
 export const staffRolePriority: Record<StaffRole, number> = {
