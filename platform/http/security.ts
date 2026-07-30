@@ -1,13 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const globalRateLimits = globalThis as typeof globalThis & { __beauxRivagesRateLimits?: Map<string, { count: number; resetAt: number }> };
-const buckets = globalRateLimits.__beauxRivagesRateLimits ?? new Map<string, { count: number; resetAt: number }>();
+const MAX_RATE_LIMIT_BUCKETS = 10_000;
+const globalRateLimits = globalThis as typeof globalThis & {
+  __beauxRivagesRateLimits?: Map<string, { count: number; resetAt: number }>;
+};
+const buckets =
+  globalRateLimits.__beauxRivagesRateLimits ??
+  new Map<string, { count: number; resetAt: number }>();
 globalRateLimits.__beauxRivagesRateLimits = buckets;
 
+function pruneExpiredBuckets(now: number) {
+  if (buckets.size < MAX_RATE_LIMIT_BUCKETS) return;
+  for (const [key, bucket] of buckets) {
+    if (bucket.resetAt <= now) buckets.delete(key);
+  }
+  while (buckets.size >= MAX_RATE_LIMIT_BUCKETS) {
+    const oldestKey = buckets.keys().next().value;
+    if (typeof oldestKey !== "string") break;
+    buckets.delete(oldestKey);
+  }
+}
+
 export function rateLimit(request: NextRequest, limit = 40, windowMs = 60_000) {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  const key = `${forwarded ?? "unknown"}:${request.nextUrl.pathname}`;
   const now = Date.now();
+  pruneExpiredBuckets(now);
+  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const clientAddress = forwarded || request.headers.get("x-real-ip") || "unknown";
+  const key = `${clientAddress}:${request.nextUrl.pathname}`;
   const bucket = buckets.get(key);
   if (!bucket || bucket.resetAt <= now) {
     buckets.set(key, { count: 1, resetAt: now + windowMs });
@@ -15,21 +34,25 @@ export function rateLimit(request: NextRequest, limit = 40, windowMs = 60_000) {
   }
   bucket.count += 1;
   if (bucket.count <= limit) return null;
-  return NextResponse.json({ error: "Trop de requêtes. Réessayez dans un instant." }, { status: 429, headers: { "Retry-After": String(Math.ceil((bucket.resetAt - now) / 1000)) } });
-}
-
-export function requireAdmin(request: NextRequest) {
-  const configured = process.env.ADMIN_API_TOKEN;
-  const supplied = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  return Boolean(configured && supplied && supplied.length === configured.length && supplied === configured);
+  return NextResponse.json(
+    { error: "Trop de requêtes. Réessayez dans un instant." },
+    { status: 429, headers: { "Retry-After": String(Math.ceil((bucket.resetAt - now) / 1000)) } },
+  );
 }
 
 export function noStoreJson(body: unknown, init?: ResponseInit) {
-  return NextResponse.json(body, { ...init, headers: { "Cache-Control": "private, no-store", ...(init?.headers ?? {}) } });
+  return NextResponse.json(body, {
+    ...init,
+    headers: { "Cache-Control": "private, no-store", ...(init?.headers ?? {}) },
+  });
 }
 
 export function isIsoDate(value: unknown): value is string {
-  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T12:00:00Z`));
+  return (
+    typeof value === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    !Number.isNaN(Date.parse(`${value}T12:00:00Z`))
+  );
 }
 
 export function requireSameOrigin(request: NextRequest) {

@@ -1,0 +1,16 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { Dialog } from "./Dialog";
+
+type ModalProps = {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  children: ReactNode;
+};
+
+export function Modal(props: ModalProps) {
+  return <Dialog {...props} className="ui-modal" />;
+}

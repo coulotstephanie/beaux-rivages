@@ -1,7 +1,12 @@
 import { NextRequest } from "next/server";
 import { isPropertySlug } from "@/platform/calendar/config";
 import { buildAnnualRates } from "@/platform/pricing/service";
-import { noStoreJson, rateLimit, requireAdmin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit } from "@/platform/http/security";
+import { requireSameOrigin } from "@/platform/http/security";
+import { isDatabaseConfigured } from "@/platform/database/client";
+import { rateOverrideSchema } from "@/features/revenue-management/schemas";
+import { RateOverrideRepository } from "@/features/revenue-management/repositories";
 
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 40);
@@ -17,9 +22,34 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   const limited = rateLimit(request, 5);
   if (limited) return limited;
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
-  return noStoreJson({
-    error: "Le dépôt tarifaire persistant doit être configuré avant toute modification en production.",
-    code: "PERSISTENT_RATE_STORE_REQUIRED",
-  }, { status: 501 });
+  if (!requireSameOrigin(request))
+    return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
+  if (!(await authorizeStaff(request, ["admin"])))
+    return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
+  if (!isDatabaseConfigured())
+    return noStoreJson({ error: "Base non configurée." }, { status: 503 });
+  const parsed = rateOverrideSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success)
+    return noStoreJson(
+      { error: "Tarif invalide.", details: parsed.error.flatten() },
+      { status: 400 },
+    );
+  try {
+    return noStoreJson(
+      { ok: true, result: await new RateOverrideRepository().create(parsed.data) },
+      { status: 201 },
+    );
+  } catch (error) {
+    const code = error instanceof Error ? error.message.split(":")[0] : "UNKNOWN";
+    return noStoreJson(
+      {
+        error:
+          code === "RATE_OUTSIDE_GUARDRAILS"
+            ? "Le prix doit rester entre le minimum et le maximum autorisés."
+            : "Enregistrement impossible.",
+        code,
+      },
+      { status: code === "RATE_OUTSIDE_GUARDRAILS" ? 409 : 500 },
+    );
+  }
 }

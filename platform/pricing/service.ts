@@ -13,38 +13,78 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
-  const priority = { "public-holiday": 5, "school-holiday": 4, high: 3, mid: 2, low: 1 };
+  const priority = {
+    manual: 7,
+    event: 6,
+    "public-holiday": 5,
+    "school-holiday": 4,
+    high: 3,
+    mid: 2,
+    low: 1,
+  };
   const season = plan.seasons
     .filter((candidate) => date >= candidate.startsOn && date < candidate.endsOn)
     .sort((a, b) => priority[b.kind] - priority[a.kind])[0];
+  const acceptedYield = plan.overrides?.find((override) => override.date === date);
+  const explicitManualRate = season?.kind === "manual";
   const day = new Date(`${date}T12:00:00Z`).getUTCDay();
   return {
-    rate: season?.nightlyRate ?? (day === 5 || day === 6 ? plan.weekendNightlyRate : plan.baseNightlyRate),
-    season: season?.label ?? (day === 5 || day === 6 ? "Week-end" : "Tarif standard"),
-    minimumNights: season?.minimumNights ?? plan.minimumNights,
+    rate:
+      (explicitManualRate ? season.nightlyRate : acceptedYield?.nightlyRate) ??
+      season?.nightlyRate ??
+      (day === 5 || day === 6 ? plan.weekendNightlyRate : plan.baseNightlyRate),
+    season:
+      (explicitManualRate ? season.label : acceptedYield ? "Yield validé" : season?.label) ??
+      (day === 5 || day === 6 ? "Week-end" : "Tarif standard"),
+    minimumNights:
+      (explicitManualRate ? season.minimumNights : acceptedYield?.minimumNights) ??
+      season?.minimumNights ??
+      plan.minimumNights,
   };
 }
 
 function promotionApplies(promotion: Promotion, input: QuoteRequest, nights: number) {
   if (!promotion.enabled) return false;
-  const leadDays = Math.floor((new Date(`${input.arrival}T12:00:00Z`).getTime() - Date.now()) / 86_400_000);
+  const leadDays = Math.floor(
+    (new Date(`${input.arrival}T12:00:00Z`).getTime() - Date.now()) / 86_400_000,
+  );
   if (promotion.kind === "long-stay") return nights >= promotion.minimumNights;
-  if (promotion.kind === "last-minute") return leadDays >= 0 && leadDays <= promotion.maximumLeadDays;
+  if (promotion.kind === "last-minute")
+    return leadDays >= 0 && leadDays <= promotion.maximumLeadDays;
   if (promotion.kind === "early-booking") return leadDays >= promotion.minimumLeadDays;
-  if (promotion.kind === "code") return promotion.code.toUpperCase() === input.promotionCode?.trim().toUpperCase() && (!promotion.ranges || promotion.ranges.some((range) => input.arrival < range.endsOn && input.departure > range.startsOn));
-  return promotion.ranges.some((range) => input.arrival < range.endsOn && input.departure > range.startsOn);
+  if (promotion.kind === "code")
+    return (
+      promotion.code.toUpperCase() === input.promotionCode?.trim().toUpperCase() &&
+      (!promotion.ranges ||
+        promotion.ranges.some(
+          (range) => input.arrival < range.endsOn && input.departure > range.startsOn,
+        ))
+    );
+  return promotion.ranges.some(
+    (range) => input.arrival < range.endsOn && input.departure > range.startsOn,
+  );
 }
 
 export async function calculateQuote(input: QuoteRequest) {
   const plan = await ratePlanRepository.get(input.propertySlug);
   const nights = getNights(input.arrival, input.departure);
-  const nightlyLines = eachNight(input.arrival, nights).map((date) => ({ date, ...rateForDate(plan, date) }));
-  const requiredMinimum = Math.max(plan.minimumNights, ...nightlyLines.map((line) => line.minimumNights));
+  const nightlyLines = eachNight(input.arrival, nights).map((date) => ({
+    date,
+    ...rateForDate(plan, date),
+  }));
+  const requiredMinimum = Math.max(
+    plan.minimumNights,
+    ...nightlyLines.map((line) => line.minimumNights),
+  );
   const stayIsValid = nights >= requiredMinimum && nights <= plan.maximumNights;
   const accommodationBeforeDiscount = nightlyLines.reduce((sum, line) => sum + line.rate, 0);
-  const applicablePromotions = plan.promotions.filter((promotion) => promotionApplies(promotion, input, nights));
+  const applicablePromotions = plan.promotions.filter((promotion) =>
+    promotionApplies(promotion, input, nights),
+  );
   const bestPromotion = applicablePromotions.sort((a, b) => b.percentage - a.percentage)[0];
-  const discount = bestPromotion ? Math.round(accommodationBeforeDiscount * bestPromotion.percentage) / 100 : 0;
+  const discount = bestPromotion
+    ? Math.round(accommodationBeforeDiscount * bestPromotion.percentage) / 100
+    : 0;
   const accommodation = accommodationBeforeDiscount - discount;
   const payingGuests = Math.max(1, input.adults + input.children);
   const optionLines = input.options.flatMap((id) => {
@@ -56,7 +96,17 @@ export async function calculateQuote(input: QuoteRequest) {
   });
   const experienceLines = input.experiences.flatMap((id) => {
     const experience = bookingExperiences.find((candidate) => candidate.id === id);
-    return experience ? [{ id, label: experience.label, quantity: 1, unitPrice: experience.price, total: experience.price }] : [];
+    return experience
+      ? [
+          {
+            id,
+            label: experience.label,
+            quantity: 1,
+            unitPrice: experience.price,
+            total: experience.price,
+          },
+        ]
+      : [];
   });
   const touristTax = plan.touristTax.enabled
     ? plan.touristTax.mode === "fixed-per-adult-per-night"
@@ -72,7 +122,14 @@ export async function calculateQuote(input: QuoteRequest) {
     stayRules: { valid: stayIsValid, requiredMinimum, maximumNights: plan.maximumNights },
     nightlyLines,
     accommodationBeforeDiscount,
-    promotion: bestPromotion ? { id: bestPromotion.id, label: bestPromotion.label, percentage: bestPromotion.percentage, discount } : null,
+    promotion: bestPromotion
+      ? {
+          id: bestPromotion.id,
+          label: bestPromotion.label,
+          percentage: bestPromotion.percentage,
+          discount,
+        }
+      : null,
     accommodation,
     cleaningFee: plan.cleaningFee,
     securityDeposit: { amount: plan.securityDeposit, includedInTotal: false },
@@ -86,7 +143,10 @@ export async function calculateQuote(input: QuoteRequest) {
   };
 }
 
-export async function buildAnnualRates(propertySlug: PropertyRatePlan["propertySlug"], year: number) {
+export async function buildAnnualRates(
+  propertySlug: PropertyRatePlan["propertySlug"],
+  year: number,
+) {
   const plan = await ratePlanRepository.get(propertySlug);
   const cursor = new Date(Date.UTC(year, 0, 1, 12));
   const days: { date: string; rate: number; season: string; minimumNights: number }[] = [];

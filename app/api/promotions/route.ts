@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { isPropertySlug } from "@/platform/calendar/config";
 import { ratePlanRepository } from "@/platform/pricing/repository";
-import { noStoreJson, rateLimit, requireAdmin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit } from "@/platform/http/security";
 
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 40);
@@ -18,6 +19,6 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   const limited = rateLimit(request, 5);
   if (limited) return limited;
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request, ["admin"])) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   return noStoreJson({ error: "Le dépôt tarifaire persistant doit être configuré avant toute modification en production.", code: "PERSISTENT_RATE_STORE_REQUIRED" }, { status: 501 });
 }

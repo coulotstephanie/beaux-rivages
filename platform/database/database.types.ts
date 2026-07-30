@@ -278,6 +278,176 @@ export type Database = {
           },
         ]
       }
+      carnet_entries: {
+        Row: {
+          address: string | null
+          body: string
+          category: string
+          created_at: string
+          created_by: string | null
+          destination: string
+          featured: boolean
+          gallery_paths: string[]
+          google_maps_url: string | null
+          highlights: string[]
+          host_tip: string | null
+          id: string
+          image_alt: string | null
+          image_path: string | null
+          latitude: number | null
+          longitude: number | null
+          meta_description: string | null
+          meta_title: string | null
+          official_url: string | null
+          open_graph_image_path: string | null
+          opening_hours: Json
+          opening_period: string | null
+          phone: string | null
+          published_at: string | null
+          recommendation_level: number
+          seasonal_rules: Json
+          slug: string
+          sort_order: number
+          status: string
+          summary: string
+          tags: string[]
+          title: string
+          updated_at: string
+          updated_by: string | null
+          version: number
+          video_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          body?: string
+          category: string
+          created_at?: string
+          created_by?: string | null
+          destination: string
+          featured?: boolean
+          gallery_paths?: string[]
+          google_maps_url?: string | null
+          highlights?: string[]
+          host_tip?: string | null
+          id?: string
+          image_alt?: string | null
+          image_path?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
+          official_url?: string | null
+          open_graph_image_path?: string | null
+          opening_hours?: Json
+          opening_period?: string | null
+          phone?: string | null
+          published_at?: string | null
+          recommendation_level?: number
+          seasonal_rules?: Json
+          slug: string
+          sort_order?: number
+          status?: string
+          summary: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          video_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          body?: string
+          category?: string
+          destination?: string
+          featured?: boolean
+          gallery_paths?: string[]
+          google_maps_url?: string | null
+          highlights?: string[]
+          host_tip?: string | null
+          image_alt?: string | null
+          image_path?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
+          official_url?: string | null
+          open_graph_image_path?: string | null
+          opening_hours?: Json
+          opening_period?: string | null
+          phone?: string | null
+          published_at?: string | null
+          recommendation_level?: number
+          seasonal_rules?: Json
+          slug?: string
+          sort_order?: number
+          status?: string
+          summary?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      carnet_entry_versions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          entry_id: string
+          id: string
+          snapshot: Json
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          entry_id: string
+          id?: string
+          snapshot: Json
+          version: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          entry_id?: string
+          id?: string
+          snapshot?: Json
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carnet_entry_versions_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "carnet_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      carnet_favorites: {
+        Row: { created_at: string; entry_id: string; guest_id: string }
+        Insert: { created_at?: string; entry_id: string; guest_id: string }
+        Update: { created_at?: string; entry_id?: string; guest_id?: string }
+        Relationships: [
+          {
+            foreignKeyName: "carnet_favorites_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "carnet_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carnet_favorites_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channel_audit_logs: {
         Row: {
           action: string
@@ -1024,6 +1194,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      demand_events: {
+        Row: {
+          applies_to_property_ids: string[]
+          created_at: string
+          date_range: unknown
+          id: string
+          impact_percentage: number
+          kind: string
+          name: string
+          source: string | null
+          updated_at: string
+        }
+        Insert: {
+          applies_to_property_ids?: string[]
+          created_at?: string
+          date_range: unknown
+          id?: string
+          impact_percentage?: number
+          kind: string
+          name: string
+          source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          applies_to_property_ids?: string[]
+          created_at?: string
+          date_range?: unknown
+          id?: string
+          impact_percentage?: number
+          kind?: string
+          name?: string
+          source?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       gift_card_uses: {
         Row: {
@@ -2431,6 +2637,101 @@ export type Database = {
           },
         ]
       }
+      rate_guardrails: {
+        Row: {
+          maximum_rate_cents: number
+          minimum_rate_cents: number
+          occupancy_pricing_enabled: boolean
+          property_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          maximum_rate_cents: number
+          minimum_rate_cents: number
+          occupancy_pricing_enabled?: boolean
+          property_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          maximum_rate_cents?: number
+          minimum_rate_cents?: number
+          occupancy_pricing_enabled?: boolean
+          property_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_guardrails_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rate_overrides: {
+        Row: {
+          begins_on: string
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          ends_on: string
+          id: string
+          kind: string
+          minimum_nights: number | null
+          name: string
+          nightly_rate_cents: number
+          priority: number
+          property_id: string
+          source: string
+          stay_range: unknown
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          begins_on: string
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          ends_on: string
+          id?: string
+          kind: string
+          minimum_nights?: number | null
+          name: string
+          nightly_rate_cents: number
+          priority?: number
+          property_id: string
+          source?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          begins_on?: string
+          enabled?: boolean
+          ends_on?: string
+          kind?: string
+          minimum_nights?: number | null
+          name?: string
+          nightly_rate_cents?: number
+          priority?: number
+          property_id?: string
+          source?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_overrides_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referrals: {
         Row: {
           created_at: string
@@ -3175,6 +3476,222 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      yield_decision_logs: {
+        Row: {
+          action: string
+          actor: string
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          id: string
+          recommendation_id: string | null
+        }
+        Insert: {
+          action: string
+          actor: string
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          id?: string
+          recommendation_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          id?: string
+          recommendation_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yield_decision_logs_recommendation_id_fkey"
+            columns: ["recommendation_id"]
+            isOneToOne: false
+            referencedRelation: "yield_recommendations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      yield_rate_overrides: {
+        Row: {
+          created_at: string
+          id: string
+          minimum_nights: number | null
+          nightly_rate_cents: number
+          property_id: string
+          recommendation_id: string | null
+          status: string
+          stay_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          minimum_nights?: number | null
+          nightly_rate_cents: number
+          property_id: string
+          recommendation_id?: string | null
+          status?: string
+          stay_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          minimum_nights?: number | null
+          nightly_rate_cents?: number
+          property_id?: string
+          recommendation_id?: string | null
+          status?: string
+          stay_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yield_rate_overrides_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "yield_rate_overrides_recommendation_id_fkey"
+            columns: ["recommendation_id"]
+            isOneToOne: false
+            referencedRelation: "yield_recommendations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      yield_recommendations: {
+        Row: {
+          base_rate_cents: number
+          confidence: number
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_note: string | null
+          factors: Json
+          id: string
+          lead_days: number
+          occupancy_rate: number
+          property_id: string
+          recommended_rate_cents: number
+          status: string
+          stay_date: string
+          updated_at: string
+        }
+        Insert: {
+          base_rate_cents: number
+          confidence?: number
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          factors?: Json
+          id?: string
+          lead_days: number
+          occupancy_rate?: number
+          property_id: string
+          recommended_rate_cents: number
+          status?: string
+          stay_date: string
+          updated_at?: string
+        }
+        Update: {
+          base_rate_cents?: number
+          confidence?: number
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          factors?: Json
+          id?: string
+          lead_days?: number
+          occupancy_rate?: number
+          property_id?: string
+          recommended_rate_cents?: number
+          status?: string
+          stay_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yield_recommendations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      yield_strategies: {
+        Row: {
+          created_at: string
+          early_booking_days: number
+          enabled: boolean
+          event_weight: number
+          id: string
+          last_minute_days: number
+          lead_time_weight: number
+          maximum_decrease_percentage: number
+          maximum_increase_percentage: number
+          maximum_rate_cents: number
+          minimum_rate_cents: number
+          name: string
+          occupancy_weight: number
+          property_id: string
+          target_occupancy: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          early_booking_days?: number
+          enabled?: boolean
+          event_weight?: number
+          id?: string
+          last_minute_days?: number
+          lead_time_weight?: number
+          maximum_decrease_percentage?: number
+          maximum_increase_percentage?: number
+          maximum_rate_cents: number
+          minimum_rate_cents: number
+          name?: string
+          occupancy_weight?: number
+          property_id: string
+          target_occupancy?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          early_booking_days?: number
+          enabled?: boolean
+          event_weight?: number
+          id?: string
+          last_minute_days?: number
+          lead_time_weight?: number
+          maximum_decrease_percentage?: number
+          maximum_increase_percentage?: number
+          maximum_rate_cents?: number
+          minimum_rate_cents?: number
+          name?: string
+          occupancy_weight?: number
+          property_id?: string
+          target_occupancy?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yield_strategies_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

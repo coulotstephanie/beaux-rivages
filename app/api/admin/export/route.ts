@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseAdminRepository } from "@/platform/database/operations";
-import { rateLimit, requireAdmin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { rateLimit } from "@/platform/http/security";
 
 const allowedEntities = ["reservations", "payments", "audit_logs"] as const;
 
@@ -14,7 +15,7 @@ function csvCell(value: unknown) {
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 4, 60_000);
   if (limited) return limited;
-  if (!requireAdmin(request)) return new Response("Authentification requise.", { status: 401 });
+  if (!await authorizeStaff(request, ["admin", "read_only"])) return new Response("Authentification requise.", { status: 401 });
   if (!isDatabaseConfigured()) return new Response("Base de données non configurée.", { status: 503 });
 
   const requestedEntity = request.nextUrl.searchParams.get("entity");

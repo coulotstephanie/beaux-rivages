@@ -3,7 +3,8 @@ import { z } from "zod";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseAuditRepository } from "@/platform/database/operations";
 import { SupabaseStripePaymentRepository } from "@/platform/database/payments";
-import { noStoreJson, rateLimit, requireAdmin, requireSameOrigin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { StripePaymentAdapter } from "@/platform/payments/stripe";
 
 const refundSchema = z.object({
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 5, 60_000);
   if (limited) return limited;
   if (!requireSameOrigin(request)) return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request, ["admin"])) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   if (!isDatabaseConfigured()) return noStoreJson({ error: "Base de données non configurée." }, { status: 503 });
   if (!process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")) return noStoreJson({ error: "Stripe TEST non configuré." }, { status: 503 });
   const parsed = refundSchema.safeParse(await request.json().catch(() => null));

@@ -4,7 +4,8 @@ import { propertySlugs } from "@/platform/calendar/config";
 import { synchronizePropertyCalendars } from "@/platform/calendar/service";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseAdminRepository } from "@/platform/database/operations";
-import { noStoreJson, rateLimit, requireAdmin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit } from "@/platform/http/security";
 import { ratePlanRepository } from "@/platform/pricing/repository";
 import { rateForDate } from "@/platform/pricing/service";
 
@@ -21,7 +22,7 @@ function enumerate(startsOn: string, endsOn: string) {
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 12);
   if (limited) return limited;
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
   const year = new Date().getFullYear();
   const startsOn = `${year}-01-01`;
   const endsOn = `${year + 1}-01-01`;

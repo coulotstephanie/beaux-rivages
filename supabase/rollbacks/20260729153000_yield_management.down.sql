@@ -1,0 +1,1 @@
+drop table if exists public.yield_decision_logs cascade;drop table if exists public.yield_rate_overrides cascade;drop table if exists public.yield_recommendations cascade;drop table if exists public.demand_events cascade;drop table if exists public.yield_strategies cascade;

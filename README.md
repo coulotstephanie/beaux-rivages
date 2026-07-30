@@ -34,6 +34,11 @@ npm run dev
 
 Puis ouvrir http://localhost:3000.
 
+La procédure détaillée se trouve dans
+[`docs/engineering/INSTALLATION.md`](docs/engineering/INSTALLATION.md). Les
+contributions suivent
+[`docs/engineering/CONTRIBUTING.md`](docs/engineering/CONTRIBUTING.md).
+
 ## Validation avant livraison
 
 ```bash
@@ -46,9 +51,19 @@ La première commande exécute lint, TypeScript strict, les tests d’intégrit�
 le build de production. La seconde validation parcourt toutes les URLs internes
 du site construit.
 
+La préparation réelle est suivie dans
+[`docs/PRODUCTION_READINESS_AUDIT_2026-07-29.md`](docs/PRODUCTION_READINESS_AUDIT_2026-07-29.md).
+Tout déploiement suit le
+[`Guide de déploiement`](docs/05_OPERATIONS/DeploymentGuide.md) et la
+[`Checklist Go Live`](docs/05_OPERATIONS/GO_LIVE_CHECKLIST.md).
+
 ## Architecture de production
 
 - `components/ui` contient les primitives du Design System.
+- `features` accueille progressivement chaque domaine selon le gabarit Feature
+  First, sans déplacement global de l’existant.
+- `components/layouts`, `components/providers` et `components/states`
+  centralisent les compositions et comportements transverses.
 - `media/properties` contient un manifest typé par maison.
 - `media/site.ts` est le registre des médias partagés et des destinations.
 - `content/fr` constitue le point d’entrée éditorial français ; les futures

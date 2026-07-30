@@ -26,7 +26,7 @@ Rivages. Il lit et modifie les données Supabase uniquement par la couche métie
 
 L’API `/api/admin/operations` impose :
 
-1. le jeton `ADMIN_API_TOKEN` ;
+1. une session Supabase Auth et un rôle interne autorisé ;
 2. une origine identique pour toute mutation ;
 3. une limitation de débit ;
 4. une validation Zod stricte ;
@@ -34,11 +34,9 @@ L’API `/api/admin/operations` impose :
 6. une entrée dans `audit_logs` après chaque action ;
 7. des réponses sans cache.
 
-Le jeton saisi dans l’interface est conservé dans `sessionStorage`, jamais dans
-une URL ou un stockage persistant. Cette protection est adaptée au pilotage
-initial. Avant d’ajouter plusieurs collaborateurs, remplacer le jeton par
-Supabase Auth et appliquer les rôles `admin`, `concierge` et `read_only` déjà
-prévus en base.
+La session est conservée dans un cookie `HttpOnly`. Les rôles `admin`,
+`concierge` et `read_only` sont contrôlés côté serveur et par les politiques
+RLS.
 
 ## Données et limites
 

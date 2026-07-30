@@ -11,9 +11,13 @@ out/
 .DS_Store
 tsconfig.tsbuildinfo
 coverage/
+playwright-report/
+test-results/
 .tools/
-.github/workflows/
 .vercel
 .env*
 !.env.example
 supabase/.temp/
+
+# Documentation opérationnelle confidentielle — jamais versionnée dans ce dépôt public
+/docs-private/

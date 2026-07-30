@@ -51,7 +51,8 @@ test("Supabase migration includes every Revenue & Marketing foundation", () => {
 
 test("Revenue admin API requires authentication and same-origin mutations", () => {
   const source = readFileSync("app/api/admin/revenue/route.ts", "utf8");
-  assert.match(source, /requireAdmin/);
+  assert.match(source, /authorizeStaff/);
+  assert.match(source, /\["admin"\]/);
   assert.match(source, /requireSameOrigin/);
   assert.match(source, /rateLimit/);
   assert.doesNotMatch(source, /NEXT_PUBLIC_.*(SECRET|KEY|TOKEN)/);

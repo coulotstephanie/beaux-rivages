@@ -21,5 +21,5 @@ test("la migration rend les jobs rejouables et les conflits traçables", () => {
 });
 test("l’API protège toutes les mutations", () => {
   const route=readFileSync("app/api/admin/channel-manager/route.ts","utf8");
-  assert.match(route,/requireAdmin/); assert.match(route,/requireSameOrigin/); assert.match(route,/channelActionSchema/);
+  assert.match(route,/authorizeStaff/); assert.match(route,/\["admin"\]/); assert.match(route,/requireSameOrigin/); assert.match(route,/channelActionSchema/);
 });

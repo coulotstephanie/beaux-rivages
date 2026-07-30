@@ -63,7 +63,8 @@ fournisseur.
 - `/administration/tarifs` : calendrier annuel, sélection de plage et
   préparation des modifications groupées.
 
-Les API d’administration exigent `Authorization: Bearer <ADMIN_API_TOKEN>`,
+Les API d’administration exigent une session Supabase Auth associée à un rôle
+interne autorisé,
 sont limitées en fréquence et ne renvoient jamais les secrets.
 
 ## Channel managers et API futures

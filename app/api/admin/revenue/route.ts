@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { isDatabaseConfigured } from "@/platform/database/client";
-import { noStoreJson, rateLimit, requireAdmin, requireSameOrigin } from "@/platform/http/security";
+import { authorizeStaff } from "@/platform/auth/server";
+import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { RevenueMarketingRepository } from "@/platform/revenue/repository";
 
 const actionSchema = z.discriminatedUnion("action", [
@@ -41,7 +42,7 @@ const unavailable = () => noStoreJson({ error: "Base commerciale non configurée
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 20);
   if (limited) return limited;
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
   if (!isDatabaseConfigured()) return unavailable();
   try {
     return noStoreJson(await new RevenueMarketingRepository().dashboard());
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 8);
   if (limited) return limited;
   if (!requireSameOrigin(request)) return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
-  if (!requireAdmin(request)) return noStoreJson({ error: "Authentification requise." }, { status: 401 });
+  if (!await authorizeStaff(request, ["admin"])) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   if (!isDatabaseConfigured()) return unavailable();
   const parsed = actionSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return noStoreJson({ error: "Données commerciales invalides.", details: parsed.error.flatten() }, { status: 400 });
