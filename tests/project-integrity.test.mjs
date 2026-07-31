@@ -253,6 +253,30 @@ test("the premium experience collection includes all requested experiences", () 
   assert.match(read("components/ExperienceCollection.tsx"), /Ajouter à mon séjour/);
 });
 
+test("hospitality services expose seven visual, bookable or quote-ready journeys", () => {
+  const catalog = read("hospitalityServices.ts");
+  const booking = read("booking.ts");
+  const migration = read("supabase/migrations/20260731193000_hospitality_experiences.sql");
+  const requestApi = read("app/api/experience-requests/route.ts");
+  for (const slug of [
+    "essentiel",
+    "bebe",
+    "animaux",
+    "experience-signature",
+    "romance",
+    "demande-en-mariage",
+    "anniversaire",
+  ]) {
+    assert.match(catalog, new RegExp(`slug: "${slug}"`), `Missing hospitality service ${slug}`);
+  }
+  assert.match(catalog, /gallery:/);
+  assert.match(booking, /id: "pet"[\s\S]{0,300}price: 25/);
+  assert.match(booking, /id: "romance"[\s\S]{0,300}price: 149/);
+  assert.match(migration, /enable row level security/);
+  assert.match(migration, /revoke all on public\.experience_requests from public, anon/);
+  assert.match(requestApi, /requireSameOrigin/);
+});
+
 test("every Carnet link to an experience anchor targets an existing experience", () => {
   const carnet = read("carnetData.ts");
   const experienceData = read("experiences.ts");

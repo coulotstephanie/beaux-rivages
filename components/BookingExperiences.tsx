@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   bookingExperiences,
   getBookingSuggestions,
@@ -16,9 +17,11 @@ export function BookingExperiences({
 }) {
   const suggestions = getBookingSuggestions(selection);
   const toggle = (id: BookingExperienceId) =>
-    onChange(selection.experiences.includes(id)
-      ? selection.experiences.filter((item) => item !== id)
-      : [...selection.experiences, id]);
+    onChange(
+      selection.experiences.includes(id)
+        ? selection.experiences.filter((item) => item !== id)
+        : [...selection.experiences, id],
+    );
 
   return (
     <section className="booking-experiences" aria-labelledby="booking-experiences-title">
@@ -45,9 +48,10 @@ export function BookingExperiences({
       <div className="booking-experiences__grid">
         {bookingExperiences.map((experience) => {
           const selected = selection.experiences.includes(experience.id);
-          const especiallySuited = !experience.propertySlugs
-            || !selection.propertySlug
-            || experience.propertySlugs.includes(selection.propertySlug);
+          const especiallySuited =
+            !experience.propertySlugs ||
+            !selection.propertySlug ||
+            experience.propertySlugs.includes(selection.propertySlug);
           return (
             <label key={experience.id} className={selected ? "is-selected" : ""}>
               <input type="checkbox" checked={selected} onChange={() => toggle(experience.id)} />
@@ -57,10 +61,31 @@ export function BookingExperiences({
               </span>
               <strong>{experience.label}</strong>
               <span>{experience.description}</span>
-              <small>À partir de {experience.price} €{especiallySuited ? "" : " · autre maison conseillée"}</small>
+              <small>
+                À partir de {experience.price} €
+                {especiallySuited ? "" : " · autre maison conseillée"}
+              </small>
             </label>
           );
         })}
+      </div>
+      <div className="booking-bespoke-grid" aria-label="Expériences sur mesure">
+        <article>
+          <small>Organisation sur mesure</small>
+          <strong>💍 Demande en mariage</strong>
+          <span>
+            Décoration, fleurs, gourmandises, photographe et choix du lieu selon votre projet.
+          </span>
+          <Link href="/demande-en-mariage">Demander un devis →</Link>
+        </article>
+        <article>
+          <small>Organisation sur mesure</small>
+          <strong>🎂 Anniversaire</strong>
+          <span>
+            Décoration, gâteau, fleurs, gourmandises et attentions entièrement personnalisées.
+          </span>
+          <Link href="/anniversaire">Demander un devis →</Link>
+        </article>
       </div>
     </section>
   );

@@ -118,9 +118,9 @@ export const stayOptions: StayOption[] = [
   {
     id: "pet",
     label: "Animal",
-    description: "Accueil d’un animal avec gamelles mises à disposition.",
+    description: "Accueil d’un animal, gamelles et guide des balades de Stéphanie & Bruno.",
     price: 25,
-    unit: "par séjour",
+    unit: "par animal et par séjour",
   },
   {
     id: "aperitif-basket",
@@ -139,9 +139,10 @@ export const stayOptions: StayOption[] = [
 export const bookingExperiences: BookingExperienceOption[] = [
   {
     id: "romance",
-    label: "Escapade romantique",
-    description: "Pétales, lumière douce et deux flûtes préparées dans la chambre.",
-    price: 75,
+    label: "Expérience Romance Signature",
+    description:
+      "Ambiance romantique, boisson au choix, gourmandises, peignoirs et attention personnalisée.",
+    price: 149,
     duration: "À l’arrivée",
     propertySlugs: ["villa-raie-manta"],
   },
@@ -209,7 +210,12 @@ export function getBookingEstimate(selection: BookingSelection, property: Proper
   const optionsTotal = selection.options.reduce((total, id) => {
     const option = stayOptions.find((item) => item.id === id);
     if (!option) return total;
-    const multiplier = option.unit === "par voyageur" ? Math.max(1, payingGuests) : 1;
+    const multiplier =
+      id === "linen"
+        ? Math.max(1, payingGuests)
+        : id === "pet"
+          ? Math.max(1, selection.guests.pets)
+          : 1;
     return total + option.price * multiplier;
   }, 0);
   const experiencesTotal = selection.experiences.reduce(

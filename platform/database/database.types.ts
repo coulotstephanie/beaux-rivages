@@ -2278,10 +2278,13 @@ export type Database = {
       }
       premium_experiences: {
         Row: {
+          availability: Json
           code: string
+          content: Json
           created_at: string
           description: string
           enabled: boolean
+          gallery_paths: string[]
           id: string
           image_path: string | null
           label: string
@@ -2289,13 +2292,18 @@ export type Database = {
           property_ids: string[]
           rules: Json
           sort_order: number
+          translations: Json
           updated_at: string
+          updated_by: string | null
         }
         Insert: {
+          availability?: Json
           code: string
+          content?: Json
           created_at?: string
           description: string
           enabled?: boolean
+          gallery_paths?: string[]
           id?: string
           image_path?: string | null
           label: string
@@ -2303,13 +2311,18 @@ export type Database = {
           property_ids?: string[]
           rules?: Json
           sort_order?: number
+          translations?: Json
           updated_at?: string
+          updated_by?: string | null
         }
         Update: {
+          availability?: Json
           code?: string
+          content?: Json
           created_at?: string
           description?: string
           enabled?: boolean
+          gallery_paths?: string[]
           id?: string
           image_path?: string | null
           label?: string
@@ -2317,8 +2330,16 @@ export type Database = {
           property_ids?: string[]
           rules?: Json
           sort_order?: number
+          translations?: Json
           updated_at?: string
+          updated_by?: string | null
         }
+        Relationships: []
+      }
+      experience_requests: {
+        Row: { assigned_to: string | null; budget: string | null; created_at: string; desired_date: string; email: string; experience_code: string; guest_id: string | null; id: string; name: string; phone: string; project_description: string; property_slug: string; source: string; status: string; updated_at: string }
+        Insert: { assigned_to?: string | null; budget?: string | null; created_at?: string; desired_date: string; email: string; experience_code: string; guest_id?: string | null; id?: string; name: string; phone: string; project_description: string; property_slug: string; source?: string; status?: string; updated_at?: string }
+        Update: { assigned_to?: string | null; budget?: string | null; desired_date?: string; email?: string; experience_code?: string; guest_id?: string | null; name?: string; phone?: string; project_description?: string; property_slug?: string; source?: string; status?: string; updated_at?: string }
         Relationships: []
       }
       promotions: {

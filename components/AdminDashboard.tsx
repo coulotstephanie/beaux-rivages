@@ -10,6 +10,7 @@ import { HousekeepingAdmin } from "@/components/admin/HousekeepingAdmin";
 import { CarnetCmsAdmin } from "@/components/admin/CarnetCmsAdmin";
 import { StaffAccess } from "@/components/admin/StaffAccess";
 import { YieldManagementAdmin } from "@/components/admin/YieldManagementAdmin";
+import { ExperienceServicesAdmin } from "@/components/admin/ExperienceServicesAdmin";
 
 type View =
   | "dashboard"
@@ -20,6 +21,7 @@ type View =
   | "yield"
   | "channel"
   | "housekeeping"
+  | "experiences-services"
   | "carnet"
   | "voyageurs"
   | "logements"
@@ -40,6 +42,7 @@ const views: { id: View; label: string }[] = [
   { id: "yield", label: "Yield Management" },
   { id: "channel", label: "Channel Manager" },
   { id: "housekeeping", label: "Housekeeping" },
+  { id: "experiences-services", label: "Expériences & Services" },
   { id: "carnet", label: "Carnet CMS" },
   { id: "voyageurs", label: "Voyageurs" },
   { id: "logements", label: "Logements" },
@@ -655,6 +658,9 @@ export function AdminDashboard() {
         <ChannelManagerAdmin token={token} properties={data.properties} notify={setMessage} />
       )}
       {view === "housekeeping" && <HousekeepingAdmin token={token} notify={setMessage} />}
+      {view === "experiences-services" && (
+        <ExperienceServicesAdmin token={token} notify={setMessage} />
+      )}
       {view === "carnet" && <CarnetCmsAdmin token={token} notify={setMessage} />}
       {(view === "calendrier" ||
         view === "paiements" ||

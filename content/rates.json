@@ -10,15 +10,59 @@
       "cleaningFee": 95,
       "securityDeposit": 800,
       "touristTax": { "mode": "fixed-per-adult-per-night", "value": 0, "enabled": false },
-      "optionPrices": { "signature": 145, "linen": 20, "pet": 25, "personal-arrival": 35, "late-checkout": 55 },
+      "optionPrices": {
+        "signature": 145,
+        "linen": 20,
+        "pet": 25,
+        "personal-arrival": 35,
+        "late-checkout": 55
+      },
       "seasons": [
-        { "id": "chai-high-2026", "label": "Haute saison", "kind": "high", "startsOn": "2026-07-01", "endsOn": "2026-09-01", "nightlyRate": 330, "minimumNights": 7 },
-        { "id": "chai-mid-2026", "label": "Moyenne saison", "kind": "mid", "startsOn": "2026-04-01", "endsOn": "2026-07-01", "nightlyRate": 275, "minimumNights": 3 },
-        { "id": "chai-winter-2026", "label": "Basse saison", "kind": "low", "startsOn": "2026-09-01", "endsOn": "2027-04-01", "nightlyRate": 220, "minimumNights": 2 }
+        {
+          "id": "chai-high-2026",
+          "label": "Haute saison",
+          "kind": "high",
+          "startsOn": "2026-07-01",
+          "endsOn": "2026-09-01",
+          "nightlyRate": 330,
+          "minimumNights": 7
+        },
+        {
+          "id": "chai-mid-2026",
+          "label": "Moyenne saison",
+          "kind": "mid",
+          "startsOn": "2026-04-01",
+          "endsOn": "2026-07-01",
+          "nightlyRate": 275,
+          "minimumNights": 3
+        },
+        {
+          "id": "chai-winter-2026",
+          "label": "Basse saison",
+          "kind": "low",
+          "startsOn": "2026-09-01",
+          "endsOn": "2027-04-01",
+          "nightlyRate": 220,
+          "minimumNights": 2
+        }
       ],
       "promotions": [
-        { "id": "chai-long-stay", "label": "Séjour de 7 nuits", "enabled": true, "kind": "long-stay", "percentage": 8, "minimumNights": 7 },
-        { "id": "chai-early", "label": "Réservation anticipée", "enabled": false, "kind": "early-booking", "percentage": 5, "minimumLeadDays": 120 }
+        {
+          "id": "chai-long-stay",
+          "label": "Séjour de 7 nuits",
+          "enabled": true,
+          "kind": "long-stay",
+          "percentage": 8,
+          "minimumNights": 7
+        },
+        {
+          "id": "chai-early",
+          "label": "Réservation anticipée",
+          "enabled": false,
+          "kind": "early-booking",
+          "percentage": 5,
+          "minimumLeadDays": 120
+        }
       ]
     },
     {
@@ -31,15 +75,59 @@
       "cleaningFee": 130,
       "securityDeposit": 1200,
       "touristTax": { "mode": "fixed-per-adult-per-night", "value": 0, "enabled": false },
-      "optionPrices": { "signature": 165, "linen": 20, "pet": 25, "personal-arrival": 35, "late-checkout": 65 },
+      "optionPrices": {
+        "signature": 145,
+        "linen": 20,
+        "pet": 25,
+        "personal-arrival": 35,
+        "late-checkout": 65
+      },
       "seasons": [
-        { "id": "villa-high-2026", "label": "Haute saison", "kind": "high", "startsOn": "2026-07-01", "endsOn": "2026-09-01", "nightlyRate": 495, "minimumNights": 7 },
-        { "id": "villa-mid-2026", "label": "Moyenne saison", "kind": "mid", "startsOn": "2026-04-01", "endsOn": "2026-07-01", "nightlyRate": 410, "minimumNights": 3 },
-        { "id": "villa-winter-2026", "label": "Basse saison", "kind": "low", "startsOn": "2026-09-01", "endsOn": "2027-04-01", "nightlyRate": 335, "minimumNights": 2 }
+        {
+          "id": "villa-high-2026",
+          "label": "Haute saison",
+          "kind": "high",
+          "startsOn": "2026-07-01",
+          "endsOn": "2026-09-01",
+          "nightlyRate": 495,
+          "minimumNights": 7
+        },
+        {
+          "id": "villa-mid-2026",
+          "label": "Moyenne saison",
+          "kind": "mid",
+          "startsOn": "2026-04-01",
+          "endsOn": "2026-07-01",
+          "nightlyRate": 410,
+          "minimumNights": 3
+        },
+        {
+          "id": "villa-winter-2026",
+          "label": "Basse saison",
+          "kind": "low",
+          "startsOn": "2026-09-01",
+          "endsOn": "2027-04-01",
+          "nightlyRate": 335,
+          "minimumNights": 2
+        }
       ],
       "promotions": [
-        { "id": "villa-long-stay", "label": "Séjour de 7 nuits", "enabled": true, "kind": "long-stay", "percentage": 8, "minimumNights": 7 },
-        { "id": "villa-last-minute", "label": "Dernière minute", "enabled": false, "kind": "last-minute", "percentage": 5, "maximumLeadDays": 10 }
+        {
+          "id": "villa-long-stay",
+          "label": "Séjour de 7 nuits",
+          "enabled": true,
+          "kind": "long-stay",
+          "percentage": 8,
+          "minimumNights": 7
+        },
+        {
+          "id": "villa-last-minute",
+          "label": "Dernière minute",
+          "enabled": false,
+          "kind": "last-minute",
+          "percentage": 5,
+          "maximumLeadDays": 10
+        }
       ]
     },
     {
@@ -52,15 +140,59 @@
       "cleaningFee": 90,
       "securityDeposit": 800,
       "touristTax": { "mode": "fixed-per-adult-per-night", "value": 0, "enabled": false },
-      "optionPrices": { "signature": 145, "linen": 20, "pet": 25, "personal-arrival": 35, "late-checkout": 55 },
+      "optionPrices": {
+        "signature": 145,
+        "linen": 20,
+        "pet": 25,
+        "personal-arrival": 35,
+        "late-checkout": 55
+      },
       "seasons": [
-        { "id": "nid-high-2026", "label": "Haute saison", "kind": "high", "startsOn": "2026-07-01", "endsOn": "2026-09-01", "nightlyRate": 310, "minimumNights": 7 },
-        { "id": "nid-mid-2026", "label": "Moyenne saison", "kind": "mid", "startsOn": "2026-04-01", "endsOn": "2026-07-01", "nightlyRate": 260, "minimumNights": 3 },
-        { "id": "nid-winter-2026", "label": "Basse saison", "kind": "low", "startsOn": "2026-09-01", "endsOn": "2027-04-01", "nightlyRate": 205, "minimumNights": 2 }
+        {
+          "id": "nid-high-2026",
+          "label": "Haute saison",
+          "kind": "high",
+          "startsOn": "2026-07-01",
+          "endsOn": "2026-09-01",
+          "nightlyRate": 310,
+          "minimumNights": 7
+        },
+        {
+          "id": "nid-mid-2026",
+          "label": "Moyenne saison",
+          "kind": "mid",
+          "startsOn": "2026-04-01",
+          "endsOn": "2026-07-01",
+          "nightlyRate": 260,
+          "minimumNights": 3
+        },
+        {
+          "id": "nid-winter-2026",
+          "label": "Basse saison",
+          "kind": "low",
+          "startsOn": "2026-09-01",
+          "endsOn": "2027-04-01",
+          "nightlyRate": 205,
+          "minimumNights": 2
+        }
       ],
       "promotions": [
-        { "id": "nid-long-stay", "label": "Séjour de 7 nuits", "enabled": true, "kind": "long-stay", "percentage": 8, "minimumNights": 7 },
-        { "id": "nid-seasonal", "label": "Douceur d’automne", "enabled": false, "kind": "seasonal", "percentage": 7, "ranges": [{ "startsOn": "2026-10-01", "endsOn": "2026-11-15" }] }
+        {
+          "id": "nid-long-stay",
+          "label": "Séjour de 7 nuits",
+          "enabled": true,
+          "kind": "long-stay",
+          "percentage": 8,
+          "minimumNights": 7
+        },
+        {
+          "id": "nid-seasonal",
+          "label": "Douceur d’automne",
+          "enabled": false,
+          "kind": "seasonal",
+          "percentage": 7,
+          "ranges": [{ "startsOn": "2026-10-01", "endsOn": "2026-11-15" }]
+        }
       ]
     }
   ]

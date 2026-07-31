@@ -91,7 +91,7 @@ export async function calculateQuote(input: QuoteRequest) {
     const option = stayOptions.find((candidate) => candidate.id === id);
     if (!option) return [];
     const unitPrice = plan.optionPrices[id] ?? option.price;
-    const quantity = option.unit === "par voyageur" ? payingGuests : 1;
+    const quantity = id === "linen" ? payingGuests : id === "pet" ? Math.max(1, input.pets) : 1;
     return [{ id, label: option.label, quantity, unitPrice, total: unitPrice * quantity }];
   });
   const experienceLines = input.experiences.flatMap((id) => {

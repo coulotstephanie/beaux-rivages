@@ -249,8 +249,8 @@ export function BookingExperience({
           {step === 4 && (
             <section aria-labelledby="booking-step-title">
               <Heading
-                eyebrow="Étape 4 · Votre expérience"
-                title="Les attentions qui changent un séjour."
+                eyebrow="Étape 4 · Personnalisez votre séjour"
+                title="Les attentions qui donnent une autre dimension au séjour."
                 id="booking-step-title"
               />
               <BookingExperiences selection={selection} onChange={updateExperiences} />
