@@ -52,8 +52,8 @@ export const reviewProfiles: PropertyReviewProfile[] = [
         platform: "Booking.com",
       },
       {
-        quote: "Très bien situé, très bien équipé, bien aménagé et avec de nombreux rangements.",
-        author: "Marion",
+        quote: "Séjour confortable en bord de mer, idéal pour visiter l’île.",
+        author: "Edith",
         platform: "Booking.com",
       },
     ],
