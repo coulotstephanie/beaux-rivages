@@ -89,6 +89,26 @@ export const destinationMedia = {
     "Fort Boyard aperçu depuis la plage",
     "Fort Boyard à l’horizon",
   ),
+  fortBoyardAerial: destinationAsset(
+    "oleron-authentique/fort-boyard-vue-aerienne.jpg",
+    "Fort Boyard vu du ciel au milieu du pertuis d’Antioche",
+    "Fort Boyard, entre Oléron et l’Île d’Aix",
+  ),
+  chassironPointAerial: destinationAsset(
+    "oleron-authentique/phare-chassiron-pointe.jpg",
+    "Pointe de Chassiron et son phare vus du ciel",
+    "La pointe nord de l’Île d’Oléron",
+  ),
+  chassironGardensAerial: destinationAsset(
+    "oleron-authentique/phare-chassiron-jardins.jpg",
+    "Jardins en rose des vents autour du phare de Chassiron",
+    "Les jardins du phare de Chassiron",
+  ),
+  chassironCoastAerial: destinationAsset(
+    "oleron-authentique/phare-chassiron-cote.jpg",
+    "Phare de Chassiron au bord de la côte rocheuse",
+    "Chassiron face à l’Atlantique",
+  ),
   oceanBreakfast: destinationAsset(
     "petit-dejeuner-ocean.jpg",
     "Petit-déjeuner face à l’océan",
