@@ -38,7 +38,25 @@ export const reviewProfiles: PropertyReviewProfile[] = [
     airbnbReviewCount: 46,
     accolade: "Coup de cœur voyageurs · parmi les 10 % de logements préférés",
     summary:
-      "Les voyageurs retiennent d’abord l’hospitalité, la situation pratique entre plage et village, ainsi que le niveau d’équipement et le confort intérieur.",
+      "Les voyageurs retiennent d’abord l’hospitalité, la situation pratique entre plages et village, ainsi que le niveau d’équipement, la rénovation soignée et le confort intérieur.",
+    verifiedQuotes: [
+      {
+        quote: "Un vrai cocon, magnifiquement rénové, avec une prestation de grande qualité.",
+        author: "Fabrice",
+        platform: "Booking.com",
+      },
+      {
+        quote:
+          "La plage est à deux minutes, les chambres sont confortables et la cuisine très pratique.",
+        author: "Joris",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Très bien situé, très bien équipé, bien aménagé et avec de nombreux rangements.",
+        author: "Marion",
+        platform: "Booking.com",
+      },
+    ],
     themes: [
       { label: "Hospitalité", count: 31 },
       { label: "Emplacement", count: 19 },
