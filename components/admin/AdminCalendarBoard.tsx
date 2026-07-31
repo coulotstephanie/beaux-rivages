@@ -3,7 +3,7 @@
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import type { BackOfficeSnapshot } from "@/platform/admin/contracts";
 
-type ExternalBlock = { startsOn: string; endsOn: string; status: string };
+type ExternalBlock = { startsOn: string; endsOn: string; status: string; source?: string };
 type CalendarPayload = { blocks?: ExternalBlock[] };
 const monthTitle = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" });
 const weekdays = ["L", "M", "M", "J", "V", "S", "D"];
@@ -16,7 +16,14 @@ function iso(date: Date) {
 }
 
 function uniqueBlocks(blocks: ExternalBlock[]) {
-  return [...new Map(blocks.map((block) => [`${block.startsOn}:${block.endsOn}`, block])).values()];
+  return [
+    ...new Map(
+      blocks.map((block) => [
+        `${block.startsOn}:${block.endsOn}:${block.source ?? "external"}`,
+        block,
+      ]),
+    ).values(),
+  ];
 }
 
 type Props = {
@@ -135,6 +142,9 @@ export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
           <i className="is-direct" /> Direct
         </span>
         <span>
+          <i className="is-manual" /> Blocage manuel
+        </span>
+        <span>
           <i className="is-turnover" /> Départ + arrivée
         </span>
       </div>
@@ -144,6 +154,11 @@ export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
             (row) => row.propertyId === property.id && row.status !== "cancelled",
           );
           const blocks = external[property.slug] ?? [];
+          const directBlocks = blocks.filter((block) => block.source === "reservation");
+          const manualBlocks = blocks.filter((block) => block.source === "manual");
+          const platformBlocks = blocks.filter(
+            (block) => !["reservation", "manual"].includes(block.source ?? ""),
+          );
           return (
             <section key={property.id}>
               <h3>{property.name}</h3>
@@ -156,10 +171,13 @@ export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
                 {days.map((day, index) => {
                   if (!day) return <span key={`empty-${index}`} />;
                   const value = iso(day);
-                  const direct = reservations.some(
-                    (row) => value >= row.arrival && value < row.departure,
+                  const direct =
+                    reservations.some((row) => value >= row.arrival && value < row.departure) ||
+                    directBlocks.some((block) => value >= block.startsOn && value < block.endsOn);
+                  const manual = manualBlocks.some(
+                    (block) => value >= block.startsOn && value < block.endsOn,
                   );
-                  const platform = blocks.some(
+                  const platform = platformBlocks.some(
                     (block) => value >= block.startsOn && value < block.endsOn,
                   );
                   const arrival =
@@ -173,16 +191,20 @@ export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
                     ? "turnover"
                     : direct
                       ? "direct"
-                      : platform
-                        ? "platform"
-                        : "free";
+                      : manual
+                        ? "manual"
+                        : platform
+                          ? "platform"
+                          : "free";
                   const label = turnover
                     ? "départ et arrivée"
                     : direct
                       ? "réservation directe"
-                      : platform
-                        ? "Période indisponible (plateforme)"
-                        : "disponible";
+                      : manual
+                        ? "Période indisponible (blocage manuel)"
+                        : platform
+                          ? "Période indisponible (plateforme)"
+                          : "disponible";
                   return (
                     <span
                       key={value}

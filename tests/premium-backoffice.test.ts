@@ -55,6 +55,7 @@ test("le calendrier du Back Office affiche les périodes iCal des trois maisons"
   assert.match(board, /Airbnb · Booking · Réservation directe/);
   assert.match(board, /action: "block_dates"/);
   assert.match(board, /Bloquer des dates/);
+  assert.match(board, /Blocage manuel/);
 });
 
 test("les réservations annulées disparaissent des listes actives", () => {

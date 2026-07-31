@@ -92,7 +92,7 @@ export async function synchronizePropertyCalendars(propertySlug: PropertySlug, f
   const value = {
     blocks: mergeCalendarBlocks(persisted.flatMap((item) => item.blocks)),
     results: persisted.map((item) => item.result),
-    expiresAt: Date.now() + 5 * 60_000,
+    expiresAt: Date.now() + 60_000,
   };
   cache.set(propertySlug, value);
   return value;
@@ -104,14 +104,26 @@ function dateOnly(value: string) {
 
 export async function getPropertyAvailability(propertySlug: PropertySlug, force = false) {
   const calendar = await synchronizePropertyCalendars(propertySlug, force);
+  const internalBlocks = isDatabaseConfigured()
+    ? await new SupabaseCalendarRepository().listOutboundBlocks(propertySlug)
+    : [];
   return {
     propertySlug,
     generatedAt: new Date().toISOString(),
-    blocks: calendar.blocks.map((block) => ({
-      startsOn: dateOnly(block.startsAt),
-      endsOn: dateOnly(block.endsAt),
-      status: block.status,
-    })),
+    blocks: [
+      ...calendar.blocks.map((block) => ({
+        startsOn: dateOnly(block.startsAt),
+        endsOn: dateOnly(block.endsAt),
+        status: block.status,
+        source: block.sourceId,
+      })),
+      ...internalBlocks.map((block) => ({
+        startsOn: block.startsOn,
+        endsOn: block.endsOn,
+        status: "confirmed" as const,
+        source: block.source,
+      })),
+    ],
     sources: calendar.results,
   };
 }

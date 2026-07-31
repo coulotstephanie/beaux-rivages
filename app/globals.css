@@ -3023,6 +3023,7 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-calendar-legend i { width:12px; height:12px; border-radius:3px; background:#eef1ef; }
 .admin-calendar-legend .is-platform { background:#dce9f5; }
 .admin-calendar-legend .is-direct { background:#d8eee7; }
+.admin-calendar-legend .is-manual { background:#eadff2; }
 .admin-calendar-legend .is-turnover { background:#f5dfb9; }
 .admin-visual-calendar__houses { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
 .admin-visual-calendar__houses > section { padding:1rem; border:1px solid var(--line); border-radius:12px; background:#fff; }
@@ -3032,6 +3033,7 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-visual-calendar__days > span { min-height:46px; padding:5px; display:flex; align-items:flex-start; justify-content:space-between; gap:2px; border-radius:6px; background:#eef1ef; font-size:.75rem; }
 .admin-visual-calendar__days > span.is-platform { background:#dce9f5; color:#174f7a; }
 .admin-visual-calendar__days > span.is-direct { background:#d8eee7; color:#195f50; }
+.admin-visual-calendar__days > span.is-manual { background:#eadff2; color:#624278; }
 .admin-visual-calendar__days > span.is-turnover { background:#f5dfb9; color:#80571c; box-shadow:inset 0 0 0 1px #d29c42; }
 .admin-visual-calendar__days small { font-size:.58rem; font-weight:700; }
 .admin-checklist { display:grid; gap:.45rem; margin-top:1rem; text-align:left; }

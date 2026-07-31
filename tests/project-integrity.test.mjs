@@ -370,6 +370,13 @@ test("iCal normalization handles event boundaries, cancellation and deduplicatio
   assert.match(source, /new Map/);
 });
 
+test("public availability includes manual and direct Supabase blocks", () => {
+  const source = read("platform/calendar/service.ts");
+  assert.match(source, /listOutboundBlocks\(propertySlug\)/);
+  assert.match(source, /source: block\.source/);
+  assert.match(source, /Date\.now\(\) \+ 60_000/);
+});
+
 test("deployment configuration never commits local secrets", () => {
   const ignored = read(".gitignore");
   const example = read(".env.example");
