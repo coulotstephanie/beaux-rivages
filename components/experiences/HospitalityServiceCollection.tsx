@@ -43,7 +43,13 @@ export function HospitalityServiceCollection({ services }: { services: Hospitali
             <span className="hospitality-service-card__icon" aria-hidden="true">
               {service.icon}
             </span>
-            <p className="hospitality-service-card__badge">{service.badge}</p>
+            <p className="hospitality-service-card__badge">
+              {service.price === null
+                ? "Sur devis personnalisé"
+                : service.price === 0
+                  ? "Inclus · sans supplément"
+                  : `${service.price} € ${service.slug === "animaux" ? "par animal et par séjour" : "par séjour"}`}
+            </p>
             <h2>{service.title}</h2>
             <p>{service.intro}</p>
             <ul>

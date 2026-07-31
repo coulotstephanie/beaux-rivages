@@ -50,9 +50,11 @@ export const experiences: Experience[] = [
     audience: "Couples",
     option: "personal-arrival",
     storyTitle: "Faire de l’horizon le seul décor.",
-    story: "Nous vous aidons à choisir une plage calme, l’orientation la plus lumineuse et l’horaire juste selon la marée. Sur demande, le moment peut être prolongé par des fleurs, une bouteille fraîche, quelques images discrètes ou un dîner réservé à proximité. Rien n’est imposé : la mise en scène reste fidèle à votre histoire.",
+    story:
+      "Nous vous aidons à choisir une plage calme, l’orientation la plus lumineuse et l’horaire juste selon la marée. Sur demande, le moment peut être prolongé par des fleurs, une bouteille fraîche, quelques images discrètes ou un dîner réservé à proximité. Rien n’est imposé : la mise en scène reste fidèle à votre histoire.",
     whyTitle: "Un moment préparé avec précision, vécu avec naturel.",
-    advice: "L’emplacement et l’horaire sont confirmés quelques jours avant selon la météo, le vent et les marées. Un plan de repli élégant peut être prévu si les conditions changent.",
+    advice:
+      "L’emplacement et l’horaire sont confirmés quelques jours avant selon la météo, le vent et les marées. Un plan de repli élégant peut être prévu si les conditions changent.",
     checklist: [
       "Repérage du lieu et conseil sur le meilleur horaire",
       "Coordination discrète des attentions choisies",
@@ -111,9 +113,11 @@ export const experiences: Experience[] = [
     audience: "Gourmands, couples et familles",
     option: "personal-arrival",
     storyTitle: "Le meilleur de l’Atlantique, déjà prêt à partager.",
-    story: "Huîtres, crevettes, bulots et coquillages sont sélectionnés selon l’arrivage auprès d’un poissonnier ou d’un producteur local. Le plateau est composé pour votre table, accompagné des essentiels et récupéré au moment convenu afin que vous n’ayez plus qu’à ouvrir une bouteille et vous installer.",
+    story:
+      "Huîtres, crevettes, bulots et coquillages sont sélectionnés selon l’arrivage auprès d’un poissonnier ou d’un producteur local. Le plateau est composé pour votre table, accompagné des essentiels et récupéré au moment convenu afin que vous n’ayez plus qu’à ouvrir une bouteille et vous installer.",
     whyTitle: "Parce qu’un grand dîner peut rester merveilleusement simple.",
-    advice: "La composition dépend de la pêche, de la saison et des allergies signalées. Nous adaptons les quantités au nombre de convives et pouvons conseiller un vin blanc local.",
+    advice:
+      "La composition dépend de la pêche, de la saison et des allergies signalées. Nous adaptons les quantités au nombre de convives et pouvons conseiller un vin blanc local.",
     checklist: [
       "Composition selon l’arrivage et le nombre de convives",
       "Pain, citron, beurre et sauces sur demande",
@@ -132,9 +136,11 @@ export const experiences: Experience[] = [
     recommendedProperty: { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
     audience: "Familles, adolescents et gourmands",
     storyTitle: "Apprendre le geste, puis goûter ce que l’on a créé.",
-    story: "Guidés par un artisan, petits et grands découvrent les étapes qui font la précision d’un macaron : préparation des coques, pochage, garniture et assemblage. L’atelier privilégie la participation et le plaisir de faire ensemble, avec une boîte de créations à rapporter à la maison.",
+    story:
+      "Guidés par un artisan, petits et grands découvrent les étapes qui font la précision d’un macaron : préparation des coques, pochage, garniture et assemblage. L’atelier privilégie la participation et le plaisir de faire ensemble, avec une boîte de créations à rapporter à la maison.",
     whyTitle: "Une parenthèse gourmande qui réunit toutes les générations.",
-    advice: "Les dates et les formats varient selon la programmation de l’artisan. Nous vérifions les places, l’âge minimum éventuel et les allergènes avant de confirmer.",
+    advice:
+      "Les dates et les formats varient selon la programmation de l’artisan. Nous vérifions les places, l’âge minimum éventuel et les allergènes avant de confirmer.",
     checklist: [
       "Atelier pratique accompagné par un professionnel",
       "Ingrédients et matériel inclus selon la formule",
@@ -153,9 +159,11 @@ export const experiences: Experience[] = [
     recommendedProperty: { slug: "nid-d-ete", label: "Le Nid d’Été" },
     audience: "Lève-tôt, photographes et couples",
     storyTitle: "Voir la plage avant que l’île ne s’éveille.",
-    story: "Nous vous indiquons le point de départ le plus juste selon la saison. Quelques minutes de marche suffisent pour rejoindre le rivage dans le silence, observer la lumière gagner l’eau et prolonger le moment avec un café ou un petit-déjeuner au retour.",
+    story:
+      "Nous vous indiquons le point de départ le plus juste selon la saison. Quelques minutes de marche suffisent pour rejoindre le rivage dans le silence, observer la lumière gagner l’eau et prolonger le moment avec un café ou un petit-déjeuner au retour.",
     whyTitle: "L’île semble entière lorsque l’on arrive avant les premiers pas.",
-    advice: "L’heure de départ est adaptée au lever du soleil et à la météo. Prévoyez une couche chaude, même en été, et arrivez une quinzaine de minutes avant l’apparition du soleil.",
+    advice:
+      "L’heure de départ est adaptée au lever du soleil et à la météo. Prévoyez une couche chaude, même en été, et arrivez une quinzaine de minutes avant l’apparition du soleil.",
     checklist: [
       "Point d’observation conseillé selon la saison",
       "Horaire précis communiqué avant le séjour",
@@ -174,9 +182,11 @@ export const experiences: Experience[] = [
     recommendedProperty: { label: "Les trois maisons" },
     audience: "Tous les voyageurs",
     storyTitle: "Regarder la lumière descendre sur les marais.",
-    story: "Un itinéraire court vous mène jusqu’à un point dégagé où le ciel et l’eau se répondent. Nous vous conseillons d’arriver avant l’heure dorée, de marcher un peu, puis de rester après la disparition du soleil, lorsque les couleurs deviennent plus profondes.",
+    story:
+      "Un itinéraire court vous mène jusqu’à un point dégagé où le ciel et l’eau se répondent. Nous vous conseillons d’arriver avant l’heure dorée, de marcher un peu, puis de rester après la disparition du soleil, lorsque les couleurs deviennent plus profondes.",
     whyTitle: "Un rituel simple qui change chaque soir.",
-    advice: "Le meilleur point de vue dépend de la couverture nuageuse et de votre île de départ. Nous partageons une option accessible en famille et une alternative plus sauvage.",
+    advice:
+      "Le meilleur point de vue dépend de la couverture nuageuse et de votre île de départ. Nous partageons une option accessible en famille et une alternative plus sauvage.",
     checklist: [
       "Point de vue choisi selon votre maison",
       "Horaire adapté à la date du séjour",
@@ -221,15 +231,27 @@ export const experiences: Experience[] = [
   },
   {
     slug: "famille",
-    title: "Une journée pensée pour la famille",
-    eyebrow: "Petits et grands",
-    text: "Plage sans voiture, jeux, goûter et retour au calme : une journée simple où chacun trouve son rythme.",
-    image: siteMedia.properties["nid-d-ete"].lifestyle[4].src,
-    imageAlt: "Enfants jouant sur la plage",
+    title: "Une journée en famille au rythme de l’océan",
+    eyebrow: "Petits, grands et grands-parents",
+    text: "Cerf-volant, château de sable, goûter sur la plage et retour au calme dans la maison : une journée simple où chaque génération trouve son rythme.",
+    image: "/images/destination/editorial/famille-cerf-volant-chien.png",
+    imageAlt: "Parents et enfants faisant voler un cerf-volant avec leur chien sur la plage",
     duration: "Une journée",
-    idealPeriod: "Vacances scolaires",
-    recommendedProperty: { slug: "nid-d-ete", label: "Le Nid d’Été" },
-    audience: "Familles avec enfants et bébé",
+    idealPeriod: "Toute l’année selon la météo",
+    recommendedProperty: { label: "Les trois maisons" },
+    audience: "Familles, bébés et séjours multigénérationnels",
+    storyTitle: "Des souvenirs à partager, sans programme imposé.",
+    story:
+      "Nous vous proposons une journée adaptée à l’âge des enfants, à la météo et à la marée : plage, balade courte, marché, jeux ou goûter dehors. Chaque idée reste facultative afin de laisser à toute la famille le temps de profiter de la maison et de se retrouver.",
+    whyTitle: "Parce qu’une belle journée en famille doit rester facile à vivre.",
+    advice:
+      "Les équipements disponibles varient selon la maison. Indiquez-nous l’âge des enfants, la présence d’un bébé ou d’un animal : nous vous orienterons vers les activités et les lieux les plus adaptés.",
+    checklist: [
+      "Idées adaptées à l’âge des enfants et à la saison",
+      "Horaires de marée et plage conseillée",
+      "Équipements bébé disponibles selon la maison",
+      "Solution intérieure lorsque la météo change",
+    ],
   },
 ];
 

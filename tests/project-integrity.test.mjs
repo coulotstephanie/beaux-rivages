@@ -249,8 +249,9 @@ test("the premium experience collection includes all requested experiences", () 
   for (const slug of slugs) {
     assert.match(data, new RegExp(`slug: "${slug}"`), `Missing experience ${slug}`);
   }
-  assert.match(page, /<ExperienceCollection experiences=\{experiences\} \/>/);
-  assert.match(read("components/ExperienceCollection.tsx"), /Ajouter à mon séjour/);
+  assert.match(page, /<ExperienceCollection experiences=\{localExperiences\} \/>/);
+  assert.match(page, /Inspirations locales · hors packs/);
+  assert.match(read("components/ExperienceCollection.tsx"), /Demander cette suggestion/);
 });
 
 test("hospitality services expose seven visual, bookable or quote-ready journeys", () => {

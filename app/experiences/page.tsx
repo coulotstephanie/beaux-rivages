@@ -18,6 +18,17 @@ export const metadata = createPageMetadata({
 });
 
 export default function ExperiencesPage() {
+  const localExperiences = experiences.filter(
+    ({ slug }) =>
+      ![
+        "pack-signature",
+        "romance",
+        "anniversaire",
+        "demande-en-mariage",
+        "lune-de-miel",
+        "plateau-fruits-de-mer",
+      ].includes(slug),
+  );
   return (
     <main>
       <PageStructuredData {...pageSeo} />
@@ -49,14 +60,15 @@ export default function ExperiencesPage() {
       <HospitalityServiceCollection services={hospitalityServices} />
 
       <section className="experience-collection-intro shell">
-        <p className="eyebrow">Découvrir les îles</p>
-        <h2>Les expériences qui donnent du relief au séjour.</h2>
+        <p className="eyebrow">Inspirations locales · hors packs</p>
+        <h2>Des idées de journées pour découvrir les îles.</h2>
         <p>
-          Balades, producteurs, océan et instants en famille : retrouvez aussi notre sélection
-          d’expériences locales.
+          Ces suggestions ne sont pas des packs vendus à prix fixe. Stéphanie et Bruno vous
+          conseillent gratuitement ; lorsqu’un prestataire est nécessaire, son tarif et sa
+          disponibilité sont confirmés avant toute réservation.
         </p>
       </section>
-      <ExperienceCollection experiences={experiences} />
+      <ExperienceCollection experiences={localExperiences} />
 
       <section className="special-attention experience-final-cta">
         <div className="shell">
