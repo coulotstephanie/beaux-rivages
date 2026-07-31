@@ -56,6 +56,8 @@ test("le calendrier du Back Office affiche les périodes iCal des trois maisons"
   assert.match(board, /action: "block_dates"/);
   assert.match(board, /Bloquer des dates/);
   assert.match(board, /Blocage manuel/);
+  assert.match(board, /action: "unblock_dates"/);
+  assert.match(board, /Débloquer/);
 });
 
 test("les réservations annulées disparaissent des listes actives", () => {

@@ -118,6 +118,7 @@ export async function getPropertyAvailability(propertySlug: PropertySlug, force 
         source: block.sourceId,
       })),
       ...internalBlocks.map((block) => ({
+        id: block.id,
         startsOn: block.startsOn,
         endsOn: block.endsOn,
         status: "confirmed" as const,

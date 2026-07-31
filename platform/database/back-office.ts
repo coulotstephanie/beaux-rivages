@@ -652,6 +652,17 @@ export class SupabaseBackOfficeRepository {
       if (error) throw new Error(`BLOCK_WRITE_FAILED:${error.code}`);
       return { id: data.id };
     }
+    if (input.action === "unblock_dates") {
+      const { data, error } = await this.client
+        .from("occupancy_blocks")
+        .delete()
+        .eq("id", input.blockId)
+        .eq("source", "manual")
+        .select("id")
+        .single();
+      if (error) throw new Error(`UNBLOCK_WRITE_FAILED:${error.code}`);
+      return { id: data.id };
+    }
     if (input.action === "update_housekeeping") {
       const completed = ["completed", "verified"].includes(input.status);
       const { data, error } = await this.client

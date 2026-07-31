@@ -3,7 +3,13 @@
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import type { BackOfficeSnapshot } from "@/platform/admin/contracts";
 
-type ExternalBlock = { startsOn: string; endsOn: string; status: string; source?: string };
+type ExternalBlock = {
+  id?: string;
+  startsOn: string;
+  endsOn: string;
+  status: string;
+  source?: string;
+};
 type CalendarPayload = { blocks?: ExternalBlock[] };
 const monthTitle = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" });
 const weekdays = ["L", "M", "M", "J", "V", "S", "D"];
@@ -220,6 +226,28 @@ export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
                   );
                 })}
               </div>
+              {manualBlocks.length > 0 && (
+                <div className="admin-calendar-manual-blocks" aria-label="Blocages manuels">
+                  {manualBlocks.map((block) => (
+                    <div key={block.id ?? `${block.startsOn}-${block.endsOn}`}>
+                      <span>
+                        {block.startsOn} → {block.endsOn}
+                      </span>
+                      {block.id && (
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() =>
+                            void onSubmit({ action: "unblock_dates", blockId: block.id })
+                          }
+                        >
+                          Débloquer
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           );
         })}
