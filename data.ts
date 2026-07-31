@@ -139,6 +139,11 @@ export const properties: Property[] = [
           "Kit de maison et serviettes de plage proposés en option ; linge de lit bébé non fourni",
       },
       { label: "Animaux", value: "Acceptés avec supplément, en prévoyant leur couchage" },
+      {
+        label: "Mobilité",
+        value:
+          "Les trois chambres sont accessibles par un escalier intérieur étroit, peu adapté aux tout-petits sans surveillance et aux personnes à mobilité réduite",
+      },
       { label: "Quiétude", value: "Maison non-fumeur ; calme demandé entre 23 h et 7 h" },
     ],
     faq: [

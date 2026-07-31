@@ -47,8 +47,8 @@ export const reviewProfiles: PropertyReviewProfile[] = [
       },
       {
         quote:
-          "La plage est à deux minutes, les chambres sont confortables et la cuisine très pratique.",
-        author: "Joris",
+          "Appartement exceptionnel : il y a tout ce dont on peut avoir besoin et bien plus encore.",
+        author: "Dianna",
         platform: "Booking.com",
       },
       {
