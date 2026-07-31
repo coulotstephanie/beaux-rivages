@@ -129,6 +129,36 @@ export const destinationMedia = {
     "Étal de primeur dans l’allée du marché de La Flotte",
     "Faire son marché sous les halles",
   ),
+  reOysterFarming: destinationAsset(
+    "re-authentique/ostreiculture-estran.jpg",
+    "Ostréiculteurs travaillant sur les parcs à huîtres à marée basse",
+    "Le travail des huîtres sur l’estran",
+  ),
+  reBridgeSunsetBike: destinationAsset(
+    "re-authentique/pont-coucher-soleil-velo.jpg",
+    "Cycliste devant le pont de l’Île de Ré au coucher du soleil",
+    "Le pont au soleil couchant",
+  ),
+  reBeachCairn: destinationAsset(
+    "re-authentique/cairn-plage.jpg",
+    "Cairn de galets sur une plage de l’Île de Ré",
+    "Les galets face à l’océan",
+  ),
+  reChateliersInterior: destinationAsset(
+    "re-authentique/abbaye-chateliers-interieur.jpg",
+    "Voûtes et ouvertures de l’ancienne abbaye des Châteliers",
+    "Dans les murs de l’abbaye des Châteliers",
+  ),
+  reChateliersGardens: destinationAsset(
+    "re-authentique/abbaye-chateliers-jardins.jpg",
+    "Ruines et jardins fleuris de l’abbaye des Châteliers",
+    "L’abbaye des Châteliers et ses jardins",
+  ),
+  reSaintMartinNight: destinationAsset(
+    "re-authentique/saint-martin-port-nuit.jpg",
+    "Port de Saint-Martin-de-Ré illuminé à la nuit tombée",
+    "Saint-Martin-de-Ré à la nuit tombée",
+  ),
   ninaMetayerSelection: destinationAsset(
     "nina-metayer/selection-patisseries.jpg",
     "Sélection de pâtisseries de Nina Métayer présentée sur une planche en bois",

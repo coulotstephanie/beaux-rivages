@@ -241,6 +241,21 @@ const bedrooms = [
 
 const bathrooms = [
   propertyAsset(
+    "bathroom/authentique/salle-eau-complete.jpg",
+    "Salle d’eau du Chai avec vasque en bois, miroir éclairé et douche minérale",
+    "La salle d’eau dans son ensemble",
+  ),
+  propertyAsset(
+    "bathroom/authentique/douche-minerale.jpg",
+    "Douche à l’italienne du Chai avec parois minérales et robinetterie bronze",
+    "La douche minérale",
+  ),
+  propertyAsset(
+    "bathroom/authentique/vasque-toilettes.jpg",
+    "Vasque contemporaine, miroir éclairé et toilettes dans la salle d’eau du Chai",
+    "Le confort de la salle d’eau",
+  ),
+  propertyAsset(
     "professional/douche-pierre-verte.jpg",
     "La douche contemporaine aux parois minérales vertes du Chai",
     "Une salle d’eau au caractère minéral",
@@ -394,6 +409,9 @@ const propertyGallery = [
   bathrooms[3],
   bathrooms[4],
   bathrooms[5],
+  bathrooms[6],
+  bathrooms[7],
+  bathrooms[8],
 
   // Espaces pratiques
   utilities[0],
