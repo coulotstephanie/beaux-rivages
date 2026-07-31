@@ -112,7 +112,24 @@ export const reviewProfiles: PropertyReviewProfile[] = [
     airbnbReviewCount: 121,
     accolade: "Coup de cœur voyageurs · parmi les 10 % de logements préférés",
     summary:
-      "L’accès privé à la plage, l’emplacement face à Fort Boyard, l’hospitalité et le calme de la résidence ressortent très nettement des retours voyageurs.",
+      "L’accès privé à la plage, l’emplacement face à Fort Boyard, le calme et le confort de la résidence ressortent très nettement des retours voyageurs. L’équipement et la décoration de la maison sont également très appréciés.",
+    verifiedQuotes: [
+      {
+        quote: "Agréable séjour au calme pour recharger les batteries.",
+        author: "Catherine",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Résidence très calme avec accès à une plage privée. Maison bien équipée.",
+        author: "Marianne",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Le confort, l’espace dans l’appartement et la situation à côté de la plage.",
+        author: "Audrey",
+        platform: "Booking.com",
+      },
+    ],
     themes: [
       { label: "Plage", count: 74 },
       { label: "Hospitalité", count: 73 },
@@ -125,6 +142,9 @@ export const reviewProfiles: PropertyReviewProfile[] = [
     otherSources: [
       {
         platform: "Booking.com",
+        rating: "9,2",
+        scale: 10,
+        reviewCount: 15,
         sourceUrl:
           "https://www.booking.com/hotel/fr/maison-acces-plage-2-a-personnes-saint-georges-d-oleron.fr.html",
       },

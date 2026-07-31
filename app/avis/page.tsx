@@ -39,6 +39,7 @@ const satisfaction = [
   [`${weightedAirbnbRating} / 5`, "Moyenne Airbnb", `${totalAirbnbReviews} avis publics`],
   ["9,3 / 10", "Le Chai des Tortues", "21 avis Booking.com"],
   ["9,1 / 10", "Villa Raie Manta", "30 avis Booking.com"],
+  ["9,2 / 10", "Le Nid d’Été", "15 avis Booking.com"],
   ["3", "Maisons analysées", `vérifié le ${reviewsVerifiedOn}`],
 ];
 
