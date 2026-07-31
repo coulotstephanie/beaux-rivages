@@ -3,129 +3,154 @@
 import { useEffect, useMemo, useState } from "react";
 import type { BackOfficeSnapshot } from "@/platform/admin/contracts";
 
-type CalendarPayload = {
-  propertySlug: string;
-  blocks: { startsOn: string; endsOn: string; status: string }[];
-  sources: { provider: string; status: string; imported: number }[];
-};
+type ExternalBlock = { startsOn: string; endsOn: string; status: string };
+type CalendarPayload = { blocks?: ExternalBlock[] };
+const monthTitle = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" });
+const weekdays = ["L", "M", "M", "J", "V", "S", "D"];
 
-const formatDate = (value: string) =>
-  new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(
-    new Date(`${value.slice(0, 10)}T12:00:00`),
-  );
+function iso(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function uniqueBlocks(blocks: ExternalBlock[]) {
+  return [...new Map(blocks.map((block) => [`${block.startsOn}:${block.endsOn}`, block])).values()];
+}
 
 export function AdminCalendarBoard({ data }: { data: BackOfficeSnapshot }) {
-  const [calendars, setCalendars] = useState<Record<string, CalendarPayload>>({});
-  const [error, setError] = useState("");
+  const [month, setMonth] = useState(() => {
+    const today = new Date(`${data.today}T12:00:00`);
+    return new Date(today.getFullYear(), today.getMonth(), 1);
+  });
+  const [external, setExternal] = useState<Record<string, ExternalBlock[]>>({});
 
   useEffect(() => {
     let active = true;
-    Promise.all(
+    void Promise.all(
       data.properties.map(async (property) => {
-        const response = await fetch(
-          `/api/calendar?property=${encodeURIComponent(property.slug)}`,
-          {
-            cache: "no-store",
-          },
-        );
-        if (!response.ok) throw new Error("CALENDAR_LOAD_FAILED");
-        return (await response.json()) as CalendarPayload;
+        const response = await fetch(`/api/calendar?property=${encodeURIComponent(property.slug)}`);
+        if (!response.ok) return [property.slug, []] as const;
+        const payload = (await response.json()) as CalendarPayload;
+        return [property.slug, uniqueBlocks(payload.blocks ?? [])] as const;
       }),
-    )
-      .then((payloads) => {
-        if (!active) return;
-        setCalendars(
-          Object.fromEntries(payloads.map((payload) => [payload.propertySlug, payload])),
-        );
-        setError("");
-      })
-      .catch(() => {
-        if (active) setError("Les calendriers externes sont momentanément indisponibles.");
-      });
+    ).then((entries) => {
+      if (active) setExternal(Object.fromEntries(entries));
+    });
     return () => {
       active = false;
     };
   }, [data.properties]);
 
-  const directByProperty = useMemo(
-    () =>
-      new Map(
-        data.properties.map((property) => [
-          property.id,
-          data.reservations
-            .filter(
-              (row) =>
-                row.propertyId === property.id &&
-                row.departure >= data.today &&
-                row.status !== "cancelled",
-            )
-            .slice(0, 12),
-        ]),
+  const days = useMemo(() => {
+    const firstOffset = (month.getDay() + 6) % 7;
+    const count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+    return [
+      ...Array.from({ length: firstOffset }, () => null),
+      ...Array.from(
+        { length: count },
+        (_, index) => new Date(month.getFullYear(), month.getMonth(), index + 1),
       ),
-    [data.properties, data.reservations, data.today],
-  );
+    ];
+  }, [month]);
 
   return (
-    <section className="admin-panel">
-      <div className="admin-panel__heading">
-        <div>
-          <p className="eyebrow">Airbnb · Booking · Réservation directe</p>
-          <h2>Calendrier unifié</h2>
-        </div>
-        <a href="/administration/calendriers">Gérer les sources iCal</a>
+    <div className="admin-visual-calendar" aria-label="Airbnb · Booking · Réservation directe">
+      <div className="admin-visual-calendar__nav">
+        <button
+          type="button"
+          onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}
+          aria-label="Mois précédent"
+        >
+          ←
+        </button>
+        <h3>{monthTitle.format(month)}</h3>
+        <button
+          type="button"
+          onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
+          aria-label="Mois suivant"
+        >
+          →
+        </button>
       </div>
-      {error ? <p className="admin-empty">{error}</p> : null}
-      <div className="admin-calendar-board">
+      <div className="admin-calendar-legend" aria-label="Légende">
+        <span>
+          <i className="is-free" /> Disponible
+        </span>
+        <span>
+          <i className="is-platform" /> Plateforme
+        </span>
+        <span>
+          <i className="is-direct" /> Direct
+        </span>
+        <span>
+          <i className="is-turnover" /> Départ + arrivée
+        </span>
+      </div>
+      <div className="admin-visual-calendar__houses">
         {data.properties.map((property) => {
-          const direct = directByProperty.get(property.id) ?? [];
-          const external = (calendars[property.slug]?.blocks ?? [])
-            .filter((block) => block.endsOn >= data.today && block.status !== "cancelled")
-            .slice(0, 24);
-          const providers = calendars[property.slug]?.sources
-            .filter((source) => source.status === "success")
-            .map((source) => source.provider)
-            .join(" + ");
+          const reservations = data.reservations.filter(
+            (row) => row.propertyId === property.id && row.status !== "cancelled",
+          );
+          const blocks = external[property.slug] ?? [];
           return (
-            <article key={property.id}>
+            <section key={property.id}>
               <h3>{property.name}</h3>
-              {direct.map((row) => (
-                <div
-                  className={`admin-calendar-event channel-${row.channel}`}
-                  draggable
-                  key={row.id}
-                >
-                  <strong>{row.guestName}</strong>
-                  <span>
-                    {formatDate(row.arrival)} → {formatDate(row.departure)}
-                  </span>
-                  <small>
-                    {row.channel} · {row.reference}
-                  </small>
-                </div>
-              ))}
-              {external.map((block, index) => (
-                <div
-                  className="admin-calendar-event channel-external"
-                  key={`${property.slug}-${block.startsOn}-${block.endsOn}-${index}`}
-                >
-                  <strong>Période indisponible</strong>
-                  <span>
-                    {formatDate(block.startsOn)} → {formatDate(block.endsOn)}
-                  </span>
-                  <small>{providers || "Calendrier externe"}</small>
-                </div>
-              ))}
-              {!direct.length && !external.length ? (
-                <p className="admin-empty">
-                  {calendars[property.slug]
-                    ? "Aucune période future."
-                    : "Chargement du calendrier…"}
-                </p>
-              ) : null}
-            </article>
+              <div className="admin-visual-calendar__weekdays" aria-hidden="true">
+                {weekdays.map((day, index) => (
+                  <span key={`${day}-${index}`}>{day}</span>
+                ))}
+              </div>
+              <div className="admin-visual-calendar__days">
+                {days.map((day, index) => {
+                  if (!day) return <span key={`empty-${index}`} />;
+                  const value = iso(day);
+                  const direct = reservations.some(
+                    (row) => value >= row.arrival && value < row.departure,
+                  );
+                  const platform = blocks.some(
+                    (block) => value >= block.startsOn && value < block.endsOn,
+                  );
+                  const arrival =
+                    reservations.some((row) => row.arrival === value) ||
+                    blocks.some((block) => block.startsOn === value);
+                  const departure =
+                    reservations.some((row) => row.departure === value) ||
+                    blocks.some((block) => block.endsOn === value);
+                  const turnover = arrival && departure;
+                  const state = turnover
+                    ? "turnover"
+                    : direct
+                      ? "direct"
+                      : platform
+                        ? "platform"
+                        : "free";
+                  const label = turnover
+                    ? "départ et arrivée"
+                    : direct
+                      ? "réservation directe"
+                      : platform
+                        ? "Période indisponible (plateforme)"
+                        : "disponible";
+                  return (
+                    <span
+                      key={value}
+                      className={`is-${state}`}
+                      title={`${value} · ${label}`}
+                      aria-label={`${day.toLocaleDateString("fr-FR")} : ${label}`}
+                    >
+                      <strong>{day.getDate()}</strong>
+                      {arrival && <small>A</small>}
+                      {departure && <small>D</small>}
+                    </span>
+                  );
+                })}
+              </div>
+            </section>
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }

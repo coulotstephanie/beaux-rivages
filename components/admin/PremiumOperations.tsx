@@ -18,7 +18,19 @@ const date = (value: string | null) =>
   value ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(new Date(value)) : "—";
 
 export function PremiumOperations({ data, view, busy, onSubmit }: Props) {
-  if (view === "calendrier") return <AdminCalendarBoard data={data} />;
+  if (view === "calendrier")
+    return (
+      <section className="admin-panel">
+        <div className="admin-panel__heading">
+          <div>
+            <p className="eyebrow">Planning mensuel</p>
+            <h2>Calendrier unifié</h2>
+          </div>
+          <a href="/administration/calendriers">Gérer les sources iCal</a>
+        </div>
+        <AdminCalendarBoard data={data} />
+      </section>
+    );
 
   if (view === "paiements")
     return (

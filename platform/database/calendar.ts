@@ -1,5 +1,9 @@
 import "server-only";
-import type { CalendarBlock, CalendarProvider, CalendarSyncResult } from "@/platform/calendar/contracts";
+import type {
+  CalendarBlock,
+  CalendarProvider,
+  CalendarSyncResult,
+} from "@/platform/calendar/contracts";
 import { getDatabaseClient } from "./client";
 import type { Database, Json } from "./database.types";
 
@@ -11,6 +15,40 @@ function toOccupancySource(provider: CalendarProvider): OccupancySource | null {
 }
 
 export class SupabaseCalendarRepository {
+  async listOutboundBlocks(propertySlug: string) {
+    const client = getDatabaseClient();
+    const { data: property, error: propertyError } = await client
+      .from("properties")
+      .select("id")
+      .eq("slug", propertySlug)
+      .maybeSingle();
+    if (propertyError || !property) throw new Error("CALENDAR_PROPERTY_NOT_FOUND");
+    const { data, error } = await client
+      .from("occupancy_blocks")
+      .select("id,stay_range,source,note")
+      .eq("property_id", property.id)
+      .in("source", ["reservation", "manual"])
+      .order("created_at", { ascending: true })
+      .limit(5000);
+    if (error) throw new Error(`CALENDAR_EXPORT_FAILED:${error.code}`);
+    return (data ?? []).flatMap((row) => {
+      const match = String(row.stay_range).match(
+        /[[(](\d{4}-\d{2}-\d{2}),(\d{4}-\d{2}-\d{2})[)\]]/,
+      );
+      return match
+        ? [
+            {
+              id: String(row.id),
+              startsOn: match[1],
+              endsOn: match[2],
+              source: String(row.source),
+              note: row.note ? String(row.note) : null,
+            },
+          ]
+        : [];
+    });
+  }
+
   async recordSync(input: CalendarSyncResult) {
     const client = getDatabaseClient();
     const provider = toOccupancySource(input.provider);
@@ -34,7 +72,12 @@ export class SupabaseCalendarRepository {
     if (error) throw new Error(`SYNC_RECORD_FAILED:${error.code}`);
   }
 
-  async replaceEvents(propertySlug: string, provider: CalendarProvider, blocks: CalendarBlock[], syncedAt: string) {
+  async replaceEvents(
+    propertySlug: string,
+    provider: CalendarProvider,
+    blocks: CalendarBlock[],
+    syncedAt: string,
+  ) {
     const occupancySource = toOccupancySource(provider);
     if (!occupancySource) throw new Error("CALENDAR_PROVIDER_UNSUPPORTED");
     const events = blocks.map((block) => ({

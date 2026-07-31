@@ -211,10 +211,10 @@ export function getBookingEstimate(selection: BookingSelection, property: Proper
     const option = stayOptions.find((item) => item.id === id);
     if (!option) return total;
     const multiplier =
-      id === "linen"
-        ? Math.max(1, payingGuests)
-        : id === "pet"
-          ? Math.max(1, selection.guests.pets)
+      option.id === "pet"
+        ? Math.max(1, selection.guests.pets)
+        : option.unit?.startsWith("par voyageur")
+          ? Math.max(1, payingGuests)
           : 1;
     return total + option.price * multiplier;
   }, 0);

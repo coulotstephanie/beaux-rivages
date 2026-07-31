@@ -253,8 +253,8 @@ export function BookingExperience({
                 title="Les attentions qui donnent une autre dimension au séjour."
                 id="booking-step-title"
               />
-              <BookingExperiences selection={selection} onChange={updateExperiences} />
               <StayOptions value={selection.options} onChange={updateOptions} />
+              <BookingExperiences selection={selection} onChange={updateExperiences} />
               <PersonalAttentionCard
                 value={selection.attention}
                 message={selection.attentionMessage}
