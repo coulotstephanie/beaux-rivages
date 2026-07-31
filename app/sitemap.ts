@@ -15,6 +15,7 @@ const staticRoutes = [
   "/conseils",
   "/mot-de-stephanie",
   "/avis",
+  "/livre-d-or",
   "/coulisses",
   "/destinations",
   "/engagements",

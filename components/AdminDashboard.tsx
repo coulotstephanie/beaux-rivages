@@ -8,6 +8,7 @@ import { PremiumOperations } from "@/components/admin/PremiumOperations";
 import { ChannelManagerAdmin } from "@/components/admin/ChannelManagerAdmin";
 import { HousekeepingAdmin } from "@/components/admin/HousekeepingAdmin";
 import { CarnetCmsAdmin } from "@/components/admin/CarnetCmsAdmin";
+import { GuestBookAdmin } from "@/components/admin/GuestBookAdmin";
 import { StaffAccess } from "@/components/admin/StaffAccess";
 import { YieldManagementAdmin } from "@/components/admin/YieldManagementAdmin";
 import { ExperienceServicesAdmin } from "@/components/admin/ExperienceServicesAdmin";
@@ -23,6 +24,7 @@ type View =
   | "housekeeping"
   | "experiences-services"
   | "carnet"
+  | "livre-or"
   | "voyageurs"
   | "logements"
   | "documents"
@@ -44,6 +46,7 @@ const views: { id: View; label: string }[] = [
   { id: "housekeeping", label: "Housekeeping" },
   { id: "experiences-services", label: "Expériences & Services" },
   { id: "carnet", label: "Carnet CMS" },
+  { id: "livre-or", label: "Livre d’Or" },
   { id: "voyageurs", label: "Voyageurs" },
   { id: "logements", label: "Logements" },
   { id: "documents", label: "Documents" },
@@ -662,6 +665,7 @@ export function AdminDashboard() {
         <ExperienceServicesAdmin token={token} notify={setMessage} />
       )}
       {view === "carnet" && <CarnetCmsAdmin token={token} notify={setMessage} />}
+      {view === "livre-or" && <GuestBookAdmin token={token} notify={setMessage} />}
       {(view === "calendrier" ||
         view === "paiements" ||
         view === "conciergerie" ||

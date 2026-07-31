@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import type { Property } from "@/data";
 import { getPropertyPresentation } from "@/propertyPresentation";
 import { reviewProfiles } from "@/reviews";
@@ -26,7 +27,7 @@ import { propertyMedia, type PropertySlug } from "@/media/properties";
 import type { MediaAsset } from "@/media/types";
 import { createPropertyStructuredData } from "@/seo";
 
-export function PropertyPage({ property }: { property: Property }) {
+export function PropertyPage({ property, children }: { property: Property; children?: ReactNode }) {
   const presentation = getPropertyPresentation(property.slug);
   const reviewProfile = reviewProfiles.find((profile) => profile.slug === property.slug);
   const manifest = propertyMedia[property.slug as PropertySlug];
@@ -74,7 +75,14 @@ export function PropertyPage({ property }: { property: Property }) {
 
       <section id="histoire" className="property-story-premium">
         <div className="property-story-premium__visual">
-          <Image src={presentation.storyImage} alt={storyAsset?.alt ?? `Atmosphère de ${property.title}`} fill quality={85} loading="lazy" sizes="(max-width: 900px) 100vw, 48vw" />
+          <Image
+            src={presentation.storyImage}
+            alt={storyAsset?.alt ?? `Atmosphère de ${property.title}`}
+            fill
+            quality={85}
+            loading="lazy"
+            sizes="(max-width: 900px) 100vw, 48vw"
+          />
         </div>
         <div className="property-story-premium__copy">
           <Badge>{presentation.storyEyebrow}</Badge>
@@ -85,7 +93,9 @@ export function PropertyPage({ property }: { property: Property }) {
             <strong>{property.signatureTitle}</strong>
             <p>{property.signatureText}</p>
           </div>
-          <Button href={`/reserver?maison=${property.slug}`} variant="ghost">Préparer mon séjour <span aria-hidden="true">→</span></Button>
+          <Button href={`/reserver?maison=${property.slug}`} variant="ghost">
+            Préparer mon séjour <span aria-hidden="true">→</span>
+          </Button>
         </div>
       </section>
 
@@ -143,12 +153,17 @@ export function PropertyPage({ property }: { property: Property }) {
         </Section>
       )}
 
+      {children}
+
       <section className="premium-property-cta">
         <MediaBackground src={property.hero} />
         <Container>
           <p className="eyebrow light">Réserver en direct</p>
           <h2>{property.bookingTitle}</h2>
-          <p>{property.bookingText} Réservation directe, échange avec Stéphanie, attentions personnalisables et paiement par Chèques-Vacances, virement bancaire ou espèces.</p>
+          <p>
+            {property.bookingText} Réservation directe, échange avec Stéphanie, attentions
+            personnalisables et paiement par Chèques-Vacances, virement bancaire ou espèces.
+          </p>
           <Button href={`/reserver?maison=${property.slug}`}>Choisir mes dates</Button>
         </Container>
       </section>

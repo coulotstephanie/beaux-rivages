@@ -278,6 +278,71 @@ export type Database = {
           },
         ]
       }
+      guest_book_entries: {
+        Row: {
+          author: string
+          created_at: string
+          date_precision: string
+          entry_date: string
+          featured: boolean
+          house: string
+          id: string
+          image_path: string | null
+          language: string
+          ocr_confidence: number | null
+          ocr_provider: string | null
+          ocr_raw_text: string | null
+          published_at: string | null
+          search_vector: unknown
+          status: string
+          tags: string[]
+          text: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          author: string
+          created_at?: string
+          date_precision?: string
+          entry_date: string
+          featured?: boolean
+          house: string
+          id?: string
+          image_path?: string | null
+          language?: string
+          ocr_confidence?: number | null
+          ocr_provider?: string | null
+          ocr_raw_text?: string | null
+          published_at?: string | null
+          status?: string
+          tags?: string[]
+          text: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          author?: string
+          date_precision?: string
+          entry_date?: string
+          featured?: boolean
+          house?: string
+          image_path?: string | null
+          language?: string
+          ocr_confidence?: number | null
+          ocr_provider?: string | null
+          ocr_raw_text?: string | null
+          published_at?: string | null
+          status?: string
+          tags?: string[]
+          text?: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: []
+      }
       carnet_entries: {
         Row: {
           address: string | null

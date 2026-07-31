@@ -1,6 +1,7 @@
 import { PropertyPage } from "@/components/PropertyPage";
 import { getProperty } from "@/data";
 import { createPageMetadata, createPropertySeo } from "@/seo";
+import { GuestBookPreview } from "@/components/guestbook/GuestBookPreview";
 
 const property = getProperty("chai-des-tortues");
 const pageSeo = createPropertySeo(property);
@@ -12,5 +13,9 @@ export const metadata = createPageMetadata({
 });
 
 export default function Page() {
-  return <PropertyPage property={property} />;
+  return (
+    <PropertyPage property={property}>
+      <GuestBookPreview />
+    </PropertyPage>
+  );
 }

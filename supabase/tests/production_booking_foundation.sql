@@ -25,9 +25,9 @@ select is((select count(*)::integer from storage.buckets where id in ('contracts
 select isnt(public.generate_reservation_number(), public.generate_reservation_number(), 'reservation references are unique');
 select ok(public.is_property_available((select id from public.properties where slug = 'chai-des-tortues'), current_date + 30, current_date + 33), 'empty dates are available');
 select is(
-  (select count(*)::integer from pg_policies where schemaname = 'public' and 'anon' = any(roles)),
+  (select count(*)::integer from pg_policies where schemaname = 'public' and 'anon' = any(roles) and tablename <> 'guest_book_entries'),
   0,
-  'no public table has an anonymous policy'
+  'no table other than the explicitly public guest book has an anonymous policy'
 );
 
 insert into public.reservations (

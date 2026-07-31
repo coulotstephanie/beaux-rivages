@@ -546,6 +546,38 @@ h1,h2,h3,blockquote { font-family:Georgia, 'Times New Roman', serif; font-weight
 .review-verified-quotes blockquote { margin:0; padding:20px 22px; border-left:2px solid var(--gold); background:rgba(255,255,255,.72); }
 .review-verified-quotes p { margin:0; color:var(--deep); font-family:Georgia,serif; font-size:18px; line-height:1.5; }
 .review-verified-quotes footer { margin-top:10px; color:#6f7f84; font-size:11px; font-style:normal; letter-spacing:.04em; }
+.guestbook-page { background:#f5f0e7; }
+.guestbook-hero .page-hero-overlay { background:linear-gradient(90deg,rgba(5,29,39,.82),rgba(5,29,39,.28)); }
+.guestbook-intro { padding:clamp(75px,10vw,130px) 0 60px; text-align:center; }
+.guestbook-intro h2 { max-width:900px; margin:16px auto 24px; font-size:clamp(42px,6vw,78px); }
+.guestbook-intro>p:last-child { max-width:760px; margin:auto; color:#5e7076; font-size:17px; line-height:1.8; }
+.guestbook { padding-bottom:clamp(80px,10vw,140px); }
+.guestbook__filters { display:grid; grid-template-columns:2fr repeat(4,1fr); gap:12px; padding:20px; border:1px solid rgba(22,53,74,.12); border-radius:18px; background:rgba(255,255,255,.82); box-shadow:0 16px 50px rgba(22,53,74,.08); }
+.guestbook__filters label { display:grid; gap:7px; color:#65767b; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+.guestbook__filters input,.guestbook__filters select { min-width:0; height:46px; padding:0 12px; border:1px solid rgba(22,53,74,.18); border-radius:9px; color:var(--deep); background:white; font:inherit; text-transform:none; letter-spacing:0; }
+.guestbook__filters input:focus-visible,.guestbook__filters select:focus-visible,.guestbook-card:focus-visible { outline:3px solid #b9975b; outline-offset:3px; }
+.guestbook__stats { display:flex; align-items:baseline; flex-wrap:wrap; gap:12px 24px; padding:32px 4px; color:#68787d; }
+.guestbook__stats strong { color:var(--deep); font-family:Georgia,serif; font-size:42px; font-weight:400; }
+.guestbook__pages { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
+.guestbook-card { min-height:390px; position:relative; padding:48px 44px 36px 62px; overflow:hidden; border:1px solid rgba(87,67,43,.13); border-radius:4px 14px 14px 4px; background:linear-gradient(90deg,rgba(111,83,48,.06),transparent 11%),repeating-linear-gradient(#fffdf7 0,#fffdf7 31px,#d8e1df 32px); box-shadow:0 22px 55px rgba(54,41,26,.12); }
+.guestbook-card__binding { position:absolute; inset:0 auto 0 22px; width:12px; border-left:1px solid #cdbf9f; border-right:1px solid #cdbf9f; opacity:.7; }
+.guestbook-card__date { margin:0 0 25px; color:#8c7958; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.guestbook-card blockquote { margin:0; }
+.guestbook-card blockquote p { margin:0; color:#243b43; font-family:"Segoe Print","Bradley Hand",cursive; font-size:clamp(18px,2vw,23px); line-height:1.55; }
+.guestbook-card blockquote footer { margin-top:28px; color:#6b604c; font-family:Georgia,serif; font-size:17px; }
+.guestbook-card__tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:30px; }
+.guestbook-card__tags span { padding:6px 9px; border:1px solid rgba(98,78,49,.18); border-radius:99px; color:#74694f; background:rgba(255,255,255,.68); font-size:9px; letter-spacing:.06em; text-transform:uppercase; }
+.guestbook__pagination { display:flex; align-items:center; justify-content:center; gap:22px; margin-top:38px; }
+.guestbook__pagination button { min-height:44px; padding:0 18px; border:1px solid var(--deep); border-radius:99px; color:var(--deep); background:transparent; cursor:pointer; }
+.guestbook__pagination button:disabled { cursor:not-allowed; opacity:.35; }
+.guestbook-preview { padding:clamp(80px,10vw,140px) 0; background:#f3ede3; }
+.guestbook-preview .guestbook { padding-bottom:36px; }
+.guestbook--compact .guestbook__pages { grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; overflow-x:auto; padding:16px 3px 30px; scroll-snap-type:x mandatory; }
+.guestbook--compact .guestbook-card { min-width:290px; min-height:420px; padding:40px 25px 30px 45px; scroll-snap-align:start; }
+.guestbook--compact .guestbook-card blockquote p { font-size:18px; }
+.guestbook-admin-workflow { display:flex; justify-content:center; gap:18px; margin-bottom:24px; }
+@media (max-width:980px) { .guestbook__filters { grid-template-columns:repeat(2,1fr); }.guestbook__filters label:first-child { grid-column:1/-1; }.guestbook--compact .guestbook__pages { grid-template-columns:repeat(5,minmax(290px,1fr)); } }
+@media (max-width:680px) { .guestbook__filters,.guestbook__pages { grid-template-columns:1fr; }.guestbook-card { min-height:350px; padding:42px 25px 30px 46px; }.guestbook__stats { align-items:flex-start; flex-direction:column; }.guestbook__pagination { justify-content:space-between; gap:8px; }.guestbook__pagination span { font-size:11px; }.guestbook-admin-workflow { align-items:center; flex-direction:column; } }
 .booking-confidence { padding:clamp(70px,9vw,120px) 0; background:var(--sand); }
 .booking-confidence__heading { display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(30px,7vw,90px); align-items:end; }
 .booking-confidence__heading h2 { max-width:760px; margin:.5rem 0 0; font:400 clamp(2.4rem,5vw,4.8rem)/1 var(--font-serif); }

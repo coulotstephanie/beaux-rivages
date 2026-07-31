@@ -18,6 +18,7 @@ const routes = [
   "/experiences",
   "/faq",
   "/inspiration",
+  "/livre-d-or",
   "/maisons",
   "/personnaliser",
   "/phototheque",
