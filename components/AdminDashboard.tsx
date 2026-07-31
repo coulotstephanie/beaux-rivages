@@ -216,7 +216,10 @@ export function AdminDashboard() {
       const result = (await response.json()) as { error?: string };
       if (!response.ok) return setMessage(result.error ?? "Opération impossible.");
       setMessage("Opération enregistrée et journalisée.");
-      if (payload.action === "update_reservation" && payload.status === "cancelled") {
+      if (
+        payload.action === "update_reservation" &&
+        ["cancelled", "declined"].includes(String(payload.status))
+      ) {
         setSelectedReservationId(null);
       }
       setReservationMode("list");
@@ -583,7 +586,11 @@ export function AdminDashboard() {
               </div>
               <div className="admin-calendar-strip" aria-label="Prochaines réservations">
                 {filteredReservations
-                  .filter((row) => row.departure >= data.today && row.status !== "cancelled")
+                  .filter(
+                    (row) =>
+                      row.departure >= data.today &&
+                      !["cancelled", "declined"].includes(row.status),
+                  )
                   .slice(0, 8)
                   .map((row) => (
                     <article key={row.id}>

@@ -65,3 +65,8 @@ test("les réservations annulées disparaissent des listes actives", () => {
   assert.match(repository, /from\("occupancy_blocks"\)/);
   assert.match(repository, /\.eq\("reservation_id", input\.reservationId\)/);
 });
+
+test("les réservations refusées disparaissent également du calendrier", () => {
+  const board = readFileSync("components/admin/AdminCalendarBoard.tsx", "utf8");
+  assert.match(board, /\["cancelled", "declined"\]\.includes\(row\.status\)/);
+});

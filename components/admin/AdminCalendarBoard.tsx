@@ -151,7 +151,8 @@ export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
       <div className="admin-visual-calendar__houses">
         {data.properties.map((property) => {
           const reservations = data.reservations.filter(
-            (row) => row.propertyId === property.id && row.status !== "cancelled",
+            (row) =>
+              row.propertyId === property.id && !["cancelled", "declined"].includes(row.status),
           );
           const blocks = external[property.slug] ?? [];
           const directBlocks = blocks.filter((block) => block.source === "reservation");
