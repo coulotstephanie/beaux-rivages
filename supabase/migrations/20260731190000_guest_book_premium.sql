@@ -17,10 +17,29 @@ create table public.guest_book_entries (
   validated_by uuid references auth.users(id) on delete set null,
   validated_at timestamptz,
   published_at timestamptz,
-  search_vector tsvector generated always as (to_tsvector('simple', coalesce(author, '') || ' ' || coalesce(text, '') || ' ' || array_to_string(tags, ' '))) stored,
+  search_vector tsvector not null default ''::tsvector,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+create function public.refresh_guest_book_search_vector()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  new.search_vector := to_tsvector(
+    'simple',
+    coalesce(new.author, '') || ' ' || coalesce(new.text, '') || ' ' ||
+    coalesce(array_to_string(new.tags, ' '), '')
+  );
+  return new;
+end;
+$$;
+
+create trigger guest_book_search_vector_refresh
+before insert or update of author, text, tags on public.guest_book_entries
+for each row execute function public.refresh_guest_book_search_vector();
 
 create index guest_book_public_date_idx on public.guest_book_entries (entry_date desc) where status = 'published';
 create index guest_book_house_language_idx on public.guest_book_entries (house, language, entry_date desc);
