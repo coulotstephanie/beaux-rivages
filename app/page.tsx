@@ -21,9 +21,21 @@ export const metadata = createPageMetadata({
 });
 
 const reasons = [
-  ["01", "Des maisons singulières", "Trois lieux de caractère, choisis pour leur relation particulière à l’océan et leur façon d’accueillir les moments partagés."],
-  ["02", "Une hospitalité sincère", "Une arrivée libre, une présence discrète et les attentions d’une maison préparée comme si nous recevions des amis."],
-  ["03", "Les îles de l’intérieur", "Nos producteurs, nos habitudes et nos adresses réellement fréquentées pour vivre Ré et Oléron avec justesse."],
+  [
+    "01",
+    "Des maisons singulières",
+    "Trois lieux de caractère, choisis pour leur relation particulière à l’océan et leur façon d’accueillir les moments partagés.",
+  ],
+  [
+    "02",
+    "Une hospitalité sincère",
+    "Une arrivée libre, une présence discrète et les attentions d’une maison préparée comme si nous recevions des amis.",
+  ],
+  [
+    "03",
+    "Les îles de l’intérieur",
+    "Nos producteurs, nos habitudes et nos adresses réellement fréquentées pour vivre Ré et Oléron avec justesse.",
+  ],
 ];
 
 const moments = [
@@ -74,7 +86,9 @@ export default function HomePage() {
           />
         </div>
         <div className="premium-hero__overlay" />
-        <div id="home-title"><VideoOverlay /></div>
+        <div id="home-title">
+          <VideoOverlay />
+        </div>
         <a className="scroll-indicator" href="#pourquoi" aria-label="Faire défiler vers la suite">
           <span />
           Découvrir
@@ -96,11 +110,26 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
-        <div className="direct-benefits premium-benefits" aria-label="Avantages de la réservation directe">
-          <div><strong>Meilleur tarif</strong><span>En réservant en direct</span></div>
-          <div><strong>Relation directe</strong><span>Avec Stéphanie & Bruno</span></div>
-          <div><strong>Chèques-Vacances</strong><span>Acceptés</span></div>
-          <div><strong>Conseils locaux</strong><span>Vraiment personnalisés</span></div>
+        <div
+          className="direct-benefits premium-benefits"
+          aria-label="Avantages de la réservation directe"
+        >
+          <div>
+            <strong>Meilleur tarif</strong>
+            <span>En réservant en direct</span>
+          </div>
+          <div>
+            <strong>Relation directe</strong>
+            <span>Avec Stéphanie & Bruno</span>
+          </div>
+          <div>
+            <strong>Chèques-Vacances</strong>
+            <span>Acceptés</span>
+          </div>
+          <div>
+            <strong>Conseils locaux</strong>
+            <span>Vraiment personnalisés</span>
+          </div>
         </div>
       </Section>
 
@@ -119,6 +148,8 @@ export default function HomePage() {
               href={`/maisons/${property.slug}`}
               image={property.hero}
               location={property.location}
+              facts={property.stats.slice(0, 4)}
+              bookingHref={`/reserver?maison=${property.slug}`}
             />
           ))}
         </div>
@@ -137,12 +168,19 @@ export default function HomePage() {
         </div>
         <div className="local-signature__copy">
           <Badge>À Rivedoux-Plage</Badge>
-          <p className="local-signature__award">Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024</p>
+          <p className="local-signature__award">
+            Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024
+          </p>
           <h2 id="nina-metayer-title">La pâtisserie de Nina Métayer, à quelques pas.</h2>
-          <p>Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.</p>
+          <p>
+            Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première
+            visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.
+          </p>
           <div className="local-signature__actions">
             <Button href="/carnet#gastronomie">Voir dans notre Carnet</Button>
-            <Button href="https://larochelle.delicatisserie.com/" variant="ghost">Découvrir Chez Nina <span aria-hidden="true">↗</span></Button>
+            <Button href="https://larochelle.delicatisserie.com/" variant="ghost">
+              Découvrir Chez Nina <span aria-hidden="true">↗</span>
+            </Button>
           </div>
         </div>
       </section>
@@ -156,18 +194,33 @@ export default function HomePage() {
         />
         <div className="moments-grid">
           {moments.map((moment) => (
-            <Link href={moment.href} className={`moment-card ${moment.className}`} key={moment.title}>
-              <Image src={moment.image} alt="" fill quality={88} loading="lazy" sizes="(max-width: 800px) 100vw, (max-width: 1400px) 58vw, 700px" />
+            <Link
+              href={moment.href}
+              className={`moment-card ${moment.className}`}
+              key={moment.title}
+            >
+              <Image
+                src={moment.image}
+                alt=""
+                fill
+                quality={88}
+                loading="lazy"
+                sizes="(max-width: 800px) 100vw, (max-width: 1400px) 58vw, 700px"
+              />
               <span className="moment-card__overlay" />
               <span className="moment-card__content">
                 <span className="eyebrow light">{moment.eyebrow}</span>
                 <strong>{moment.title}</strong>
               </span>
-              <span className="moment-card__arrow" aria-hidden="true">↗</span>
+              <span className="moment-card__arrow" aria-hidden="true">
+                ↗
+              </span>
             </Link>
           ))}
         </div>
-        <Button href="/experiences" variant="secondary">Explorer toutes les expériences</Button>
+        <Button href="/experiences" variant="secondary">
+          Explorer toutes les expériences
+        </Button>
       </Section>
 
       <FutureVisualScenes />
@@ -185,9 +238,17 @@ export default function HomePage() {
         </div>
         <div className="host-advice__copy">
           <Badge>Le conseil de Stéphanie & Bruno</Badge>
-          <blockquote>« Les plus belles vacances ne se mesurent pas en mètres carrés. Elles se mesurent en souvenirs. »</blockquote>
-          <p>Nos recommandations viennent de notre vie sur les îles : des producteurs, artisans et expériences que nous partageons comme nous le ferions avec des amis.</p>
-          <Button href="/carnet" variant="ghost">Ouvrir le Carnet Beaux Rivages <span aria-hidden="true">→</span></Button>
+          <blockquote>
+            « Les plus belles vacances ne se mesurent pas en mètres carrés. Elles se mesurent en
+            souvenirs. »
+          </blockquote>
+          <p>
+            Nos recommandations viennent de notre vie sur les îles : des producteurs, artisans et
+            expériences que nous partageons comme nous le ferions avec des amis.
+          </p>
+          <Button href="/carnet" variant="ghost">
+            Ouvrir le Carnet Beaux Rivages <span aria-hidden="true">→</span>
+          </Button>
         </div>
       </section>
 
