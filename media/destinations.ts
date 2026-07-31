@@ -129,6 +129,21 @@ export const destinationMedia = {
     "Étal de primeur dans l’allée du marché de La Flotte",
     "Faire son marché sous les halles",
   ),
+  ninaMetayerSelection: destinationAsset(
+    "nina-metayer/selection-patisseries.jpg",
+    "Sélection de pâtisseries de Nina Métayer présentée sur une planche en bois",
+    "Une sélection de créations de Nina Métayer",
+  ),
+  ninaMetayerFruitCake: destinationAsset(
+    "nina-metayer/gateau-fruits.jpg",
+    "Gâteau aux fruits et à la crème signé Nina Métayer",
+    "Un gâteau à partager signé Nina Métayer",
+  ),
+  ninaMetayerCookieBrownie: destinationAsset(
+    "nina-metayer/cookie-brownie.jpg",
+    "Biscuits au chocolat et brownies de Nina Métayer",
+    "Une gourmandise chocolatée de Nina Métayer",
+  ),
   laRochelleOldPort: destinationAsset(
     "guide-vieux-port-la-rochelle.jpg",
     "Entrée du Vieux-Port de La Rochelle",

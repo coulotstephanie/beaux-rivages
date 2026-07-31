@@ -158,8 +158,8 @@ export default function HomePage() {
       <section className="local-signature" aria-labelledby="nina-metayer-title">
         <div className="local-signature__visual">
           <Image
-            src={siteMedia.destination.food}
-            alt="Une douceur gourmande à savourer sur l’Île de Ré"
+            src={siteMedia.destination.ninaMetayerFruitCake}
+            alt="Gâteau aux fruits et à la crème signé Nina Métayer"
             fill
             quality={90}
             loading="lazy"

@@ -53,9 +53,12 @@ const sourcedPhoto = (
 // Chaque fiche possède une photographie propre : aucune image générique par
 // destination n'est partagée entre les cartes du guide.
 const placeImages = {
-  "chez-nina": beauxRivagesPhoto(
-    "/images/properties/chai-des-tortues/viennoiseries.jpeg",
-    "Viennoiseries artisanales pour un petit-déjeuner à Rivedoux",
+  "chez-nina": sourcedPhoto(
+    "/images/destination/nina-metayer/selection-patisseries.jpg",
+    "Sélection de pâtisseries de Nina Métayer à Rivedoux-Plage",
+    "Nina Métayer",
+    "Créations et photographie · droits réservés",
+    "https://larochelle.delicatisserie.com/",
   ),
   "la-tartentiere": sourcedPhoto(
     "/images/destination/guides/la-tartentiere-tarte.jpg",
