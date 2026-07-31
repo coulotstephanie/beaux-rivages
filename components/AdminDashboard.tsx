@@ -216,6 +216,9 @@ export function AdminDashboard() {
       const result = (await response.json()) as { error?: string };
       if (!response.ok) return setMessage(result.error ?? "Opération impossible.");
       setMessage("Opération enregistrée et journalisée.");
+      if (payload.action === "update_reservation" && payload.status === "cancelled") {
+        setSelectedReservationId(null);
+      }
       setReservationMode("list");
       await load(token);
     } finally {
@@ -254,9 +257,13 @@ export function AdminDashboard() {
   };
 
   const filteredReservations = useMemo(() => {
+    const visibleReservations =
+      data?.reservations.filter(
+        (reservation) => !["cancelled", "declined"].includes(reservation.status),
+      ) ?? [];
     const normalized = query.trim().toLowerCase();
-    if (!data || !normalized) return data?.reservations ?? [];
-    return data.reservations.filter((reservation) =>
+    if (!normalized) return visibleReservations;
+    return visibleReservations.filter((reservation) =>
       [
         reservation.guestName,
         reservation.guestEmail,

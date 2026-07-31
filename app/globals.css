@@ -3008,6 +3008,13 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .admin-calendar-event.channel-booking { border-color:#286090; }
 .admin-calendar-event.channel-direct { border-color:#2d7769; }
 .admin-visual-calendar { display:grid; gap:1.25rem; }
+.admin-calendar-blocker { padding:1rem; display:grid; grid-template-columns:minmax(190px,1.3fr) repeat(4,minmax(130px,1fr)) auto; gap:.75rem; align-items:end; border:1px solid var(--line); border-radius:12px; background:#fff; }
+.admin-calendar-blocker > div { align-self:center; display:grid; gap:.2rem; }
+.admin-calendar-blocker > div span { color:#60716c; font-size:.78rem; line-height:1.35; }
+.admin-calendar-blocker label { display:grid; gap:.3rem; color:#536863; font-size:.72rem; font-weight:700; }
+.admin-calendar-blocker input,.admin-calendar-blocker select { width:100%; min-height:42px; padding:.55rem .65rem; border:1px solid #c9d0cc; border-radius:4px; background:#fff; }
+.admin-calendar-blocker button { min-height:42px; padding:.6rem 1rem; border:1px solid #163832; border-radius:4px; color:#fff; background:#163832; cursor:pointer; }
+.admin-calendar-blocker button:disabled { opacity:.55; cursor:wait; }
 .admin-visual-calendar__nav { display:flex; align-items:center; justify-content:center; gap:1rem; }
 .admin-visual-calendar__nav h3 { min-width:220px; margin:0; text-align:center; text-transform:capitalize; }
 .admin-visual-calendar__nav button { width:44px; height:44px; border:1px solid var(--line); border-radius:50%; background:#fff; cursor:pointer; }
@@ -3274,11 +3281,15 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .loyalty-levels { grid-template-columns: 1fr 1fr; }
   .admin-login { grid-template-columns: 1fr; align-items: stretch; }
   .admin-visual-calendar__houses { grid-template-columns: 1fr; }
+  .admin-calendar-blocker { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .admin-calendar-blocker > div { grid-column:1/-1; }
   .stephanie-letter { grid-template-columns: 1fr; }
   .stay-personal-guide > div { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
   .admin-calendar-board { grid-template-columns:1fr; }
+  .admin-calendar-blocker { grid-template-columns:1fr; }
+  .admin-calendar-blocker > div { grid-column:auto; }
   .admin-global-search { min-width:100%; }
   .admin-detail-grid { grid-template-columns:1fr; }
   .admin-reservation-detail { inset:.5rem; width:auto; }

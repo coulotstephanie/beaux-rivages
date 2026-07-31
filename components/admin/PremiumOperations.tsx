@@ -28,7 +28,7 @@ export function PremiumOperations({ data, view, busy, onSubmit }: Props) {
           </div>
           <a href="/administration/calendriers">Gérer les sources iCal</a>
         </div>
-        <AdminCalendarBoard data={data} />
+        <AdminCalendarBoard data={data} busy={busy} onSubmit={onSubmit} />
       </section>
     );
 

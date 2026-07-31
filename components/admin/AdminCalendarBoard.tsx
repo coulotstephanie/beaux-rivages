@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import type { BackOfficeSnapshot } from "@/platform/admin/contracts";
 
 type ExternalBlock = { startsOn: string; endsOn: string; status: string };
@@ -19,7 +19,13 @@ function uniqueBlocks(blocks: ExternalBlock[]) {
   return [...new Map(blocks.map((block) => [`${block.startsOn}:${block.endsOn}`, block])).values()];
 }
 
-export function AdminCalendarBoard({ data }: { data: BackOfficeSnapshot }) {
+type Props = {
+  data: BackOfficeSnapshot;
+  busy: boolean;
+  onSubmit: (payload: Record<string, unknown>) => Promise<void>;
+};
+
+export function AdminCalendarBoard({ data, busy, onSubmit }: Props) {
   const [month, setMonth] = useState(() => {
     const today = new Date(`${data.today}T12:00:00`);
     return new Date(today.getFullYear(), today.getMonth(), 1);
@@ -55,8 +61,52 @@ export function AdminCalendarBoard({ data }: { data: BackOfficeSnapshot }) {
     ];
   }, [month]);
 
+  const blockDates = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    void onSubmit({
+      action: "block_dates",
+      propertySlug: values.get("propertySlug"),
+      arrival: values.get("arrival"),
+      departure: values.get("departure"),
+      note: values.get("note"),
+    }).then(() => form.reset());
+  };
+
   return (
     <div className="admin-visual-calendar" aria-label="Airbnb · Booking · Réservation directe">
+      <form className="admin-calendar-blocker" onSubmit={blockDates}>
+        <div>
+          <strong>Bloquer des dates</strong>
+          <span>La période devient immédiatement indisponible à la réservation directe.</span>
+        </div>
+        <label>
+          Logement
+          <select name="propertySlug" required>
+            {data.properties.map((property) => (
+              <option key={property.id} value={property.slug}>
+                {property.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Du
+          <input name="arrival" type="date" min={data.today} required />
+        </label>
+        <label>
+          Au
+          <input name="departure" type="date" min={data.today} required />
+        </label>
+        <label>
+          Motif
+          <input name="note" defaultValue="Blocage manuel" minLength={2} maxLength={300} required />
+        </label>
+        <button type="submit" disabled={busy}>
+          {busy ? "Enregistrement…" : "Bloquer"}
+        </button>
+      </form>
       <div className="admin-visual-calendar__nav">
         <button
           type="button"

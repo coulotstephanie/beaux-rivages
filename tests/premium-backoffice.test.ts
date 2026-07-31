@@ -53,4 +53,14 @@ test("le calendrier du Back Office affiche les périodes iCal des trois maisons"
   assert.match(board, /api\/calendar\?property=/);
   assert.match(board, /Période indisponible/);
   assert.match(board, /Airbnb · Booking · Réservation directe/);
+  assert.match(board, /action: "block_dates"/);
+  assert.match(board, /Bloquer des dates/);
+});
+
+test("les réservations annulées disparaissent des listes actives", () => {
+  const dashboard = readFileSync("components/AdminDashboard.tsx", "utf8");
+  const repository = readFileSync("platform/database/back-office.ts", "utf8");
+  assert.match(dashboard, /!\["cancelled", "declined"\]\.includes\(reservation\.status\)/);
+  assert.match(repository, /from\("occupancy_blocks"\)/);
+  assert.match(repository, /\.eq\("reservation_id", input\.reservationId\)/);
 });
