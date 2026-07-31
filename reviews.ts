@@ -11,6 +11,11 @@ export type PropertyReviewProfile = {
   airbnbReviewCount: number;
   accolade?: string;
   summary: string;
+  verifiedQuotes?: {
+    quote: string;
+    author: string;
+    platform: "Booking.com";
+  }[];
   themes: ReviewTheme[];
   sourceUrl: string;
   otherSources?: {
@@ -22,7 +27,7 @@ export type PropertyReviewProfile = {
   }[];
 };
 
-export const reviewsVerifiedOn = "30 juillet 2026";
+export const reviewsVerifiedOn = "31 juillet 2026";
 
 export const reviewProfiles: PropertyReviewProfile[] = [
   {
@@ -61,7 +66,24 @@ export const reviewProfiles: PropertyReviewProfile[] = [
     airbnbRating: "4,84",
     airbnbReviewCount: 31,
     summary:
-      "La communication, l’arrivée, la propreté et la proximité de la mer structurent l’expérience. La décoration et les volumes de la villa sont également souvent relevés.",
+      "La vue mer, la propreté, le niveau d’équipement et les espaces pensés pour les familles structurent l’expérience. La disponibilité des hôtes et la proximité des commerces sont également souvent relevées.",
+    verifiedQuotes: [
+      {
+        quote: "La maison est superbe, très bien équipée et offre un confort parfait.",
+        author: "Karine",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Très jolie maison dans le cœur de Rivedoux, face à la mer avec vue sur le pont.",
+        author: "Erinyes83",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Pour deux familles, la maison est idéale, avec deux espaces distincts.",
+        author: "Olena",
+        platform: "Booking.com",
+      },
+    ],
     themes: [
       { label: "Hospitalité", count: 17 },
       { label: "Emplacement", count: 13 },
@@ -76,7 +98,7 @@ export const reviewProfiles: PropertyReviewProfile[] = [
         platform: "Booking.com",
         rating: "9,1",
         scale: 10,
-        reviewCount: 29,
+        reviewCount: 30,
         sourceUrl:
           "https://www.booking.com/hotel/fr/maison-vue-mer-ile-de-re-rivedoux-plage.fr.html",
       },

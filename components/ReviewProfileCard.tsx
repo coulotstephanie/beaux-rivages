@@ -21,6 +21,19 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
       {profile.accolade && <p className="review-accolade">{profile.accolade}</p>}
       <p className="review-summary">{profile.summary}</p>
 
+      {profile.verifiedQuotes && (
+        <div className="review-verified-quotes" aria-label="Extraits d’avis voyageurs vérifiés">
+          {profile.verifiedQuotes.map((review) => (
+            <blockquote key={`${review.author}-${review.quote}`}>
+              <p>« {review.quote} »</p>
+              <footer>
+                {review.author} · avis vérifié sur {review.platform}
+              </footer>
+            </blockquote>
+          ))}
+        </div>
+      )}
+
       <div
         className="review-theme-list"
         aria-label={`Thèmes les plus cités pour ${profile.property}`}
