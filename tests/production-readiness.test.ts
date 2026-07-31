@@ -15,10 +15,12 @@ test("le sitemap ne simule pas une modification à chaque lecture", () => {
   assert.doesNotMatch(source, /lastModified:\s*new Date/);
 });
 
-test("le média d'accueil respecte les connexions contraintes", () => {
+test("le média d'accueil respecte les connexions contraintes et reste lisible sur Safari", () => {
   const source = readFileSync("components/media/HeroVideo.tsx", "utf8");
   assert.match(source, /saveData/);
-  assert.match(source, /preload=\{constrainedConnection \|\| reduceMotion \? "none"/);
+  assert.match(source, /preload="metadata"/);
+  assert.match(source, /video\.load\(\)/);
+  assert.ok(source.indexOf('type="video/mp4"') < source.indexOf('type="video/webm"'));
 });
 
 test("la supervision dispose d'une sonde sans cache", () => {

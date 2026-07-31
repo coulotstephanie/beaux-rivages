@@ -25,7 +25,6 @@ export function HeroVideo({
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduceMotion = useReducedMotion();
   const [canAutoplay, setCanAutoplay] = useState(false);
-  const [constrainedConnection, setConstrainedConnection] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -36,13 +35,14 @@ export function HeroVideo({
       navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }
     ).connection;
     const constrained = connection?.saveData || connection?.effectiveType === "2g";
-    setConstrainedConnection(Boolean(constrained));
     setCanAutoplay(!reduceMotion && !constrained);
   }, [reduceMotion]);
 
   useEffect(() => {
-    if (!canAutoplay || !videoRef.current) return;
-    void videoRef.current.play().catch(() => setPlaying(false));
+    const video = videoRef.current;
+    if (!canAutoplay || !video) return;
+    video.load();
+    void video.play().catch(() => setPlaying(false));
   }, [canAutoplay]);
 
   const togglePlayback = async () => {
@@ -53,6 +53,7 @@ export function HeroVideo({
       return;
     }
     try {
+      if (video.readyState === HTMLMediaElement.HAVE_NOTHING) video.load();
       await video.play();
     } catch {
       setPlaying(false);
@@ -77,7 +78,7 @@ export function HeroVideo({
         muted
         loop
         playsInline
-        preload={constrainedConnection || reduceMotion ? "none" : "metadata"}
+        preload="metadata"
         poster={poster}
         aria-hidden="true"
         tabIndex={-1}
@@ -85,14 +86,14 @@ export function HeroVideo({
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       >
-        {sources.mobileWebm && (
-          <source src={sources.mobileWebm} media="(max-width: 900px)" type="video/webm" />
-        )}
         {sources.mobileMp4 && (
           <source src={sources.mobileMp4} media="(max-width: 900px)" type="video/mp4" />
         )}
-        {sources.webm && <source src={sources.webm} type="video/webm" />}
+        {sources.mobileWebm && (
+          <source src={sources.mobileWebm} media="(max-width: 900px)" type="video/webm" />
+        )}
         <source src={sources.mp4} type="video/mp4" />
+        {sources.webm && <source src={sources.webm} type="video/webm" />}
       </motion.video>
       <button
         type="button"
