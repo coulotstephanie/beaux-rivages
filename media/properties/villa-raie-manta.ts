@@ -208,6 +208,28 @@ const airbnbBathrooms = [
     "Trois WC dans la maison",
   ),
 ];
+const authenticBathrooms = [
+  asset(
+    "authentique/salle-eau-vasque.jpg",
+    "Salle d’eau de Villa Raie Manta avec douche, vasque en bois et miroir rond",
+    "La salle d’eau dans son ensemble",
+  ),
+  asset(
+    "authentique/douche-italienne.jpg",
+    "Douche à l’italienne carrelée de Villa Raie Manta",
+    "La douche à l’italienne",
+  ),
+  asset(
+    "authentique/douche-et-vasque.jpg",
+    "Douche et vasque en bois de Villa Raie Manta",
+    "La douche et son meuble vasque",
+  ),
+  asset(
+    "authentique/toilettes-independantes.jpg",
+    "Toilettes indépendantes décorées d’une photographie de l’océan",
+    "Les toilettes indépendantes",
+  ),
+];
 const airbnbExterior = [
   asset("airbnb-cour-d-entree-1.jpeg", "Entrée de Villa Raie Manta", "L’arrivée à Rivedoux-Plage"),
   asset(
@@ -257,7 +279,7 @@ export const villaRaieMantaMedia = {
     doubleRoom,
     ...airbnbBedrooms,
   ],
-  bathrooms: [bathroom, ...airbnbBathrooms],
+  bathrooms: [...authenticBathrooms, bathroom, ...airbnbBathrooms],
   terrace: [
     editorialFamilyTerraceAperitif,
     editorialSeafood,
@@ -326,6 +348,7 @@ export const villaRaieMantaMedia = {
     editorialRomance,
 
     // Salles d’eau et toilettes
+    ...authenticBathrooms,
     bathroom,
     ...airbnbBathrooms,
 

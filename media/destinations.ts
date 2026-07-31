@@ -54,6 +54,81 @@ export const destinationMedia = {
     "Pointe et phare de Chassiron",
     "Le nord sauvage d’Oléron",
   ),
+  reMap: destinationAsset(
+    "re-authentique/carte-ile-de-re.jpg",
+    "Carte générale de l’Île de Ré et de ses villages",
+    "Se repérer sur l’Île de Ré",
+  ),
+  reAerial: destinationAsset(
+    "re-authentique/ile-de-re-vue-aerienne.jpg",
+    "Île de Ré vue du ciel au milieu de l’Atlantique",
+    "L’Île de Ré vue du ciel",
+  ),
+  reBridgeAerial: destinationAsset(
+    "re-authentique/pont-ile-de-re-vue-aerienne.jpg",
+    "Pont reliant La Rochelle à l’Île de Ré vu du ciel",
+    "Le pont entre le continent et l’île",
+  ),
+  reLove: destinationAsset(
+    "re-authentique/sculpture-amour-rivage.jpg",
+    "Sculpture AMOUR installée face au rivage",
+    "Un mot face à l’océan",
+  ),
+  whalesOldTower: destinationAsset(
+    "re-authentique/vieille-tour-des-baleines.jpg",
+    "Vieille Tour des Baleines face à l’estran",
+    "La Vieille Tour des Baleines",
+  ),
+  whalesLighthouse: destinationAsset(
+    "re-authentique/phare-des-baleines.jpg",
+    "Phare des Baleines derrière un cairn de galets",
+    "Le Phare des Baleines depuis la plage",
+  ),
+  reMarketCheese: destinationAsset(
+    "re-authentique/marche-fromages.jpg",
+    "Fromages régionaux présentés sur un étal du marché",
+    "Les fromages du marché",
+  ),
+  reMarketSwordfish: destinationAsset(
+    "re-authentique/marche-poisson-espadon.jpg",
+    "Étal de poissons frais au marché de La Flotte",
+    "La poissonnerie du marché",
+  ),
+  reMarketProducerWine: destinationAsset(
+    "re-authentique/marche-vins-producteur.jpg",
+    "Bouteilles de vin présentées par un producteur au marché",
+    "Les vins des producteurs",
+  ),
+  reMarketTomatoes: destinationAsset(
+    "re-authentique/marche-tomates.jpg",
+    "Tomates anciennes colorées sur un étal de marché",
+    "Les couleurs du marché",
+  ),
+  reMarketWine: destinationAsset(
+    "re-authentique/marche-vins-ile-de-re.jpg",
+    "Vins et pineaux proposés au marché de l’Île de Ré",
+    "Vins et pineaux de l’île",
+  ),
+  reMarketFruit: destinationAsset(
+    "re-authentique/marche-fruits.jpg",
+    "Fruits rouges, melons et agrumes sur un étal de marché",
+    "Les fruits de saison",
+  ),
+  reMarketFish: destinationAsset(
+    "re-authentique/marche-poissonnerie.jpg",
+    "Grand étal de poissons et crustacés au marché de La Flotte",
+    "L’arrivage de la poissonnerie",
+  ),
+  reMarketLane: destinationAsset(
+    "re-authentique/marche-la-flotte-allee.jpg",
+    "Allée pavée et étals sous les halles de La Flotte",
+    "Le marché de La Flotte",
+  ),
+  reMarketGreengrocer: destinationAsset(
+    "re-authentique/marche-la-flotte-primeur.jpg",
+    "Étal de primeur dans l’allée du marché de La Flotte",
+    "Faire son marché sous les halles",
+  ),
   laRochelleOldPort: destinationAsset(
     "guide-vieux-port-la-rochelle.jpg",
     "Entrée du Vieux-Port de La Rochelle",

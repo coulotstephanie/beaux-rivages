@@ -166,6 +166,81 @@ export const destinationGuides: DestinationGuide[] = [
     ],
     gallery: [
       {
+        src: siteMedia.destination.reAerial,
+        alt: "Île de Ré vue du ciel",
+        caption: "L’île posée sur l’Atlantique",
+      },
+      {
+        src: siteMedia.destination.reBridgeAerial,
+        alt: "Pont de l’Île de Ré vu du ciel",
+        caption: "Le passage entre La Rochelle et l’île",
+      },
+      {
+        src: siteMedia.destination.reMap,
+        alt: "Carte générale de l’Île de Ré",
+        caption: "Les dix villages de l’île",
+      },
+      {
+        src: siteMedia.destination.whalesLighthouse,
+        alt: "Phare des Baleines derrière un cairn de galets",
+        caption: "Le Phare des Baleines",
+      },
+      {
+        src: siteMedia.destination.whalesOldTower,
+        alt: "Vieille Tour des Baleines face à la mer",
+        caption: "La Vieille Tour et son musée",
+      },
+      {
+        src: siteMedia.destination.reLove,
+        alt: "Sculpture AMOUR face au rivage",
+        caption: "Un mot face à l’océan",
+      },
+      {
+        src: siteMedia.destination.reMarketLane,
+        alt: "Allée pavée du marché de La Flotte",
+        caption: "Le marché de La Flotte",
+      },
+      {
+        src: siteMedia.destination.reMarketGreengrocer,
+        alt: "Étal de primeur au marché de La Flotte",
+        caption: "Les étals sous les halles",
+      },
+      {
+        src: siteMedia.destination.reMarketFish,
+        alt: "Poissonnerie du marché de La Flotte",
+        caption: "L’arrivage du matin",
+      },
+      {
+        src: siteMedia.destination.reMarketSwordfish,
+        alt: "Poissons frais et espadon au marché",
+        caption: "La pêche sur l’étal",
+      },
+      {
+        src: siteMedia.destination.reMarketCheese,
+        alt: "Fromages régionaux au marché",
+        caption: "Les fromages régionaux",
+      },
+      {
+        src: siteMedia.destination.reMarketFruit,
+        alt: "Fruits rouges et melons au marché",
+        caption: "Les fruits de saison",
+      },
+      {
+        src: siteMedia.destination.reMarketTomatoes,
+        alt: "Tomates anciennes colorées au marché",
+        caption: "Les couleurs des producteurs",
+      },
+      {
+        src: siteMedia.destination.reMarketWine,
+        alt: "Vins et pineaux proposés au marché",
+        caption: "Les vins et pineaux de l’île",
+      },
+      {
+        src: siteMedia.destination.reMarketProducerWine,
+        alt: "Vins présentés par un producteur",
+        caption: "À la rencontre des producteurs",
+      },
+      {
         src: siteMedia.destination.marsh,
         alt: "Marais rétais au coucher du soleil",
         caption: "La lumière sur les marais",
