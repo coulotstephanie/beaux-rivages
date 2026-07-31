@@ -5,6 +5,8 @@ export type PremiumMapCategory =
   | "fort-boyard"
   | "marches"
   | "velo"
+  | "activites"
+  | "sante"
   | "parkings"
   | "bornes-electriques";
 
@@ -51,30 +53,150 @@ const sourcedPhoto = (
 // Chaque fiche possède une photographie propre : aucune image générique par
 // destination n'est partagée entre les cartes du guide.
 const placeImages = {
-  "chez-nina": beauxRivagesPhoto("/images/properties/chai-des-tortues/viennoiseries.jpeg", "Viennoiseries artisanales pour un petit-déjeuner à Rivedoux"),
-  "la-tartentiere": sourcedPhoto("/images/destination/guides/la-tartentiere-tarte.jpg", "Tarte salée aux légumes frais préparée par La Tartentière", "La Tartentière", "Photo officielle · droits réservés", "https://www.latartentiere.com/"),
-  "la-martiniere": sourcedPhoto("/images/destination/guides/la-martiniere-dessert-glace.jpg", "Verrine glacée Banana Split de La Martinière", "La Martinière", "Photo officielle · droits réservés", "https://la-martiniere.fr/"),
-  "huitres-et-ma-re": beauxRivagesPhoto("/images/destination/huitres-vin-blanc.jpg", "Huîtres de l’Atlantique accompagnées d’un verre de vin blanc"),
-  "marche-rivedoux": sourcedPhoto("/images/destination/guides/marche-rivedoux.jpg", "Étalages et halles du marché de Rivedoux-Plage", "Destination Île de Ré · Laurence Furic", "Photo officielle · droits réservés", "https://www.iledere.com/sinformer/shopping-commerces-services/marche-de-rivedoux-plage-rivedoux-plage-fr-1261072/"),
-  "boucle-sud-re": beauxRivagesPhoto("/images/properties/chai-des-tortues/village-velo.jpeg", "Vélo posé dans un village de l’Île de Ré"),
-  "plage-sud-rivedoux": beauxRivagesPhoto("/images/destination/plage-ganivelles.jpeg", "Plage de sable derrière les ganivelles"),
-  "bio-sens": sourcedPhoto("/images/destination/guides/bio-sens-coiffeur.jpg", "Façade du salon de coiffure Bio Sens à Rivedoux-Plage", "Bio Sens · Planity", "Photo professionnelle · droits réservés", "https://www.planity.com/bio-sens-17940-rivedoux-plage"),
-  "reeduk-coach": beauxRivagesPhoto("/images/destination/surf-matin.jpg", "Activité sportive face à l’océan au petit matin"),
-  "fort-boyard-saumonards": beauxRivagesPhoto("/images/destination/fort-boyard-depuis-plage.jpg", "Fort Boyard aperçu depuis la plage des Saumonards"),
-  boyardville: beauxRivagesPhoto("/images/properties/nid-d-ete/vue-plage.jpeg", "Vue lumineuse sur la plage près de Boyardville"),
-  "marche-boyardville": sourcedPhoto("/images/destination/guides/marche-boyardville.jpg", "Étal de fruits frais au marché de Boyardville", "Office de tourisme de Saint-Georges-d’Oléron", "Photo officielle · droits réservés", "https://www.saint-georges-oleron-tourisme.com/marches-locaux/marche-de-boyardville"),
-  "port-cotiniere": sourcedPhoto("/images/destination/guides/port-cotiniere.jpg", "Quai de débarquement et criée du port de La Cotinière", "Jean-Pierre Bazard", "CC BY-SA 3.0 · image redimensionnée", "https://commons.wikimedia.org/wiki/File:Le_port_de_La_Cotini%C3%A8re_(1).JPG"),
-  "plage-saumonards": beauxRivagesPhoto("/images/properties/nid-d-ete/plage.jpeg", "Plage des Saumonards au bord de l’océan"),
-  "piste-saumonards": beauxRivagesPhoto("/images/properties/nid-d-ete/peupliers.jpeg", "Chemin ombragé dans la végétation oléronaise"),
-  "vieux-port-la-rochelle": sourcedPhoto("/images/destination/guide-vieux-port-la-rochelle.jpg", "Tours à l’entrée du Vieux-Port de La Rochelle", "Jebulon", "CC0", "https://commons.wikimedia.org/wiki/File:Entrance_La_Rochelle_old_harbor.jpg"),
-  "aquarium-la-rochelle": sourcedPhoto("/images/destination/guides/aquarium-la-rochelle.jpg", "Entrée de l’Aquarium de La Rochelle", "William Scot", "CC BY-SA 2.5 · image redimensionnée", "https://commons.wikimedia.org/wiki/File:Aquarium_de_La_Rochelle_-_Entr%C3%A9e.jpg"),
-  "tours-la-rochelle": sourcedPhoto("/images/destination/guides/tours-vieux-port-la-rochelle.jpg", "Tours de la Chaîne et Saint-Nicolas à La Rochelle", "NemesisIII", "CC BY-SA 3.0 · image redimensionnée", "https://commons.wikimedia.org/wiki/File:Les_tours_du_vieux_port,_La_Rochelle.jpg"),
-  "marche-central-la-rochelle": sourcedPhoto("/images/destination/guides/marche-central-la-rochelle.jpg", "Façade des halles du marché central de La Rochelle", "Patrick Despoix", "CC BY-SA 3.0 · image redimensionnée", "https://commons.wikimedia.org/wiki/File:503_-_March%C3%A9_central_-_La_Rochelle.jpg"),
-  "musee-maritime": sourcedPhoto("/images/destination/guides/musee-maritime-la-rochelle.jpg", "Navires du Musée maritime de La Rochelle", "Rémi Jouan", "CC BY-SA 3.0 · image redimensionnée", "https://commons.wikimedia.org/wiki/File:La_Rochelle_-_Mus%C3%A9e_maritime.jpg"),
-  "rue-saint-nicolas": sourcedPhoto("/images/destination/guides/quartier-saint-nicolas-la-rochelle.webp", "Promenade entre boutiques et terrasses du quartier Saint-Nicolas", "Les Conteurs · La Rochelle Tourisme", "Photo officielle · droits réservés", "https://www.nous-larochelle.fr/fr/inspiration/lieux-de-vie/des-pecheurs-aux-etudiants-le-si-vivant-quartier-saint-nicolas"),
-  "parking-greffieres": beauxRivagesPhoto("/images/destination/village-fleuri.jpeg", "Arrivée paisible aux portes de la ville"),
-  "parking-vieux-port-sud": beauxRivagesPhoto("/images/destination/famille-coucher-soleil.jpg", "Promenade au bord de l’eau à la fin du jour"),
-  "recharge-verdun": beauxRivagesPhoto("/images/destination/marais-coucher-soleil.jpeg", "Paysage charentais dans une lumière apaisée"),
+  "chez-nina": beauxRivagesPhoto(
+    "/images/properties/chai-des-tortues/viennoiseries.jpeg",
+    "Viennoiseries artisanales pour un petit-déjeuner à Rivedoux",
+  ),
+  "la-tartentiere": sourcedPhoto(
+    "/images/destination/guides/la-tartentiere-tarte.jpg",
+    "Tarte salée aux légumes frais préparée par La Tartentière",
+    "La Tartentière",
+    "Photo officielle · droits réservés",
+    "https://www.latartentiere.com/",
+  ),
+  "la-martiniere": sourcedPhoto(
+    "/images/destination/guides/la-martiniere-dessert-glace.jpg",
+    "Verrine glacée Banana Split de La Martinière",
+    "La Martinière",
+    "Photo officielle · droits réservés",
+    "https://la-martiniere.fr/",
+  ),
+  "huitres-et-ma-re": beauxRivagesPhoto(
+    "/images/destination/huitres-vin-blanc.jpg",
+    "Huîtres de l’Atlantique accompagnées d’un verre de vin blanc",
+  ),
+  "marche-rivedoux": sourcedPhoto(
+    "/images/destination/guides/marche-rivedoux.jpg",
+    "Étalages et halles du marché de Rivedoux-Plage",
+    "Destination Île de Ré · Laurence Furic",
+    "Photo officielle · droits réservés",
+    "https://www.iledere.com/sinformer/shopping-commerces-services/marche-de-rivedoux-plage-rivedoux-plage-fr-1261072/",
+  ),
+  "boucle-sud-re": beauxRivagesPhoto(
+    "/images/properties/chai-des-tortues/village-velo.jpeg",
+    "Vélo posé dans un village de l’Île de Ré",
+  ),
+  "plage-sud-rivedoux": beauxRivagesPhoto(
+    "/images/destination/plage-ganivelles.jpeg",
+    "Plage de sable derrière les ganivelles",
+  ),
+  "bio-sens": sourcedPhoto(
+    "/images/destination/guides/bio-sens-coiffeur.jpg",
+    "Façade du salon de coiffure Bio Sens à Rivedoux-Plage",
+    "Bio Sens · Planity",
+    "Photo professionnelle · droits réservés",
+    "https://www.planity.com/bio-sens-17940-rivedoux-plage",
+  ),
+  "reeduk-coach": beauxRivagesPhoto(
+    "/images/destination/surf-matin.jpg",
+    "Activité sportive face à l’océan au petit matin",
+  ),
+  "fort-boyard-saumonards": beauxRivagesPhoto(
+    "/images/destination/fort-boyard-depuis-plage.jpg",
+    "Fort Boyard aperçu depuis la plage des Saumonards",
+  ),
+  boyardville: beauxRivagesPhoto(
+    "/images/properties/nid-d-ete/vue-plage.jpeg",
+    "Vue lumineuse sur la plage près de Boyardville",
+  ),
+  "marche-boyardville": sourcedPhoto(
+    "/images/destination/guides/marche-boyardville.jpg",
+    "Étal de fruits frais au marché de Boyardville",
+    "Office de tourisme de Saint-Georges-d’Oléron",
+    "Photo officielle · droits réservés",
+    "https://www.saint-georges-oleron-tourisme.com/marches-locaux/marche-de-boyardville",
+  ),
+  "port-cotiniere": sourcedPhoto(
+    "/images/destination/guides/port-cotiniere.jpg",
+    "Quai de débarquement et criée du port de La Cotinière",
+    "Jean-Pierre Bazard",
+    "CC BY-SA 3.0 · image redimensionnée",
+    "https://commons.wikimedia.org/wiki/File:Le_port_de_La_Cotini%C3%A8re_(1).JPG",
+  ),
+  "plage-saumonards": beauxRivagesPhoto(
+    "/images/properties/nid-d-ete/plage.jpeg",
+    "Plage des Saumonards au bord de l’océan",
+  ),
+  "piste-saumonards": beauxRivagesPhoto(
+    "/images/properties/nid-d-ete/peupliers.jpeg",
+    "Chemin ombragé dans la végétation oléronaise",
+  ),
+  "vieux-port-la-rochelle": sourcedPhoto(
+    "/images/destination/guide-vieux-port-la-rochelle.jpg",
+    "Tours à l’entrée du Vieux-Port de La Rochelle",
+    "Jebulon",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:Entrance_La_Rochelle_old_harbor.jpg",
+  ),
+  "aquarium-la-rochelle": sourcedPhoto(
+    "/images/destination/guides/aquarium-la-rochelle.jpg",
+    "Entrée de l’Aquarium de La Rochelle",
+    "William Scot",
+    "CC BY-SA 2.5 · image redimensionnée",
+    "https://commons.wikimedia.org/wiki/File:Aquarium_de_La_Rochelle_-_Entr%C3%A9e.jpg",
+  ),
+  "tours-la-rochelle": sourcedPhoto(
+    "/images/destination/guides/tours-vieux-port-la-rochelle.jpg",
+    "Tours de la Chaîne et Saint-Nicolas à La Rochelle",
+    "NemesisIII",
+    "CC BY-SA 3.0 · image redimensionnée",
+    "https://commons.wikimedia.org/wiki/File:Les_tours_du_vieux_port,_La_Rochelle.jpg",
+  ),
+  "marche-central-la-rochelle": sourcedPhoto(
+    "/images/destination/guides/marche-central-la-rochelle.jpg",
+    "Façade des halles du marché central de La Rochelle",
+    "Patrick Despoix",
+    "CC BY-SA 3.0 · image redimensionnée",
+    "https://commons.wikimedia.org/wiki/File:503_-_March%C3%A9_central_-_La_Rochelle.jpg",
+  ),
+  "musee-maritime": sourcedPhoto(
+    "/images/destination/guides/musee-maritime-la-rochelle.jpg",
+    "Navires du Musée maritime de La Rochelle",
+    "Rémi Jouan",
+    "CC BY-SA 3.0 · image redimensionnée",
+    "https://commons.wikimedia.org/wiki/File:La_Rochelle_-_Mus%C3%A9e_maritime.jpg",
+  ),
+  "rue-saint-nicolas": sourcedPhoto(
+    "/images/destination/guides/quartier-saint-nicolas-la-rochelle.webp",
+    "Promenade entre boutiques et terrasses du quartier Saint-Nicolas",
+    "Les Conteurs · La Rochelle Tourisme",
+    "Photo officielle · droits réservés",
+    "https://www.nous-larochelle.fr/fr/inspiration/lieux-de-vie/des-pecheurs-aux-etudiants-le-si-vivant-quartier-saint-nicolas",
+  ),
+  "parking-greffieres": beauxRivagesPhoto(
+    "/images/destination/village-fleuri.jpeg",
+    "Arrivée paisible aux portes de la ville",
+  ),
+  "parking-vieux-port-sud": beauxRivagesPhoto(
+    "/images/destination/famille-coucher-soleil.jpg",
+    "Promenade au bord de l’eau à la fin du jour",
+  ),
+  "recharge-verdun": beauxRivagesPhoto(
+    "/images/destination/marais-coucher-soleil.jpeg",
+    "Paysage charentais dans une lumière apaisée",
+  ),
+  "parking-lions": beauxRivagesPhoto(
+    "/images/destination/village-fleuri.jpeg",
+    "Centre de Rivedoux-Plage à proximité du stationnement",
+  ),
+  "sante-rivedoux": beauxRivagesPhoto(
+    "/images/destination/ruelle.jpeg",
+    "Rue de village à Rivedoux-Plage",
+  ),
+  "parking-goelands": beauxRivagesPhoto(
+    "/images/properties/nid-d-ete/vue-plage.jpeg",
+    "Boyardville et son environnement maritime",
+  ),
 } as const;
 
 const osm = (lat: number, lng: number) =>
@@ -89,7 +211,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.15948, -1.27584],
     address: "190 rue Jules-Ferry, Rivedoux-Plage",
-    description: "Les viennoiseries et créations de saison de Nina Métayer, à retirer au cœur de Rivedoux.",
+    description:
+      "Les viennoiseries et créations de saison de Nina Métayer, à retirer au cœur de Rivedoux.",
     officialUrl: "https://larochelle.delicatisserie.com/click-and-collect/",
     mapUrl: osm(46.15948, -1.27584),
     distance: "1,4 km depuis le Chai",
@@ -106,7 +229,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.18754, -1.32837],
     address: "2 rue des Culquoilés, La Flotte",
-    description: "Tartes salées et sucrées à la farine bio, légumes frais et produits régionaux de saison.",
+    description:
+      "Tartes salées et sucrées à la farine bio, légumes frais et produits régionaux de saison.",
     officialUrl: "https://www.latartentiere.com/",
     mapUrl: osm(46.18754, -1.32837),
     distance: "6,5 km depuis Rivedoux",
@@ -123,7 +247,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.20498, -1.36759],
     address: "Saint-Martin-de-Ré et plusieurs boutiques sur l’île",
-    description: "Une maison familiale née sur Ré, connue pour ses glaces, macarons et pâtisseries glacées.",
+    description:
+      "Une maison familiale née sur Ré, connue pour ses glaces, macarons et pâtisseries glacées.",
     officialUrl: "https://la-martiniere.fr/",
     mapUrl: osm(46.20498, -1.36759),
     distance: "12 km depuis Rivedoux",
@@ -140,7 +265,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.16247, -1.25795],
     address: "601 avenue de la Corniche, Rivedoux-Plage",
-    description: "Huîtres de l’Île de Ré et plateaux de fruits de mer à emporter directement chez le producteur.",
+    description:
+      "Huîtres de l’Île de Ré et plateaux de fruits de mer à emporter directement chez le producteur.",
     officialUrl: "https://www.huitresetmare.fr/",
     mapUrl: osm(46.16247, -1.25795),
     distance: "2,1 km depuis le Chai",
@@ -157,8 +283,10 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.15893, -1.27038],
     address: "Place de la République, Rivedoux-Plage",
-    description: "Le marché de village pour composer le déjeuner et rencontrer les producteurs de saison.",
-    officialUrl: "https://www.iledere.com/sinformer/shopping-commerces-services/marche-de-rivedoux-plage-rivedoux-plage-fr-1261072/",
+    description:
+      "Le marché de village pour composer le déjeuner et rencontrer les producteurs de saison.",
+    officialUrl:
+      "https://www.iledere.com/sinformer/shopping-commerces-services/marche-de-rivedoux-plage-rivedoux-plage-fr-1261072/",
     mapUrl: osm(46.15893, -1.27038),
     distance: "1,2 km depuis le Chai",
     bikeTime: "4 min à vélo",
@@ -174,8 +302,10 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.15973, -1.27259],
     address: "Départ Rivedoux-Plage",
-    description: "Une boucle officielle entre littoral, villages et pistes aménagées au départ de Rivedoux.",
-    officialUrl: "https://www.iledere.com/organiser-activites-et-loisirs/itineraires-balades-et-randonnees/a-velo/",
+    description:
+      "Une boucle officielle entre littoral, villages et pistes aménagées au départ de Rivedoux.",
+    officialUrl:
+      "https://www.iledere.com/organiser-activites-et-loisirs/itineraires-balades-et-randonnees/a-velo/",
     mapUrl: osm(46.15973, -1.27259),
     distance: "Départ à 1,3 km",
     bikeTime: "Boucle modulable",
@@ -191,13 +321,15 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.15562, -1.28062],
     address: "Avenue de la Plage, Rivedoux-Plage",
-    description: "Une grande plage tournée vers le pertuis, agréable pour marcher et observer les marées.",
+    description:
+      "Une grande plage tournée vers le pertuis, agréable pour marcher et observer les marées.",
     officialUrl: "https://www.iledere.com/",
     mapUrl: osm(46.15562, -1.28062),
     distance: "1,8 km depuis le Chai",
     bikeTime: "7 min à vélo",
     walkTime: "23 min à pied",
-    hostTip: "Consultez les horaires de marée : le paysage change complètement au fil de la journée.",
+    hostTip:
+      "Consultez les horaires de marée : le paysage change complètement au fil de la journée.",
     ...placeImages["plage-sud-rivedoux"],
   },
   {
@@ -208,7 +340,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île de Ré",
     coordinates: [46.15905, -1.27231],
     address: "91 avenue de la Plage, Rivedoux-Plage",
-    description: "Un salon de proximité proposant notamment coupes, soins et colorations végétales sur rendez-vous.",
+    description:
+      "Un salon de proximité proposant notamment coupes, soins et colorations végétales sur rendez-vous.",
     officialUrl: "https://www.planity.com/bio-sens-17940-rivedoux-plage",
     mapUrl: osm(46.15905, -1.27231),
     distance: "1,2 km depuis le Chai",
@@ -221,11 +354,12 @@ export const premiumPlaces: PremiumPlace[] = [
     slug: "reeduk-coach",
     name: "Ré Eduk Coach",
     kind: "Sport & bien-être",
-    category: "velo",
+    category: "activites",
     destination: "Île de Ré",
     coordinates: [46.16068, -1.26625],
     address: "Rivedoux-Plage",
-    description: "Kinés-coachs, Pilates, gym douce, yoga de Gasquet, marche aquatique et massages face à la mer.",
+    description:
+      "Kinés-coachs, Pilates, gym douce, yoga de Gasquet, marche aquatique et massages face à la mer.",
     officialUrl: "https://www.reedukcoach.fr/",
     mapUrl: osm(46.16068, -1.26625),
     distance: "1,6 km depuis le Chai",
@@ -235,6 +369,44 @@ export const premiumPlaces: PremiumPlace[] = [
     ...placeImages["reeduk-coach"],
   },
   {
+    slug: "parking-lions",
+    name: "Parking de la place des Lions",
+    kind: "Parking gratuit & recharge",
+    category: "parkings",
+    destination: "Île de Ré",
+    coordinates: [46.15935, -1.2722],
+    address: "Place des Lions, 17940 Rivedoux-Plage",
+    description:
+      "Parking gratuit en zone bleue en saison, avec place PMR, stationnement vélo et borne MObiVE jusqu’à 50 kW.",
+    officialUrl:
+      "https://www.iledere.com/sinformer/shopping-commerces-services/commerces-et-artisans/parking-de-la-place-des-lions-rivedoux-plage-fr-3655471/",
+    mapUrl: osm(46.15935, -1.2722),
+    distance: "Environ 1 km depuis les maisons de Rivedoux",
+    bikeTime: "4 min à vélo",
+    walkTime: "12 min à pied",
+    hostTip:
+      "Du 1er avril au 30 septembre, prévoyez un disque bleu et respectez la limite de 1 h 30.",
+    ...placeImages["parking-lions"],
+  },
+  {
+    slug: "sante-rivedoux",
+    name: "Pôle de santé de Rivedoux",
+    kind: "Médecin, infirmiers & pharmacie",
+    category: "sante",
+    destination: "Île de Ré",
+    coordinates: [46.15959, -1.27486],
+    address: "154 rue Jules Ferry, 17940 Rivedoux-Plage",
+    description:
+      "Le médecin généraliste et les cabinets infirmiers sont regroupés rue Jules-Ferry ; la pharmacie se trouve au numéro 200.",
+    officialUrl: "https://www.rivedoux-plage.fr/vivre-a-rivedoux/sante",
+    mapUrl: osm(46.15959, -1.27486),
+    distance: "À proximité des maisons de Rivedoux",
+    bikeTime: "5 min à vélo",
+    walkTime: "15 min à pied",
+    hostTip: "En cas d’urgence vitale, composez toujours le 15 ou le 112.",
+    ...placeImages["sante-rivedoux"],
+  },
+  {
     slug: "fort-boyard-saumonards",
     name: "Fort Boyard depuis les Saumonards",
     kind: "Point de vue",
@@ -242,7 +414,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île d’Oléron",
     coordinates: [45.98061, -1.29512],
     address: "Plage des Saumonards, Saint-Georges-d’Oléron",
-    description: "Le point de vue naturel le plus proche du Nid d’Été pour contempler la silhouette du fort.",
+    description:
+      "Le point de vue naturel le plus proche du Nid d’Été pour contempler la silhouette du fort.",
     officialUrl: "https://www.ile-oleron-marennes.com/",
     mapUrl: osm(45.98061, -1.29512),
     distance: "20 m depuis le Nid",
@@ -259,7 +432,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île d’Oléron",
     coordinates: [45.96728, -1.24216],
     address: "Port de Boyardville",
-    description: "Un village entre port, chenal, forêt des Saumonards et départs maritimes autour de Fort Boyard.",
+    description:
+      "Un village entre port, chenal, forêt des Saumonards et départs maritimes autour de Fort Boyard.",
     officialUrl: "https://www.ile-oleron-marennes.com/",
     mapUrl: osm(45.96728, -1.24216),
     distance: "5 km depuis le Nid",
@@ -276,7 +450,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île d’Oléron",
     coordinates: [45.96717, -1.24292],
     address: "Place du Marché, Boyardville",
-    description: "Le marché de proximité pour les produits frais avant une journée entre forêt et plage.",
+    description:
+      "Le marché de proximité pour les produits frais avant une journée entre forêt et plage.",
     officialUrl: "https://www.ile-oleron-marennes.com/",
     mapUrl: osm(45.96717, -1.24292),
     distance: "5 km depuis le Nid",
@@ -286,6 +461,26 @@ export const premiumPlaces: PremiumPlace[] = [
     ...placeImages["marche-boyardville"],
   },
   {
+    slug: "parking-goelands",
+    name: "Parking des Goëlands",
+    kind: "Parking gratuit & recharge",
+    category: "bornes-electriques",
+    destination: "Île d’Oléron",
+    coordinates: [45.96766, -1.24313],
+    address: "353 avenue Pierre-Loti, Boyardville",
+    description:
+      "Parking gratuit en zone bleue avec trois emplacements PMR et une borne de recharge pour véhicules électriques.",
+    officialUrl:
+      "https://www.ile-oleron-marennes.com/commerces-et-services-sites-communaux/parking-des-goelands-a-boyardville",
+    mapUrl: osm(45.96766, -1.24313),
+    distance: "Environ 5 km depuis Le Nid d’Été",
+    bikeTime: "18 min à vélo",
+    walkTime: "1 h à pied",
+    hostTip:
+      "Du 1er avril au 30 septembre, la zone bleue est limitée à 1 h 30 : gardez un disque dans la voiture.",
+    ...placeImages["parking-goelands"],
+  },
+  {
     slug: "port-cotiniere",
     name: "Port de La Cotinière",
     kind: "Port de pêche",
@@ -293,7 +488,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "Île d’Oléron",
     coordinates: [45.91552, -1.32876],
     address: "La Cotinière, Saint-Pierre-d’Oléron",
-    description: "Le principal port de pêche de l’île, vivant au rythme des bateaux et de la criée.",
+    description:
+      "Le principal port de pêche de l’île, vivant au rythme des bateaux et de la criée.",
     officialUrl: "https://www.ile-oleron-marennes.com/",
     mapUrl: osm(45.91552, -1.32876),
     distance: "16 km depuis le Nid",
@@ -344,7 +540,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "La Rochelle",
     coordinates: [46.15603, -1.15447],
     address: "Quai Duperré, La Rochelle",
-    description: "Le cœur historique de la ville, entre quais, tours médiévales, arcades et horizon maritime.",
+    description:
+      "Le cœur historique de la ville, entre quais, tours médiévales, arcades et horizon maritime.",
     officialUrl: "https://www.nous-larochelle.fr/fr",
     mapUrl: osm(46.15603, -1.15447),
     distance: "13 km depuis Rivedoux",
@@ -357,11 +554,12 @@ export const premiumPlaces: PremiumPlace[] = [
     slug: "aquarium-la-rochelle",
     name: "Aquarium La Rochelle",
     kind: "Famille & jour de pluie",
-    category: "restaurants",
+    category: "activites",
     destination: "La Rochelle",
     coordinates: [46.15387, -1.15249],
     address: "Quai Louis-Prunier, La Rochelle",
-    description: "Un parcours immersif consacré à l’océan, particulièrement adapté aux familles et aux jours de pluie.",
+    description:
+      "Un parcours immersif consacré à l’océan, particulièrement adapté aux familles et aux jours de pluie.",
     officialUrl: "https://www.aquarium-larochelle.com/",
     mapUrl: osm(46.15387, -1.15249),
     distance: "14 km depuis Rivedoux",
@@ -378,7 +576,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "La Rochelle",
     coordinates: [46.15539, -1.15728],
     address: "Vieux-Port, La Rochelle",
-    description: "Trois tours, vestiges des fortifications maritimes médiévales, avec des vues majeures sur la ville.",
+    description:
+      "Trois tours, vestiges des fortifications maritimes médiévales, avec des vues majeures sur la ville.",
     officialUrl: "https://www.tours-la-rochelle.fr/",
     mapUrl: osm(46.15539, -1.15728),
     distance: "13 km depuis Rivedoux",
@@ -395,7 +594,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "La Rochelle",
     coordinates: [46.16191, -1.15175],
     address: "Place du Marché, La Rochelle",
-    description: "Des halles du XIXe siècle entourées de commerces, idéales pour composer un déjeuner rochelais.",
+    description:
+      "Des halles du XIXe siècle entourées de commerces, idéales pour composer un déjeuner rochelais.",
     officialUrl: "https://www.nous-larochelle.fr/fr",
     mapUrl: osm(46.16191, -1.15175),
     distance: "13 km depuis Rivedoux",
@@ -408,11 +608,12 @@ export const premiumPlaces: PremiumPlace[] = [
     slug: "musee-maritime",
     name: "Musée maritime",
     kind: "Musée",
-    category: "restaurants",
+    category: "activites",
     destination: "La Rochelle",
     coordinates: [46.14916, -1.15285],
     address: "Place Bernard-Moitessier, La Rochelle",
-    description: "Navires patrimoniaux, histoire du port et culture maritime dans l’ancien bassin des chalutiers.",
+    description:
+      "Navires patrimoniaux, histoire du port et culture maritime dans l’ancien bassin des chalutiers.",
     officialUrl: "https://museemaritime.larochelle.fr/",
     mapUrl: osm(46.14916, -1.15285),
     distance: "15 km depuis Rivedoux",
@@ -429,7 +630,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "La Rochelle",
     coordinates: [46.15745, -1.14975],
     address: "Rue Saint-Nicolas, La Rochelle",
-    description: "Boutiques indépendantes, galeries et cafés dans un quartier vivant derrière le Vieux-Port.",
+    description:
+      "Boutiques indépendantes, galeries et cafés dans un quartier vivant derrière le Vieux-Port.",
     officialUrl: "https://www.nous-larochelle.fr/fr",
     mapUrl: osm(46.15745, -1.14975),
     distance: "14 km depuis Rivedoux",
@@ -446,7 +648,8 @@ export const premiumPlaces: PremiumPlace[] = [
     destination: "La Rochelle",
     coordinates: [46.17967, -1.13484],
     address: "Avenue des Corsaires, Lagord",
-    description: "Un parking relais pratique en arrivant de l’Île de Ré, relié au centre par les transports Yélo.",
+    description:
+      "Un parking relais pratique en arrivant de l’Île de Ré, relié au centre par les transports Yélo.",
     officialUrl: "https://www.larochelle.fr/vie-quotidienne/stationnement/stationnement-parkings",
     mapUrl: osm(46.17967, -1.13484),
     distance: "11 km depuis Rivedoux",
@@ -498,6 +701,8 @@ export const premiumMapCategories: { id: PremiumMapCategory; label: string }[] =
   { id: "fort-boyard", label: "Incontournables" },
   { id: "marches", label: "Marchés" },
   { id: "velo", label: "Vélo" },
+  { id: "activites", label: "Activités" },
+  { id: "sante", label: "Santé" },
   { id: "parkings", label: "Parkings" },
   { id: "bornes-electriques", label: "Bornes électriques" },
 ];
@@ -517,28 +722,70 @@ export const idealDays: IdealDay[] = [
     slug: "famille",
     title: "La journée famille",
     eyebrow: "Sable, forêt, émerveillement",
-    description: "Des étapes courtes, une vraie pause et assez de liberté pour suivre l’énergie des enfants.",
+    description:
+      "Des étapes courtes, une vraie pause et assez de liberté pour suivre l’énergie des enfants.",
     image: "/images/destination/famille-estran.jpg",
     imageAlt: "Famille découvrant l’estran à marée basse",
     stops: [
-      { time: "09:00", title: "Marché de Boyardville", detail: "Composer le pique-nique.", placeSlug: "marche-boyardville" },
-      { time: "10:30", title: "Saumonards", detail: "Plage et jeux selon la marée.", placeSlug: "plage-saumonards" },
-      { time: "13:00", title: "Sous les pins", detail: "Déjeuner et temps calme.", placeSlug: "piste-saumonards" },
-      { time: "17:30", title: "Fort Boyard", detail: "Retour sur le sable à l’heure dorée.", placeSlug: "fort-boyard-saumonards" },
+      {
+        time: "09:00",
+        title: "Marché de Boyardville",
+        detail: "Composer le pique-nique.",
+        placeSlug: "marche-boyardville",
+      },
+      {
+        time: "10:30",
+        title: "Saumonards",
+        detail: "Plage et jeux selon la marée.",
+        placeSlug: "plage-saumonards",
+      },
+      {
+        time: "13:00",
+        title: "Sous les pins",
+        detail: "Déjeuner et temps calme.",
+        placeSlug: "piste-saumonards",
+      },
+      {
+        time: "17:30",
+        title: "Fort Boyard",
+        detail: "Retour sur le sable à l’heure dorée.",
+        placeSlug: "fort-boyard-saumonards",
+      },
     ],
   },
   {
     slug: "couple",
     title: "La journée en couple",
     eyebrow: "Lumière et temps retrouvé",
-    description: "Une journée à vélo, peu d’adresses mais chacune choisie pour laisser de la place à la conversation.",
+    description:
+      "Une journée à vélo, peu d’adresses mais chacune choisie pour laisser de la place à la conversation.",
     image: "/images/destination/pique-nique-plage.jpg",
     imageAlt: "Pique-nique à deux face à l’océan sur l’Île de Ré",
     stops: [
-      { time: "08:30", title: "Chez Nina", detail: "Viennoiseries pour partir doucement.", placeSlug: "chez-nina" },
-      { time: "10:00", title: "Boucle du sud", detail: "Villages et littoral à vélo.", placeSlug: "boucle-sud-re" },
-      { time: "13:00", title: "La Tartentière", detail: "Déjeuner à partager.", placeSlug: "la-tartentiere" },
-      { time: "18:00", title: "Saint-Martin", detail: "Glace puis remparts.", placeSlug: "la-martiniere" },
+      {
+        time: "08:30",
+        title: "Chez Nina",
+        detail: "Viennoiseries pour partir doucement.",
+        placeSlug: "chez-nina",
+      },
+      {
+        time: "10:00",
+        title: "Boucle du sud",
+        detail: "Villages et littoral à vélo.",
+        placeSlug: "boucle-sud-re",
+      },
+      {
+        time: "13:00",
+        title: "La Tartentière",
+        detail: "Déjeuner à partager.",
+        placeSlug: "la-tartentiere",
+      },
+      {
+        time: "18:00",
+        title: "Saint-Martin",
+        detail: "Glace puis remparts.",
+        placeSlug: "la-martiniere",
+      },
     ],
   },
   {
@@ -549,24 +796,59 @@ export const idealDays: IdealDay[] = [
     image: "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
     imageAlt: "Table de fruits de mer préparée pour le dîner",
     stops: [
-      { time: "08:00", title: "Marché de Rivedoux", detail: "Produits de saison.", placeSlug: "marche-rivedoux" },
-      { time: "10:00", title: "Huîtres et Ma Ré", detail: "Rencontre et commande du plateau.", placeSlug: "huitres-et-ma-re" },
-      { time: "12:30", title: "La Tartentière", detail: "Tarte de saison.", placeSlug: "la-tartentiere" },
-      { time: "19:30", title: "À la maison", detail: "Plateau de fruits de mer autour de la grande table." },
+      {
+        time: "08:00",
+        title: "Marché de Rivedoux",
+        detail: "Produits de saison.",
+        placeSlug: "marche-rivedoux",
+      },
+      {
+        time: "10:00",
+        title: "Huîtres et Ma Ré",
+        detail: "Rencontre et commande du plateau.",
+        placeSlug: "huitres-et-ma-re",
+      },
+      {
+        time: "12:30",
+        title: "La Tartentière",
+        detail: "Tarte de saison.",
+        placeSlug: "la-tartentiere",
+      },
+      {
+        time: "19:30",
+        title: "À la maison",
+        detail: "Plateau de fruits de mer autour de la grande table.",
+      },
     ],
   },
   {
     slug: "velo",
     title: "La journée vélo",
     eyebrow: "Ré au rythme du vent",
-    description: "Un parcours modulable depuis Rivedoux, avec des haltes qui comptent autant que la destination.",
+    description:
+      "Un parcours modulable depuis Rivedoux, avec des haltes qui comptent autant que la destination.",
     image: "/images/properties/chai-des-tortues/village-velo.jpeg",
     imageAlt: "Vélos dans une ruelle de village de l’Île de Ré",
     stops: [
-      { time: "08:30", title: "Départ de Rivedoux", detail: "Réglage des vélos et lecture du vent.", placeSlug: "boucle-sud-re" },
+      {
+        time: "08:30",
+        title: "Départ de Rivedoux",
+        detail: "Réglage des vélos et lecture du vent.",
+        placeSlug: "boucle-sud-re",
+      },
       { time: "10:30", title: "La Flotte", detail: "Port et ruelles." },
-      { time: "13:00", title: "Saint-Martin", detail: "Déjeuner puis remparts.", placeSlug: "la-martiniere" },
-      { time: "17:00", title: "Retour par la côte", detail: "Dernière halte sur la plage sud.", placeSlug: "plage-sud-rivedoux" },
+      {
+        time: "13:00",
+        title: "Saint-Martin",
+        detail: "Déjeuner puis remparts.",
+        placeSlug: "la-martiniere",
+      },
+      {
+        time: "17:00",
+        title: "Retour par la côte",
+        detail: "Dernière halte sur la plage sud.",
+        placeSlug: "plage-sud-rivedoux",
+      },
     ],
   },
   {
@@ -577,24 +859,65 @@ export const idealDays: IdealDay[] = [
     image: "/images/destination/saunier.jpeg",
     imageAlt: "Saunier travaillant dans les marais salants",
     stops: [
-      { time: "08:00", title: "Forêt des Saumonards", detail: "Marche fraîche sous les pins.", placeSlug: "piste-saumonards" },
-      { time: "11:00", title: "Plage", detail: "Observer l’estran.", placeSlug: "plage-saumonards" },
-      { time: "15:00", title: "La Cotinière", detail: "Port et retour des bateaux.", placeSlug: "port-cotiniere" },
-      { time: "19:00", title: "Face au fort", detail: "Fin de journée sans programme.", placeSlug: "fort-boyard-saumonards" },
+      {
+        time: "08:00",
+        title: "Forêt des Saumonards",
+        detail: "Marche fraîche sous les pins.",
+        placeSlug: "piste-saumonards",
+      },
+      {
+        time: "11:00",
+        title: "Plage",
+        detail: "Observer l’estran.",
+        placeSlug: "plage-saumonards",
+      },
+      {
+        time: "15:00",
+        title: "La Cotinière",
+        detail: "Port et retour des bateaux.",
+        placeSlug: "port-cotiniere",
+      },
+      {
+        time: "19:00",
+        title: "Face au fort",
+        detail: "Fin de journée sans programme.",
+        placeSlug: "fort-boyard-saumonards",
+      },
     ],
   },
   {
     slug: "pluie",
     title: "La journée pluie",
     eyebrow: "La Rochelle à couvert",
-    description: "L’océan, l’histoire maritime et les halles : la pluie devient une autre manière d’entrer dans le territoire.",
+    description:
+      "L’océan, l’histoire maritime et les halles : la pluie devient une autre manière d’entrer dans le territoire.",
     image: "/images/destination/guides/aquarium-la-rochelle.jpg",
     imageAlt: "Aquarium de La Rochelle pour une journée de pluie à couvert",
     stops: [
-      { time: "09:00", title: "Marché central", detail: "Petit-déjeuner et achats.", placeSlug: "marche-central-la-rochelle" },
-      { time: "10:30", title: "Aquarium", detail: "Deux heures d’immersion.", placeSlug: "aquarium-la-rochelle" },
-      { time: "14:30", title: "Musée maritime", detail: "Navires et mémoire du port.", placeSlug: "musee-maritime" },
-      { time: "17:30", title: "Saint-Nicolas", detail: "Boutiques puis café.", placeSlug: "rue-saint-nicolas" },
+      {
+        time: "09:00",
+        title: "Marché central",
+        detail: "Petit-déjeuner et achats.",
+        placeSlug: "marche-central-la-rochelle",
+      },
+      {
+        time: "10:30",
+        title: "Aquarium",
+        detail: "Deux heures d’immersion.",
+        placeSlug: "aquarium-la-rochelle",
+      },
+      {
+        time: "14:30",
+        title: "Musée maritime",
+        detail: "Navires et mémoire du port.",
+        placeSlug: "musee-maritime",
+      },
+      {
+        time: "17:30",
+        title: "Saint-Nicolas",
+        detail: "Boutiques puis café.",
+        placeSlug: "rue-saint-nicolas",
+      },
     ],
   },
   {
@@ -605,10 +928,30 @@ export const idealDays: IdealDay[] = [
     image: "/images/destination/pont-ile-de-re-rose.jpg",
     imageAlt: "Pont de l’Île de Ré dans la lumière du soir, porte d’entrée du week-end littoral",
     stops: [
-      { time: "Sam. 09:00", title: "Rivedoux et Ré", detail: "Marché, vélo et artisans.", placeSlug: "marche-rivedoux" },
-      { time: "Sam. 18:00", title: "Saint-Martin", detail: "Remparts à l’heure dorée.", placeSlug: "la-martiniere" },
-      { time: "Dim. 09:30", title: "Oléron", detail: "Boyardville et Saumonards.", placeSlug: "boyardville" },
-      { time: "Dim. 16:00", title: "La Rochelle", detail: "Tours et Vieux-Port.", placeSlug: "tours-la-rochelle" },
+      {
+        time: "Sam. 09:00",
+        title: "Rivedoux et Ré",
+        detail: "Marché, vélo et artisans.",
+        placeSlug: "marche-rivedoux",
+      },
+      {
+        time: "Sam. 18:00",
+        title: "Saint-Martin",
+        detail: "Remparts à l’heure dorée.",
+        placeSlug: "la-martiniere",
+      },
+      {
+        time: "Dim. 09:30",
+        title: "Oléron",
+        detail: "Boyardville et Saumonards.",
+        placeSlug: "boyardville",
+      },
+      {
+        time: "Dim. 16:00",
+        title: "La Rochelle",
+        detail: "Tours et Vieux-Port.",
+        placeSlug: "tours-la-rochelle",
+      },
     ],
   },
 ];

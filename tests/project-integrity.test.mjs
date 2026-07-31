@@ -407,8 +407,55 @@ test("public review claims stay sourced and the direct request stays payment-fre
   );
   assert.match(reviews, /reviewsVerifiedOn/);
   assert.doesNotMatch(reviewPage, /99 %|98 %|97 %/);
-  assert.match(bookingTrust, /Aucun paiement n’est demandé par ce formulaire/);
+  assert.match(bookingTrust, /Aucun débit n’a lieu avant/);
   assert.match(bookingTrust, /totalPublicPlatformReviews/);
+});
+
+test("direct booking exposes a verified quote and durable request confirmation", () => {
+  const journey = read("components/BookingExperience.tsx");
+  const form = read("components/DirectBookingForm.tsx");
+  const reservation = read("app/api/reservation/route.ts");
+  assert.match(journey, /DirectBookingForm/);
+  assert.match(journey, /booking_quote_viewed/);
+  assert.match(form, /\/api\/reservation/);
+  assert.match(form, /Demande enregistrée/);
+  assert.match(form, /Aucun\s+paiement n’a été débité/);
+  assert.match(reservation, /SupabaseReservationRepository/);
+  assert.match(reservation, /DATES_UNAVAILABLE/);
+});
+
+test("the persuasive galleries preserve every room type and lived-in family scenes", () => {
+  const data = read("data.ts");
+  assert.match(data, /curateGallery/);
+  const livedInMedia = [
+    read("media/properties/chai-des-tortues.ts"),
+    read("media/properties/villa-raie-manta.ts"),
+    read("media/properties/nid-d-ete.ts"),
+  ].join("\n");
+  assert.match(livedInMedia, /editorial\/enfants-bebe-et-chien/);
+  assert.match(livedInMedia, /editorial\/retour-plage-en-famille/);
+  for (const manifest of [
+    "media/properties/chai-des-tortues.ts",
+    "media/properties/villa-raie-manta.ts",
+    "media/properties/nid-d-ete.ts",
+  ]) {
+    const source = read(manifest);
+    assert.match(source, /bathroom|bathrooms|salle-de-bain|salle-eau/i);
+    assert.match(source, /toilettes/i);
+    assert.match(source, /kitchen|cuisine/i);
+    assert.match(source, /bedroom|bedrooms|chambre/i);
+    assert.match(source, /exterior|exterieur|extérieur/i);
+  }
+});
+
+test("the useful map includes health, parking, charging and direct directions", () => {
+  const data = read("carnetPremiumData.ts");
+  const map = read("components/carnet/PremiumInteractiveMap.tsx");
+  assert.match(data, /sante-rivedoux/);
+  assert.match(data, /parking-lions/);
+  assert.match(data, /parking-goelands/);
+  assert.match(data, /bornes-electriques/);
+  assert.match(map, /Itinéraire/);
 });
 
 test("premium concierge renders native German and Spanish dynamic content", () => {
@@ -425,8 +472,8 @@ test("booking handoff clearly uses a native email action", () => {
   const button = read("components/ui/Button.tsx");
   const journey = read("components/BookingExperience.tsx");
   assert.match(button, /href\.startsWith\("mailto:"\)/);
-  assert.match(journey, /Votre application e-mail va s’ouvrir/);
-  assert.match(journey, /Préparer l’e-mail de demande/);
+  assert.match(journey, /emailBookingGateway/);
+  assert.match(journey, /Préparer plutôt un e-mail/);
 });
 
 test("the Signature experience exposes its weather, planning and arrival journeys", () => {

@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { Analytics as VercelAnalytics, type BeforeSendEvent } from "@vercel/analytics/next";
 import { trackEvent } from "@/platform/analytics/events";
 
 export function Analytics() {
@@ -10,7 +11,8 @@ export function Analytics() {
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   useEffect(() => {
     trackEvent("page_view", { page_path: pathname });
-    if (pathname.startsWith("/maisons/")) trackEvent("view_property", { property_slug: pathname.split("/").at(-1) ?? "" });
+    if (pathname.startsWith("/maisons/"))
+      trackEvent("view_property", { property_slug: pathname.split("/").at(-1) ?? "" });
     if (pathname === "/reserver") trackEvent("booking_started");
   }, [pathname]);
   useEffect(() => {
@@ -24,6 +26,29 @@ export function Analytics() {
     document.addEventListener("click", click);
     return () => document.removeEventListener("click", click);
   }, []);
-  if (!measurementId) return null;
-  return <><Script src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} strategy="afterInteractive" /><Script id="ga4-config" strategy="afterInteractive">{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','${measurementId}',{send_page_view:false,anonymize_ip:true});`}</Script></>;
+  const protectPrivateRoutes = (event: BeforeSendEvent) => {
+    const url = new URL(event.url);
+    if (url.pathname.startsWith("/administration") || url.pathname.startsWith("/carnet-voyageur")) {
+      return null;
+    }
+    url.search = "";
+    url.hash = "";
+    return { ...event, url: url.toString() };
+  };
+  return (
+    <>
+      <VercelAnalytics beforeSend={protectPrivateRoutes} />
+      {measurementId ? (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="ga4-config" strategy="afterInteractive">
+            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','${measurementId}',{send_page_view:false,anonymize_ip:true});`}
+          </Script>
+        </>
+      ) : null}
+    </>
+  );
 }
