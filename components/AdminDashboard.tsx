@@ -1,120 +1,63 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import type { BackOfficeReservation, BackOfficeSnapshot } from "@/platform/admin/contracts";
-import { GuestMessagesAdmin } from "@/components/admin/GuestMessagesAdmin";
-import { RevenueMarketingAdmin } from "@/components/admin/RevenueMarketingAdmin";
-import { PremiumOperations } from "@/components/admin/PremiumOperations";
-import { ChannelManagerAdmin } from "@/components/admin/ChannelManagerAdmin";
-import { HousekeepingAdmin } from "@/components/admin/HousekeepingAdmin";
-import { CarnetCmsAdmin } from "@/components/admin/CarnetCmsAdmin";
-import { GuestBookAdmin } from "@/components/admin/GuestBookAdmin";
 import { StaffAccess } from "@/components/admin/StaffAccess";
-import { YieldManagementAdmin } from "@/components/admin/YieldManagementAdmin";
-import { ExperienceServicesAdmin } from "@/components/admin/ExperienceServicesAdmin";
-import { FiscalityAdmin } from "@/components/admin/FiscalityAdmin";
-import { LegalCenterAdmin } from "@/components/admin/LegalCenterAdmin";
 import { describeWelcomeBaskets } from "@/platform/reservations/welcome-baskets";
+import { DashboardHeader } from "@/components/admin/dashboard/DashboardHeader";
+import { TodayOverview } from "@/components/admin/dashboard/TodayOverview";
+import { dateTime, money, shortDate, Status } from "@/components/admin/dashboard/format";
+import {
+  type DashboardView as View,
+  isDashboardView,
+} from "@/components/admin/dashboard/navigation";
+import {
+  BlockDatesForm,
+  DocumentList,
+  ManualReservationForm,
+  ReservationActions,
+  ReservationDetail,
+} from "@/components/admin/dashboard/ReservationWorkspaceParts";
+import { Pagination } from "@/components/admin/dashboard/Pagination";
 
-type View =
-  | "dashboard"
-  | "calendrier"
-  | "reservations"
-  | "messages"
-  | "revenue"
-  | "yield"
-  | "channel"
-  | "housekeeping"
-  | "experiences-services"
-  | "carnet"
-  | "livre-or"
-  | "voyageurs"
-  | "logements"
-  | "documents"
-  | "paiements"
-  | "conciergerie"
-  | "menage"
-  | "maintenance"
-  | "statistiques"
-  | "pilotage"
-  | "fiscalite"
-  | "juridique"
-  | "parametres";
-const views: { id: View; label: string }[] = [
-  { id: "dashboard", label: "Aujourd’hui" },
-  { id: "calendrier", label: "Calendrier" },
-  { id: "reservations", label: "Réservations" },
-  { id: "messages", label: "Messages voyageurs" },
-  { id: "revenue", label: "Revenue & Marketing" },
-  { id: "yield", label: "Yield Management" },
-  { id: "channel", label: "Channel Manager" },
-  { id: "housekeeping", label: "Housekeeping" },
-  { id: "experiences-services", label: "Expériences & Services" },
-  { id: "carnet", label: "Carnet CMS" },
-  { id: "livre-or", label: "Livre d’Or" },
-  { id: "voyageurs", label: "Voyageurs" },
-  { id: "logements", label: "Logements" },
-  { id: "documents", label: "Documents" },
-  { id: "paiements", label: "Paiements" },
-  { id: "conciergerie", label: "Conciergerie" },
-  { id: "menage", label: "Ménage" },
-  { id: "maintenance", label: "Maintenance" },
-  { id: "statistiques", label: "Statistiques" },
-  { id: "pilotage", label: "Pilotage" },
-  { id: "fiscalite", label: "Fiscalité" },
-  { id: "juridique", label: "Centre juridique" },
-  { id: "parametres", label: "Paramètres" },
-];
+const RESERVATIONS_PER_PAGE = 50;
 
-const statusLabels: Record<string, string> = {
-  draft: "Brouillon",
-  pending_payment: "Paiement attendu",
-  requested: "Demande",
-  confirmed: "Confirmée",
-  cancelled: "Annulée",
-  completed: "Terminée",
-  declined: "Refusée",
-  paid: "Payé",
-  pending: "En attente",
-  signed: "Signé",
-  generated: "Généré",
-  sent: "Envoyé",
-  viewed: "Consulté",
-  healthy: "Opérationnel",
-  success: "Réussi",
-  failed: "Échec",
-  warning: "Attention",
-  error: "Erreur",
-  queued: "En attente",
-  delivered: "Livré",
-  bounced: "Rejeté",
-  opened: "Ouvert",
-  authorized: "Autorisé",
-};
-
-function money(cents: number) {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(cents / 100);
-}
-
-function shortDate(value: string | null) {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(`${value.slice(0, 10)}T12:00:00`));
-}
-
-function dateTime(value: string | null) {
-  if (!value) return "Jamais";
-  return new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(
-    new Date(value),
-  );
-}
+const GuestMessagesAdmin = dynamic(() =>
+  import("@/components/admin/GuestMessagesAdmin").then((module) => module.GuestMessagesAdmin),
+);
+const RevenueMarketingAdmin = dynamic(() =>
+  import("@/components/admin/RevenueMarketingAdmin").then((module) => module.RevenueMarketingAdmin),
+);
+const PremiumOperations = dynamic(() =>
+  import("@/components/admin/PremiumOperations").then((module) => module.PremiumOperations),
+);
+const ChannelManagerAdmin = dynamic(() =>
+  import("@/components/admin/ChannelManagerAdmin").then((module) => module.ChannelManagerAdmin),
+);
+const HousekeepingAdmin = dynamic(() =>
+  import("@/components/admin/HousekeepingAdmin").then((module) => module.HousekeepingAdmin),
+);
+const CarnetCmsAdmin = dynamic(() =>
+  import("@/components/admin/CarnetCmsAdmin").then((module) => module.CarnetCmsAdmin),
+);
+const GuestBookAdmin = dynamic(() =>
+  import("@/components/admin/GuestBookAdmin").then((module) => module.GuestBookAdmin),
+);
+const YieldManagementAdmin = dynamic(() =>
+  import("@/components/admin/YieldManagementAdmin").then((module) => module.YieldManagementAdmin),
+);
+const ExperienceServicesAdmin = dynamic(() =>
+  import("@/components/admin/ExperienceServicesAdmin").then(
+    (module) => module.ExperienceServicesAdmin,
+  ),
+);
+const FiscalityAdmin = dynamic(() =>
+  import("@/components/admin/FiscalityAdmin").then((module) => module.FiscalityAdmin),
+);
+const LegalCenterAdmin = dynamic(() =>
+  import("@/components/admin/LegalCenterAdmin").then((module) => module.LegalCenterAdmin),
+);
 
 function nights(reservation: BackOfficeReservation) {
   return Math.round(
@@ -124,66 +67,75 @@ function nights(reservation: BackOfficeReservation) {
   );
 }
 
-function Status({ value }: { value: string }) {
-  return (
-    <span className={`admin-status admin-status--${value}`}>{statusLabels[value] ?? value}</span>
-  );
-}
-
-function ReservationList({
-  rows,
-  empty = "Aucune réservation.",
-}: {
-  rows: BackOfficeReservation[];
-  empty?: string;
-}) {
-  if (!rows.length) return <p className="admin-empty">{empty}</p>;
-  return (
-    <div className="admin-list">
-      {rows.map((reservation) => (
-        <article key={reservation.id} className="admin-reservation-row">
-          <div>
-            <strong>{reservation.guestName}</strong>
-            <span>
-              {reservation.propertyName} · {nights(reservation)} nuit(s)
-            </span>
-            {describeWelcomeBaskets(reservation.options).included !== "Aucun" ? (
-              <small>
-                Accueil gourmand : {describeWelcomeBaskets(reservation.options).included}
-                {describeWelcomeBaskets(reservation.options).extra !== "Aucun"
-                  ? ` + ${describeWelcomeBaskets(reservation.options).extra}`
-                  : ""}
-              </small>
-            ) : null}
-          </div>
-          <div>
-            <strong>{shortDate(reservation.arrival)}</strong>
-            <span>au {shortDate(reservation.departure)}</span>
-          </div>
-          <Status value={reservation.status} />
-          <strong>{money(reservation.totalCents)}</strong>
-        </article>
-      ))}
-    </div>
-  );
-}
-
 export function AdminDashboard() {
   const [token, setToken] = useState("");
   const [data, setData] = useState<BackOfficeSnapshot | null>(null);
   const [view, setView] = useState<View>("dashboard");
   const [message, setMessage] = useState(
-    "Saisissez le jeton administrateur pour ouvrir le Back Office.",
+    "Connectez-vous avec votre compte professionnel pour ouvrir le Back Office.",
   );
   const [busy, setBusy] = useState(false);
   const [query, setQuery] = useState("");
+  const [serverResults, setServerResults] = useState<{ id: string; label: string; view: View }[]>(
+    [],
+  );
   const [dark, setDark] = useState(false);
   const [selectedReservationId, setSelectedReservationId] = useState<string | null>(null);
   const [reservationMode, setReservationMode] = useState<"list" | "create" | "block">("list");
+  const [reservationPage, setReservationPage] = useState(1);
 
   useEffect(() => {
     setDark(window.localStorage.getItem("beaux-rivages-admin-theme") === "dark");
+    const requestedView = new URL(window.location.href).searchParams.get("view");
+    if (isDashboardView(requestedView)) setView(requestedView);
   }, []);
+
+  useEffect(() => {
+    if (!data) return;
+    const refresh = window.setInterval(
+      () => {
+        void fetch("/api/auth/staff", { cache: "no-store" });
+      },
+      30 * 60 * 1_000,
+    );
+    return () => window.clearInterval(refresh);
+  }, [data]);
+
+  useEffect(() => {
+    const normalized = query.trim();
+    if (!data || normalized.length < 2) {
+      setServerResults([]);
+      return;
+    }
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      void fetch(`/api/admin/search?q=${encodeURIComponent(normalized)}`, {
+        signal: controller.signal,
+      })
+        .then(async (response) => (response.ok ? response.json() : { results: [] }))
+        .then((payload: { results?: { id: string; label: string; view: string }[] }) => {
+          setServerResults(
+            (payload.results ?? []).filter(
+              (item): item is { id: string; label: string; view: View } =>
+                isDashboardView(item.view),
+            ),
+          );
+        })
+        .catch(() => undefined);
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [data, query]);
+
+  const selectView = (nextView: View) => {
+    setView(nextView);
+    const url = new URL(window.location.href);
+    if (nextView === "dashboard") url.searchParams.delete("view");
+    else url.searchParams.set("view", nextView);
+    window.history.replaceState({}, "", url);
+  };
 
   const call = async (path: string, init?: RequestInit, accessToken = token) =>
     fetch(path, {
@@ -201,7 +153,6 @@ export function AdminDashboard() {
       const response = await call("/api/admin/operations", undefined, accessToken);
       const payload = (await response.json()) as BackOfficeSnapshot & { error?: string };
       if (!response.ok) {
-        setData(null);
         return setMessage(payload.error ?? "Accès impossible.");
       }
       setToken(accessToken);
@@ -209,6 +160,8 @@ export function AdminDashboard() {
       setMessage(
         `Données actualisées à ${new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit" }).format(new Date(payload.generatedAt))}.`,
       );
+    } catch {
+      setMessage("Connexion interrompue. Les dernières données restent affichées. Réessayez.");
     } finally {
       setBusy(false);
     }
@@ -238,7 +191,67 @@ export function AdminDashboard() {
         setSelectedReservationId(null);
       }
       setReservationMode("list");
-      await load(token);
+      if (payload.action === "update_housekeeping") {
+        setData((current) =>
+          current
+            ? {
+                ...current,
+                operations: {
+                  ...current.operations,
+                  housekeeping: current.operations.housekeeping.map((task) =>
+                    task.id === payload.taskId
+                      ? {
+                          ...task,
+                          status: String(payload.status),
+                          checklist: payload.checklist as typeof task.checklist,
+                        }
+                      : task,
+                  ),
+                },
+              }
+            : current,
+        );
+      } else if (payload.action === "update_maintenance") {
+        setData((current) =>
+          current
+            ? {
+                ...current,
+                operations: {
+                  ...current.operations,
+                  maintenance: current.operations.maintenance.map((incident) =>
+                    incident.id === payload.incidentId
+                      ? {
+                          ...incident,
+                          status: String(payload.status),
+                        }
+                      : incident,
+                  ),
+                },
+              }
+            : current,
+        );
+      } else if (payload.action === "update_notification") {
+        setData((current) =>
+          current
+            ? {
+                ...current,
+                operations: {
+                  ...current.operations,
+                  notifications: current.operations.notifications.map((notification) =>
+                    notification.id === payload.notificationId
+                      ? {
+                          ...notification,
+                          readAt: payload.read ? new Date().toISOString() : null,
+                        }
+                      : notification,
+                  ),
+                },
+              }
+            : current,
+        );
+      } else {
+        await load(token);
+      }
     } finally {
       setBusy(false);
     }
@@ -291,10 +304,18 @@ export function AdminDashboard() {
       ].some((value) => value.toLowerCase().includes(normalized)),
     );
   }, [data, query]);
+  const paginatedReservations = useMemo(() => {
+    const lastPage = Math.max(1, Math.ceil(filteredReservations.length / RESERVATIONS_PER_PAGE));
+    const safePage = Math.min(reservationPage, lastPage);
+    return filteredReservations.slice(
+      (safePage - 1) * RESERVATIONS_PER_PAGE,
+      safePage * RESERVATIONS_PER_PAGE,
+    );
+  }, [filteredReservations, reservationPage]);
   const globalResults = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!data || normalized.length < 2) return [];
-    return [
+    const localResults = [
       ...data.reservations
         .filter((item) =>
           [item.reference, item.guestName, item.guestEmail, item.propertyName].some((value) =>
@@ -328,7 +349,11 @@ export function AdminDashboard() {
           view: "documents" as View,
         })),
     ];
-  }, [data, query]);
+    const unique = new Map(
+      [...localResults, ...serverResults].map((item) => [`${item.view}-${item.id}`, item]),
+    );
+    return [...unique.values()].slice(0, 16);
+  }, [data, query, serverResults]);
   const selectedReservation =
     data?.reservations.find((item) => item.id === selectedReservationId) ?? null;
 
@@ -336,223 +361,31 @@ export function AdminDashboard() {
 
   return (
     <div className={`admin-workspace${dark ? " admin-workspace--dark" : ""}`}>
-      <div className="admin-workspace__bar">
-        <nav aria-label="Rubriques du Back Office">
-          {views.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-current={view === item.id ? "page" : undefined}
-              onClick={() => setView(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-        <div className="admin-global-search">
-          <input
-            aria-label="Recherche globale"
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Rechercher partout…"
-          />
-          {globalResults.length > 0 && (
-            <div>
-              {globalResults.map((result) => (
-                <button
-                  type="button"
-                  key={`${result.view}-${result.id}`}
-                  onClick={() => {
-                    setView(result.view);
-                    setSelectedReservationId(result.view === "reservations" ? result.id : null);
-                  }}
-                >
-                  {result.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-        <button
-          type="button"
-          className="admin-theme"
-          aria-label={dark ? "Activer le mode clair" : "Activer le mode sombre"}
-          onClick={() => {
-            const next = !dark;
-            setDark(next);
-            window.localStorage.setItem("beaux-rivages-admin-theme", next ? "dark" : "light");
-          }}
-        >
-          {dark ? "☀ Clair" : "☾ Sombre"}
-        </button>
-        <button type="button" className="admin-theme" onClick={() => void signOut()}>
-          Se déconnecter
-        </button>
-        <button type="button" className="admin-refresh" disabled={busy} onClick={() => void load()}>
-          {busy ? "Actualisation…" : "Actualiser"}
-        </button>
-      </div>
+      <DashboardHeader
+        view={view}
+        onView={selectView}
+        query={query}
+        onQuery={setQuery}
+        results={globalResults}
+        onResult={(result) => {
+          selectView(result.view);
+          setSelectedReservationId(result.view === "reservations" ? result.id : null);
+        }}
+        dark={dark}
+        onTheme={() => {
+          const next = !dark;
+          setDark(next);
+          window.localStorage.setItem("beaux-rivages-admin-theme", next ? "dark" : "light");
+        }}
+        onSignOut={() => void signOut()}
+        busy={busy}
+        onRefresh={() => void load()}
+      />
       <p className="admin-live-status" role="status">
         {message}
       </p>
 
-      {view === "dashboard" && (
-        <section className="admin-panel">
-          <div className="admin-panel__heading">
-            <div>
-              <p className="eyebrow">{shortDate(data.today)}</p>
-              <h2>La journée en un regard</h2>
-            </div>
-            <p>Les priorités opérationnelles, mises à jour depuis Supabase.</p>
-          </div>
-          <div className="admin-kpis">
-            <article>
-              <span>Réservations</span>
-              <strong>{data.reservations.length}</strong>
-              <small>tous canaux</small>
-            </article>
-            <article>
-              <span>CA du mois</span>
-              <strong>{money(data.metrics.revenueMonthCents)}</strong>
-            </article>
-            <article>
-              <span>CA annuel</span>
-              <strong>{money(data.metrics.revenueYearCents)}</strong>
-            </article>
-            <article>
-              <span>Panier moyen</span>
-              <strong>
-                {money(
-                  data.reservations.length
-                    ? Math.round(
-                        data.reservations.reduce((sum, item) => sum + item.totalCents, 0) /
-                          data.reservations.length,
-                      )
-                    : 0,
-                )}
-              </strong>
-            </article>
-            <article>
-              <span>Part directe</span>
-              <strong>{data.metrics.directShare} %</strong>
-            </article>
-            <article>
-              <span>Séjour moyen</span>
-              <strong>{data.metrics.averageStayNights}</strong>
-              <small>nuits</small>
-            </article>
-            <article>
-              <span>Arrivées</span>
-              <strong>{data.operational.arrivals.length}</strong>
-              <small>aujourd’hui</small>
-            </article>
-            <article>
-              <span>Départs</span>
-              <strong>{data.operational.departures.length}</strong>
-              <small>aujourd’hui</small>
-            </article>
-            <article>
-              <span>Sur place</span>
-              <strong>{data.operational.inHouse.length}</strong>
-              <small>séjour en cours</small>
-            </article>
-            <article className={data.operational.requests.length ? "needs-attention" : ""}>
-              <span>Demandes</span>
-              <strong>{data.operational.requests.length}</strong>
-              <small>à traiter</small>
-            </article>
-            <article className={data.operational.pendingPayments.length ? "needs-attention" : ""}>
-              <span>Paiements</span>
-              <strong>{data.operational.pendingPayments.length}</strong>
-              <small>{money(data.metrics.pendingPaymentsCents)} à suivre</small>
-            </article>
-            <article className={data.operational.unsignedContracts.length ? "needs-attention" : ""}>
-              <span>Contrats</span>
-              <strong>{data.operational.unsignedContracts.length}</strong>
-              <small>non signés</small>
-            </article>
-            <article
-              className={
-                data.operations.maintenance.some(
-                  (item) => !["resolved", "closed"].includes(item.status),
-                )
-                  ? "needs-attention"
-                  : ""
-              }
-            >
-              <span>Maintenance</span>
-              <strong>
-                {
-                  data.operations.maintenance.filter(
-                    (item) => !["resolved", "closed"].includes(item.status),
-                  ).length
-                }
-              </strong>
-              <small>incident(s) ouvert(s)</small>
-            </article>
-            <article>
-              <span>Notifications</span>
-              <strong>{data.operations.notifications.filter((item) => !item.readAt).length}</strong>
-              <small>non lue(s)</small>
-            </article>
-          </div>
-          <div className="admin-two-columns">
-            <article className="admin-card">
-              <h3>Arrivées aujourd’hui</h3>
-              <ReservationList
-                rows={data.operational.arrivals}
-                empty="Aucune arrivée aujourd’hui."
-              />
-            </article>
-            <article className="admin-card">
-              <h3>Départs aujourd’hui</h3>
-              <ReservationList
-                rows={data.operational.departures}
-                empty="Aucun départ aujourd’hui."
-              />
-            </article>
-            <article className="admin-card">
-              <h3>Voyageurs actuellement présents</h3>
-              <ReservationList
-                rows={data.operational.inHouse}
-                empty="Aucun séjour direct en cours."
-              />
-            </article>
-            <article className="admin-card">
-              <h3>Demandes à traiter</h3>
-              <ReservationList
-                rows={data.operational.requests}
-                empty="Toutes les demandes sont traitées."
-              />
-            </article>
-            <article className="admin-card">
-              <h3>Les 7 prochains jours</h3>
-              <ReservationList
-                rows={data.operational.upcoming7Days}
-                empty="Aucune arrivée prévue."
-              />
-            </article>
-            <article className="admin-card">
-              <h3>Préparations des maisons</h3>
-              {data.operations.housekeeping.slice(0, 6).map((task) => (
-                <div className="admin-health-row" key={task.id}>
-                  <div>
-                    <strong>{task.propertyName}</strong>
-                    <span>
-                      {dateTime(task.scheduledFor)} ·{" "}
-                      {task.checklist.filter((item) => item.done).length}/{task.checklist.length}{" "}
-                      contrôles
-                    </span>
-                  </div>
-                  <Status value={task.status} />
-                </div>
-              ))}
-            </article>
-          </div>
-        </section>
-      )}
-
+      {view === "dashboard" && <TodayOverview data={data} />}
       {view === "reservations" && (
         <section className="admin-panel">
           <div className="admin-panel__heading">
@@ -595,7 +428,10 @@ export function AdminDashboard() {
                   id="reservation-search"
                   type="search"
                   value={query}
-                  onChange={(event) => setQuery(event.target.value)}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                    setReservationPage(1);
+                  }}
                   placeholder="Ex. Dupont ou BR-2026…"
                 />
               </div>
@@ -629,7 +465,7 @@ export function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredReservations.map((reservation) => (
+                    {paginatedReservations.map((reservation) => (
                       <tr key={reservation.id}>
                         <td>
                           <strong>{reservation.guestName}</strong>
@@ -672,6 +508,12 @@ export function AdminDashboard() {
                   </tbody>
                 </table>
               </div>
+              <Pagination
+                page={reservationPage}
+                pageSize={RESERVATIONS_PER_PAGE}
+                total={filteredReservations.length}
+                onPage={setReservationPage}
+              />
               {selectedReservation && (
                 <ReservationDetail
                   reservation={selectedReservation}
@@ -1037,463 +879,6 @@ export function AdminDashboard() {
           </div>
         </section>
       )}
-    </div>
-  );
-}
-
-function ManualReservationForm({
-  properties,
-  busy,
-  onCancel,
-  onSubmit,
-}: {
-  properties: BackOfficeSnapshot["properties"];
-  busy: boolean;
-  onCancel: () => void;
-  onSubmit: (payload: Record<string, unknown>) => Promise<void>;
-}) {
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const values = new FormData(event.currentTarget);
-    void onSubmit({
-      action: "create_reservation",
-      propertySlug: values.get("propertySlug"),
-      arrival: values.get("arrival"),
-      departure: values.get("departure"),
-      adults: Number(values.get("adults")),
-      children: Number(values.get("children")),
-      babies: Number(values.get("babies")),
-      pets: Number(values.get("pets")),
-      totalCents: Math.round(Number(values.get("total")) * 100),
-      channel: values.get("channel"),
-      status: values.get("status"),
-      guest: {
-        firstName: values.get("firstName"),
-        lastName: values.get("lastName"),
-        email: values.get("email"),
-        phone: values.get("phone") || undefined,
-        countryCode: "FR",
-      },
-    });
-  };
-  return (
-    <form className="admin-editor" onSubmit={submit}>
-      <div className="admin-editor__heading">
-        <h3>Ajouter une réservation manuelle</h3>
-        <p>La disponibilité sera vérifiée avant l’enregistrement.</p>
-      </div>
-      <div className="admin-form-grid">
-        <label>
-          Logement
-          <select name="propertySlug" required>
-            {properties.map((property) => (
-              <option value={property.slug} key={property.id}>
-                {property.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Arrivée
-          <input name="arrival" type="date" required />
-        </label>
-        <label>
-          Départ
-          <input name="departure" type="date" required />
-        </label>
-        <label>
-          Prénom
-          <input name="firstName" required maxLength={100} />
-        </label>
-        <label>
-          Nom
-          <input name="lastName" required maxLength={100} />
-        </label>
-        <label>
-          E-mail
-          <input name="email" type="email" required />
-        </label>
-        <label>
-          Téléphone
-          <input name="phone" type="tel" />
-        </label>
-        <label>
-          Adultes
-          <input name="adults" type="number" min="1" max="30" defaultValue="2" required />
-        </label>
-        <label>
-          Enfants
-          <input name="children" type="number" min="0" max="30" defaultValue="0" required />
-        </label>
-        <label>
-          Bébés
-          <input name="babies" type="number" min="0" max="10" defaultValue="0" required />
-        </label>
-        <label>
-          Animaux
-          <input name="pets" type="number" min="0" max="10" defaultValue="0" required />
-        </label>
-        <label>
-          Total TTC (€)
-          <input name="total" type="number" min="0" step="0.01" defaultValue="0" required />
-        </label>
-        <label>
-          Origine
-          <select name="channel">
-            <option value="manual">Manuelle</option>
-            <option value="direct">Directe</option>
-          </select>
-        </label>
-        <label>
-          Statut
-          <select name="status">
-            <option value="confirmed">Confirmée</option>
-            <option value="requested">Demande</option>
-          </select>
-        </label>
-      </div>
-      <div className="admin-editor__actions">
-        <button type="button" onClick={onCancel}>
-          Annuler
-        </button>
-        <button type="submit" disabled={busy}>
-          Enregistrer
-        </button>
-      </div>
-    </form>
-  );
-}
-
-function BlockDatesForm({
-  properties,
-  busy,
-  onCancel,
-  onSubmit,
-}: {
-  properties: BackOfficeSnapshot["properties"];
-  busy: boolean;
-  onCancel: () => void;
-  onSubmit: (payload: Record<string, unknown>) => Promise<void>;
-}) {
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const values = new FormData(event.currentTarget);
-    void onSubmit({
-      action: "block_dates",
-      propertySlug: values.get("propertySlug"),
-      arrival: values.get("arrival"),
-      departure: values.get("departure"),
-      note: values.get("note"),
-    });
-  };
-  return (
-    <form className="admin-editor" onSubmit={submit}>
-      <div className="admin-editor__heading">
-        <h3>Bloquer des dates</h3>
-        <p>Pour travaux, usage personnel ou indisponibilité ponctuelle.</p>
-      </div>
-      <div className="admin-form-grid">
-        <label>
-          Logement
-          <select name="propertySlug" required>
-            {properties.map((property) => (
-              <option value={property.slug} key={property.id}>
-                {property.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Début
-          <input name="arrival" type="date" required />
-        </label>
-        <label>
-          Fin
-          <input name="departure" type="date" required />
-        </label>
-        <label className="wide">
-          Motif
-          <input name="note" required minLength={2} maxLength={300} />
-        </label>
-      </div>
-      <div className="admin-editor__actions">
-        <button type="button" onClick={onCancel}>
-          Annuler
-        </button>
-        <button type="submit" disabled={busy}>
-          Bloquer les dates
-        </button>
-      </div>
-    </form>
-  );
-}
-
-function ReservationActions({
-  reservation,
-  busy,
-  onSubmit,
-}: {
-  reservation: BackOfficeReservation;
-  busy: boolean;
-  onSubmit: (payload: Record<string, unknown>) => Promise<void>;
-}) {
-  const [open, setOpen] = useState(false);
-  if (!open)
-    return (
-      <button type="button" className="admin-link-button" onClick={() => setOpen(true)}>
-        Modifier
-      </button>
-    );
-  return (
-    <div className="admin-row-actions">
-      <select
-        aria-label={`Statut de ${reservation.reference}`}
-        defaultValue={reservation.status}
-        onChange={(event) => {
-          void onSubmit({
-            action: "update_reservation",
-            reservationId: reservation.id,
-            status: event.target.value,
-          });
-          setOpen(false);
-        }}
-        disabled={busy}
-      >
-        {["requested", "pending_payment", "confirmed", "completed", "cancelled", "declined"].map(
-          (status) => (
-            <option value={status} key={status}>
-              {statusLabels[status]}
-            </option>
-          ),
-        )}
-      </select>
-      <button type="button" onClick={() => setOpen(false)}>
-        Fermer
-      </button>
-    </div>
-  );
-}
-
-function ReservationDetail({
-  reservation,
-  payments,
-  deposits,
-  onClose,
-}: {
-  reservation: BackOfficeReservation;
-  payments: BackOfficeSnapshot["pilotage"]["recentPayments"];
-  deposits: BackOfficeSnapshot["operations"]["deposits"];
-  onClose: () => void;
-}) {
-  const paid = payments
-    .filter((item) => ["paid", "authorized", "partially_refunded"].includes(item.status))
-    .reduce((sum, item) => sum + item.amountCents - item.refundedCents, 0);
-  return (
-    <aside className="admin-reservation-detail" aria-labelledby="reservation-detail-title">
-      <div className="admin-panel__heading">
-        <div>
-          <p className="eyebrow">{reservation.reference}</p>
-          <h2 id="reservation-detail-title">{reservation.guestName}</h2>
-        </div>
-        <button type="button" onClick={onClose}>
-          Fermer
-        </button>
-      </div>
-      <div className="admin-detail-grid">
-        <article>
-          <h3>Séjour</h3>
-          <dl>
-            <div>
-              <dt>Maison</dt>
-              <dd>{reservation.propertyName}</dd>
-            </div>
-            <div>
-              <dt>Plateforme</dt>
-              <dd>{reservation.channel}</dd>
-            </div>
-            <div>
-              <dt>Arrivée</dt>
-              <dd>{shortDate(reservation.arrival)}</dd>
-            </div>
-            <div>
-              <dt>Départ</dt>
-              <dd>{shortDate(reservation.departure)}</dd>
-            </div>
-            <div>
-              <dt>Durée</dt>
-              <dd>{nights(reservation)} nuits</dd>
-            </div>
-            <div>
-              <dt>Voyageurs</dt>
-              <dd>
-                {reservation.adults} adulte(s), {reservation.children} enfant(s),{" "}
-                {reservation.babies} bébé(s), {reservation.pets} animal(aux)
-              </dd>
-            </div>
-          </dl>
-        </article>
-        <article>
-          <h3>Coordonnées</h3>
-          <a href={`mailto:${reservation.guestEmail}`}>
-            {reservation.guestEmail || "E-mail non renseigné"}
-          </a>
-          <a href={`tel:${reservation.guestPhone}`}>
-            {reservation.guestPhone || "Téléphone non renseigné"}
-          </a>
-        </article>
-        <article>
-          <h3>Finances</h3>
-          <dl>
-            <div>
-              <dt>Prix du séjour</dt>
-              <dd>{money(reservation.totalCents)}</dd>
-            </div>
-            <div>
-              <dt>Taxe de séjour</dt>
-              <dd>{money(reservation.touristTaxCents)}</dd>
-              <dt>Personnes assujetties</dt>
-              <dd>{reservation.touristTaxDetails.liableGuests}</dd>
-              <dt>Personnes exonérées</dt>
-              <dd>{reservation.touristTaxDetails.exemptGuests}</dd>
-              <dt>Méthode de calcul</dt>
-              <dd>{reservation.touristTaxDetails.method}</dd>
-            </div>
-            <div>
-              <dt>Acompte prévu</dt>
-              <dd>{money(reservation.depositDueCents)}</dd>
-            </div>
-            <div>
-              <dt>Échéance du solde</dt>
-              <dd>
-                {reservation.fullPaymentRequired
-                  ? "Paiement intégral immédiat"
-                  : shortDate(reservation.balanceDueDate)}
-              </dd>
-            </div>
-            <div>
-              <dt>Paiements reçus</dt>
-              <dd>{money(paid)}</dd>
-            </div>
-            <div>
-              <dt>Restant</dt>
-              <dd>{money(Math.max(0, reservation.totalCents - paid))}</dd>
-            </div>
-            <div>
-              <dt>Statut du règlement</dt>
-              <dd>
-                {paid >= reservation.totalCents
-                  ? "Réglé"
-                  : paid < reservation.depositDueCents
-                    ? "Acompte non reçu"
-                    : reservation.balanceDueDate &&
-                        reservation.balanceDueDate < new Date().toISOString().slice(0, 10)
-                      ? "Solde en retard"
-                      : "Solde à venir"}
-              </dd>
-            </div>
-            <div>
-              <dt>Caution</dt>
-              <dd>
-                {deposits.length
-                  ? deposits.map((item) => `${money(item.amountCents)} · ${item.status}`).join(", ")
-                  : "Non enregistrée"}
-              </dd>
-            </div>
-          </dl>
-        </article>
-        <article>
-          <h3>Options réservées</h3>
-          <dl>
-            <div>
-              <dt>Accueil gourmand</dt>
-              <dd>{describeWelcomeBaskets(reservation.options).included}</dd>
-            </div>
-            <div>
-              <dt>Panier supplémentaire</dt>
-              <dd>{describeWelcomeBaskets(reservation.options).extra}</dd>
-            </div>
-          </dl>
-          {reservation.options.length ? (
-            <ul>
-              {reservation.options.map((item) => (
-                <li key={item.code}>
-                  {item.label} × {item.quantity} · {money(item.totalCents)}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="admin-empty">Aucune option réservée.</p>
-          )}
-        </article>
-        <article>
-          <h3>Acceptations juridiques</h3>
-          <dl>
-            <div>
-              <dt>CGV</dt>
-              <dd>Version {reservation.legalAcceptance.termsVersion}</dd>
-            </div>
-            <div>
-              <dt>Acceptées le</dt>
-              <dd>
-                {reservation.legalAcceptance.termsAcceptedAt
-                  ? dateTime(reservation.legalAcceptance.termsAcceptedAt)
-                  : "Non renseigné"}
-              </dd>
-            </div>
-            <div>
-              <dt>Annulation</dt>
-              <dd>Version {reservation.legalAcceptance.cancellationVersion}</dd>
-            </div>
-            <div>
-              <dt>Prise en compte le</dt>
-              <dd>
-                {reservation.legalAcceptance.cancellationAcceptedAt
-                  ? dateTime(reservation.legalAcceptance.cancellationAcceptedAt)
-                  : "Non renseigné"}
-              </dd>
-            </div>
-            <div>
-              <dt>Règlement choisi</dt>
-              <dd>
-                {reservation.legalAcceptance.paymentMethod === "bank_transfer"
-                  ? "Virement bancaire"
-                  : reservation.legalAcceptance.paymentMethod === "holiday_voucher"
-                    ? "Chèques‑Vacances"
-                    : reservation.legalAcceptance.paymentMethod}
-              </dd>
-            </div>
-          </dl>
-        </article>
-      </div>
-    </aside>
-  );
-}
-
-function DocumentList({
-  rows,
-}: {
-  rows: {
-    id: string;
-    number: string;
-    status: string;
-    reservationReference: string;
-    updatedAt: string;
-  }[];
-}) {
-  if (!rows.length) return <p className="admin-empty">Aucun document généré.</p>;
-  return (
-    <div className="admin-list">
-      {rows.map((row) => (
-        <div className="admin-document-row" key={row.id}>
-          <div>
-            <strong>{row.number}</strong>
-            <span>
-              {row.reservationReference} · {dateTime(row.updatedAt)}
-            </span>
-          </div>
-          <Status value={row.status} />
-        </div>
-      ))}
     </div>
   );
 }

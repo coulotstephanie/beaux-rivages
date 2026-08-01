@@ -675,7 +675,10 @@ test("welcome basket choice stays exclusive, priced and visible throughout the d
   assert.match(baskets, /L’Atelier de la Biscuiterie de Ré/);
 
   assert.match(read("app/api/reservation/route.ts"), /Un seul panier d’accueil/);
-  assert.match(read("components/AdminDashboard.tsx"), /Accueil gourmand/);
+  assert.match(
+    `${read("components/AdminDashboard.tsx")}\n${read("components/admin/dashboard/ReservationList.tsx")}\n${read("components/admin/dashboard/ReservationWorkspaceParts.tsx")}`,
+    /Accueil gourmand/,
+  );
   assert.match(read("platform/email/reservation-request.ts"), /Accueil gourmand/);
   assert.match(read("platform/contracts/html.ts"), /Accueil gourmand/);
   assert.match(read("supabase/migrations/20260801113000_welcome_baskets.sql"), /4500/);

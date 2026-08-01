@@ -48,6 +48,10 @@ function countBy(rows: Row[], key: string) {
   }, {});
 }
 
+function daysInYear(year: number) {
+  return new Date(Date.UTC(year, 1, 29)).getUTCDate() === 29 ? 366 : 365;
+}
+
 export class SupabaseBackOfficeRepository {
   private client = getDatabaseClient();
 
@@ -110,6 +114,7 @@ export class SupabaseBackOfficeRepository {
       this.client
         .from("occupancy_blocks")
         .select("property_id,source,stay_range,created_at")
+        .overlaps("stay_range", `[${yearStart},${yearEnd})`)
         .limit(10000),
       this.client
         .from("calendar_sources")
@@ -199,6 +204,13 @@ export class SupabaseBackOfficeRepository {
     const guestById = new Map(guestRows.map((row) => [String(row.id), row]));
     const links = (linksResult.data ?? []) as Row[];
     const optionRows = (optionsResult.data ?? []) as Row[];
+    const optionsByReservation = new Map<string, Row[]>();
+    for (const option of optionRows) {
+      const reservationId = String(option.reservation_id);
+      const current = optionsByReservation.get(reservationId) ?? [];
+      current.push(option);
+      optionsByReservation.set(reservationId, current);
+    }
     const primaryGuestByReservation = new Map(
       links
         .filter((row) => row.is_primary)
@@ -265,14 +277,12 @@ export class SupabaseBackOfficeRepository {
               : null,
             paymentMethod: String(quote.paymentMethod ?? "Non renseigné"),
           },
-          options: optionRows
-            .filter((option) => String(option.reservation_id) === String(row.id))
-            .map((option) => ({
-              code: String(option.option_code),
-              label: String(option.label),
-              quantity: Number(option.quantity),
-              totalCents: Number(option.total_cents),
-            })),
+          options: (optionsByReservation.get(String(row.id)) ?? []).map((option) => ({
+            code: String(option.option_code),
+            label: String(option.label),
+            quantity: Number(option.quantity),
+            totalCents: Number(option.total_cents),
+          })),
           guestId,
           guestName: guest ? `${guest.first_name} ${guest.last_name}` : "Voyageur non renseigné",
           guestEmail: String(guest?.email ?? ""),
@@ -314,12 +324,18 @@ export class SupabaseBackOfficeRepository {
     const sevenDaysEnd = sevenDays.toISOString().slice(0, 10);
     const currentMonthEnd = new Date(`${month}-01T12:00:00Z`);
     currentMonthEnd.setUTCMonth(currentMonthEnd.getUTCMonth() + 1);
+    const reservationsByGuest = new Map<string, BackOfficeReservation[]>();
+    for (const link of links) {
+      const reservation = reservationById.get(String(link.reservation_id));
+      if (!reservation) continue;
+      const guestId = String(link.guest_id);
+      const current = reservationsByGuest.get(guestId) ?? [];
+      current.push(reservation);
+      reservationsByGuest.set(guestId, current);
+    }
     const guestSummaries = guestRows
       .map((guest) => {
-        const guestReservations = links
-          .filter((link) => String(link.guest_id) === String(guest.id))
-          .map((link) => reservationById.get(String(link.reservation_id)))
-          .filter((item): item is BackOfficeReservation => Boolean(item));
+        const guestReservations = reservationsByGuest.get(String(guest.id)) ?? [];
         return {
           id: String(guest.id),
           name: `${guest.first_name} ${guest.last_name}`,
@@ -372,7 +388,7 @@ export class SupabaseBackOfficeRepository {
         slug: String(property.slug),
         name: String(property.name),
         status: String(property.status),
-        occupancyRate: Math.round((occupiedNights / 365) * 10_000) / 100,
+        occupancyRate: Math.round((occupiedNights / daysInYear(year)) * 10_000) / 100,
         occupiedNights,
         directNights,
         platformNights,

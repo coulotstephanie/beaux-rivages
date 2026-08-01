@@ -3171,6 +3171,10 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .stock-grid input { width:100%; min-height:42px; padding:.5rem; }
 .admin-workspace__bar { padding: .8rem; display: flex; gap: 1rem; justify-content: space-between; align-items: center; background: #163832; }
 .admin-workspace__bar nav { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: thin; }
+.admin-nav-group { display: flex; gap: .25rem; align-items: center; flex: 0 0 auto; }
+.admin-nav-group__label { padding: 0 .35rem; color: #aebfba; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+.admin-pagination { display: flex; justify-content: center; align-items: center; gap: 1rem; padding: 1rem; }
+.admin-pagination button { min-height: 40px; padding: .5rem .9rem; }
 .admin-workspace__bar nav button { min-height: 44px; padding: .6rem .85rem; flex: 0 0 auto; border: 0; border-radius: 2px; color: #dfe9e5; background: transparent; cursor: pointer; }
 .admin-workspace__bar nav button:hover,.admin-workspace__bar nav button[aria-current="page"] { color: #163832; background: #e7d8b5; }
 .admin-refresh { flex: 0 0 auto; border-color: #d6c18f; color: #163832; background: #d6c18f; }

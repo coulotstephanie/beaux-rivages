@@ -4,6 +4,8 @@ import { authorizeStaff, authorizeStaffToken, staffAccessCookie } from "@/platfo
 import { getStaffAuthClient, isStaffAuthConfigured } from "@/platform/auth/provider";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 
+const staffRefreshCookie = "br-staff-refresh";
+
 const signInSchema = z
   .object({
     email: z.string().trim().email().max(254),
@@ -21,6 +23,33 @@ const cookieOptions = {
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 20);
   if (limited) return limited;
+  const refreshToken = request.cookies.get(staffRefreshCookie)?.value;
+  if (refreshToken && isStaffAuthConfigured()) {
+    const { data } = await getStaffAuthClient().auth.refreshSession({
+      refresh_token: refreshToken,
+    });
+    if (data.session) {
+      const refreshedIdentity = await authorizeStaffToken(data.session.access_token);
+      if (refreshedIdentity) {
+        const refreshedResponse = noStoreJson({
+          authenticated: true,
+          email: refreshedIdentity.email,
+          role: refreshedIdentity.role,
+          authentication: refreshedIdentity.authentication,
+          refreshed: true,
+        });
+        refreshedResponse.cookies.set(staffAccessCookie, data.session.access_token, {
+          ...cookieOptions,
+          maxAge: data.session.expires_in,
+        });
+        refreshedResponse.cookies.set(staffRefreshCookie, data.session.refresh_token, {
+          ...cookieOptions,
+          maxAge: 60 * 60 * 24 * 30,
+        });
+        return refreshedResponse;
+      }
+    }
+  }
   const identity = await authorizeStaff(request);
   if (!identity) {
     return noStoreJson({ authenticated: false }, { status: 401 });
@@ -68,6 +97,10 @@ export async function POST(request: NextRequest) {
     ...cookieOptions,
     maxAge: data.session.expires_in,
   });
+  response.cookies.set(staffRefreshCookie, data.session.refresh_token, {
+    ...cookieOptions,
+    maxAge: 60 * 60 * 24 * 30,
+  });
   return response;
 }
 
@@ -77,6 +110,10 @@ export async function DELETE(request: NextRequest) {
   }
   const response = noStoreJson({ authenticated: false });
   response.cookies.set(staffAccessCookie, "", {
+    ...cookieOptions,
+    maxAge: 0,
+  });
+  response.cookies.set(staffRefreshCookie, "", {
     ...cookieOptions,
     maxAge: 0,
   });

@@ -62,10 +62,44 @@ test("le calendrier du Back Office affiche les périodes iCal des trois maisons"
 
 test("les réservations annulées disparaissent des listes actives", () => {
   const dashboard = readFileSync("components/AdminDashboard.tsx", "utf8");
+  const reservationList = readFileSync("components/admin/dashboard/ReservationList.tsx", "utf8");
   const repository = readFileSync("platform/database/back-office.ts", "utf8");
   assert.match(dashboard, /!\["cancelled", "declined"\]\.includes\(reservation\.status\)/);
+  assert.match(reservationList, /describeWelcomeBaskets/);
   assert.match(repository, /from\("occupancy_blocks"\)/);
   assert.match(repository, /\.eq\("reservation_id", input\.reservationId\)/);
+});
+
+test("le Dashboard est découpé, différé et conserve sa vue dans l’URL", () => {
+  const dashboard = readFileSync("components/AdminDashboard.tsx", "utf8");
+  const navigation = readFileSync("components/admin/dashboard/navigation.ts", "utf8");
+  assert.match(dashboard, /dynamic\(\(\) => import/);
+  assert.match(dashboard, /searchParams\.set\("view"/);
+  for (const category of [
+    "Journée",
+    "Réservations",
+    "Voyageurs",
+    "Exploitation",
+    "Contenu",
+    "Finance",
+    "Paramètres",
+  ]) {
+    assert.match(navigation, new RegExp(category));
+  }
+});
+
+test("le snapshot limite les blocages à l’année utile et gère les années bissextiles", () => {
+  const repository = readFileSync("platform/database/back-office.ts", "utf8");
+  assert.match(repository, /\.overlaps\("stay_range"/);
+  assert.match(repository, /function daysInYear/);
+  assert.match(repository, /daysInYear\(year\)/);
+});
+
+test("la session longue utilise un jeton de renouvellement protégé", () => {
+  const auth = readFileSync("app/api/auth/staff/route.ts", "utf8");
+  assert.match(auth, /br-staff-refresh/);
+  assert.match(auth, /refreshSession/);
+  assert.match(auth, /httpOnly: true/);
 });
 
 test("les réservations refusées disparaissent également du calendrier", () => {
