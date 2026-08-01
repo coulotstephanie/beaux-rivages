@@ -152,6 +152,14 @@ export default async function ExperienceDetailPage({
                 },
               ]
             : []),
+          ...(experience.slug === "atelier-macarons"
+            ? [
+                {
+                  label: "Réservation",
+                  value: "Directement chez Confetti à Rivedoux-Plage, selon leurs disponibilités",
+                },
+              ]
+            : []),
         ]}
         faq={[
           {

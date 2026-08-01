@@ -126,9 +126,9 @@ export const experiences: Experience[] = [
   },
   {
     slug: "atelier-macarons",
-    title: "Atelier macarons",
+    title: "Atelier macarons et pâtisserie",
     eyebrow: "Testé par Stéphanie & Bruno",
-    text: "Mettre la main à la pâte, comprendre le geste et repartir avec ses créations : un atelier que nous avons aimé vivre en famille.",
+    text: "Mettre la main à la pâte, comprendre le geste et repartir avec ses créations : un atelier macarons et pâtisserie que nous avons aimé vivre en famille, réservable directement chez Confetti à Rivedoux-Plage.",
     image: "/images/destination/experiences/atelier-macarons.jpg",
     imageAlt: "Macarons colorés manipulés pendant un atelier gourmand",
     duration: "Une demi-journée",
