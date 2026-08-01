@@ -18,6 +18,10 @@ export type HospitalityService = {
   sections: { title: string; items: string[] }[];
   gallery: { src: string; alt: string }[];
   action: "included" | "booking" | "quote";
+  practical?: { label: string; value: string }[];
+  faq?: { question: string; answer: string }[];
+  linenIncluded?: boolean;
+  sources?: { label: string; href: string }[];
 };
 
 export const hospitalityServices: HospitalityService[] = [
@@ -47,6 +51,27 @@ export const hospitalityServices: HospitalityService[] = [
           "Équipement bébé selon le logement",
         ],
       },
+      {
+        title: "Le linge, à votre choix",
+        items: [
+          "Afin de répondre aux attentes de tous nos voyageurs, le linge de maison est proposé en option. Certains voyageurs préfèrent utiliser leur propre linge, notamment depuis l’évolution des habitudes liées au Covid. Cette formule permet à chacun de choisir la solution qui lui convient tout en conservant un tarif de séjour plus avantageux.",
+        ],
+      },
+    ],
+    practical: [
+      { label: "Disponibilité", value: "Toute l’année · les trois maisons" },
+      { label: "Tarif", value: "Inclus dans le prix du séjour" },
+      { label: "Linge", value: "Optionnel, à sélectionner lors de la réservation" },
+    ],
+    faq: [
+      {
+        question: "Le linge est-il obligatoire ?",
+        answer: "Non. Vous pouvez choisir le forfait linge ou apporter le vôtre.",
+      },
+      {
+        question: "Les maisons sont-elles entièrement équipées ?",
+        answer: "Oui. Les équipements propres à chaque maison sont détaillés sur sa fiche.",
+      },
     ],
     gallery: [
       {
@@ -73,11 +98,35 @@ export const hospitalityServices: HospitalityService[] = [
     sections: [
       {
         title: "Dans les maisons",
-        items: ["Lit parapluie", "Chaise haute", "Baignoire pliante", "Transat", "Livres", "Jeux"],
+        items: [
+          "Lit parapluie",
+          "Chaise haute",
+          "Baignoire pliante",
+          "Transat",
+          "Tapis d’éveil",
+          "Vaisselle bébé",
+          "Jeux adaptés",
+        ],
       },
       {
         title: "Selon le logement",
         items: ["Poussette au Chai des Tortues", "Tente anti-UV au Nid d’Été"],
+      },
+    ],
+    practical: [
+      { label: "Tarif", value: "Offert, sur demande préalable" },
+      { label: "Poussette", value: "Le Chai des Tortues uniquement" },
+      { label: "Tente anti-UV", value: "Le Nid d’Été uniquement" },
+    ],
+    faq: [
+      {
+        question: "Faut-il réserver les équipements ?",
+        answer: "Oui. Indiquez vos besoins avant l’arrivée afin que nous préparions la maison.",
+      },
+      {
+        question: "Le matériel est-il disponible dans toutes les maisons ?",
+        answer:
+          "Le socle commun l’est sur demande ; la poussette et la tente anti-UV dépendent du logement indiqué.",
       },
     ],
     gallery: [
@@ -107,12 +156,27 @@ export const hospitalityServices: HospitalityService[] = [
         title: "L’accueil",
         items: [
           "Gamelles",
-          "Guide des balades de Stéphanie & Bruno",
-          "Plages autorisées",
-          "Forêts",
-          "Balades matinales",
-          "Restaurants dog friendly",
-          "Points d’eau et espaces ombragés",
+          "Villa Raie Manta : cour totalement close",
+          "Le Nid d’Été : jardin totalement clos",
+          "Suggestion de balade matinale",
+          "Suggestion de balade en soirée",
+        ],
+      },
+      {
+        title: "Accès aux plages · informations officielles",
+        items: [
+          "Rivedoux-Plage : plage du Défend et plage Nord, hors promenade Théodore Porsain, tolérées de 20 h à 10 h avec chien tenu en laisse ; restrictions renforcées du 1er juin au 30 septembre.",
+          "Saint-Georges-d’Oléron : les animaux ne sont pas acceptés sur la plage des Sables Vignier ; l’arrêté municipal affiché à l’entrée de chaque plage reste la référence.",
+          "Les règles pouvant évoluer, vérifier systématiquement l’affichage municipal avant l’accès à la plage.",
+        ],
+      },
+      {
+        title: "Forêts, eau et ombre",
+        items: [
+          "Île de Ré : boisements et sentiers de Rivedoux, puis massifs du Lizay et de Trousse-Chemise selon les conditions d’accès officielles.",
+          "Île d’Oléron : forêts domaniales des Saumonards, de Domino et de Saint-Trojan ; chiens sous contrôle et en laisse lorsque la réglementation l’impose.",
+          "Points d’eau : littoral et points d’eau potable publics signalés sur place ; prévoir toujours une gourde et une gamelle, l’eau naturelle n’étant pas garantie potable.",
+          "Zones ombragées : forêt des Saumonards, forêt de Domino et venelles arborées des villages ; privilégier matin et soirée en période chaude.",
         ],
       },
       {
@@ -123,6 +187,53 @@ export const hospitalityServices: HospitalityService[] = [
           "Chien en laisse dans La Maison Heureuse",
           "Ramasser les déjections",
         ],
+      },
+    ],
+    practical: [
+      { label: "Tarif", value: "25 € par animal et par séjour" },
+      {
+        label: "Île de Ré",
+        value: "Règlement détaillé : Office de tourisme Destination Île de Ré",
+      },
+      {
+        label: "Île d’Oléron",
+        value:
+          "Règlement affiché à l’entrée de chaque plage et informations de l’Office de tourisme",
+      },
+      {
+        label: "Forêt",
+        value:
+          "Du 15 avril au 30 juin, laisse obligatoire hors allées forestières ; respecter les restrictions temporaires.",
+      },
+    ],
+    faq: [
+      {
+        question: "Les extérieurs sont-ils clos ?",
+        answer: "La cour de Villa Raie Manta et le jardin du Nid d’Été sont totalement clos.",
+      },
+      {
+        question: "Puis-je aller sur toutes les plages ?",
+        answer:
+          "Non. Les autorisations varient selon la commune, la plage, la saison et l’horaire. L’affichage municipal en vigueur fait foi.",
+      },
+      {
+        question: "Dois-je apporter de l’eau ?",
+        answer:
+          "Oui. Emportez une gourde et une gamelle ; aucun point d’eau naturel ne doit être considéré comme potable.",
+      },
+    ],
+    sources: [
+      {
+        label: "Destination Île de Ré · Chiens sur les plages",
+        href: "https://www.iledere.com/sinformer/informations-locales-et-pratiques/chiens-sur-les-plages/",
+      },
+      {
+        label: "Office de tourisme Île d’Oléron · Plage des Sables Vignier",
+        href: "https://www.ile-oleron-marennes.com/preparer-mes-vacances/quoi-faire/activites-nautiques/plages/plage-des-sables-vignier",
+      },
+      {
+        label: "Office national des forêts · Forêt domaniale de l’Île d’Oléron",
+        href: "https://www.onf.fr/vivre-la-foret/foret-domaniale-pres-de-chez-moi/%2B/19c4%3A%3Aforet-domaniale-de-ile-oleron.html?lang=fr",
       },
     ],
     gallery: [
@@ -152,10 +263,10 @@ export const hospitalityServices: HospitalityService[] = [
         title: "Une maison prête à vivre",
         items: [
           "Lits faits",
-          "Jeux de linge de lit",
           "Linge de toilette complet",
           "Tapis de bain",
-          "Essuie-mains",
+          "Essuie-mains cuisine",
+          "Essuie-mains toilettes avec lave-mains",
         ],
       },
       {
@@ -173,11 +284,29 @@ export const hospitalityServices: HospitalityService[] = [
       {
         title: "Les attentions",
         items: [
-          "Carafe d’eau fraîche",
+          "Carafe d’eau fraîche au réfrigérateur",
+          "Le linge fourni est soigneusement lavé puis désinfecté entre chaque séjour afin de garantir une hygiène irréprochable et un confort digne des standards hôteliers.",
           "Attention personnalisée",
           "Arrivée anticipée ou départ tardif selon disponibilité",
           "Accès privilégié au Carnet Beaux Rivages",
         ],
+      },
+    ],
+    linenIncluded: true,
+    practical: [
+      { label: "Tarif", value: "145 € par séjour" },
+      { label: "Maisons", value: "Disponible dans les trois maisons" },
+      { label: "Préparation", value: "Installée avant votre arrivée" },
+    ],
+    faq: [
+      {
+        question: "Le linge est-il compris ?",
+        answer:
+          "Oui. Les lits sont faits et le linge inclus est préparé selon le protocole de soin Beaux Rivages.",
+      },
+      {
+        question: "Peut-on choisir le panier ?",
+        answer: "Oui, parmi les propositions disponibles au moment de votre séjour.",
       },
     ],
     gallery: [
@@ -190,8 +319,8 @@ export const hospitalityServices: HospitalityService[] = [
         alt: "Panier apéritif présenté sur l’îlot",
       },
       {
-        src: "/images/properties/chai-des-tortues/kitchen/table-familiale.jpeg",
-        alt: "Table familiale dressée",
+        src: "/images/properties/nid-d-ete/editorial/table-en-famille.png",
+        alt: "Table du Nid d’Été préparée pour un séjour Signature",
       },
     ],
   },
@@ -209,7 +338,11 @@ export const hospitalityServices: HospitalityService[] = [
     sections: [
       {
         title: "Ambiance romantique",
-        items: ["Bougies LED", "Pétales de roses", "Carte personnalisée"],
+        items: [
+          "Bougies LED",
+          "Pétales de roses disposés en forme de cœur sur le lit",
+          "Carte personnalisée",
+        ],
       },
       {
         title: "À savourer à deux",
@@ -222,13 +355,31 @@ export const hospitalityServices: HospitalityService[] = [
       {
         title: "Confort et liberté",
         items: [
+          "Linge complet",
           "Deux peignoirs",
           "Deux paires de chaussons",
           "Huile de massage",
           "Playlist romantique par QR Code",
           "Arrivée anticipée ou départ tardif selon disponibilité",
           "Attention personnalisée",
+          "Carafe d’eau fraîche au réfrigérateur",
         ],
+      },
+    ],
+    linenIncluded: true,
+    practical: [
+      { label: "Tarif", value: "149 € par séjour" },
+      { label: "Maisons", value: "Disponible dans les trois maisons" },
+      { label: "Préparation", value: "Discrètement installée avant votre arrivée" },
+    ],
+    faq: [
+      {
+        question: "Le linge complet est-il inclus ?",
+        answer: "Oui, avec les lits préparés pour votre arrivée.",
+      },
+      {
+        question: "Une alternative sans alcool est-elle possible ?",
+        answer: "Oui, une alternative premium peut remplacer la bouteille alcoolisée.",
       },
     ],
     gallery: [

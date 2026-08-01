@@ -1,15 +1,31 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { StructuredData } from "@/components/StructuredData";
 import type { HospitalityService } from "@/hospitalityServices";
 import { SITE_URL } from "@/seo";
 import { ExperienceRequestForm } from "./ExperienceRequestForm";
+import { ExperienceSections } from "./ExperienceSections";
 import { ServiceGallery } from "./ServiceGallery";
+import { hospitalityServices } from "@/hospitalityServices";
 
 export function HospitalityServicePage({ service }: { service: HospitalityService }) {
   const url = `${SITE_URL}/${service.slug}`;
+  const included = service.sections.flatMap(({ title, items }) =>
+    items.map((item) => `${title} · ${item}`),
+  );
+  const similar = hospitalityServices
+    .filter(({ slug }) => slug !== service.slug)
+    .map((item) => ({
+      title: item.title,
+      href: item.slug === "essentiel" ? "/essentiel" : `/${item.slug}`,
+      image: item.image,
+      imageAlt: item.imageAlt,
+    }));
+  const bookingHref =
+    service.action === "included"
+      ? "/reserver"
+      : `/reserver?${service.slug === "animaux" ? "option=pet" : service.slug === "experience-signature" ? "option=signature" : "experience=romance"}`;
   return (
     <main className="hospitality-service-page">
       <StructuredData
@@ -57,53 +73,44 @@ export function HospitalityServicePage({ service }: { service: HospitalityServic
           <p>{service.intro}</p>
         </div>
       </section>
-      <section className="hospitality-service-content shell">
-        {service.sections.map((section) => (
-          <article key={section.title}>
-            <p className="eyebrow">Beaux Rivages</p>
-            <h2>{section.title}</h2>
-            <ul>
-              {section.items.map((item) => (
-                <li key={item}>
-                  <span aria-hidden="true">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </section>
+      <ExperienceSections
+        presentation={service.intro}
+        included={included}
+        practical={
+          service.practical ?? [
+            { label: "Disponibilité", value: "Sur demande" },
+            { label: "Maisons", value: "Selon l’expérience choisie" },
+          ]
+        }
+        faq={
+          service.faq ?? [
+            {
+              question: "Comment réserver cette expérience ?",
+              answer:
+                "Ajoutez-la à votre demande de séjour ou contactez directement Stéphanie et Bruno.",
+            },
+          ]
+        }
+        bookingHref={bookingHref}
+        bookingLabel={
+          service.action === "included" ? "Choisir ma maison" : "Ajouter cette expérience"
+        }
+        linenIncluded={service.linenIncluded}
+        similar={similar}
+        sources={service.sources}
+      />
       <section className="service-gallery-section shell">
         <p className="eyebrow">L’atmosphère</p>
         <h2>Une expérience préparée avec justesse.</h2>
         <ServiceGallery gallery={service.gallery} />
       </section>
-      {service.action === "quote" ? (
+      {service.action === "quote" && (
         <section className="experience-request-section shell">
           <p className="eyebrow">Votre projet</p>
           <h2>Racontez-nous le moment que vous imaginez.</h2>
           <ExperienceRequestForm
             experience={service.slug as "demande-en-mariage" | "anniversaire"}
           />
-        </section>
-      ) : (
-        <section className="experience-detail-cta shell">
-          <p className="eyebrow">Personnaliser votre séjour</p>
-          <h2>
-            {service.action === "included"
-              ? "Cette attention fait déjà partie de l’hospitalité Beaux Rivages."
-              : "Ajoutez cette expérience à votre demande de réservation."}
-          </h2>
-          <Link
-            className="primary-button"
-            href={
-              service.action === "included"
-                ? "/reserver"
-                : `/reserver?${service.slug === "animaux" ? "option=pet" : service.slug === "experience-signature" ? "option=signature" : "experience=romance"}`
-            }
-          >
-            {service.action === "included" ? "Choisir ma maison" : "Ajouter cette expérience"}
-          </Link>
         </section>
       )}
       <Footer />

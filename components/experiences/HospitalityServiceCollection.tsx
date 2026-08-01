@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { HospitalityService } from "@/hospitalityServices";
 
 const serviceHref = (service: HospitalityService) =>
-  service.slug === "essentiel" ? "/experiences#essentiel" : `/${service.slug}`;
+  service.slug === "essentiel" ? "/essentiel" : `/${service.slug}`;
 
 export function HospitalityServiceCollection({ services }: { services: HospitalityService[] }) {
   const reducedMotion = useReducedMotion();

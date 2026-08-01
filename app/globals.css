@@ -1055,6 +1055,34 @@ body.menu-open { overflow: hidden; }
 .hospitality-service-content h2 { font:400 clamp(1.8rem,3vw,2.8rem) var(--font-serif); }
 .hospitality-service-content li { margin:.8rem 0; display:flex; gap:.75rem; line-height:1.55; }
 .hospitality-service-content li span { color:var(--gold-text); }
+.experience-unified-presentation,.experience-unified-included,.experience-linen,.experience-unified-practical,.experience-unified-faq,.experience-similar { padding:clamp(4rem,8vw,7rem) 0; }
+.experience-unified-presentation > p:last-child,.experience-linen > p:last-child { max-width:850px; font-size:clamp(1.05rem,1.8vw,1.3rem); line-height:1.8; color:var(--muted); }
+.experience-unified-presentation h2,.experience-unified-included h2,.experience-linen h2,.experience-unified-practical h2,.experience-unified-faq h2,.experience-similar h2 { max-width:900px; margin:.5rem 0 2rem; font:400 clamp(2rem,4vw,4rem)/1.08 var(--font-serif); }
+.experience-unified-included { padding-left:max(5vw,calc((100vw - 1200px)/2)); padding-right:max(5vw,calc((100vw - 1200px)/2)); width:100%; max-width:none; background:var(--sand); }
+.experience-unified-included ul { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8rem 2rem; padding:0; list-style:none; }
+.experience-unified-included li { display:flex; gap:.7rem; line-height:1.6; }
+.experience-unified-included li span { color:var(--gold-text); font-weight:700; }
+.experience-linen { padding-left:max(5vw,calc((100vw - 1200px)/2)); padding-right:max(5vw,calc((100vw - 1200px)/2)); width:100%; max-width:none; color:#fff; background:var(--deep); }
+.experience-linen > p:last-child { color:rgba(255,255,255,.82); }
+.experience-unified-practical dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; background:rgba(7,35,39,.12); }
+.experience-unified-practical dl div { padding:1.3rem 1.5rem; background:#fff; }
+.experience-unified-practical dt { color:var(--muted); font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.experience-unified-practical dd { margin:.45rem 0 0; line-height:1.55; }
+.experience-fresh-water { margin:2rem 0 0; padding:1.2rem 1.4rem; border-left:3px solid var(--gold-text); background:var(--sand); line-height:1.7; }
+.experience-official-sources { display:flex; flex-wrap:wrap; gap:.7rem 1.2rem; margin-top:1.5rem; }
+.experience-official-sources strong { flex-basis:100%; }
+.experience-official-sources a { color:var(--deep); text-underline-offset:3px; }
+.experience-unified-faq details { max-width:900px; padding:1.15rem 0; border-bottom:1px solid rgba(7,35,39,.16); }
+.experience-unified-faq summary { cursor:pointer; font-weight:700; }
+.experience-unified-faq details p { color:var(--muted); line-height:1.7; }
+.experience-similar > div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+.experience-similar a { color:inherit; text-decoration:none; }
+.experience-similar a > span { display:block; position:relative; aspect-ratio:4/3; overflow:hidden; }
+.experience-similar img { object-fit:cover; transition:transform .5s ease; }
+.experience-similar a:hover img { transform:scale(1.03); }
+.experience-similar strong,.experience-similar small { display:block; margin-top:.8rem; }
+.experience-similar strong { font:400 1.35rem var(--font-serif); }
+.experience-similar small { color:var(--gold-text); font-weight:700; }
 .service-gallery-section,.experience-request-section,.experience-detail-cta { padding-bottom:clamp(5rem,10vw,9rem); }
 .service-gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; }
 .service-gallery button { min-height:340px; position:relative; border:0; overflow:hidden; background:var(--sand); cursor:zoom-in; }
@@ -1078,6 +1106,7 @@ body.menu-open { overflow: hidden; }
   .hospitality-service-card:nth-child(even) .hospitality-service-card__media { order:0; }
   .hospitality-service-card__media { min-height:65vw; }
   .hospitality-service-content,.service-gallery { grid-template-columns:1fr; }
+  .experience-unified-included ul,.experience-unified-practical dl,.experience-similar > div { grid-template-columns:1fr; }
   .service-gallery button { min-height:75vw; }
 }
 @media (max-width:600px) {

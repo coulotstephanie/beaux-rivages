@@ -631,3 +631,33 @@ test("availability and pricing APIs are documented and protected", () => {
   assert.match(read("features/reservations/hooks/use-availability-calendar.ts"), /api\/calendar/);
   assert.match(read("components/PriceSummary.tsx"), /api\/pricing/);
 });
+
+test("experience pages share the premium structure and required hospitality promises", () => {
+  const shared = read("components/experiences/ExperienceSections.tsx");
+  for (const heading of [
+    "Présentation",
+    "Ce qui est inclus",
+    "Informations pratiques",
+    "FAQ",
+    "Réserver",
+    "Expériences similaires",
+  ]) {
+    assert.match(shared, new RegExp(heading));
+  }
+  assert.match(shared, /carafe d’eau fraîche/);
+  assert.match(shared, /lavé et désinfecté selon un protocole rigoureux/);
+  assert.ok(existsSync(join(root, "app", "essentiel", "page.tsx")));
+
+  const services = read("hospitalityServices.ts");
+  assert.doesNotMatch(services, /"Livres"/);
+  assert.match(services, /Tapis d’éveil/);
+  assert.match(services, /Vaisselle bébé/);
+  assert.match(services, /cour totalement close/);
+  assert.match(services, /jardin totalement clos/);
+  assert.match(services, /149 € par séjour/);
+
+  const details = read("app/experiences/[slug]/page.tsx");
+  assert.match(details, /confetti-patisserie\.com/);
+  assert.match(details, /reedukcoach\.fr/);
+  assert.match(details, /grandes marées/);
+});
