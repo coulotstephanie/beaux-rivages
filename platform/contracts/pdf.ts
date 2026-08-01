@@ -169,6 +169,20 @@ export async function createContractPdf(stay: StayAccessPayload) {
         ],
         ["Séjour", `${stay.arrival} au ${stay.departure}`],
         ["Options", stay.options.join(", ") || "Aucune"],
+        ["Expériences", stay.experiences?.join(", ") || "Aucune"],
+        [
+          "Demandes particulières",
+          stay.specialRequests
+            ? [
+                stay.specialRequests.occasion,
+                stay.specialRequests.message,
+                stay.specialRequests.allergies,
+                stay.specialRequests.lateArrival,
+              ]
+                .filter(Boolean)
+                .join(" · ") || "Aucune"
+            : "Aucune",
+        ],
       ]
     : [
         ["Voyageur", stay.travelerName],

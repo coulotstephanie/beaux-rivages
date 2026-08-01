@@ -8,6 +8,8 @@ import type { AdminOperationInput } from "./schemas";
 import { getDatabaseClient } from "./client";
 import type { Database } from "./database.types";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
+import { calculateQuote } from "@/platform/pricing/service";
+import { reservationServiceItems } from "@/platform/reservations/context";
 
 type Row = Record<string, unknown>;
 
@@ -83,6 +85,8 @@ export class SupabaseBackOfficeRepository {
       depositsResult,
       notificationsResult,
       notesResult,
+      reservationRequestsResult,
+      reservationEventsResult,
     ] = await Promise.all([
       this.client.from("properties").select("id,slug,name,status").order("name"),
       this.client
@@ -93,8 +97,8 @@ export class SupabaseBackOfficeRepository {
       this.client.from("reservation_guests").select("reservation_id,guest_id,is_primary"),
       this.client.from("guests").select("id,first_name,last_name,email,phone").order("last_name"),
       this.client
-        .from("reservation_options")
-        .select("reservation_id,option_code,label,quantity,total_cents"),
+        .from("reservation_items")
+        .select("reservation_id,kind,code,label,quantity,total_cents"),
       this.client
         .from("payments")
         .select(
@@ -172,6 +176,12 @@ export class SupabaseBackOfficeRepository {
         .select("*")
         .order("created_at", { ascending: false })
         .limit(500),
+      this.client.from("reservation_special_requests").select("*"),
+      this.client
+        .from("reservation_events")
+        .select("reservation_id,event_type,origin,occurred_at")
+        .order("occurred_at", { ascending: false })
+        .limit(5000),
     ]);
     const failed = [
       propertiesResult,
@@ -195,6 +205,8 @@ export class SupabaseBackOfficeRepository {
       depositsResult,
       notificationsResult,
       notesResult,
+      reservationRequestsResult,
+      reservationEventsResult,
     ].find((result) => result.error);
     if (failed?.error) throw new Error(`BACK_OFFICE_READ_FAILED:${failed.error.code}`);
 
@@ -203,13 +215,27 @@ export class SupabaseBackOfficeRepository {
     const guestRows = (guestsResult.data ?? []) as Row[];
     const guestById = new Map(guestRows.map((row) => [String(row.id), row]));
     const links = (linksResult.data ?? []) as Row[];
-    const optionRows = (optionsResult.data ?? []) as Row[];
-    const optionsByReservation = new Map<string, Row[]>();
-    for (const option of optionRows) {
-      const reservationId = String(option.reservation_id);
-      const current = optionsByReservation.get(reservationId) ?? [];
-      current.push(option);
-      optionsByReservation.set(reservationId, current);
+    const itemsByReservation = new Map<string, Row[]>();
+    for (const item of (optionsResult.data ?? []) as Row[]) {
+      const reservationId = String(item.reservation_id);
+      itemsByReservation.set(reservationId, [
+        ...(itemsByReservation.get(reservationId) ?? []),
+        item,
+      ]);
+    }
+    const requestsByReservation = new Map(
+      ((reservationRequestsResult.data ?? []) as Row[]).map((request) => [
+        String(request.reservation_id),
+        request,
+      ]),
+    );
+    const eventsByReservation = new Map<string, Row[]>();
+    for (const event of (reservationEventsResult.data ?? []) as Row[]) {
+      const reservationId = String(event.reservation_id);
+      eventsByReservation.set(reservationId, [
+        ...(eventsByReservation.get(reservationId) ?? []),
+        event,
+      ]);
     }
     const primaryGuestByReservation = new Map(
       links
@@ -233,6 +259,26 @@ export class SupabaseBackOfficeRepository {
           !Array.isArray(quote.touristTaxDetails)
             ? (quote.touristTaxDetails as Row)
             : {};
+        const persistedServices = itemsByReservation.get(String(row.id));
+        const services = persistedServices?.length
+          ? persistedServices.map((service) => ({
+              kind: service.kind,
+              code: service.code,
+              label: service.label,
+              quantity: service.quantity,
+              totalCents: service.total_cents,
+            }))
+          : Array.isArray(quote.services)
+            ? (quote.services as Row[])
+            : [];
+        const persistedRequest = requestsByReservation.get(String(row.id));
+        const request =
+          persistedRequest ??
+          (quote.specialRequests &&
+          typeof quote.specialRequests === "object" &&
+          !Array.isArray(quote.specialRequests)
+            ? (quote.specialRequests as Row)
+            : {});
         return {
           id: String(row.id),
           reference: String(row.reference),
@@ -277,11 +323,36 @@ export class SupabaseBackOfficeRepository {
               : null,
             paymentMethod: String(quote.paymentMethod ?? "Non renseigné"),
           },
-          options: (optionsByReservation.get(String(row.id)) ?? []).map((option) => ({
-            code: String(option.option_code),
-            label: String(option.label),
-            quantity: Number(option.quantity),
-            totalCents: Number(option.total_cents),
+          options: services
+            .filter((service) => service.kind !== "experience")
+            .map((service) => ({
+              code: String(service.code),
+              label: String(service.label),
+              quantity: Number(service.quantity),
+              totalCents: Number(service.totalCents),
+            })),
+          experiences: services
+            .filter((service) => service.kind === "experience")
+            .map((service) => ({
+              code: String(service.code),
+              label: String(service.label),
+              quantity: Number(service.quantity),
+              totalCents: Number(service.totalCents),
+            })),
+          specialRequests: {
+            occasion: request.occasion ? String(request.occasion) : null,
+            message: request.message ? String(request.message) : null,
+            allergies: request.allergies ? String(request.allergies) : null,
+            lateArrival: request.late_arrival
+              ? String(request.late_arrival)
+              : request.lateArrival
+                ? String(request.lateArrival)
+                : null,
+          },
+          timeline: (eventsByReservation.get(String(row.id)) ?? []).map((event) => ({
+            eventType: String(event.event_type),
+            origin: String(event.origin),
+            occurredAt: String(event.occurred_at),
           })),
           guestId,
           guestName: guest ? `${guest.first_name} ${guest.last_name}` : "Voyageur non renseigné",
@@ -648,18 +719,36 @@ export class SupabaseBackOfficeRepository {
 
   async execute(input: AdminOperationInput) {
     if (input.action === "create_reservation") {
-      const schedule = buildPaymentSchedule(input.arrival, input.totalCents);
+      const calculated = await calculateQuote({
+        propertySlug: input.propertySlug,
+        arrival: input.arrival,
+        departure: input.departure,
+        adults: input.adults,
+        children: input.children,
+        babies: input.babies,
+        pets: input.pets,
+        options: input.options,
+        experiences: input.experiences,
+      });
+      if (!calculated.stayRules.valid) throw new Error("STAY_RULES_INVALID");
+      const calculatedTotalCents = Math.round(calculated.total * 100);
+      const totalCents = input.totalCents ?? calculatedTotalCents;
+      const schedule = buildPaymentSchedule(input.arrival, totalCents);
+      const services = reservationServiceItems(calculated.optionLines, calculated.experienceLines);
       const quote = {
         adults: input.adults,
         children: input.children,
         babies: input.babies,
         pets: input.pets,
-        nightsTotalCents: input.totalCents,
-        optionsTotalCents: 0,
-        cleaningFeeCents: 0,
-        touristTaxCents: 0,
+        nightsTotalCents: Math.round(calculated.accommodation * 100),
+        optionsTotalCents: Math.round(
+          (calculated.optionsTotal + calculated.experiencesTotal) * 100,
+        ),
+        cleaningFeeCents: Math.round(calculated.cleaningFee * 100),
+        touristTaxCents: Math.round(calculated.touristTax * 100),
+        touristTaxDetails: calculated.touristTaxDetails,
         discountCents: 0,
-        totalCents: input.totalCents,
+        totalCents,
         depositDueCents: schedule.depositDueCents,
         balanceDueCents: schedule.balanceDueCents,
         balanceDueDate: schedule.balanceDueDate,
@@ -667,6 +756,16 @@ export class SupabaseBackOfficeRepository {
         fullPaymentRequired: schedule.fullPaymentRequired,
         source: "back_office",
         propertySlug: input.propertySlug,
+        services,
+        specialRequests: input.specialRequests,
+        manualOverride:
+          input.totalCents === undefined
+            ? null
+            : {
+                calculatedTotalCents,
+                appliedTotalCents: input.totalCents,
+                reason: input.overrideReason,
+              },
       };
       const { data: reservation, error } = await this.client.rpc("create_direct_reservation", {
         property_slug: input.propertySlug,
@@ -674,7 +773,12 @@ export class SupabaseBackOfficeRepository {
         departure_date: input.departure,
         guest: input.guest,
         quote,
-        selected_options: [],
+        selected_options: calculated.optionLines.map((line) => ({
+          code: line.id,
+          label: line.label,
+          quantity: line.quantity,
+          unitPriceCents: Math.round(line.unitPrice * 100),
+        })),
         request_key: crypto.randomUUID(),
       });
       if (error) {

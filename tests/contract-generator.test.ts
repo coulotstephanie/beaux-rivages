@@ -10,10 +10,19 @@ const properties = [
   ["nid-d-ete", "Le Nid d’Été"],
 ] as const;
 
-function fixture(propertySlug: string, propertyName: string, scenario: "solo" | "family" | "pets" | "signature"): StayAccessPayload {
+function fixture(
+  propertySlug: string,
+  propertyName: string,
+  scenario: "solo" | "family" | "pets" | "signature",
+): StayAccessPayload {
   const family = scenario === "family";
   const pets = scenario === "pets" ? 1 : 0;
-  const options = scenario === "signature" ? ["Pack Signature Beaux Rivages", "Linge complet"] : pets ? ["Animal"] : [];
+  const options =
+    scenario === "signature"
+      ? ["Pack Signature Beaux Rivages", "Linge complet"]
+      : pets
+        ? ["Animal"]
+        : [];
   return {
     reservationId: `test-${propertySlug}-${scenario}`,
     reference: `BR-2026-${scenario.toUpperCase()}`,
@@ -27,6 +36,8 @@ function fixture(propertySlug: string, propertyName: string, scenario: "solo" | 
     balanceRemaining: 1240,
     currency: "EUR",
     options,
+    experiences: ["Romance Signature"],
+    specialRequests: { occasion: "Anniversaire", message: "Arrivée après 20 h" },
     guideSlugs: [],
     documents: [{ id: "contract", title: "Contrat de location", kind: "contract" }],
     expiresAt: "2030-01-01T00:00:00.000Z",
@@ -60,6 +71,8 @@ for (const [propertySlug, propertyName] of properties) {
       assert.match(html, new RegExp(propertyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
       assert.match(html, /Conditions de location/);
       assert.match(html, /signature/i);
+      assert.match(html, /Romance Signature/);
+      assert.match(html, /Arrivée après 20 h/);
       const pdf = await createContractPdf(stay);
       assert.equal(Buffer.from(pdf).subarray(0, 4).toString(), "%PDF");
       assert.ok(pdf.byteLength > 75_000, "premium PDF should contain the cover and QR assets");

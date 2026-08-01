@@ -19,6 +19,8 @@ import { ownerRequestEmail, travelerRequestEmail } from "@/platform/email/reserv
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { calculateQuote } from "@/platform/pricing/service";
 import { legalVersion } from "@/content/legal";
+import { reservationSpecialRequestsSchema } from "@/platform/database/schemas";
+import { reservationServiceItems } from "@/platform/reservations/context";
 
 const reservationRequestSchema = z
   .object({
@@ -31,6 +33,7 @@ const reservationRequestSchema = z
     pets: z.number().int().min(0).max(4),
     options: z.array(z.string()).max(30).default([]),
     experiences: z.array(z.string()).max(20).default([]),
+    specialRequests: reservationSpecialRequestsSchema.optional(),
     promotionCode: z.string().trim().max(40).optional(),
     guest: guestInputSchema,
     idempotencyKey: z.string().uuid(),
@@ -115,8 +118,32 @@ export async function POST(request: NextRequest) {
   const experiences = input.experiences.filter((id): id is BookingExperienceId =>
     bookingExperiences.some((experience) => experience.id === id),
   );
+  if (options.length !== input.options.length || experiences.length !== input.experiences.length) {
+    return noStoreJson({ error: "Une prestation sélectionnée est invalide." }, { status: 400 });
+  }
+  if (
+    experiences.some((id) => {
+      const experience = bookingExperiences.find((item) => item.id === id);
+      return experience?.propertySlugs && !experience.propertySlugs.includes(propertySlug);
+    })
+  ) {
+    return noStoreJson(
+      { error: "Une expérience n’est pas proposée dans ce logement." },
+      { status: 400 },
+    );
+  }
 
   const calendar = await getPropertyAvailability(propertySlug, true);
+  if (!calendar.reliable) {
+    return noStoreJson(
+      {
+        error:
+          "La disponibilité ne peut pas être vérifiée pour le moment. Réessayez dans quelques minutes.",
+        code: "CALENDAR_UNAVAILABLE",
+      },
+      { status: 503 },
+    );
+  }
   if (!isRangeAvailable(calendar.blocks, input.arrival, input.departure)) {
     return noStoreJson(
       { error: "Ces dates ne sont plus disponibles.", code: "DATES_UNAVAILABLE" },
@@ -144,6 +171,7 @@ export async function POST(request: NextRequest) {
   }
 
   const totalCents = toCents(quote.total);
+  const services = reservationServiceItems(quote.optionLines, quote.experienceLines);
   const {
     depositDueCents,
     balanceDueCents,
@@ -189,6 +217,13 @@ export async function POST(request: NextRequest) {
         cancellationVersion: legalVersion,
         cancellationAcceptedAt: new Date().toISOString(),
         breakdown: quote.nightlyLines,
+        services,
+        specialRequests: input.specialRequests,
+        calendarValidation: {
+          checkedAt: calendar.generatedAt,
+          sources: calendar.sources.map((source) => source.sourceId),
+          reliable: true,
+        },
       },
     });
     console.info(
@@ -213,6 +248,8 @@ export async function POST(request: NextRequest) {
       paymentMethod: input.paymentMethod,
       guest: input.guest,
       options: quote.optionLines.map((line) => line.label),
+      experiences: quote.experienceLines.map((line) => line.label),
+      specialRequests: input.specialRequests,
     };
     const provider = new ConfigurableEmailProvider();
     const travelerEmail = travelerRequestEmail(emailInput);

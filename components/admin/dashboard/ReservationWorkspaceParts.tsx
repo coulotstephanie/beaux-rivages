@@ -36,7 +36,8 @@ export function ManualReservationForm({
       children: Number(values.get("children")),
       babies: Number(values.get("babies")),
       pets: Number(values.get("pets")),
-      totalCents: Math.round(Number(values.get("total")) * 100),
+      totalCents: values.get("total") ? Math.round(Number(values.get("total")) * 100) : undefined,
+      overrideReason: values.get("overrideReason") || undefined,
       channel: values.get("channel"),
       status: values.get("status"),
       guest: {
@@ -106,8 +107,13 @@ export function ManualReservationForm({
           <input name="pets" type="number" min="0" max="10" defaultValue="0" required />
         </label>
         <label>
-          Total TTC (€)
-          <input name="total" type="number" min="0" step="0.01" defaultValue="0" required />
+          Total exceptionnel (€)
+          <input name="total" type="number" min="0" step="0.01" />
+          <small>Laisser vide pour appliquer le calcul automatique.</small>
+        </label>
+        <label>
+          Justification de la dérogation
+          <input name="overrideReason" minLength={10} maxLength={500} />
         </label>
         <label>
           Origine
@@ -395,6 +401,53 @@ export function ReservationDetail({
             </ul>
           ) : (
             <p className="admin-empty">Aucune option réservée.</p>
+          )}
+        </article>
+        <article>
+          <h3>Expériences</h3>
+          {reservation.experiences.length ? (
+            <ul>
+              {reservation.experiences.map((item) => (
+                <li key={item.code}>
+                  {item.label} · {money(item.totalCents)}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="admin-empty">Aucune expérience réservée.</p>
+          )}
+        </article>
+        <article>
+          <h3>Demandes particulières</h3>
+          {Object.values(reservation.specialRequests).some(Boolean) ? (
+            <dl>
+              {reservation.specialRequests.occasion && (
+                <div>
+                  <dt>Occasion</dt>
+                  <dd>{reservation.specialRequests.occasion}</dd>
+                </div>
+              )}
+              {reservation.specialRequests.message && (
+                <div>
+                  <dt>Message</dt>
+                  <dd>{reservation.specialRequests.message}</dd>
+                </div>
+              )}
+              {reservation.specialRequests.allergies && (
+                <div>
+                  <dt>Allergies</dt>
+                  <dd>{reservation.specialRequests.allergies}</dd>
+                </div>
+              )}
+              {reservation.specialRequests.lateArrival && (
+                <div>
+                  <dt>Arrivée tardive</dt>
+                  <dd>{reservation.specialRequests.lateArrival}</dd>
+                </div>
+              )}
+            </dl>
+          ) : (
+            <p className="admin-empty">Aucune demande particulière.</p>
           )}
         </article>
         <article>

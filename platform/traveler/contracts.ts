@@ -34,6 +34,13 @@ export type StayAccessPayload = {
   balanceRemaining: number;
   currency: "EUR";
   options: string[];
+  experiences?: string[];
+  specialRequests?: {
+    occasion?: string | null;
+    message?: string | null;
+    allergies?: string | null;
+    lateArrival?: string | null;
+  };
   guideSlugs: string[];
   documents: { id: string; title: string; kind: "contract" | "conditions" | "invoice" }[];
   arrivalDetails?: { availableFrom: string; accessCode?: string; parking?: string };

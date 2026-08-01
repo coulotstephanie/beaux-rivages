@@ -44,6 +44,12 @@ export function DirectBookingForm({
         ...selection.guests,
         options: selection.options,
         experiences: selection.experiences,
+        specialRequests: {
+          occasion: selection.attention,
+          message: selection.attentionMessage || null,
+          allergies: null,
+          lateArrival: null,
+        },
         guest: {
           firstName: String(data.get("firstName") ?? ""),
           lastName: String(data.get("lastName") ?? ""),
@@ -99,7 +105,7 @@ export function DirectBookingForm({
           <span aria-hidden="true" />
           {sourcesHealthy
             ? "Disponibilité contrôlée sur les calendriers connectés"
-            : "Disponibilité à confirmer personnellement"}
+            : "Réservation temporairement suspendue : calendriers en cours de vérification"}
         </div>
       </div>
       <div className="direct-booking-form__summary">
@@ -181,7 +187,13 @@ export function DirectBookingForm({
             "La demande n’a pas pu être enregistrée. Vous pouvez réessayer ou contacter Stéphanie."}
         </p>
       ) : null}
-      <button type="submit" disabled={status === "submitting"}>
+      {!sourcesHealthy && (
+        <p role="alert">
+          La réservation directe reprendra automatiquement dès que les calendriers Airbnb et Booking
+          disposeront d’un état fiable.
+        </p>
+      )}
+      <button type="submit" disabled={status === "submitting" || !sourcesHealthy}>
         {status === "submitting" ? "Enregistrement sécurisé…" : "Envoyer ma demande"}
       </button>
       <small>

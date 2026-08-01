@@ -46,6 +46,18 @@ export type BackOfficeReservation = {
     paymentMethod: string;
   };
   options: { code: string; label: string; quantity: number; totalCents: number }[];
+  experiences: { code: string; label: string; quantity: number; totalCents: number }[];
+  specialRequests: {
+    occasion: string | null;
+    message: string | null;
+    allergies: string | null;
+    lateArrival: string | null;
+  };
+  timeline: {
+    eventType: string;
+    origin: string;
+    occurredAt: string;
+  }[];
   guestId: string | null;
   guestName: string;
   guestEmail: string;

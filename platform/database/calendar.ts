@@ -15,6 +15,49 @@ function toOccupancySource(provider: CalendarProvider): OccupancySource | null {
 }
 
 export class SupabaseCalendarRepository {
+  async lastKnownExternalState(propertySlug: string) {
+    const client = getDatabaseClient();
+    const { data: property, error: propertyError } = await client
+      .from("properties")
+      .select("id")
+      .eq("slug", propertySlug)
+      .maybeSingle();
+    if (propertyError || !property) throw new Error("CALENDAR_PROPERTY_NOT_FOUND");
+    const { data: sources, error: sourcesError } = await client
+      .from("calendar_sources")
+      .select("id,provider,last_synced_at,enabled")
+      .eq("property_id", property.id)
+      .eq("enabled", true);
+    if (sourcesError) throw new Error(`CALENDAR_STATE_FAILED:${sourcesError.code}`);
+    const sourceIds = (sources ?? []).map((source) => source.id);
+    const { data: events, error: eventsError } = sourceIds.length
+      ? await client
+          .from("calendar_events")
+          .select("id,source_id,arrival,departure,status")
+          .in("source_id", sourceIds)
+          .neq("status", "cancelled")
+          .gte("departure", new Date().toISOString().slice(0, 10))
+          .limit(5000)
+      : { data: [], error: null };
+    if (eventsError) throw new Error(`CALENDAR_STATE_FAILED:${eventsError.code}`);
+    const providerBySource = new Map(
+      (sources ?? []).map((source) => [source.id, String(source.provider)]),
+    );
+    return {
+      providers: (sources ?? []).map((source) => ({
+        provider: String(source.provider),
+        hasSnapshot: Boolean(source.last_synced_at),
+      })),
+      blocks: (events ?? []).map((event) => ({
+        id: String(event.id),
+        startsOn: String(event.arrival),
+        endsOn: String(event.departure),
+        status: String(event.status),
+        source: providerBySource.get(event.source_id) ?? "external",
+      })),
+    };
+  }
+
   async listOutboundBlocks(propertySlug: string) {
     const client = getDatabaseClient();
     const { data: property, error: propertyError } = await client
@@ -70,6 +113,26 @@ export class SupabaseCalendarRepository {
       completed_at: input.syncedAt,
     });
     if (error) throw new Error(`SYNC_RECORD_FAILED:${error.code}`);
+    if (input.status === "error") {
+      const entityId = `${input.propertySlug}:${input.provider}`;
+      const { data: existing } = await client
+        .from("back_office_notifications")
+        .select("id")
+        .eq("entity_type", "calendar_source")
+        .eq("entity_id", entityId)
+        .is("dismissed_at", null)
+        .limit(1);
+      if (!existing?.length) {
+        await client.from("back_office_notifications").insert({
+          kind: "system",
+          title: "Synchronisation calendrier indisponible",
+          body: `${input.propertySlug} · ${input.provider}. Le dernier état fiable est conservé et la réservation directe est suspendue s’il n’existe pas.`,
+          priority: "urgent",
+          entity_type: "calendar_source",
+          entity_id: entityId,
+        });
+      }
+    }
   }
 
   async replaceEvents(

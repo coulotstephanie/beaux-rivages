@@ -153,14 +153,32 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
         </section>
         <section>
           <h3>Vos expériences</h3>
-          {stay.options.length ? (
+          {stay.options.length || stay.experiences?.length ? (
             <ul>
               {stay.options.map((option) => (
                 <li key={option}>{option}</li>
               ))}
+              {stay.experiences?.map((experience) => (
+                <li key={experience}>{experience}</li>
+              ))}
             </ul>
           ) : (
             <p>Aucune attention ajoutée.</p>
+          )}
+          {stay.specialRequests && Object.values(stay.specialRequests).some(Boolean) && (
+            <div>
+              <h4>Demandes particulières</h4>
+              <p>
+                {[
+                  stay.specialRequests.occasion,
+                  stay.specialRequests.message,
+                  stay.specialRequests.allergies,
+                  stay.specialRequests.lateArrival,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+            </div>
           )}
         </section>
         <section>

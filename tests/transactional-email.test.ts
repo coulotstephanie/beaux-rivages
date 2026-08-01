@@ -57,3 +57,19 @@ test("reservation emails escape traveler-controlled content", () => {
   assert.match(owner.subject, /Villa Raie Manta/);
   assert.match(owner.html, /camille@example.com/);
 });
+
+test("reservation emails contain experiences and special requests consistently", () => {
+  const email = ownerRequestEmail({
+    reference: "BR-P0-001",
+    propertySlug: "chai-des-tortues",
+    arrival: "2026-10-10",
+    departure: "2026-10-12",
+    total: 500,
+    guest: { firstName: "Camille", lastName: "Martin", email: "c@example.fr" },
+    experiences: ["Romance Signature"],
+    specialRequests: { occasion: "Anniversaire", message: "Sans fruits à coque" },
+  });
+  assert.match(email.html, /Romance Signature/);
+  assert.match(email.html, /Anniversaire/);
+  assert.match(email.html, /Sans fruits à coque/);
+});

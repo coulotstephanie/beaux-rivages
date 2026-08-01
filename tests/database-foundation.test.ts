@@ -15,6 +15,10 @@ const stripeMigration = readFileSync(
   new URL("../supabase/migrations/20260727204500_stripe_test_payments.sql", import.meta.url),
   "utf8",
 );
+const p0Migration = readFileSync(
+  new URL("../supabase/migrations/20260801220000_reservation_p0_security.sql", import.meta.url),
+  "utf8",
+);
 
 test("the reservation payload accepts a complete validated request", () => {
   const result = createReservationSchema.safeParse({
@@ -135,6 +139,7 @@ test("back-office operations validate manual reservations and date blocks", () =
     channel: "manual",
     status: "confirmed",
     totalCents: 145000,
+    overrideReason: "Geste commercial validé par Stéphanie",
     guest: { firstName: "Alice", lastName: "Durand", email: "alice@example.fr", countryCode: "FR" },
   });
   const block = adminOperationSchema.safeParse({
@@ -146,6 +151,42 @@ test("back-office operations validate manual reservations and date blocks", () =
   });
   assert.equal(manual.success, true);
   assert.equal(block.success, true);
+});
+
+test("P0 persistence has one canonical service store, requests and a full journal", () => {
+  assert.match(p0Migration, /create table public\.reservation_items/);
+  assert.match(p0Migration, /create table public\.reservation_special_requests/);
+  assert.match(p0Migration, /create table public\.reservation_events/);
+  assert.match(p0Migration, /create table public\.reservation_documents/);
+  assert.match(p0Migration, /quote_snapshot->'services'/);
+  assert.match(p0Migration, /reservation\.created/);
+  assert.match(p0Migration, /payment\.refunded/);
+  assert.match(p0Migration, /'quote'[\s\S]*'contract'/);
+});
+
+test("P0 concurrency serializes a property and refuses every overlapping source", () => {
+  assert.match(p0Migration, /pg_advisory_xact_lock/);
+  assert.match(p0Migration, /stay_range && daterange/);
+  assert.match(p0Migration, /errcode='23P01'/);
+  assert.doesNotMatch(p0Migration, /source\s*=\s*'reservation'/);
+});
+
+test("manual price overrides require an auditable justification", () => {
+  const result = adminOperationSchema.safeParse({
+    action: "create_reservation",
+    propertySlug: "nid-d-ete",
+    arrival: "2026-12-01",
+    departure: "2026-12-04",
+    adults: 2,
+    children: 0,
+    babies: 0,
+    pets: 0,
+    channel: "manual",
+    status: "confirmed",
+    totalCents: 10000,
+    guest: { firstName: "A", lastName: "B", email: "a@example.fr", countryCode: "FR" },
+  });
+  assert.equal(result.success, false);
 });
 
 test("back-office operations reject reversed dates and unknown actions", () => {

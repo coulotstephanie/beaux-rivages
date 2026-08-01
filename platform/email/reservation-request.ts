@@ -32,7 +32,25 @@ export type ReservationEmailInput = {
   paymentMethod?: "bank_transfer" | "holiday_vouchers";
   guest: { firstName: string; lastName: string; email: string; phone?: string };
   options?: string[];
+  experiences?: string[];
+  specialRequests?: {
+    occasion?: string | null;
+    message?: string | null;
+    allergies?: string | null;
+    lateArrival?: string | null;
+  };
 };
+
+function listSummary(title: string, items: string[] = []) {
+  return items.length
+    ? `<p><strong>${escapeHtml(title)}</strong><br>${items.map(escapeHtml).join("<br>")}</p>`
+    : "";
+}
+
+function requestSummary(request: ReservationEmailInput["specialRequests"]) {
+  if (!request || !Object.values(request).some(Boolean)) return "";
+  return `<p><strong>Demandes particulières</strong>${request.occasion ? `<br>Occasion : ${escapeHtml(request.occasion)}` : ""}${request.message ? `<br>${escapeHtml(request.message)}` : ""}${request.allergies ? `<br>Allergies : ${escapeHtml(request.allergies)}` : ""}${request.lateArrival ? `<br>Arrivée tardive : ${escapeHtml(request.lateArrival)}` : ""}</p>`;
+}
 
 function basketSummary(options: string[] = []) {
   const included = options.find((item) => item.startsWith("Panier inclus ·"));
@@ -75,7 +93,7 @@ export function travelerRequestEmail(input: ReservationEmailInput) {
     subject: `Demande ${input.reference} bien reçue · Beaux Rivages`,
     html: shell(
       "Votre demande est bien reçue",
-      `<p>Bonjour ${escapeHtml(input.guest.firstName)},</p><h1 style="font-family:Georgia,serif;font-weight:400">Votre demande est entre de bonnes mains.</h1><p>Nous avons enregistré votre demande pour <strong>${escapeHtml(house)}</strong>, du ${escapeHtml(input.arrival)} au ${escapeHtml(input.departure)}.</p><p>Taxe de séjour : <strong>${(input.touristTax ?? 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</strong><br>Total : <strong>${input.total.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</strong></p>${scheduleSummary(input)}<p>${escapeHtml(paymentSummary(input.paymentMethod))}</p>${basketSummary(input.options)}<p>Référence : <strong>${escapeHtml(input.reference)}</strong></p><p><a href="https://www.beaux-rivages.com/conditions-generales-de-vente">Conditions Générales de Vente acceptées</a><br><a href="https://www.beaux-rivages.com/politique-annulation">Politique d’annulation</a></p><p>Aucun paiement n’a été débité. Stéphanie ou Bruno vous répondra avant toute confirmation définitive.</p>`,
+      `<p>Bonjour ${escapeHtml(input.guest.firstName)},</p><h1 style="font-family:Georgia,serif;font-weight:400">Votre demande est entre de bonnes mains.</h1><p>Nous avons enregistré votre demande pour <strong>${escapeHtml(house)}</strong>, du ${escapeHtml(input.arrival)} au ${escapeHtml(input.departure)}.</p><p>Taxe de séjour : <strong>${(input.touristTax ?? 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</strong><br>Total : <strong>${input.total.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</strong></p>${scheduleSummary(input)}<p>${escapeHtml(paymentSummary(input.paymentMethod))}</p>${listSummary("Options", input.options)}${listSummary("Expériences", input.experiences)}${basketSummary(input.options)}${requestSummary(input.specialRequests)}<p>Référence : <strong>${escapeHtml(input.reference)}</strong></p><p><a href="https://www.beaux-rivages.com/conditions-generales-de-vente">Conditions Générales de Vente acceptées</a><br><a href="https://www.beaux-rivages.com/politique-annulation">Politique d’annulation</a></p><p>Aucun paiement n’a été débité. Stéphanie ou Bruno vous répondra avant toute confirmation définitive.</p>`,
     ),
   };
 }
@@ -86,7 +104,7 @@ export function ownerRequestEmail(input: ReservationEmailInput) {
     subject: `Nouvelle demande ${input.reference} · ${house}`,
     html: shell(
       "Nouvelle demande de réservation",
-      `<h1 style="font-family:Georgia,serif;font-weight:400">Une nouvelle demande vient d’arriver.</h1><p><strong>${escapeHtml(input.guest.firstName)} ${escapeHtml(input.guest.lastName)}</strong><br>${escapeHtml(input.guest.email)}${input.guest.phone ? `<br>${escapeHtml(input.guest.phone)}` : ""}</p><p>${escapeHtml(house)}<br>Du ${escapeHtml(input.arrival)} au ${escapeHtml(input.departure)}<br>Taxe de séjour : ${(input.touristTax ?? 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}${input.touristTaxDetails ? `<br>${input.touristTaxDetails.liableGuests} assujetti(s) · ${input.touristTaxDetails.exemptGuests} exonéré(s) · ${escapeHtml(input.touristTaxDetails.method)}` : ""}<br>Total calculé : ${input.total.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</p>${scheduleSummary(input)}<p>${escapeHtml(paymentSummary(input.paymentMethod))}</p>${basketSummary(input.options)}<p>CGV acceptées · <a href="https://www.beaux-rivages.com/conditions-generales-de-vente">consulter</a><br><a href="https://www.beaux-rivages.com/politique-annulation">Politique d’annulation</a></p><p>Référence : <strong>${escapeHtml(input.reference)}</strong></p>`,
+      `<h1 style="font-family:Georgia,serif;font-weight:400">Une nouvelle demande vient d’arriver.</h1><p><strong>${escapeHtml(input.guest.firstName)} ${escapeHtml(input.guest.lastName)}</strong><br>${escapeHtml(input.guest.email)}${input.guest.phone ? `<br>${escapeHtml(input.guest.phone)}` : ""}</p><p>${escapeHtml(house)}<br>Du ${escapeHtml(input.arrival)} au ${escapeHtml(input.departure)}<br>Taxe de séjour : ${(input.touristTax ?? 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}${input.touristTaxDetails ? `<br>${input.touristTaxDetails.liableGuests} assujetti(s) · ${input.touristTaxDetails.exemptGuests} exonéré(s) · ${escapeHtml(input.touristTaxDetails.method)}` : ""}<br>Total calculé : ${input.total.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</p>${scheduleSummary(input)}<p>${escapeHtml(paymentSummary(input.paymentMethod))}</p>${listSummary("Options", input.options)}${listSummary("Expériences", input.experiences)}${basketSummary(input.options)}${requestSummary(input.specialRequests)}<p>CGV acceptées · <a href="https://www.beaux-rivages.com/conditions-generales-de-vente">consulter</a><br><a href="https://www.beaux-rivages.com/politique-annulation">Politique d’annulation</a></p><p>Référence : <strong>${escapeHtml(input.reference)}</strong></p>`,
     ),
   };
 }

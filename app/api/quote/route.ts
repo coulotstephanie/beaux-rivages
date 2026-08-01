@@ -19,6 +19,18 @@ export async function POST(request: NextRequest) {
   }
 
   const result = await reservationEngine.search(parsed.data);
+  if (!result.sourcesHealthy) {
+    return noStoreJson(
+      {
+        ...result,
+        available: false,
+        error:
+          "La disponibilité ne peut pas être vérifiée pour le moment. La réservation directe est temporairement suspendue.",
+        code: "CALENDAR_UNAVAILABLE",
+      },
+      { status: 503 },
+    );
+  }
   if (!result.available) {
     return noStoreJson({ ...result, error: "Ces dates ne sont pas disponibles." }, { status: 409 });
   }

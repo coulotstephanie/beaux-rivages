@@ -1,6 +1,6 @@
 import type { CalendarBlock, CalendarSyncResult } from "./contracts";
 import { ICalendarConnector } from "./connector";
-import { getCalendarSources, type PropertySlug } from "./config";
+import { getCalendarSources, getCalendarConfigurationStatus, type PropertySlug } from "./config";
 import { mergeCalendarBlocks } from "./ical";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseCalendarRepository } from "@/platform/database/calendar";
@@ -104,9 +104,31 @@ function dateOnly(value: string) {
 
 export async function getPropertyAvailability(propertySlug: PropertySlug, force = false) {
   const calendar = await synchronizePropertyCalendars(propertySlug, force);
-  const internalBlocks = isDatabaseConfigured()
-    ? await new SupabaseCalendarRepository().listOutboundBlocks(propertySlug)
-    : [];
+  const repository = new SupabaseCalendarRepository();
+  const [internalBlocks, lastKnown] = isDatabaseConfigured()
+    ? await Promise.all([
+        repository.listOutboundBlocks(propertySlug),
+        repository.lastKnownExternalState(propertySlug),
+      ])
+    : [[], { providers: [], blocks: [] }];
+  const requiredProviders = ["airbnb", "booking"] as const;
+  const configuredProviders = new Set(
+    getCalendarConfigurationStatus()
+      .filter((source) => source.propertySlug === propertySlug && source.configured)
+      .map((source) => source.provider),
+  );
+  const failedProviders = calendar.results
+    .filter((result) => result.status === "error")
+    .map((result) => result.provider);
+  const reliable = requiredProviders.every((provider) => {
+    const live = calendar.results.some(
+      (result) => result.provider === provider && result.status === "success",
+    );
+    const snapshot = lastKnown.providers.some(
+      (state) => state.provider === provider && state.hasSnapshot,
+    );
+    return (configuredProviders.has(provider) && live) || snapshot;
+  });
   return {
     propertySlug,
     generatedAt: new Date().toISOString(),
@@ -124,7 +146,16 @@ export async function getPropertyAvailability(propertySlug: PropertySlug, force 
         status: "confirmed" as const,
         source: block.source,
       })),
+      ...lastKnown.blocks.map((block) => ({
+        ...block,
+        status: block.status as "confirmed" | "tentative",
+      })),
     ],
     sources: calendar.results,
+    reliable,
+    usingLastKnownState:
+      reliable &&
+      (failedProviders.length > 0 ||
+        requiredProviders.some((provider) => !configuredProviders.has(provider))),
   };
 }

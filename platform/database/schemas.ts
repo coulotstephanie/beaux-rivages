@@ -27,6 +27,20 @@ export const reservationOptionInputSchema = z
   })
   .strict();
 
+export const reservationServiceInputSchema = reservationOptionInputSchema.extend({
+  kind: z.enum(["option", "experience", "basket"]),
+  totalCents: cents,
+});
+
+export const reservationSpecialRequestsSchema = z
+  .object({
+    occasion: z.string().trim().max(100).nullable().default(null),
+    message: z.string().trim().max(2000).nullable().default(null),
+    allergies: z.string().trim().max(1000).nullable().default(null),
+    lateArrival: z.string().trim().max(500).nullable().default(null),
+  })
+  .strict();
+
 export const reservationQuoteSchema = z
   .object({
     adults: z.number().int().min(1).max(30),
@@ -69,6 +83,16 @@ export const reservationQuoteSchema = z
     cancellationVersion: z.string().min(1).max(50),
     cancellationAcceptedAt: z.string().datetime(),
     breakdown: z.array(z.unknown()).default([]),
+    services: z.array(reservationServiceInputSchema).max(50).default([]),
+    specialRequests: reservationSpecialRequestsSchema.optional(),
+    calendarValidation: z
+      .object({
+        checkedAt: z.string().datetime(),
+        sources: z.array(z.string()),
+        reliable: z.boolean(),
+      })
+      .strict()
+      .optional(),
   })
   .strict()
   .superRefine((quote, context) => {
@@ -115,7 +139,34 @@ export const adminManualReservationSchema = z
     pets: z.number().int().min(0).max(10).default(0),
     channel: z.enum(["direct", "manual"]).default("manual"),
     status: z.enum(["requested", "confirmed"]).default("confirmed"),
-    totalCents: cents,
+    totalCents: cents.optional(),
+    overrideReason: z.string().trim().min(10).max(500).optional(),
+    options: z
+      .array(
+        z.enum([
+          "signature",
+          "linen",
+          "beach-towels",
+          "robes",
+          "slippers",
+          "personal-arrival",
+          "late-checkout",
+          "pet",
+          "aperitif-basket",
+          "basket",
+          "signature-aperitif",
+          "signature-sweet",
+        ]),
+      )
+      .max(30)
+      .default([]),
+    experiences: z
+      .array(
+        z.enum(["romance", "anniversaire", "lune-de-miel", "fruits-de-mer", "velo", "famille"]),
+      )
+      .max(20)
+      .default([]),
+    specialRequests: reservationSpecialRequestsSchema.optional(),
     guest: guestInputSchema,
   })
   .strict()
@@ -125,6 +176,13 @@ export const adminManualReservationSchema = z
         code: "custom",
         path: ["departure"],
         message: "La date de départ doit suivre l’arrivée.",
+      });
+    }
+    if (input.totalCents !== undefined && !input.overrideReason) {
+      context.addIssue({
+        code: "custom",
+        path: ["overrideReason"],
+        message: "Une dérogation tarifaire doit être justifiée.",
       });
     }
   });

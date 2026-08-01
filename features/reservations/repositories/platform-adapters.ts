@@ -9,7 +9,7 @@ export class PlatformAvailabilityRepository implements AvailabilityRepository {
       propertySlug,
       generatedAt: snapshot.generatedAt,
       blocks: snapshot.blocks,
-      sourcesHealthy: snapshot.sources.every((source) => source.status === "success"),
+      sourcesHealthy: snapshot.reliable,
     };
   }
 }

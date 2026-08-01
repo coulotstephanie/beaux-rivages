@@ -2879,6 +2879,24 @@ export type Database = {
           },
         ]
       }
+      reservation_events: {
+        Row: { actor_id: string | null; details: Json; event_type: string; id: number; occurred_at: string; origin: string; reservation_id: string }
+        Insert: { actor_id?: string | null; details?: Json; event_type: string; id?: never; occurred_at?: string; origin: string; reservation_id: string }
+        Update: { actor_id?: string | null; details?: Json; event_type?: string; occurred_at?: string; origin?: string; reservation_id?: string }
+        Relationships: [{ foreignKeyName: "reservation_events_reservation_id_fkey"; columns: ["reservation_id"]; isOneToOne: false; referencedRelation: "reservations"; referencedColumns: ["id"] }]
+      }
+      reservation_items: {
+        Row: { code: string; created_at: string; id: string; kind: string; label: string; metadata: Json; quantity: number; reservation_id: string; total_cents: number; unit_price_cents: number }
+        Insert: { code: string; created_at?: string; id?: string; kind: string; label: string; metadata?: Json; quantity?: number; reservation_id: string; unit_price_cents?: number }
+        Update: { code?: string; kind?: string; label?: string; metadata?: Json; quantity?: number; unit_price_cents?: number }
+        Relationships: [{ foreignKeyName: "reservation_items_reservation_id_fkey"; columns: ["reservation_id"]; isOneToOne: false; referencedRelation: "reservations"; referencedColumns: ["id"] }]
+      }
+      reservation_special_requests: {
+        Row: { allergies: string | null; created_at: string; late_arrival: string | null; message: string | null; occasion: string | null; reservation_id: string; updated_at: string }
+        Insert: { allergies?: string | null; late_arrival?: string | null; message?: string | null; occasion?: string | null; reservation_id: string }
+        Update: { allergies?: string | null; late_arrival?: string | null; message?: string | null; occasion?: string | null; updated_at?: string }
+        Relationships: [{ foreignKeyName: "reservation_special_requests_reservation_id_fkey"; columns: ["reservation_id"]; isOneToOne: true; referencedRelation: "reservations"; referencedColumns: ["id"] }]
+      }
       reservation_guests: {
         Row: {
           created_at: string

@@ -1,0 +1,14 @@
+drop trigger if exists payment_journal_after_write on public.payments;
+drop trigger if exists reservation_journal_after_update on public.reservations;
+drop trigger if exists reservation_item_journal on public.reservation_items;
+drop trigger if exists reservation_context_after_insert on public.reservations;
+drop trigger if exists reservation_no_overlap on public.reservations;
+drop function if exists public.journal_payment_change();
+drop function if exists public.journal_reservation_change();
+drop function if exists public.journal_reservation_item();
+drop function if exists public.persist_reservation_context();
+drop function if exists public.prevent_reservation_overlap();
+drop table if exists public.reservation_events;
+drop table if exists public.reservation_documents;
+drop table if exists public.reservation_special_requests;
+drop table if exists public.reservation_items;
