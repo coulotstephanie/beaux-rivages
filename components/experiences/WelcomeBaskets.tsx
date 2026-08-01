@@ -41,9 +41,11 @@ const baskets = [
 export function WelcomeBaskets({
   value,
   onChange,
+  showPrice = true,
 }: {
   value?: WelcomeBasketChoice;
   onChange?: (choice: WelcomeBasketChoice) => void;
+  showPrice?: boolean;
 }) {
   const selectable = Boolean(onChange);
   return (
@@ -52,8 +54,8 @@ export function WelcomeBaskets({
         <p className="eyebrow">Accueil gourmand</p>
         <h2 id="welcome-baskets-title">Deux paniers, une même attention portée aux producteurs.</h2>
         <p>
-          Le choix du panier est effectué lors de la réservation. Chaque panier coûte 45 € par
-          séjour.
+          Le choix du panier est effectué lors de la réservation.
+          {showPrice ? " Chaque panier coûte 45 € par séjour." : ""}
         </p>
         {selectable ? (
           <label className={`welcome-basket-none${value === null ? " is-selected" : ""}`}>
@@ -82,7 +84,7 @@ export function WelcomeBaskets({
               </div>
               <div className="welcome-basket-experience__copy">
                 <h3>{basket.title}</h3>
-                <strong>45 € par séjour</strong>
+                {showPrice ? <strong>45 € par séjour</strong> : null}
                 <p>{basket.intro}</p>
                 <ul>
                   {basket.items.map((item) => (

@@ -76,7 +76,7 @@ export function HospitalityServicePage({ service }: { service: HospitalityServic
       </section>
       {service.slug === "experience-signature" ? (
         <div className="shell">
-          <WelcomeBaskets />
+          <WelcomeBaskets showPrice={false} />
         </div>
       ) : null}
       <ExperienceSections
