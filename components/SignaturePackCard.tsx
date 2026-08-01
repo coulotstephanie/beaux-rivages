@@ -27,8 +27,9 @@ export function SignaturePackCard({
         </span>
         <strong>Le séjour préparé dans ses moindres détails.</strong>
         <span>
-          Lits faits, linge complet, serviettes de plage, deux peignoirs et chaussons, panier
-          gourmand au choix, carafe d’eau fraîche et attention personnalisée.
+          Lits faits, linge complet, serviettes de plage, deux peignoirs et chaussons, carafe d’eau
+          fraîche et attention personnalisée. Le panier gourmand de votre choix peut être ajouté à
+          la réservation.
         </span>
       </span>
     </label>

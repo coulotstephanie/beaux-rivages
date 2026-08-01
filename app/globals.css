@@ -1072,6 +1072,26 @@ body.menu-open { overflow: hidden; }
 .experience-official-sources { display:flex; flex-wrap:wrap; gap:.7rem 1.2rem; margin-top:1.5rem; }
 .experience-official-sources strong { flex-basis:100%; }
 .experience-official-sources a { color:var(--deep); text-underline-offset:3px; }
+.welcome-basket-experience { padding:clamp(4rem,8vw,7rem) 0; }
+.welcome-basket-experience__heading { max-width:860px; margin-bottom:2rem; }
+.welcome-basket-experience__heading h2 { margin:.5rem 0 1rem; font:400 clamp(2rem,4vw,4rem)/1.08 var(--font-serif); }
+.welcome-basket-experience__heading > p:last-of-type { color:var(--muted); line-height:1.7; }
+.welcome-basket-none { width:fit-content; margin-top:1.2rem; padding:.8rem 1.1rem; display:flex; gap:.7rem; align-items:center; border:1px solid var(--line); cursor:pointer; }
+.welcome-basket-none.is-selected { border-color:var(--gold-text); background:var(--sand); }
+.welcome-basket-experience__grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; align-items:stretch; }
+.welcome-basket-experience__grid article { min-width:0; display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--line); background:#fff; box-shadow:var(--shadow-soft); }
+.welcome-basket-experience__grid article.is-selected { border-color:var(--gold-text); box-shadow:inset 0 0 0 1px var(--gold-text),var(--shadow-soft); }
+.welcome-basket-experience__image { position:relative; aspect-ratio:16/10; overflow:hidden; }
+.welcome-basket-experience__image img { object-fit:cover; }
+.welcome-basket-experience__copy { flex:1; padding:clamp(1.5rem,3.5vw,2.6rem); display:flex; flex-direction:column; align-items:flex-start; }
+.welcome-basket-experience__copy h3 { min-height:2.2em; margin:0 0 .6rem; font:400 clamp(1.8rem,3vw,2.7rem)/1.08 var(--font-serif); }
+.welcome-basket-experience__copy > strong { color:var(--gold-text); font-size:1.05rem; }
+.welcome-basket-experience__copy > p { min-height:5.2em; color:var(--muted); line-height:1.65; }
+.welcome-basket-experience__copy ul { flex:1; margin:0 0 1.8rem; padding-left:1.1rem; }
+.welcome-basket-experience__copy li { margin:.65rem 0; line-height:1.55; }
+.welcome-basket-experience__copy .primary-button { margin-top:auto; cursor:pointer; }
+.welcome-basket-experience__copy .primary-button input { position:absolute; opacity:0; }
+.welcome-basket-experience__copy .primary-button:has(input:focus-visible) { outline:3px solid var(--gold-text); outline-offset:3px; }
 .experience-unified-faq details { max-width:900px; padding:1.15rem 0; border-bottom:1px solid rgba(7,35,39,.16); }
 .experience-unified-faq summary { cursor:pointer; font-weight:700; }
 .experience-unified-faq details p { color:var(--muted); line-height:1.7; }
@@ -1107,6 +1127,8 @@ body.menu-open { overflow: hidden; }
   .hospitality-service-card__media { min-height:65vw; }
   .hospitality-service-content,.service-gallery { grid-template-columns:1fr; }
   .experience-unified-included ul,.experience-unified-practical dl,.experience-similar > div { grid-template-columns:1fr; }
+  .welcome-basket-experience__grid { grid-template-columns:1fr; }
+  .welcome-basket-experience__copy h3,.welcome-basket-experience__copy > p { min-height:0; }
   .service-gallery button { min-height:75vw; }
 }
 @media (max-width:600px) {

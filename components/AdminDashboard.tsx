@@ -1351,6 +1351,18 @@ function ReservationDetail({
         </article>
         <article>
           <h3>Options réservées</h3>
+          <dl>
+            <div>
+              <dt>Accueil gourmand</dt>
+              <dd>
+                {reservation.options.some((item) => item.code === "aperitif-basket")
+                  ? "Panier Apéritif"
+                  : reservation.options.some((item) => item.code === "basket")
+                    ? "Panier Douceur"
+                    : "Aucun"}
+              </dd>
+            </div>
+          </dl>
           {reservation.options.length ? (
             <ul>
               {reservation.options.map((item) => (

@@ -42,6 +42,13 @@ const reservationRequestSchema = z
     if (input.adults + input.children > 8) {
       context.addIssue({ code: "custom", path: ["adults"], message: "Capacité dépassée." });
     }
+    if (input.options.includes("aperitif-basket") && input.options.includes("basket")) {
+      context.addIssue({
+        code: "custom",
+        path: ["options"],
+        message: "Un seul panier d’accueil peut être sélectionné.",
+      });
+    }
   });
 
 function toCents(value: number) {
@@ -154,6 +161,7 @@ export async function POST(request: NextRequest) {
       departure: input.departure,
       total: quote.total,
       guest: input.guest,
+      options: quote.optionLines.map((line) => line.label),
     };
     const provider = new ConfigurableEmailProvider();
     const travelerEmail = travelerRequestEmail(emailInput);

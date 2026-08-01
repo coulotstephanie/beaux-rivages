@@ -7,6 +7,7 @@ import { SITE_URL } from "@/seo";
 import { ExperienceRequestForm } from "./ExperienceRequestForm";
 import { ExperienceSections } from "./ExperienceSections";
 import { ServiceGallery } from "./ServiceGallery";
+import { WelcomeBaskets } from "./WelcomeBaskets";
 import { hospitalityServices } from "@/hospitalityServices";
 
 export function HospitalityServicePage({ service }: { service: HospitalityService }) {
@@ -73,6 +74,11 @@ export function HospitalityServicePage({ service }: { service: HospitalityServic
           <p>{service.intro}</p>
         </div>
       </section>
+      {service.slug === "experience-signature" ? (
+        <div className="shell">
+          <WelcomeBaskets />
+        </div>
+      ) : null}
       <ExperienceSections
         presentation={service.intro}
         included={included}

@@ -661,3 +661,22 @@ test("experience pages share the premium structure and required hospitality prom
   assert.match(details, /reedukcoach\.fr/);
   assert.match(details, /grandes marées/);
 });
+
+test("welcome basket choice stays exclusive, priced and visible throughout the direct journey", () => {
+  const booking = read("booking.ts");
+  assert.match(booking, /Panier Apéritif Beaux Rivages/);
+  assert.match(booking, /Panier Douceur Beaux Rivages/);
+  assert.equal((booking.match(/price: 45/g) ?? []).length >= 2, true);
+
+  const baskets = read("components/experiences/WelcomeBaskets.tsx");
+  assert.match(baskets, /Aucun panier/);
+  assert.match(baskets, /Choisir ce panier/);
+  assert.match(baskets, /Pelletier de l’Île de Ré/);
+  assert.match(baskets, /L’Atelier de la Biscuiterie de Ré/);
+
+  assert.match(read("app/api/reservation/route.ts"), /Un seul panier d’accueil/);
+  assert.match(read("components/AdminDashboard.tsx"), /Accueil gourmand/);
+  assert.match(read("platform/email/reservation-request.ts"), /Accueil gourmand/);
+  assert.match(read("platform/contracts/html.ts"), /Accueil gourmand/);
+  assert.match(read("supabase/migrations/20260801113000_welcome_baskets.sql"), /4500/);
+});

@@ -276,9 +276,8 @@ export const hospitalityServices: HospitalityService[] = [
       {
         title: "Accueil gourmand au choix",
         items: [
-          "Panier Apéritif : vin Pelletier de l’Île de Ré au choix, biscuits apéritifs, terrine artisanale",
-          "Panier Douceur : biscuits artisanaux, confiture locale, caramels au beurre salé, jus de fruits",
-          "Carte des producteurs et recommandations de Stéphanie & Bruno",
+          "Panier Apéritif Beaux Rivages · 45 € par séjour : vin Pelletier de l’Île de Ré au choix, biscuits apéritifs de L’Atelier de la Biscuiterie de Ré, terrine artisanale et carte des producteurs",
+          "Panier Douceur Beaux Rivages · 45 € par séjour : biscuits de L’Atelier de la Biscuiterie de Ré, confiture locale, caramels au beurre salé, jus de fruits et carte des producteurs",
         ],
       },
       {

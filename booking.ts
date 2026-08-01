@@ -124,15 +124,17 @@ export const stayOptions: StayOption[] = [
   },
   {
     id: "aperitif-basket",
-    label: "Panier apéritif",
-    description: "Une sélection conviviale inspirée des producteurs et saveurs des îles.",
-    price: 52,
+    label: "Panier Apéritif Beaux Rivages",
+    description:
+      "Vin Pelletier de l’Île de Ré, biscuits apéritifs artisanaux, terrine et carte des producteurs.",
+    price: 45,
   },
   {
     id: "basket",
-    label: "Panier gourmand",
-    description: "Une sélection de saison, salée ou sucrée, préparée pour votre arrivée.",
-    price: 48,
+    label: "Panier Douceur Beaux Rivages",
+    description:
+      "Biscuits artisanaux, confiture locale, caramels au beurre salé, jus de fruits et carte des producteurs.",
+    price: 45,
   },
 ];
 
