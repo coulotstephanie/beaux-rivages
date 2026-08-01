@@ -7,6 +7,7 @@ import type {
 import type { AdminOperationInput } from "./schemas";
 import { getDatabaseClient } from "./client";
 import type { Database } from "./database.types";
+import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 
 type Row = Record<string, unknown>;
 
@@ -208,6 +209,18 @@ export class SupabaseBackOfficeRepository {
         const property = propertyById.get(String(row.property_id));
         const guestId = primaryGuestByReservation.get(String(row.id)) ?? null;
         const guest = guestId ? guestById.get(guestId) : undefined;
+        const quote =
+          row.quote_snapshot &&
+          typeof row.quote_snapshot === "object" &&
+          !Array.isArray(row.quote_snapshot)
+            ? (row.quote_snapshot as Row)
+            : {};
+        const taxDetails =
+          quote.touristTaxDetails &&
+          typeof quote.touristTaxDetails === "object" &&
+          !Array.isArray(quote.touristTaxDetails)
+            ? (quote.touristTaxDetails as Row)
+            : {};
         return {
           id: String(row.id),
           reference: String(row.reference),
@@ -225,7 +238,33 @@ export class SupabaseBackOfficeRepository {
           totalCents: Number(row.total_cents),
           depositDueCents: Number(row.deposit_due_cents),
           balanceDueCents: Number(row.balance_due_cents),
+          balanceDueDate: quote.balanceDueDate ? String(quote.balanceDueDate) : null,
+          depositPercentage: Number(
+            quote.depositPercentage ?? (Number(row.balance_due_cents) === 0 ? 100 : 30),
+          ),
+          fullPaymentRequired: Boolean(
+            quote.fullPaymentRequired ?? Number(row.balance_due_cents) === 0,
+          ),
           touristTaxCents: Number(row.tourist_tax_cents),
+          touristTaxDetails: {
+            liableGuests: Number(taxDetails.liableGuests ?? row.adults),
+            exemptGuests: Number(
+              taxDetails.exemptGuests ?? Number(row.children) + Number(row.babies),
+            ),
+            method: String(taxDetails.method ?? "Non renseignée"),
+            baseRate: taxDetails.baseRate == null ? null : Number(taxDetails.baseRate),
+            additionalRate:
+              taxDetails.additionalRate == null ? null : Number(taxDetails.additionalRate),
+          },
+          legalAcceptance: {
+            termsVersion: String(quote.termsVersion ?? "Non renseignée"),
+            termsAcceptedAt: quote.termsAcceptedAt ? String(quote.termsAcceptedAt) : null,
+            cancellationVersion: String(quote.cancellationVersion ?? "Non renseignée"),
+            cancellationAcceptedAt: quote.cancellationAcceptedAt
+              ? String(quote.cancellationAcceptedAt)
+              : null,
+            paymentMethod: String(quote.paymentMethod ?? "Non renseigné"),
+          },
           options: optionRows
             .filter((option) => String(option.reservation_id) === String(row.id))
             .map((option) => ({
@@ -593,7 +632,7 @@ export class SupabaseBackOfficeRepository {
 
   async execute(input: AdminOperationInput) {
     if (input.action === "create_reservation") {
-      const deposit = Math.round(input.totalCents * 0.3);
+      const schedule = buildPaymentSchedule(input.arrival, input.totalCents);
       const quote = {
         adults: input.adults,
         children: input.children,
@@ -605,8 +644,11 @@ export class SupabaseBackOfficeRepository {
         touristTaxCents: 0,
         discountCents: 0,
         totalCents: input.totalCents,
-        depositDueCents: deposit,
-        balanceDueCents: input.totalCents - deposit,
+        depositDueCents: schedule.depositDueCents,
+        balanceDueCents: schedule.balanceDueCents,
+        balanceDueDate: schedule.balanceDueDate,
+        depositPercentage: schedule.depositPercentage,
+        fullPaymentRequired: schedule.fullPaymentRequired,
         source: "back_office",
         propertySlug: input.propertySlug,
       };

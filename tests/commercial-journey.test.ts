@@ -22,8 +22,33 @@ test("complete direct-booking preparation calculates a family quote", async () =
   assert.equal(quote.stayRules.valid, true);
   assert.ok(quote.promotion?.discount);
   assert.ok(quote.cleaningFee > 0);
+  assert.ok(quote.touristTax > 0);
+  assert.equal(quote.touristTaxDetails.liableGuests, 2);
+  assert.equal(quote.touristTaxDetails.exemptGuests, 3);
+  assert.equal(quote.touristTaxDetails.method, "Tarif proportionnel");
   assert.ok(quote.optionLines.some((line) => line.id === "signature"));
   assert.ok(quote.total > quote.accommodation);
+});
+
+test("tourist tax excludes minors and respects the local nightly cap", async () => {
+  const quote = await calculateQuote({
+    propertySlug: "nid-d-ete",
+    arrival: "2026-08-10",
+    departure: "2026-08-12",
+    adults: 2,
+    children: 2,
+    babies: 1,
+    pets: 0,
+    options: [],
+    experiences: [],
+  });
+  assert.equal(quote.touristTaxDetails.liableGuests, 2);
+  assert.equal(quote.touristTaxDetails.exemptGuests, 3);
+  assert.ok(quote.touristTaxDetails.taxPerGuestNight <= 3.3);
+  assert.equal(
+    quote.touristTax,
+    quote.touristTaxDetails.taxPerGuestNight * quote.touristTaxDetails.liableGuests * 2,
+  );
 });
 
 test("Signature includes one welcome basket and charges only the additional basket", async () => {

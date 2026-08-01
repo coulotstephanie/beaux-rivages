@@ -10,6 +10,7 @@ type BookingResult = {
   reference?: string;
   message?: string;
   error?: string;
+  paymentMethod?: "bank_transfer" | "holiday_vouchers";
 };
 
 export function DirectBookingForm({
@@ -51,6 +52,9 @@ export function DirectBookingForm({
           countryCode: "FR",
         },
         idempotencyKey: crypto.randomUUID(),
+        paymentMethod: String(data.get("paymentMethod")),
+        termsAccepted: data.get("termsAccepted") === "on",
+        cancellationAccepted: data.get("cancellationAccepted") === "on",
       }),
     });
     const payload = (await response.json().catch(() => ({}))) as BookingResult;
@@ -76,6 +80,7 @@ export function DirectBookingForm({
           Stéphanie ou Bruno vérifie les derniers détails avant la confirmation définitive. Aucun
           paiement n’a été débité.
         </p>
+        <p>{result.message}</p>
         <a href={`mailto:coulotstephanie@gmail.com?subject=Réservation ${result.reference}`}>
           Contacter Stéphanie au sujet de cette demande
         </a>
@@ -102,6 +107,25 @@ export function DirectBookingForm({
         <strong>{quote.total.toLocaleString("fr-FR")} €</strong>
         <small>Prix total du séjour, options et taxe de séjour comprises</small>
       </div>
+      <aside className="booking-conditions-summary" aria-labelledby="booking-conditions-title">
+        <h4 id="booking-conditions-title">Conditions de réservation</h4>
+        {quote.paymentSchedule.fullPaymentRequired ? (
+          <p>
+            <strong>Paiement intégral lors de la réservation.</strong> Cette demande intervient
+            moins de 14 jours avant l’arrivée : aucun acompte n’est proposé.
+          </p>
+        ) : (
+          <p>
+            <strong>Acompte de 30 % à la réservation.</strong> Solde à régler 14 jours avant votre
+            arrivée.
+          </p>
+        )}
+        <p>
+          Annulation gratuite pendant 24 heures après la réservation, hors réservations effectuées
+          moins de 14 jours avant l’arrivée. Après ce délai, l’acompte reste acquis. À moins de 14
+          jours de l’arrivée, le séjour est intégralement dû.
+        </p>
+      </aside>
       <div className="direct-booking-form__fields">
         <label>
           Prénom
@@ -121,13 +145,36 @@ export function DirectBookingForm({
         </label>
       </div>
       <label className="direct-booking-form__consent">
-        <input name="consent" type="checkbox" required />
+        <input name="termsAccepted" type="checkbox" required />
         <span>
-          J’ai vérifié les dates, les voyageurs, les options et le prix. Je comprends qu’il s’agit
-          d’une demande sans débit immédiat et que les conditions contractuelles me seront
-          présentées avant tout engagement.
+          Je reconnais avoir lu et accepté les{" "}
+          <a href="/conditions-generales-de-vente" target="_blank" rel="noreferrer">
+            Conditions Générales de Vente
+          </a>
+          .
         </span>
       </label>
+      <label className="direct-booking-form__consent">
+        <input name="cancellationAccepted" type="checkbox" required />
+        <span>
+          Je reconnais avoir pris connaissance de la{" "}
+          <a href="/politique-annulation" target="_blank" rel="noreferrer">
+            politique d’annulation
+          </a>
+          .
+        </span>
+      </label>
+      <fieldset className="direct-booking-form__payment">
+        <legend>Mode de règlement</legend>
+        <label>
+          <input type="radio" name="paymentMethod" value="bank_transfer" required /> Virement
+          bancaire
+        </label>
+        <label>
+          <input type="radio" name="paymentMethod" value="holiday_vouchers" required />{" "}
+          Chèques‑Vacances
+        </label>
+      </fieldset>
       {status === "error" ? (
         <p role="alert">
           {result.error ??

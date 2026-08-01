@@ -3536,6 +3536,110 @@ export type Database = {
           },
         ]
       }
+      legal_documents: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          document_key: string
+          effective_from: string
+          id: string
+          published: boolean
+          sections: Json
+          title: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          document_key: string
+          effective_from?: string
+          id?: string
+          published?: boolean
+          sections?: Json
+          title: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          document_key?: string
+          effective_from?: string
+          id?: string
+          published?: boolean
+          sections?: Json
+          title?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      tourist_tax_settings: {
+        Row: {
+          accommodation_category: string
+          additional_rate_percent: number
+          calculation_mode: string
+          classification: string
+          created_at: string
+          effective_from: string
+          effective_to: string | null
+          enabled: boolean
+          id: string
+          intercommunality: string
+          municipality: string
+          nightly_cap_cents: number
+          property_id: string
+          rate_value: number
+          source_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          accommodation_category?: string
+          additional_rate_percent?: number
+          calculation_mode?: string
+          classification?: string
+          created_at?: string
+          effective_from: string
+          effective_to?: string | null
+          enabled?: boolean
+          id?: string
+          intercommunality: string
+          municipality: string
+          nightly_cap_cents: number
+          property_id: string
+          rate_value: number
+          source_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accommodation_category?: string
+          additional_rate_percent?: number
+          calculation_mode?: string
+          classification?: string
+          created_at?: string
+          effective_from?: string
+          effective_to?: string | null
+          enabled?: boolean
+          id?: string
+          intercommunality?: string
+          municipality?: string
+          nightly_cap_cents?: number
+          property_id?: string
+          rate_value?: number
+          source_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tourist_tax_settings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           active: boolean
@@ -3784,6 +3888,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      publish_legal_document: {
+        Args: { target_id: string }
+        Returns: undefined
+      }
       calculate_stay_price: {
         Args: {
           requested_arrival: string

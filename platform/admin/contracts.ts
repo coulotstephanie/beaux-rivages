@@ -8,7 +8,7 @@ export const reservationStatuses = [
   "declined",
 ] as const;
 
-export type ReservationStatus = typeof reservationStatuses[number];
+export type ReservationStatus = (typeof reservationStatuses)[number];
 
 export type BackOfficeReservation = {
   id: string;
@@ -27,7 +27,24 @@ export type BackOfficeReservation = {
   totalCents: number;
   depositDueCents: number;
   balanceDueCents: number;
+  balanceDueDate: string | null;
+  depositPercentage: number;
+  fullPaymentRequired: boolean;
   touristTaxCents: number;
+  touristTaxDetails: {
+    liableGuests: number;
+    exemptGuests: number;
+    method: string;
+    baseRate: number | null;
+    additionalRate: number | null;
+  };
+  legalAcceptance: {
+    termsVersion: string;
+    termsAcceptedAt: string | null;
+    cancellationVersion: string;
+    cancellationAcceptedAt: string | null;
+    paymentMethod: string;
+  };
   options: { code: string; label: string; quantity: number; totalCents: number }[];
   guestId: string | null;
   guestName: string;
@@ -79,49 +96,127 @@ export type BackOfficeSnapshot = {
     revenueCents: number;
   }[];
   documents: {
-    contracts: { id: string; number: string; status: string; reservationReference: string; updatedAt: string }[];
-    invoices: { id: string; number: string; status: string; reservationReference: string; totalCents: number; updatedAt: string }[];
+    contracts: {
+      id: string;
+      number: string;
+      status: string;
+      reservationReference: string;
+      updatedAt: string;
+    }[];
+    invoices: {
+      id: string;
+      number: string;
+      status: string;
+      reservationReference: string;
+      totalCents: number;
+      updatedAt: string;
+    }[];
   };
   operations: {
     housekeeping: {
-      id: string; propertyId: string; propertyName: string; reservationReference: string | null;
-      scheduledFor: string; assignee: string; status: string;
-      checklist: { id: string; label: string; done: boolean }[]; notes: string;
+      id: string;
+      propertyId: string;
+      propertyName: string;
+      reservationReference: string | null;
+      scheduledFor: string;
+      assignee: string;
+      status: string;
+      checklist: { id: string; label: string; done: boolean }[];
+      notes: string;
     }[];
     maintenance: {
-      id: string; propertyId: string; propertyName: string; reservationReference: string | null;
-      title: string; description: string; priority: string; status: string; assignee: string;
-      costCents: number; dueAt: string | null; createdAt: string;
+      id: string;
+      propertyId: string;
+      propertyName: string;
+      reservationReference: string | null;
+      title: string;
+      description: string;
+      priority: string;
+      status: string;
+      assignee: string;
+      costCents: number;
+      dueAt: string | null;
+      createdAt: string;
     }[];
     concierge: {
-      id: string; reservationId: string; reservationReference: string; guestName: string;
-      kind: string; title: string; details: string; status: string; scheduledFor: string | null;
+      id: string;
+      reservationId: string;
+      reservationReference: string;
+      guestName: string;
+      kind: string;
+      title: string;
+      details: string;
+      status: string;
+      scheduledFor: string | null;
       isSurprise: boolean;
     }[];
     conciergeOrders: {
-      id: string; reservationReference: string; guestName: string; status: string; locale: string;
-      totalCents: number; itemCount: number; createdAt: string;
+      id: string;
+      reservationReference: string;
+      guestName: string;
+      status: string;
+      locale: string;
+      totalCents: number;
+      itemCount: number;
+      createdAt: string;
     }[];
     specialRequests: {
-      id: string; reservationReference: string; guestName: string; occasion: string;
-      details: string; allergies: string; dietaryRequirements: string; status: string; createdAt: string;
+      id: string;
+      reservationReference: string;
+      guestName: string;
+      occasion: string;
+      details: string;
+      allergies: string;
+      dietaryRequirements: string;
+      status: string;
+      createdAt: string;
     }[];
     deposits: {
-      id: string; reservationReference: string; guestName: string; amountCents: number;
-      status: string; provider: string; updatedAt: string;
+      id: string;
+      reservationReference: string;
+      guestName: string;
+      amountCents: number;
+      status: string;
+      provider: string;
+      updatedAt: string;
     }[];
     notifications: {
-      id: string; kind: string; title: string; body: string; priority: string;
-      entityType: string | null; entityId: string | null; readAt: string | null; createdAt: string;
+      id: string;
+      kind: string;
+      title: string;
+      body: string;
+      priority: string;
+      entityType: string | null;
+      entityId: string | null;
+      readAt: string | null;
+      createdAt: string;
     }[];
     notes: {
-      id: string; reservationId: string; category: string; content: string;
-      pinned: boolean; createdAt: string;
+      id: string;
+      reservationId: string;
+      category: string;
+      content: string;
+      pinned: boolean;
+      createdAt: string;
     }[];
   };
   pilotage: {
-    calendarSources: { id: string; property: string; provider: string; status: string; lastSyncedAt: string | null }[];
-    recentSyncs: { id: string; provider: string; property: string; status: string; importedCount: number; errorCount: number; startedAt: string }[];
+    calendarSources: {
+      id: string;
+      property: string;
+      provider: string;
+      status: string;
+      lastSyncedAt: string | null;
+    }[];
+    recentSyncs: {
+      id: string;
+      provider: string;
+      property: string;
+      status: string;
+      importedCount: number;
+      errorCount: number;
+      startedAt: string;
+    }[];
     emailStatus: Record<string, number>;
     paymentStatus: Record<string, number>;
     recentPayments: {

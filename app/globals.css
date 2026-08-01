@@ -3311,6 +3311,30 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .stay-testimonial label,.stay-testimonial textarea { width: 100%; display: block; }
 .stay-testimonial textarea { margin: .5rem 0 1rem; padding: 1rem; border: 1px solid var(--line); background: white; font: inherit; }
 
+.legal-page { padding-top: clamp(8rem,14vw,12rem); padding-bottom: clamp(4rem,8vw,8rem); }
+.legal-page > header { max-width: 850px; margin-bottom: clamp(2.5rem,6vw,5rem); }
+.legal-page h1 { margin: .6rem 0 1.2rem; color: var(--deep); font: 400 clamp(2.6rem,6vw,5.8rem)/.98 var(--font-serif); }
+.legal-page > header > p,.legal-page section p,.legal-page details p { color: var(--muted); line-height: 1.8; }
+.legal-page section { max-width: 920px; padding: 1.4rem 0; border-top: 1px solid var(--line); }
+.legal-page h2 { margin: 0 0 .6rem; color: var(--deep); font: 400 clamp(1.35rem,3vw,2rem) var(--font-serif); }
+.legal-page details { max-width: 920px; border-top: 1px solid var(--line); }
+.legal-page details:last-child { border-bottom: 1px solid var(--line); }
+.legal-page summary { padding: 1.3rem 2.5rem 1.3rem 0; position: relative; cursor: pointer; color: var(--deep); font: 400 clamp(1.25rem,3vw,1.8rem) var(--font-serif); list-style: none; }
+.legal-page summary::-webkit-details-marker { display: none; }
+.legal-page summary::after { content: "+"; position: absolute; right: .4rem; top: 1rem; font-size: 1.8rem; }
+.legal-page details[open] summary::after { content: "−"; }
+.legal-page details p { padding: 0 2.5rem 1.4rem 0; }
+.legal-admin-layout { display: grid; grid-template-columns: minmax(0,1.7fr) minmax(280px,.8fr); gap: 1rem; align-items: start; }
+.legal-admin-editor { display: grid; gap: .9rem; }
+.legal-admin-editor label { display: grid; gap: .4rem; }
+.legal-admin-editor input,.legal-admin-editor select,.legal-admin-editor textarea { width: 100%; padding: .7rem; border: 1px solid #ccd3d0; background: white; font: inherit; }
+.legal-admin-editor textarea { resize: vertical; line-height: 1.55; }
+.booking-conditions-summary { margin: 1rem 0 1.4rem; padding: 1.2rem; border: 1px solid #d8ccb1; background: #f7f3ea; }
+.booking-conditions-summary h4 { margin: 0 0 .7rem; color: var(--deep); font: 400 1.45rem var(--font-serif); }
+.booking-conditions-summary p { margin: .45rem 0; color: var(--muted); line-height: 1.6; }
+.legal-admin-fields { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+@media (max-width: 800px) { .legal-admin-layout { grid-template-columns: 1fr; } .legal-admin-fields { grid-template-columns: 1fr; } }
+
 .stephanie-letter { padding: clamp(5rem,10vw,10rem) 0; display: grid; grid-template-columns: 1fr .9fr; gap: clamp(2rem,7vw,7rem); }
 .stephanie-letter h2 { margin: .6rem 0 2rem; font-family: var(--font-serif); font-size: clamp(2.5rem,5vw,5rem); font-weight: 400; line-height: 1; }
 .stephanie-letter p { color: var(--muted); font-size: 1.05rem; line-height: 1.85; }

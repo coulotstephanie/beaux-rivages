@@ -162,7 +162,7 @@ export function PropertyPage({ property, children }: { property: Property; child
           <h2>{property.bookingTitle}</h2>
           <p>
             {property.bookingText} Réservation directe, échange avec Stéphanie, attentions
-            personnalisables et paiement par Chèques-Vacances, virement bancaire ou espèces.
+            personnalisables et paiement par Chèques‑Vacances ou virement bancaire.
           </p>
           <Button href={`/reserver?maison=${property.slug}`}>Choisir mes dates</Button>
         </Container>

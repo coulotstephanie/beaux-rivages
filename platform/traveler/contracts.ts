@@ -1,5 +1,17 @@
-export type TravelerDocument = { id: string; title: string; url: string; availableFrom: string; sensitive: boolean };
-export type ArrivalInformation = { propertySlug: string; availableFrom: string; parking: string; checkIn: string; contact: string };
+export type TravelerDocument = {
+  id: string;
+  title: string;
+  url: string;
+  availableFrom: string;
+  sensitive: boolean;
+};
+export type ArrivalInformation = {
+  propertySlug: string;
+  availableFrom: string;
+  parking: string;
+  checkIn: string;
+  contact: string;
+};
 export type TravelerPortal = {
   travelerId: string;
   reservationIds: string[];
@@ -40,6 +52,11 @@ export type StayAccessPayload = {
     touristTax: number;
     optionsTotal: number;
     total: number;
+    depositDue?: number;
+    balanceDue?: number;
+    balanceDueDate?: string;
+    termsVersion?: string;
+    cancellationVersion?: string;
     issuedOn: string;
     wifiQrValue?: string;
   };

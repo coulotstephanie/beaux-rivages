@@ -9,7 +9,18 @@
       "maximumNights": 28,
       "cleaningFee": 95,
       "securityDeposit": 800,
-      "touristTax": { "mode": "fixed-per-adult-per-night", "value": 0, "enabled": false },
+      "touristTax": {
+        "mode": "percentage",
+        "value": 5,
+        "enabled": true,
+        "additionalRate": 10,
+        "nightlyCap": 4.1,
+        "municipality": "Rivedoux-Plage",
+        "intercommunality": "Communauté de communes de l’Île de Ré",
+        "category": "Meublé de tourisme non classé",
+        "classification": "unclassified",
+        "effectiveFrom": "2026-01-01"
+      },
       "optionPrices": {
         "signature": 145,
         "linen": 20,
@@ -74,7 +85,18 @@
       "maximumNights": 28,
       "cleaningFee": 130,
       "securityDeposit": 1200,
-      "touristTax": { "mode": "fixed-per-adult-per-night", "value": 0, "enabled": false },
+      "touristTax": {
+        "mode": "percentage",
+        "value": 5,
+        "enabled": true,
+        "additionalRate": 10,
+        "nightlyCap": 4.1,
+        "municipality": "Rivedoux-Plage",
+        "intercommunality": "Communauté de communes de l’Île de Ré",
+        "category": "Meublé de tourisme non classé",
+        "classification": "unclassified",
+        "effectiveFrom": "2026-01-01"
+      },
       "optionPrices": {
         "signature": 145,
         "linen": 20,
@@ -139,7 +161,18 @@
       "maximumNights": 28,
       "cleaningFee": 90,
       "securityDeposit": 800,
-      "touristTax": { "mode": "fixed-per-adult-per-night", "value": 0, "enabled": false },
+      "touristTax": {
+        "mode": "percentage",
+        "value": 5,
+        "enabled": true,
+        "additionalRate": 10,
+        "nightlyCap": 3,
+        "municipality": "Saint-Georges-d’Oléron",
+        "intercommunality": "Communauté de communes de l’Île d’Oléron",
+        "category": "Meublé de tourisme non classé",
+        "classification": "unclassified",
+        "effectiveFrom": "2026-01-01"
+      },
       "optionPrices": {
         "signature": 145,
         "linen": 20,

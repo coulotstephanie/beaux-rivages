@@ -26,7 +26,7 @@ const assurances = [
   },
   {
     title: "Règlement",
-    copy: "Chèques-Vacances, virement bancaire et espèces sont proposés selon le séjour. Le paiement par carte sera affiché uniquement après activation sécurisée de Stripe.",
+    copy: "Le règlement des réservations directes s’effectue exclusivement par virement bancaire ou Chèques‑Vacances, selon les instructions transmises après validation.",
   },
   {
     title: "Contact direct",

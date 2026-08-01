@@ -4,7 +4,7 @@ import { SupabaseAdminRepository } from "@/platform/database/operations";
 import { authorizeStaff } from "@/platform/auth/server";
 import { rateLimit } from "@/platform/http/security";
 
-const allowedEntities = ["reservations", "payments", "audit_logs"] as const;
+const allowedEntities = ["reservations", "payments", "audit_logs", "tourist_tax"] as const;
 
 function csvCell(value: unknown) {
   const raw = value == null ? "" : String(value);
@@ -15,15 +15,17 @@ function csvCell(value: unknown) {
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 4, 60_000);
   if (limited) return limited;
-  if (!await authorizeStaff(request, ["admin", "read_only"])) return new Response("Authentification requise.", { status: 401 });
-  if (!isDatabaseConfigured()) return new Response("Base de données non configurée.", { status: 503 });
+  if (!(await authorizeStaff(request, ["admin", "read_only"])))
+    return new Response("Authentification requise.", { status: 401 });
+  if (!isDatabaseConfigured())
+    return new Response("Base de données non configurée.", { status: 503 });
 
   const requestedEntity = request.nextUrl.searchParams.get("entity");
-  if (!allowedEntities.includes(requestedEntity as typeof allowedEntities[number])) {
+  if (!allowedEntities.includes(requestedEntity as (typeof allowedEntities)[number])) {
     return new Response("Export inconnu.", { status: 400 });
   }
-  const entity = requestedEntity as typeof allowedEntities[number];
-  const rows = await new SupabaseAdminRepository().exportRows(entity);
+  const entity = requestedEntity as (typeof allowedEntities)[number];
+  const rows: Record<string, unknown>[] = await new SupabaseAdminRepository().exportRows(entity);
   const headers = rows[0] ? Object.keys(rows[0]) : [];
   const csv = [
     headers.map(csvCell).join(","),

@@ -2,9 +2,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { adminOperationSchema, createReservationSchema } from "../platform/database/schemas";
+import { buildPaymentSchedule } from "../platform/reservations/payment-schedule";
 
 const migration = readFileSync(
-  new URL("../supabase/migrations/20260727170000_production_booking_foundation.sql", import.meta.url),
+  new URL(
+    "../supabase/migrations/20260727170000_production_booking_foundation.sql",
+    import.meta.url,
+  ),
   "utf8",
 );
 const stripeMigration = readFileSync(
@@ -36,7 +40,15 @@ test("the reservation payload accepts a complete validated request", () => {
       totalCents: 97500,
       depositDueCents: 29250,
       balanceDueCents: 68250,
+      balanceDueDate: "2026-09-28",
+      depositPercentage: 30,
+      fullPaymentRequired: false,
       pricingVersion: "test",
+      paymentMethod: "bank_transfer",
+      termsVersion: "test",
+      termsAcceptedAt: "2026-08-01T10:00:00.000Z",
+      cancellationVersion: "test",
+      cancellationAcceptedAt: "2026-08-01T10:00:00.000Z",
       breakdown: [],
     },
     options: [],
@@ -64,12 +76,36 @@ test("the reservation payload rejects inconsistent financial totals", () => {
       totalCents: 89000,
       depositDueCents: 100,
       balanceDueCents: 100,
+      balanceDueDate: "2026-09-28",
+      depositPercentage: 30,
+      fullPaymentRequired: false,
       pricingVersion: "test",
+      paymentMethod: "holiday_vouchers",
+      termsVersion: "test",
+      termsAcceptedAt: "2026-08-01T10:00:00.000Z",
+      cancellationVersion: "test",
+      cancellationAcceptedAt: "2026-08-01T10:00:00.000Z",
       breakdown: [],
     },
     idempotencyKey: "73f640dc-e678-4ba0-a6df-b12576880805",
   });
   assert.equal(result.success, false);
+});
+
+test("payment schedule requests 30% then the balance fourteen days before arrival", () => {
+  const schedule = buildPaymentSchedule("2026-10-20", 100000, new Date("2026-10-01T08:00:00.000Z"));
+  assert.equal(schedule.depositDueCents, 30000);
+  assert.equal(schedule.balanceDueCents, 70000);
+  assert.equal(schedule.balanceDueDate, "2026-10-06");
+  assert.equal(schedule.fullPaymentRequired, false);
+});
+
+test("payment schedule requests the full amount for a last-minute stay", () => {
+  const schedule = buildPaymentSchedule("2026-10-10", 100000, new Date("2026-10-01T08:00:00.000Z"));
+  assert.equal(schedule.depositDueCents, 100000);
+  assert.equal(schedule.balanceDueCents, 0);
+  assert.equal(schedule.depositPercentage, 100);
+  assert.equal(schedule.fullPaymentRequired, true);
 });
 
 test("the SQL foundation enforces transactional occupancy conflicts and RLS", () => {
@@ -113,28 +149,37 @@ test("back-office operations validate manual reservations and date blocks", () =
 });
 
 test("back-office operations reject reversed dates and unknown actions", () => {
-  assert.equal(adminOperationSchema.safeParse({
-    action: "block_dates",
-    propertySlug: "chai-des-tortues",
-    arrival: "2026-12-10",
-    departure: "2026-12-01",
-    note: "Entretien",
-  }).success, false);
+  assert.equal(
+    adminOperationSchema.safeParse({
+      action: "block_dates",
+      propertySlug: "chai-des-tortues",
+      arrival: "2026-12-10",
+      departure: "2026-12-01",
+      note: "Entretien",
+    }).success,
+    false,
+  );
   assert.equal(adminOperationSchema.safeParse({ action: "delete_everything" }).success, false);
 });
 
 test("back-office status changes accept only the reservation lifecycle", () => {
-  assert.equal(adminOperationSchema.safeParse({
-    action: "update_reservation",
-    reservationId: "73f640dc-e678-4ba0-a6df-b12576880805",
-    status: "cancelled",
-    cancellationReason: "Demande du voyageur",
-  }).success, true);
-  assert.equal(adminOperationSchema.safeParse({
-    action: "update_reservation",
-    reservationId: "73f640dc-e678-4ba0-a6df-b12576880805",
-    status: "deleted",
-  }).success, false);
+  assert.equal(
+    adminOperationSchema.safeParse({
+      action: "update_reservation",
+      reservationId: "73f640dc-e678-4ba0-a6df-b12576880805",
+      status: "cancelled",
+      cancellationReason: "Demande du voyageur",
+    }).success,
+    true,
+  );
+  assert.equal(
+    adminOperationSchema.safeParse({
+      action: "update_reservation",
+      reservationId: "73f640dc-e678-4ba0-a6df-b12576880805",
+      status: "deleted",
+    }).success,
+    false,
+  );
 });
 
 test("Stripe webhook persistence is idempotent, private and reversible", () => {

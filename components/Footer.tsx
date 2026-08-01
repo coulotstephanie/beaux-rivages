@@ -11,7 +11,9 @@ export function Footer() {
             <p className="eyebrow light">Votre prochaine parenthèse</p>
             <h2>Préparons votre séjour sur les îles.</h2>
           </div>
-          <Button href="/reserver" variant="secondary">Demander une réservation</Button>
+          <Button href="/reserver" variant="secondary">
+            Demander une réservation
+          </Button>
         </div>
         <Divider light />
         <div className="premium-footer__grid">
@@ -49,6 +51,22 @@ export function Footer() {
             <a href="mailto:coulotstephanie@gmail.com">coulotstephanie@gmail.com</a>
             <a href="tel:+33617260094">+33 6 17 26 00 94</a>
             <p>Stéphanie & Bruno</p>
+          </div>
+          <div>
+            <p className="premium-footer__label">Informations légales</p>
+            <Link href="/conditions-generales-de-vente">Conditions Générales de Vente</Link>
+            <Link href="/conditions-generales-utilisation">Conditions Générales d’Utilisation</Link>
+            <Link href="/politique-annulation">Politique d’annulation</Link>
+            <Link href="/politique-remboursement">Politique de remboursement</Link>
+            <Link href="/mentions-legales">Mentions légales</Link>
+            <Link href="/politique-de-confidentialite">Politique de confidentialité</Link>
+            <Link href="/politique-de-cookies">Politique de cookies</Link>
+            <Link href="/charte-qualite">Charte qualité</Link>
+            <Link href="/engagements-environnement">Engagements environnementaux</Link>
+            <Link href="/charte-animaux">Charte Animaux</Link>
+            <Link href="/charte-bon-voisinage">Charte du bon voisinage</Link>
+            <Link href="/accessibilite">Accessibilité</Link>
+            <Link href="/faq-juridique">FAQ juridique</Link>
           </div>
         </div>
         <Divider light />

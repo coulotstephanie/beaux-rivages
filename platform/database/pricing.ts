@@ -34,6 +34,7 @@ export class SupabasePricingPlanReader {
       overridesResult,
       yieldOverridesResult,
       guardrailsResult,
+      touristTaxResult,
     ] = await Promise.all([
       client
         .from("rates")
@@ -52,6 +53,14 @@ export class SupabasePricingPlanReader {
         .eq("property_id", property.id)
         .eq("status", "active"),
       client.from("rate_guardrails").select("*").eq("property_id", property.id).maybeSingle(),
+      client
+        .from("tourist_tax_settings")
+        .select("*")
+        .eq("property_id", property.id)
+        .eq("enabled", true)
+        .order("effective_from", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
     ]);
     if (ratesResult.error) throw new Error(`PRICING_RATES_FAILED:${ratesResult.error.code}`);
     if (optionsResult.error) throw new Error(`PRICING_OPTIONS_FAILED:${optionsResult.error.code}`);
@@ -63,6 +72,8 @@ export class SupabasePricingPlanReader {
       throw new Error(`PRICING_YIELD_OVERRIDES_FAILED:${yieldOverridesResult.error.code}`);
     if (guardrailsResult.error)
       throw new Error(`PRICING_GUARDRAILS_FAILED:${guardrailsResult.error.code}`);
+    if (touristTaxResult.error)
+      throw new Error(`PRICING_TOURIST_TAX_FAILED:${touristTaxResult.error.code}`);
 
     const rates = ratesResult.data;
     const baseRate = rates.find((rate) => !rate.season_id && rate.weekdays.includes(1));
@@ -156,12 +167,31 @@ export class SupabasePricingPlanReader {
       maximumNights: baseRate.maximum_nights ?? 28,
       cleaningFee: baseRate.cleaning_fee_cents / 100,
       securityDeposit: baseRate.security_deposit_cents / 100,
-      touristTax: {
-        enabled: baseRate.tourist_tax_mode !== "disabled",
-        mode:
-          baseRate.tourist_tax_mode === "percentage" ? "percentage" : "fixed-per-adult-per-night",
-        value: Number(baseRate.tourist_tax_value),
-      },
+      touristTax: touristTaxResult.data
+        ? {
+            enabled: touristTaxResult.data.enabled,
+            mode:
+              touristTaxResult.data.calculation_mode === "proportional"
+                ? "percentage"
+                : "fixed-per-adult-per-night",
+            value: Number(touristTaxResult.data.rate_value),
+            additionalRate: Number(touristTaxResult.data.additional_rate_percent),
+            nightlyCap: touristTaxResult.data.nightly_cap_cents / 100,
+            municipality: touristTaxResult.data.municipality,
+            intercommunality: touristTaxResult.data.intercommunality,
+            category: touristTaxResult.data.accommodation_category,
+            classification: touristTaxResult.data
+              .classification as PropertyRatePlan["touristTax"]["classification"],
+            effectiveFrom: touristTaxResult.data.effective_from,
+          }
+        : {
+            enabled: baseRate.tourist_tax_mode !== "disabled",
+            mode:
+              baseRate.tourist_tax_mode === "percentage"
+                ? "percentage"
+                : "fixed-per-adult-per-night",
+            value: Number(baseRate.tourist_tax_value),
+          },
       optionPrices,
       seasons,
       promotions,

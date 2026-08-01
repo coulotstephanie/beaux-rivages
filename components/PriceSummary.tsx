@@ -16,6 +16,13 @@ export type BookingQuote = {
   optionLines: { id: string; label: string; quantity: number; unitPrice: number; total: number }[];
   experienceLines: { id: string; label: string; total: number }[];
   total: number;
+  paymentSchedule: {
+    depositPercentage: number;
+    depositDue: number;
+    balanceDue: number;
+    balanceDueDate: string;
+    fullPaymentRequired: boolean;
+  };
   stayRules: { valid: boolean; requiredMinimum: number; maximumNights: number };
 };
 
@@ -110,7 +117,15 @@ export function PriceSummary({
           </div>
           {quote.touristTax > 0 ? (
             <div>
-              <span>Taxe de séjour</span>
+              <span>
+                Taxe de séjour{" "}
+                <abbr
+                  title="La taxe de séjour est calculée automatiquement selon la réglementation locale en vigueur."
+                  aria-label="Information sur la taxe de séjour"
+                >
+                  ⓘ
+                </abbr>
+              </span>
               <strong>{quote.touristTax.toLocaleString("fr-FR")} €</strong>
             </div>
           ) : null}
@@ -133,6 +148,25 @@ export function PriceSummary({
             <span>Total du séjour</span>
             <strong>{quote.total.toLocaleString("fr-FR")} €</strong>
           </div>
+          <div>
+            <span>
+              {quote.paymentSchedule.fullPaymentRequired
+                ? "Paiement intégral à la réservation"
+                : "Acompte de 30 %"}
+            </span>
+            <strong>{quote.paymentSchedule.depositDue.toLocaleString("fr-FR")} €</strong>
+          </div>
+          {!quote.paymentSchedule.fullPaymentRequired ? (
+            <div>
+              <span>
+                Solde au{" "}
+                {new Intl.DateTimeFormat("fr-FR").format(
+                  new Date(`${quote.paymentSchedule.balanceDueDate}T12:00:00`),
+                )}
+              </span>
+              <strong>{quote.paymentSchedule.balanceDue.toLocaleString("fr-FR")} €</strong>
+            </div>
+          ) : null}
           <small>
             Caution non encaissée : {quote.securityDeposit.amount.toLocaleString("fr-FR")} €.{" "}
             {quote.stayRules.valid

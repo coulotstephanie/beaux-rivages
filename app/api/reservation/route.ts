@@ -18,6 +18,7 @@ import { ConfigurableEmailProvider } from "@/platform/email/contracts";
 import { ownerRequestEmail, travelerRequestEmail } from "@/platform/email/reservation-request";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { calculateQuote } from "@/platform/pricing/service";
+import { legalVersion } from "@/content/legal";
 
 const reservationRequestSchema = z
   .object({
@@ -33,6 +34,9 @@ const reservationRequestSchema = z
     promotionCode: z.string().trim().max(40).optional(),
     guest: guestInputSchema,
     idempotencyKey: z.string().uuid(),
+    paymentMethod: z.enum(["bank_transfer", "holiday_vouchers"]),
+    termsAccepted: z.literal(true),
+    cancellationAccepted: z.literal(true),
   })
   .strict()
   .superRefine((input, context) => {
@@ -140,11 +144,13 @@ export async function POST(request: NextRequest) {
   }
 
   const totalCents = toCents(quote.total);
-  const depositPercentage = Math.min(
-    100,
-    Math.max(0, Number(process.env.BOOKING_DEPOSIT_PERCENTAGE ?? 30)),
-  );
-  const depositDueCents = Math.round((totalCents * depositPercentage) / 100);
+  const {
+    depositDueCents,
+    balanceDueCents,
+    balanceDueDate,
+    depositPercentage,
+    fullPaymentRequired,
+  } = quote.paymentSchedule;
 
   try {
     const reservation = await new SupabaseReservationRepository().create({
@@ -168,11 +174,20 @@ export async function POST(request: NextRequest) {
         optionsTotalCents: toCents(quote.optionsTotal + quote.experiencesTotal),
         cleaningFeeCents: toCents(quote.cleaningFee),
         touristTaxCents: toCents(quote.touristTax),
+        touristTaxDetails: quote.touristTaxDetails,
         discountCents: toCents(quote.promotion?.discount ?? 0),
         totalCents,
         depositDueCents,
-        balanceDueCents: totalCents - depositDueCents,
+        balanceDueCents,
+        balanceDueDate,
+        depositPercentage,
+        fullPaymentRequired,
         pricingVersion: "rates-json-2026-07",
+        paymentMethod: input.paymentMethod,
+        termsVersion: legalVersion,
+        termsAcceptedAt: new Date().toISOString(),
+        cancellationVersion: legalVersion,
+        cancellationAcceptedAt: new Date().toISOString(),
         breakdown: quote.nightlyLines,
       },
     });
@@ -189,6 +204,13 @@ export async function POST(request: NextRequest) {
       arrival: input.arrival,
       departure: input.departure,
       total: quote.total,
+      touristTax: quote.touristTax,
+      touristTaxDetails: quote.touristTaxDetails,
+      depositDue: depositDueCents / 100,
+      balanceDue: balanceDueCents / 100,
+      balanceDueDate,
+      fullPaymentRequired,
+      paymentMethod: input.paymentMethod,
       guest: input.guest,
       options: quote.optionLines.map((line) => line.label),
     };
@@ -228,7 +250,11 @@ export async function POST(request: NextRequest) {
         reference: reservation.reference,
         status: reservation.status,
         paymentEnabled: false,
-        message: "Demande enregistrée. Aucun paiement n’est encore activé.",
+        paymentMethod: input.paymentMethod,
+        message:
+          input.paymentMethod === "holiday_vouchers"
+            ? "Demande enregistrée. Les modalités Chèques‑Vacances vous seront transmises après validation."
+            : "Demande enregistrée. Les coordonnées de virement vous seront transmises après validation.",
       },
       { status: 201 },
     );

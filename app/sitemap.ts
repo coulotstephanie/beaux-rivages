@@ -37,6 +37,19 @@ const staticRoutes = [
   "/reserver",
   "/saisons",
   "/sejour",
+  "/conditions-generales-de-vente",
+  "/conditions-generales-utilisation",
+  "/politique-annulation",
+  "/politique-remboursement",
+  "/mentions-legales",
+  "/politique-de-confidentialite",
+  "/politique-de-cookies",
+  "/charte-qualite",
+  "/engagements-environnement",
+  "/charte-animaux",
+  "/charte-bon-voisinage",
+  "/accessibilite",
+  "/faq-juridique",
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

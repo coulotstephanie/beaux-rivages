@@ -1,6 +1,7 @@
 import { bookingExperiences, getNights, stayOptions } from "@/booking";
 import type { Promotion, PropertyRatePlan, QuoteRequest } from "./contracts";
 import { ratePlanRepository } from "./repository";
+import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -113,13 +114,42 @@ export async function calculateQuote(input: QuoteRequest) {
         ]
       : [];
   });
-  const touristTax = plan.touristTax.enabled
+  const liableGuests = input.adults;
+  const exemptGuests = input.children + input.babies;
+  const occupants = Math.max(1, liableGuests + exemptGuests);
+  const nightlyPricePerGuest = nights > 0 ? accommodation / nights / occupants : 0;
+  const baseTaxPerGuestNight = plan.touristTax.enabled
     ? plan.touristTax.mode === "fixed-per-adult-per-night"
-      ? Math.round(plan.touristTax.value * input.adults * nights * 100) / 100
-      : Math.round(accommodation * plan.touristTax.value) / 100
+      ? plan.touristTax.value
+      : Math.min(
+          nightlyPricePerGuest * (plan.touristTax.value / 100),
+          plan.touristTax.nightlyCap ?? Number.POSITIVE_INFINITY,
+        )
     : 0;
+  const taxPerGuestNight =
+    Math.round(baseTaxPerGuestNight * (1 + (plan.touristTax.additionalRate ?? 0) / 100) * 100) /
+    100;
+  const touristTax = Math.round(taxPerGuestNight * liableGuests * nights * 100) / 100;
+  const touristTaxDetails = {
+    liableGuests,
+    exemptGuests,
+    nights,
+    nightlyPricePerGuest: Math.round(nightlyPricePerGuest * 100) / 100,
+    baseRate: plan.touristTax.value,
+    additionalRate: plan.touristTax.additionalRate ?? 0,
+    nightlyCap: plan.touristTax.nightlyCap ?? null,
+    taxPerGuestNight,
+    method: plan.touristTax.mode === "percentage" ? "Tarif proportionnel" : "Tarif fixe classé",
+    category: plan.touristTax.category ?? "Meublé de tourisme",
+    classification: plan.touristTax.classification ?? "unclassified",
+    effectiveFrom: plan.touristTax.effectiveFrom,
+    municipality: plan.touristTax.municipality,
+    intercommunality: plan.touristTax.intercommunality,
+  };
   const optionsTotal = optionLines.reduce((sum, line) => sum + line.total, 0);
   const experiencesTotal = experienceLines.reduce((sum, line) => sum + line.total, 0);
+  const total = accommodation + plan.cleaningFee + touristTax + optionsTotal + experiencesTotal;
+  const paymentSchedule = buildPaymentSchedule(input.arrival, Math.round(total * 100));
   return {
     propertySlug: input.propertySlug,
     currency: plan.currency,
@@ -139,11 +169,17 @@ export async function calculateQuote(input: QuoteRequest) {
     cleaningFee: plan.cleaningFee,
     securityDeposit: { amount: plan.securityDeposit, includedInTotal: false },
     touristTax,
+    touristTaxDetails,
     optionLines,
     experienceLines,
     optionsTotal,
     experiencesTotal,
-    total: accommodation + plan.cleaningFee + touristTax + optionsTotal + experiencesTotal,
+    total,
+    paymentSchedule: {
+      ...paymentSchedule,
+      depositDue: paymentSchedule.depositDueCents / 100,
+      balanceDue: paymentSchedule.balanceDueCents / 100,
+    },
     contractual: false,
   };
 }

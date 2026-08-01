@@ -12,6 +12,8 @@ import { GuestBookAdmin } from "@/components/admin/GuestBookAdmin";
 import { StaffAccess } from "@/components/admin/StaffAccess";
 import { YieldManagementAdmin } from "@/components/admin/YieldManagementAdmin";
 import { ExperienceServicesAdmin } from "@/components/admin/ExperienceServicesAdmin";
+import { FiscalityAdmin } from "@/components/admin/FiscalityAdmin";
+import { LegalCenterAdmin } from "@/components/admin/LegalCenterAdmin";
 import { describeWelcomeBaskets } from "@/platform/reservations/welcome-baskets";
 
 type View =
@@ -35,6 +37,8 @@ type View =
   | "maintenance"
   | "statistiques"
   | "pilotage"
+  | "fiscalite"
+  | "juridique"
   | "parametres";
 const views: { id: View; label: string }[] = [
   { id: "dashboard", label: "Aujourd’hui" },
@@ -57,6 +61,8 @@ const views: { id: View; label: string }[] = [
   { id: "maintenance", label: "Maintenance" },
   { id: "statistiques", label: "Statistiques" },
   { id: "pilotage", label: "Pilotage" },
+  { id: "fiscalite", label: "Fiscalité" },
+  { id: "juridique", label: "Centre juridique" },
   { id: "parametres", label: "Paramètres" },
 ];
 
@@ -261,7 +267,7 @@ export function AdminDashboard() {
       });
       const payload = (await response.json()) as { error?: string };
       if (!response.ok) return setMessage(payload.error ?? "Remboursement impossible.");
-      setMessage("Remboursement Stripe TEST demandé. Le webhook mettra le statut à jour.");
+      setMessage("Remboursement demandé. Le statut sera mis à jour après confirmation.");
       await load(token);
     } finally {
       setBusy(false);
@@ -697,6 +703,8 @@ export function AdminDashboard() {
       )}
       {view === "carnet" && <CarnetCmsAdmin token={token} notify={setMessage} />}
       {view === "livre-or" && <GuestBookAdmin token={token} notify={setMessage} />}
+      {view === "fiscalite" && <FiscalityAdmin token={token} notify={setMessage} />}
+      {view === "juridique" && <LegalCenterAdmin token={token} notify={setMessage} />}
       {(view === "calendrier" ||
         view === "paiements" ||
         view === "conciergerie" ||
@@ -933,7 +941,7 @@ export function AdminDashboard() {
             <article>
               <span>Paiements échoués</span>
               <strong>{data.pilotage.paymentStatus.failed ?? 0}</strong>
-              <small>Stripe test non activé</small>
+              <small>Aucun paiement en ligne actif</small>
             </article>
             <article>
               <span>Alertes</span>
@@ -986,7 +994,7 @@ export function AdminDashboard() {
               )}
             </article>
             <article className="admin-card">
-              <h3>Paiements Stripe TEST</h3>
+              <h3>Historique des paiements</h3>
               {data.pilotage.recentPayments.map((payment) => (
                 <div className="admin-health-row" key={payment.id}>
                   <div>
@@ -1343,10 +1351,24 @@ function ReservationDetail({
             <div>
               <dt>Taxe de séjour</dt>
               <dd>{money(reservation.touristTaxCents)}</dd>
+              <dt>Personnes assujetties</dt>
+              <dd>{reservation.touristTaxDetails.liableGuests}</dd>
+              <dt>Personnes exonérées</dt>
+              <dd>{reservation.touristTaxDetails.exemptGuests}</dd>
+              <dt>Méthode de calcul</dt>
+              <dd>{reservation.touristTaxDetails.method}</dd>
             </div>
             <div>
               <dt>Acompte prévu</dt>
               <dd>{money(reservation.depositDueCents)}</dd>
+            </div>
+            <div>
+              <dt>Échéance du solde</dt>
+              <dd>
+                {reservation.fullPaymentRequired
+                  ? "Paiement intégral immédiat"
+                  : shortDate(reservation.balanceDueDate)}
+              </dd>
             </div>
             <div>
               <dt>Paiements reçus</dt>
@@ -1355,6 +1377,19 @@ function ReservationDetail({
             <div>
               <dt>Restant</dt>
               <dd>{money(Math.max(0, reservation.totalCents - paid))}</dd>
+            </div>
+            <div>
+              <dt>Statut du règlement</dt>
+              <dd>
+                {paid >= reservation.totalCents
+                  ? "Réglé"
+                  : paid < reservation.depositDueCents
+                    ? "Acompte non reçu"
+                    : reservation.balanceDueDate &&
+                        reservation.balanceDueDate < new Date().toISOString().slice(0, 10)
+                      ? "Solde en retard"
+                      : "Solde à venir"}
+              </dd>
             </div>
             <div>
               <dt>Caution</dt>
@@ -1389,6 +1424,45 @@ function ReservationDetail({
           ) : (
             <p className="admin-empty">Aucune option réservée.</p>
           )}
+        </article>
+        <article>
+          <h3>Acceptations juridiques</h3>
+          <dl>
+            <div>
+              <dt>CGV</dt>
+              <dd>Version {reservation.legalAcceptance.termsVersion}</dd>
+            </div>
+            <div>
+              <dt>Acceptées le</dt>
+              <dd>
+                {reservation.legalAcceptance.termsAcceptedAt
+                  ? dateTime(reservation.legalAcceptance.termsAcceptedAt)
+                  : "Non renseigné"}
+              </dd>
+            </div>
+            <div>
+              <dt>Annulation</dt>
+              <dd>Version {reservation.legalAcceptance.cancellationVersion}</dd>
+            </div>
+            <div>
+              <dt>Prise en compte le</dt>
+              <dd>
+                {reservation.legalAcceptance.cancellationAcceptedAt
+                  ? dateTime(reservation.legalAcceptance.cancellationAcceptedAt)
+                  : "Non renseigné"}
+              </dd>
+            </div>
+            <div>
+              <dt>Règlement choisi</dt>
+              <dd>
+                {reservation.legalAcceptance.paymentMethod === "bank_transfer"
+                  ? "Virement bancaire"
+                  : reservation.legalAcceptance.paymentMethod === "holiday_voucher"
+                    ? "Chèques‑Vacances"
+                    : reservation.legalAcceptance.paymentMethod}
+              </dd>
+            </div>
+          </dl>
         </article>
       </div>
     </aside>

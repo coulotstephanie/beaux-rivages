@@ -65,7 +65,18 @@ export type PropertyRatePlan = {
   maximumNights: number;
   cleaningFee: number;
   securityDeposit: number;
-  touristTax: { mode: "fixed-per-adult-per-night" | "percentage"; value: number; enabled: boolean };
+  touristTax: {
+    mode: "fixed-per-adult-per-night" | "percentage";
+    value: number;
+    enabled: boolean;
+    additionalRate?: number;
+    nightlyCap?: number;
+    municipality?: string;
+    intercommunality?: string;
+    category?: string;
+    classification?: "unclassified" | "1" | "2" | "3" | "4" | "5";
+    effectiveFrom?: string;
+  };
   optionPrices: Partial<Record<StayOptionId, number>>;
   seasons: SeasonRule[];
   promotions: Promotion[];
