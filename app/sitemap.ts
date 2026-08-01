@@ -21,6 +21,8 @@ const staticRoutes = [
   "/engagements",
   "/experiences",
   "/experience-signature",
+  "/panier-aperitif",
+  "/panier-douceur",
   "/romance",
   "/demande-en-mariage",
   "/anniversaire",

@@ -95,6 +95,18 @@ export function BookingExperience({
   }, [selection.guests.pets, selection.options]);
 
   useEffect(() => {
+    if (
+      selection.options.includes("signature") &&
+      !selection.options.some((id) => id === "signature-aperitif" || id === "signature-sweet")
+    ) {
+      setSelection((current) => ({
+        ...current,
+        options: [...current.options, "signature-aperitif"],
+      }));
+    }
+  }, [selection.options]);
+
+  useEffect(() => {
     const recordAbandonment = () => {
       if (step > 1 && !completedRef.current) {
         trackEvent("booking_abandoned", {

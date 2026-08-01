@@ -27,6 +27,8 @@ const optionIds: StayOptionId[] = [
   "pet",
   "aperitif-basket",
   "basket",
+  "signature-aperitif",
+  "signature-sweet",
 ];
 
 export default async function BookingPage({

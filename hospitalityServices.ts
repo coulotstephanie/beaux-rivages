@@ -3,6 +3,8 @@ export type HospitalityServiceSlug =
   | "bebe"
   | "animaux"
   | "experience-signature"
+  | "panier-aperitif"
+  | "panier-douceur"
   | "romance"
   | "demande-en-mariage"
   | "anniversaire";
@@ -25,6 +27,87 @@ export type HospitalityService = {
 };
 
 export const hospitalityServices: HospitalityService[] = [
+  {
+    slug: "panier-aperitif",
+    icon: "🍷",
+    title: "Panier Apéritif Beaux Rivages",
+    badge: "Accueil gourmand",
+    price: 45,
+    action: "booking",
+    intro:
+      "Commencez votre séjour autour des saveurs de l’Île de Ré. Nous préparons votre panier avant votre arrivée pour un moment convivial en famille ou entre amis.",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    imageAlt: "Panier Apéritif Beaux Rivages composé de produits artisanaux locaux",
+    sections: [
+      {
+        title: "Ce qui est inclus",
+        items: [
+          "Une bouteille de vin Pelletier de l’Île de Ré — rouge, blanc ou rosé au choix",
+          "Des biscuits apéritifs artisanaux de L’Atelier de la Biscuiterie de Ré",
+          "Une terrine artisanale",
+          "Une carte des producteurs et les recommandations de Stéphanie & Bruno",
+        ],
+      },
+    ],
+    practical: [
+      { label: "Préparation", value: "Avant votre arrivée" },
+      { label: "Disponibilité", value: "Toute l’année" },
+      { label: "Réservation", value: "Avant votre séjour" },
+      { label: "Tarif", value: "45 € par séjour" },
+    ],
+    faq: [
+      {
+        question: "Quand le panier est-il préparé ?",
+        answer: "Il vous attend dans la maison dès votre arrivée.",
+      },
+      {
+        question: "Puis-je choisir le vin ?",
+        answer: "Oui, rouge, blanc ou rosé, lors de la réservation.",
+      },
+    ],
+    gallery: [],
+  },
+  {
+    slug: "panier-douceur",
+    icon: "🍪",
+    title: "Panier Douceur Beaux Rivages",
+    badge: "Accueil gourmand",
+    price: 45,
+    action: "booking",
+    intro:
+      "Commencez votre séjour par une parenthèse gourmande. Une sélection de douceurs artisanales vous attend dès votre arrivée.",
+    image: "/images/destination/petit-dejeuner-ocean.jpg",
+    imageAlt: "Panier Douceur Beaux Rivages composé de gourmandises artisanales",
+    sections: [
+      {
+        title: "Ce qui est inclus",
+        items: [
+          "Des biscuits artisanaux de L’Atelier de la Biscuiterie de Ré",
+          "Une confiture artisanale préparée localement",
+          "Des caramels au beurre salé",
+          "Une bouteille de jus de fruits",
+          "Une carte des producteurs et les recommandations de Stéphanie & Bruno",
+        ],
+      },
+    ],
+    practical: [
+      { label: "Préparation", value: "Avant votre arrivée" },
+      { label: "Disponibilité", value: "Toute l’année" },
+      { label: "Réservation", value: "Avant votre séjour" },
+      { label: "Tarif", value: "45 € par séjour" },
+    ],
+    faq: [
+      {
+        question: "Quand le panier est-il préparé ?",
+        answer: "Il vous attend dans la maison dès votre arrivée.",
+      },
+      {
+        question: "Le panier convient-il à toutes les maisons ?",
+        answer: "Oui, il est disponible dans les trois maisons Beaux Rivages.",
+      },
+    ],
+    gallery: [],
+  },
   {
     slug: "essentiel",
     icon: "🌿",

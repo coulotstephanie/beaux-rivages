@@ -26,7 +26,7 @@ export function HospitalityServicePage({ service }: { service: HospitalityServic
   const bookingHref =
     service.action === "included"
       ? "/reserver"
-      : `/reserver?${service.slug === "animaux" ? "option=pet" : service.slug === "experience-signature" ? "option=signature" : "experience=romance"}`;
+      : `/reserver?${service.slug === "animaux" ? "option=pet" : service.slug === "experience-signature" ? "option=signature" : service.slug === "panier-aperitif" ? "option=aperitif-basket" : service.slug === "panier-douceur" ? "option=basket" : "experience=romance"}`;
   return (
     <main className="hospitality-service-page">
       <StructuredData

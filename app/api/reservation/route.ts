@@ -42,11 +42,40 @@ const reservationRequestSchema = z
     if (input.adults + input.children > 8) {
       context.addIssue({ code: "custom", path: ["adults"], message: "Capacité dépassée." });
     }
-    if (input.options.includes("aperitif-basket") && input.options.includes("basket")) {
+    const signature = input.options.includes("signature");
+    const included = input.options.filter((item) =>
+      ["signature-aperitif", "signature-sweet"].includes(item),
+    );
+    const paid = input.options.filter((item) => ["aperitif-basket", "basket"].includes(item));
+    if (!signature && included.length) {
+      context.addIssue({
+        code: "custom",
+        path: ["options"],
+        message: "Panier Signature invalide.",
+      });
+    }
+    if (signature && included.length !== 1) {
+      context.addIssue({
+        code: "custom",
+        path: ["options"],
+        message: "Choisissez le panier inclus.",
+      });
+    }
+    if (paid.length > 1) {
       context.addIssue({
         code: "custom",
         path: ["options"],
         message: "Un seul panier d’accueil peut être sélectionné.",
+      });
+    }
+    if (
+      (input.options.includes("signature-aperitif") && input.options.includes("aperitif-basket")) ||
+      (input.options.includes("signature-sweet") && input.options.includes("basket"))
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["options"],
+        message: "Un panier ne peut pas être sélectionné deux fois.",
       });
     }
   });

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import type { BookingSelection } from "@/booking";
 import { getNights } from "@/booking";
-import { stayOptions } from "@/booking";
 import type { Property } from "@/data";
 import { Badge } from "./ui";
+import { describeWelcomeBaskets } from "@/platform/reservations/welcome-baskets";
 
 export function BookingConfirmationPreview({
   selection,
@@ -13,6 +13,7 @@ export function BookingConfirmationPreview({
   property: Property;
 }) {
   const guests = selection.guests.adults + selection.guests.children;
+  const baskets = describeWelcomeBaskets(selection.options.map((code) => ({ code })));
   return (
     <section className="booking-confirmation-preview" aria-labelledby="preview-title">
       <div className="booking-confirmation-preview__image">
@@ -42,14 +43,13 @@ export function BookingConfirmationPreview({
             <strong>{selection.options.length + selection.experiences.length}</strong> attentions
           </span>
         </div>
-        <p className="booking-confirmation-preview__basket">
-          <strong>Accueil gourmand :</strong>{" "}
-          {stayOptions.find(
-            (item) =>
-              selection.options.includes(item.id) &&
-              ["aperitif-basket", "basket"].includes(item.id),
-          )?.label ?? "Aucun panier"}
-        </p>
+        <div className="booking-confirmation-preview__basket">
+          <strong>Accueil gourmand</strong>
+          <p>Panier inclus : {baskets.included}</p>
+          {selection.options.includes("signature") ? (
+            <p>Panier supplémentaire : {baskets.extra}</p>
+          ) : null}
+        </div>
         {selection.attention && (
           <blockquote>
             « Une attention pour votre {selection.attention.toLowerCase()} sera étudiée avec vous. »

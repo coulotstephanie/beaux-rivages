@@ -6,7 +6,7 @@ import type { StayOptionId } from "@/booking";
 
 export type WelcomeBasketChoice = Extract<StayOptionId, "aperitif-basket" | "basket"> | null;
 
-const baskets = [
+export const welcomeBaskets = [
   {
     id: "aperitif-basket" as const,
     title: "Panier Apéritif Beaux Rivages",
@@ -70,7 +70,7 @@ export function WelcomeBaskets({
         ) : null}
       </div>
       <div className="welcome-basket-experience__grid">
-        {baskets.map((basket) => {
+        {welcomeBaskets.map((basket) => {
           const selected = value === basket.id;
           return (
             <article className={selected ? "is-selected" : ""} key={basket.id}>
@@ -110,6 +110,72 @@ export function WelcomeBaskets({
             </article>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+export function SignatureWelcomeBaskets({
+  included,
+  extra,
+  onIncludedChange,
+  onExtraChange,
+}: {
+  included: "signature-aperitif" | "signature-sweet";
+  extra: "aperitif-basket" | "basket" | null;
+  onIncludedChange: (choice: "signature-aperitif" | "signature-sweet") => void;
+  onExtraChange: (choice: "aperitif-basket" | "basket" | null) => void;
+}) {
+  const includedIsAperitif = included === "signature-aperitif";
+  const extraChoice = includedIsAperitif ? "basket" : "aperitif-basket";
+  const extraBasket = welcomeBaskets.find((item) => item.id === extraChoice)!;
+  return (
+    <section className="welcome-basket-experience" aria-labelledby="signature-baskets-title">
+      <div className="welcome-basket-experience__heading">
+        <p className="eyebrow">Votre panier gourmand inclus</p>
+        <h2 id="signature-baskets-title">Choisissez votre panier de bienvenue.</h2>
+        <p>Ce premier panier est inclus dans l’Expérience Signature, sans supplément.</p>
+      </div>
+      <div className="welcome-basket-experience__grid">
+        {welcomeBaskets.map((basket) => {
+          const choice = basket.id === "aperitif-basket" ? "signature-aperitif" : "signature-sweet";
+          const selected = choice === included;
+          return (
+            <label className={selected ? "is-selected" : ""} key={choice}>
+              <div className="welcome-basket-experience__image">
+                <Image
+                  src={basket.image}
+                  alt={basket.imageAlt}
+                  fill
+                  sizes="(max-width: 760px) 100vw, 50vw"
+                />
+              </div>
+              <div className="welcome-basket-experience__copy">
+                <input
+                  type="radio"
+                  name="signature-basket"
+                  checked={selected}
+                  onChange={() => onIncludedChange(choice)}
+                />
+                <h3>{basket.title}</h3>
+                <p>{basket.intro}</p>
+                <strong>{selected ? "Panier inclus choisi" : "Choisir ce panier"}</strong>
+              </div>
+            </label>
+          );
+        })}
+      </div>
+      <div className="welcome-basket-experience__heading">
+        <p className="eyebrow">Une gourmandise supplémentaire</p>
+        <h2>Souhaitez-vous également profiter du second panier pendant votre séjour ?</h2>
+        <label className={`welcome-basket-none${extra === extraChoice ? " is-selected" : ""}`}>
+          <input
+            type="checkbox"
+            checked={extra === extraChoice}
+            onChange={(event) => onExtraChange(event.target.checked ? extraChoice : null)}
+          />
+          Ajouter le {extraBasket.title} (+45 €)
+        </label>
       </div>
     </section>
   );

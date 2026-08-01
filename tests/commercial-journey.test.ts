@@ -4,6 +4,7 @@ import { calculateQuote } from "../platform/pricing/service";
 import { stayEmailTemplates } from "../platform/email/templates";
 import { StripePaymentAdapter } from "../platform/payments/stripe";
 import { amountDue, purposeToKind } from "../platform/payments/contracts";
+import { describeWelcomeBaskets } from "../platform/reservations/welcome-baskets";
 
 test("complete direct-booking preparation calculates a family quote", async () => {
   const quote = await calculateQuote({
@@ -25,9 +26,49 @@ test("complete direct-booking preparation calculates a family quote", async () =
   assert.ok(quote.total > quote.accommodation);
 });
 
+test("Signature includes one welcome basket and charges only the additional basket", async () => {
+  const quote = await calculateQuote({
+    propertySlug: "chai-des-tortues",
+    arrival: "2026-10-12",
+    departure: "2026-10-19",
+    adults: 2,
+    children: 0,
+    babies: 0,
+    pets: 0,
+    options: ["signature", "signature-aperitif", "basket"],
+    experiences: [],
+  });
+  assert.equal(quote.optionLines.find((line) => line.id === "signature-aperitif")?.total, 0);
+  assert.equal(quote.optionLines.find((line) => line.id === "basket")?.total, 45);
+  assert.deepEqual(
+    describeWelcomeBaskets([
+      { code: "signature" },
+      { code: "signature-aperitif" },
+      { code: "basket" },
+    ]),
+    { included: "Panier Apéritif", extra: "Panier Douceur · 45 €" },
+  );
+});
+
 test("all transactional email stages render responsive branded HTML", () => {
-  const data = { travelerName: "Camille", propertyName: "Le Chai des Tortues", arrival: "12 octobre", departure: "19 octobre", portalUrl: "https://www.beaux-rivages.com/carnet-voyageur?access=test" };
-  const expected = ["confirmation", "depositReceived", "fullPaymentReceived", "contractAvailable", "preArrival", "arrival", "duringStay", "departure", "thanks"] as const;
+  const data = {
+    travelerName: "Camille",
+    propertyName: "Le Chai des Tortues",
+    arrival: "12 octobre",
+    departure: "19 octobre",
+    portalUrl: "https://www.beaux-rivages.com/carnet-voyageur?access=test",
+  };
+  const expected = [
+    "confirmation",
+    "depositReceived",
+    "fullPaymentReceived",
+    "contractAvailable",
+    "preArrival",
+    "arrival",
+    "duringStay",
+    "departure",
+    "thanks",
+  ] as const;
   for (const name of expected) {
     const html = stayEmailTemplates[name](data);
     assert.match(html, /BEAUX RIVAGES/);

@@ -14,7 +14,9 @@ export type StayOptionId =
   | "late-checkout"
   | "pet"
   | "aperitif-basket"
-  | "basket";
+  | "basket"
+  | "signature-aperitif"
+  | "signature-sweet";
 export type StayOption = {
   id: StayOptionId;
   label: string;
@@ -135,6 +137,18 @@ export const stayOptions: StayOption[] = [
     description:
       "Biscuits artisanaux, confiture locale, caramels au beurre salé, jus de fruits et carte des producteurs.",
     price: 45,
+  },
+  {
+    id: "signature-aperitif",
+    label: "Panier inclus · Panier Apéritif Beaux Rivages",
+    description: "Panier de bienvenue inclus dans l’Expérience Signature.",
+    price: 0,
+  },
+  {
+    id: "signature-sweet",
+    label: "Panier inclus · Panier Douceur Beaux Rivages",
+    description: "Panier de bienvenue inclus dans l’Expérience Signature.",
+    price: 0,
   },
 ];
 

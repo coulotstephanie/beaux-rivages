@@ -12,6 +12,7 @@ import { GuestBookAdmin } from "@/components/admin/GuestBookAdmin";
 import { StaffAccess } from "@/components/admin/StaffAccess";
 import { YieldManagementAdmin } from "@/components/admin/YieldManagementAdmin";
 import { ExperienceServicesAdmin } from "@/components/admin/ExperienceServicesAdmin";
+import { describeWelcomeBaskets } from "@/platform/reservations/welcome-baskets";
 
 type View =
   | "dashboard"
@@ -140,6 +141,14 @@ function ReservationList({
             <span>
               {reservation.propertyName} · {nights(reservation)} nuit(s)
             </span>
+            {describeWelcomeBaskets(reservation.options).included !== "Aucun" ? (
+              <small>
+                Accueil gourmand : {describeWelcomeBaskets(reservation.options).included}
+                {describeWelcomeBaskets(reservation.options).extra !== "Aucun"
+                  ? ` + ${describeWelcomeBaskets(reservation.options).extra}`
+                  : ""}
+              </small>
+            ) : null}
           </div>
           <div>
             <strong>{shortDate(reservation.arrival)}</strong>
@@ -619,6 +628,14 @@ export function AdminDashboard() {
                         <td>
                           <strong>{reservation.guestName}</strong>
                           <small>{reservation.reference}</small>
+                          {describeWelcomeBaskets(reservation.options).included !== "Aucun" ? (
+                            <small>
+                              {describeWelcomeBaskets(reservation.options).included}
+                              {describeWelcomeBaskets(reservation.options).extra !== "Aucun"
+                                ? ` + ${describeWelcomeBaskets(reservation.options).extra}`
+                                : ""}
+                            </small>
+                          ) : null}
                         </td>
                         <td>
                           {shortDate(reservation.arrival)} → {shortDate(reservation.departure)}
@@ -1354,13 +1371,11 @@ function ReservationDetail({
           <dl>
             <div>
               <dt>Accueil gourmand</dt>
-              <dd>
-                {reservation.options.some((item) => item.code === "aperitif-basket")
-                  ? "Panier Apéritif"
-                  : reservation.options.some((item) => item.code === "basket")
-                    ? "Panier Douceur"
-                    : "Aucun"}
-              </dd>
+              <dd>{describeWelcomeBaskets(reservation.options).included}</dd>
+            </div>
+            <div>
+              <dt>Panier supplémentaire</dt>
+              <dd>{describeWelcomeBaskets(reservation.options).extra}</dd>
             </div>
           </dl>
           {reservation.options.length ? (
