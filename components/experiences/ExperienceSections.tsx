@@ -16,12 +16,13 @@ type Props = {
   included: string[];
   practical: ExperiencePractical[];
   faq: ExperienceFaq[];
-  bookingHref: string;
-  bookingLabel: string;
+  bookingHref?: string;
+  bookingLabel?: string;
   bookingExternal?: boolean;
   linenIncluded?: boolean;
   similar: SimilarExperience[];
   sources?: { label: string; href: string }[];
+  recommendedHouses?: { icon: string; title: string; text: string }[];
 };
 
 export function ExperienceSections({
@@ -35,6 +36,7 @@ export function ExperienceSections({
   linenIncluded = false,
   similar,
   sources = [],
+  recommendedHouses = [],
 }: Props) {
   return (
     <>
@@ -44,18 +46,38 @@ export function ExperienceSections({
         <p>{presentation}</p>
       </section>
 
-      <section className="experience-unified-included shell">
-        <p className="eyebrow">Ce qui est inclus</p>
-        <h2>Des repères clairs, sans promesse imprécise.</h2>
-        <ul>
-          {included.map((item) => (
-            <li key={item}>
-              <span aria-hidden="true">✓</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {included.length > 0 ? (
+        <section className="experience-unified-included shell">
+          <p className="eyebrow">Ce qui est inclus</p>
+          <h2>Des repères clairs, sans promesse imprécise.</h2>
+          <ul>
+            {included.map((item) => (
+              <li key={item}>
+                <span aria-hidden="true">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {recommendedHouses.length > 0 ? (
+        <section
+          className="experience-unified-included shell"
+          aria-labelledby="recommended-houses-title"
+        >
+          <p className="eyebrow">Maisons recommandées</p>
+          <h2 id="recommended-houses-title">À proximité des ateliers Confetti.</h2>
+          <ul>
+            {recommendedHouses.map((house) => (
+              <li key={house.title}>
+                <span aria-hidden="true">{house.icon}</span>
+                <strong>{house.title}</strong> · {house.text}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {linenIncluded && (
         <section className="experience-linen shell" aria-labelledby="experience-linen-title">
@@ -100,18 +122,20 @@ export function ExperienceSections({
         ))}
       </section>
 
-      <section className="experience-detail-cta shell">
-        <p className="eyebrow">Réserver</p>
-        <h2>Prêt à donner une autre dimension à votre séjour ?</h2>
-        <Link
-          className="primary-button"
-          href={bookingHref}
-          target={bookingExternal ? "_blank" : undefined}
-          rel={bookingExternal ? "noopener noreferrer" : undefined}
-        >
-          {bookingLabel}
-        </Link>
-      </section>
+      {bookingHref && bookingLabel ? (
+        <section className="experience-detail-cta shell">
+          <p className="eyebrow">Réserver</p>
+          <h2>Prêt à donner une autre dimension à votre séjour ?</h2>
+          <Link
+            className="primary-button"
+            href={bookingHref}
+            target={bookingExternal ? "_blank" : undefined}
+            rel={bookingExternal ? "noopener noreferrer" : undefined}
+          >
+            {bookingLabel}
+          </Link>
+        </section>
+      ) : null}
 
       <section className="experience-similar shell" aria-labelledby="similar-experiences-title">
         <p className="eyebrow">Expériences similaires</p>

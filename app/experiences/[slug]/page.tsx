@@ -51,7 +51,7 @@ export default async function ExperienceDetailPage({
   const directPartners: Record<string, { href: string; label: string }> = {
     "atelier-macarons": {
       href: "https://www.confetti-patisserie.com",
-      label: "Réserver auprès de Confetti",
+      label: "Découvrir les ateliers chez Confetti",
     },
     "bien-etre": {
       href: "https://www.reedukcoach.fr",
@@ -60,9 +60,10 @@ export default async function ExperienceDetailPage({
   };
   const freeExperiences = ["lever-de-soleil", "coucher-de-soleil", "peche-a-pied", "famille"];
   const partner = directPartners[experience.slug];
+  const isFree = freeExperiences.includes(experience.slug);
   const included =
     experience.slug === "atelier-macarons"
-      ? ["La présentation de l’atelier et notre recommandation personnelle"]
+      ? []
       : experience.slug === "bien-etre"
         ? ["La présentation de l’expérience et notre recommandation personnelle"]
         : [
@@ -120,29 +121,25 @@ export default async function ExperienceDetailPage({
         </div>
       </section>
       <ExperienceSections
-        presentation={experience.story ?? experience.text}
+        presentation={
+          experience.slug === "atelier-macarons"
+            ? `${experience.text} Les ateliers sont proposés directement par Confetti Pâtisserie et doivent être réservés selon leurs disponibilités.`
+            : (experience.story ?? experience.text)
+        }
         included={included}
         practical={[
           { label: "Durée", value: experience.duration },
           {
             label: "Disponibilité",
-            value: freeExperiences.includes(experience.slug)
-              ? "Toute l’année"
-              : experience.idealPeriod,
+            value: isFree ? "Toute l’année" : experience.idealPeriod,
           },
           {
             label: "Maison",
-            value: freeExperiences.includes(experience.slug)
-              ? "Les trois maisons"
-              : experience.recommendedProperty.label,
+            value: isFree ? "Les trois maisons" : experience.recommendedProperty.label,
           },
           {
             label: "Tarif",
-            value: freeExperiences.includes(experience.slug)
-              ? "Gratuit"
-              : partner
-                ? "Selon le prestataire"
-                : "Sur demande",
+            value: isFree ? "Gratuit" : partner ? "Selon le prestataire" : "Sur demande",
           },
           ...(experience.slug === "bien-etre"
             ? [
@@ -161,23 +158,55 @@ export default async function ExperienceDetailPage({
               ]
             : []),
         ]}
-        faq={[
-          {
-            question: "Faut-il réserver ?",
-            answer: partner
-              ? "Oui, directement auprès du prestataire et selon ses disponibilités."
-              : "Les expériences gratuites se vivent librement, sans réservation spécifique.",
-          },
-          {
-            question: "Cette expérience convient-elle à toutes les maisons ?",
-            answer: freeExperiences.includes(experience.slug)
-              ? "Oui, elle est valable pour les trois maisons."
-              : `Elle est particulièrement adaptée à ${experience.recommendedProperty.label}.`,
-          },
-        ]}
-        bookingHref={partner?.href ?? "/reserver"}
-        bookingLabel={partner?.label ?? "Réserver une maison"}
+        faq={
+          isFree
+            ? [
+                {
+                  question: "Qui peut profiter de cette expérience ?",
+                  answer: "Elle est gratuite et accessible à tous les voyageurs des trois maisons.",
+                },
+                {
+                  question: "Quand la vivre ?",
+                  answer:
+                    experience.advice ??
+                    `Le meilleur moment dépend de la saison, de la météo et des marées.`,
+                },
+              ]
+            : [
+                {
+                  question: "Faut-il réserver ?",
+                  answer: partner
+                    ? "Oui, directement auprès du prestataire et selon ses disponibilités."
+                    : "Oui, depuis le parcours de réservation Beaux Rivages.",
+                },
+                {
+                  question: "Quelles maisons sont recommandées ?",
+                  answer:
+                    experience.slug === "atelier-macarons"
+                      ? "Le Chai des Tortues et Villa Raie Manta sont les plus proches de Rivedoux-Plage."
+                      : `Cette expérience est particulièrement adaptée à ${experience.recommendedProperty.label}.`,
+                },
+              ]
+        }
+        bookingHref={isFree ? undefined : (partner?.href ?? "/reserver")}
+        bookingLabel={isFree ? undefined : (partner?.label ?? "Ajouter à ma réservation")}
         bookingExternal={Boolean(partner)}
+        recommendedHouses={
+          experience.slug === "atelier-macarons"
+            ? [
+                {
+                  icon: "🐢",
+                  title: "Le Chai des Tortues",
+                  text: "Une maison particulièrement pratique pour rejoindre Confetti à Rivedoux-Plage.",
+                },
+                {
+                  icon: "🌊",
+                  title: "Villa Raie Manta",
+                  text: "Une situation adaptée pour profiter facilement des ateliers à Rivedoux-Plage.",
+                },
+              ]
+            : []
+        }
         similar={similar}
       />
       <Footer />

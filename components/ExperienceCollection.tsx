@@ -11,6 +11,12 @@ function bookingHref(experience: Experience) {
 }
 
 export function ExperienceCollection({ experiences }: { experiences: Experience[] }) {
+  const freeExperiences = new Set([
+    "lever-de-soleil",
+    "coucher-de-soleil",
+    "peche-a-pied",
+    "famille",
+  ]);
   return (
     <section className="premium-experience-collection shell" aria-label="Collection d’expériences">
       {experiences.map((experience) => (
@@ -51,9 +57,11 @@ export function ExperienceCollection({ experiences }: { experiences: Experience[
               <Link href={`/experiences/${experience.slug}`}>
                 Voir l’expérience <span aria-hidden="true">→</span>
               </Link>
-              <Link href={bookingHref(experience)}>
-                Demander cette suggestion <span aria-hidden="true">+</span>
-              </Link>
+              {!freeExperiences.has(experience.slug) && experience.slug !== "atelier-macarons" ? (
+                <Link href={bookingHref(experience)}>
+                  Demander cette suggestion <span aria-hidden="true">+</span>
+                </Link>
+              ) : null}
             </div>
           </div>
         </article>
