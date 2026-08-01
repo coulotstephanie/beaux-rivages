@@ -73,7 +73,7 @@ test("les réservations annulées disparaissent des listes actives", () => {
 test("le Dashboard est découpé, différé et conserve sa vue dans l’URL", () => {
   const dashboard = readFileSync("components/AdminDashboard.tsx", "utf8");
   const navigation = readFileSync("components/admin/dashboard/navigation.ts", "utf8");
-  assert.match(dashboard, /dynamic\(\(\) => import/);
+  assert.match(dashboard, /dynamic\(\(\)\s*=>\s*import/);
   assert.match(dashboard, /searchParams\.set\("view"/);
   for (const category of [
     "Journée",
