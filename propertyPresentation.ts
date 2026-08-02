@@ -394,8 +394,8 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "Entre forêt et océan",
         copy: "Retrouver la Maison Heureuse dans son écrin d’arbres, à quelques mètres seulement du sable.",
-        image: propertyMedia["nid-d-ete"].lifestyle[15].src,
-        alt: propertyMedia["nid-d-ete"].lifestyle[15].alt,
+        image: propertyMedia["nid-d-ete"].lifestyle[16].src,
+        alt: propertyMedia["nid-d-ete"].lifestyle[16].alt,
       },
       {
         title: "Fort Boyard vu du ciel",
