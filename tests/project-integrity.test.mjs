@@ -124,13 +124,28 @@ test("the ambient player uses the credited public-domain Vivaldi recording", () 
   assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.ogg")));
 });
 
-test("the homepage video remains manually playable when autoplay is unavailable", () => {
-  const component = read("components/media/HeroVideo.tsx");
-  const styles = read("app/globals.css");
-  assert.match(component, /className="hero-video__control"/);
-  assert.match(component, /Lire la vidéo d’accueil/);
-  assert.match(component, /<motion\.video[\s\S]*autoPlay=\{canAutoplay\}/);
-  assert.doesNotMatch(styles, /\.premium-hero video\s*\{\s*display:\s*none/);
+test("the homepage uses a reliable premium hero image", () => {
+  const page = read("app/page.tsx");
+  assert.doesNotMatch(page, /<HeroVideo/);
+  assert.match(page, /src=\{siteMedia\.destination\.sea\}/);
+  assert.match(page, /priority/);
+});
+
+test("mobile navigation uses native iOS-compatible disclosures and exposes contact", () => {
+  const header = read("components/Header.tsx");
+  const footer = read("components/Footer.tsx");
+  assert.match(header, /<details className="mobile-navigation__group">/);
+  assert.match(header, /<summary>\{label\}<\/summary>/);
+  assert.match(header, /href="\/contact"/);
+  assert.match(footer, /href="\/contact"/);
+});
+
+test("public search supports explicit submission and linked results", () => {
+  const component = read("components/PublicSiteSearch.tsx");
+  assert.match(component, /<form[\s\S]*role="search"/);
+  assert.match(component, /type="submit"/);
+  assert.match(component, /router\.push\(firstResult\.href\)/);
+  assert.match(component, /<Link href=\{item\.href\}/);
 });
 
 test("every property manifest exclusively references its own media directory", () => {

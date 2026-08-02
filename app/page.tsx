@@ -9,7 +9,7 @@ import { siteMedia } from "@/media/site";
 import { PageStructuredData } from "@/components/PageStructuredData";
 import { staticPageSeo } from "@/content/fr/seo";
 import { createPageMetadata } from "@/seo";
-import { HeroVideo, VideoOverlay } from "@/components/media";
+import { VideoOverlay } from "@/components/media";
 import { totalPublicPlatformReviews, weightedAirbnbRating } from "@/reviews";
 
 const pageSeo = staticPageSeo["/"];
@@ -77,13 +77,12 @@ export default function HomePage() {
 
       <section className="premium-hero" aria-labelledby="home-title">
         <div className="premium-hero__media">
-          <HeroVideo
-            poster={siteMedia.destination.sea}
-            sources={{
-              mp4: siteMedia.video.homepageHero,
-              webm: siteMedia.video.homepageHeroWebm,
-              mobileMp4: siteMedia.video.homepageHeroLegacy,
-            }}
+          <Image
+            src={siteMedia.destination.sea}
+            alt="L’océan Atlantique, horizon des maisons Beaux Rivages"
+            fill
+            priority
+            sizes="100vw"
           />
         </div>
         <div className="premium-hero__overlay" />

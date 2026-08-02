@@ -67,6 +67,7 @@ export function Footer() {
           </div>
           <div>
             <p className="premium-footer__label">Nous contacter</p>
+            <Link href="/contact">Page Contact</Link>
             <a href="mailto:coulotstephanie@gmail.com">coulotstephanie@gmail.com</a>
             <a href="tel:+33617260094">+33 6 17 26 00 94</a>
             <p>Stéphanie & Bruno</p>

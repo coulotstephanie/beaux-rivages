@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useId, useMemo, useState } from "react";
 import { publicSearchIndex } from "@/lib/publicSearchIndex";
 
@@ -13,6 +14,7 @@ function normalize(value: string) {
 }
 
 export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
+  const router = useRouter();
   const searchId = useId();
   const [query, setQuery] = useState("");
   const results = useMemo(() => {
@@ -27,8 +29,22 @@ export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
       .slice(0, 7);
   }, [query]);
 
+  const openFirstResult = () => {
+    const firstResult = results[0];
+    if (!firstResult) return;
+    onNavigate?.();
+    router.push(firstResult.href);
+  };
+
   return (
-    <div className="public-site-search" role="search">
+    <form
+      className="public-site-search"
+      role="search"
+      onSubmit={(event) => {
+        event.preventDefault();
+        openFirstResult();
+      }}
+    >
       <label htmlFor={searchId}>Rechercher dans Beaux Rivages</label>
       <div className="public-site-search__field">
         <span aria-hidden="true">⌕</span>
@@ -40,6 +56,9 @@ export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
           placeholder="Maison, monument, village, plage…"
           autoComplete="off"
         />
+        <button type="submit" disabled={!results.length} aria-label="Ouvrir le premier résultat">
+          Rechercher
+        </button>
       </div>
       {query.trim().length >= 2 && (
         <div className="public-site-search__results" aria-live="polite">
@@ -56,6 +75,6 @@ export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
           )}
         </div>
       )}
-    </div>
+    </form>
   );
 }
