@@ -7,8 +7,8 @@ const experiences = [
     copy: "Une sélection matinale préparée pour profiter de la maison dès le réveil.",
   },
   {
-    title: "Plateau de fruits de mer",
-    copy: "Les saveurs de l’Atlantique à partager autour de la grande table.",
+    title: "Panier apéritif",
+    copy: "Les saveurs artisanales de l’île à partager autour de la grande table.",
   },
   {
     title: "Pack Signature",

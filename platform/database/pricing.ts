@@ -35,6 +35,7 @@ export class SupabasePricingPlanReader {
       yieldOverridesResult,
       guardrailsResult,
       touristTaxResult,
+      pricingRulesResult,
     ] = await Promise.all([
       client
         .from("rates")
@@ -61,6 +62,11 @@ export class SupabasePricingPlanReader {
         .order("effective_from", { ascending: false })
         .limit(1)
         .maybeSingle(),
+      client
+        .from("property_pricing_rules" as "properties")
+        .select("allowed_arrival_weekdays")
+        .eq("property_id" as "id", property.id)
+        .maybeSingle(),
     ]);
     if (ratesResult.error) throw new Error(`PRICING_RATES_FAILED:${ratesResult.error.code}`);
     if (optionsResult.error) throw new Error(`PRICING_OPTIONS_FAILED:${optionsResult.error.code}`);
@@ -74,6 +80,10 @@ export class SupabasePricingPlanReader {
       throw new Error(`PRICING_GUARDRAILS_FAILED:${guardrailsResult.error.code}`);
     if (touristTaxResult.error)
       throw new Error(`PRICING_TOURIST_TAX_FAILED:${touristTaxResult.error.code}`);
+    // This optional table was introduced after the original production pricing
+    // schema. Its absence must not disable every quote.
+    if (pricingRulesResult.error && pricingRulesResult.error.code !== "PGRST205")
+      throw new Error(`PRICING_RULES_FAILED:${pricingRulesResult.error.code}`);
 
     const rates = ratesResult.data;
     const baseRate = rates.find((rate) => !rate.season_id && rate.weekdays.includes(1));
@@ -119,6 +129,12 @@ export class SupabasePricingPlanReader {
         label: promotion.name,
         enabled: promotion.enabled,
         percentage: Number(promotion.percentage),
+        fixedAmount:
+          (promotion as typeof promotion & { fixed_discount_cents?: number | null })
+            .fixed_discount_cents != null
+            ? (promotion as typeof promotion & { fixed_discount_cents: number })
+                .fixed_discount_cents / 100
+            : undefined,
       };
       if (promotion.kind === "long_stay")
         return { ...common, kind: "long-stay", minimumNights: promotion.minimum_nights ?? 1 };
@@ -165,6 +181,12 @@ export class SupabasePricingPlanReader {
         : undefined,
       minimumNights: baseRate.minimum_nights ?? 1,
       maximumNights: baseRate.maximum_nights ?? 28,
+      allowedArrivalWeekdays: (pricingRulesResult.error
+        ? null
+        : (pricingRulesResult.data as unknown as {
+            allowed_arrival_weekdays?: number[];
+          } | null)
+      )?.allowed_arrival_weekdays ?? [1, 2, 3, 4, 5, 6, 7],
       cleaningFee: baseRate.cleaning_fee_cents / 100,
       securityDeposit: baseRate.security_deposit_cents / 100,
       touristTax: touristTaxResult.data

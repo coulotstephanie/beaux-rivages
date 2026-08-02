@@ -32,6 +32,7 @@ const mapEntry = (row: {
   tags: string[];
   featured: boolean;
   status: string;
+  sort_order: number;
   version: number;
   meta_title: string | null;
   meta_description: string | null;
@@ -64,6 +65,7 @@ const mapEntry = (row: {
   tags: row.tags,
   featured: row.featured,
   status: row.status as CarnetEntry["status"],
+  sortOrder: row.sort_order,
   version: row.version,
   metaTitle: row.meta_title ?? "",
   metaDescription: row.meta_description ?? "",
@@ -107,6 +109,7 @@ export class CarnetRepository {
       tags: input.tags,
       featured: input.featured,
       status: input.status,
+      sort_order: input.sortOrder,
       meta_title: input.metaTitle ?? null,
       meta_description: input.metaDescription ?? null,
       open_graph_image_path: input.openGraphImagePath ?? null,
@@ -118,5 +121,10 @@ export class CarnetRepository {
     const { data, error } = await query.select("*").single();
     if (error) throw new Error(`CARNET_WRITE_FAILED:${error.code}`);
     return mapEntry(data);
+  }
+
+  async remove(id: string) {
+    const { error } = await this.client.from("carnet_entries").delete().eq("id", id);
+    if (error) throw new Error(`CARNET_DELETE_FAILED:${error.code}`);
   }
 }

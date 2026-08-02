@@ -53,3 +53,27 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  const limited = rateLimit(request, 12);
+  if (limited) return limited;
+  if (!requireSameOrigin(request))
+    return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
+  if (!(await authorizeStaff(request, ["admin", "concierge"])))
+    return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
+  const id = new URL(request.url).searchParams.get("id");
+  if (!id || !/^[0-9a-f-]{36}$/i.test(id))
+    return noStoreJson({ error: "Identifiant invalide." }, { status: 400 });
+  try {
+    await new CarnetRepository().remove(id);
+    return noStoreJson({ deleted: true });
+  } catch (error) {
+    return noStoreJson(
+      {
+        error: "Suppression impossible.",
+        code: error instanceof Error ? error.message.split(":")[0] : "UNKNOWN",
+      },
+      { status: 500 },
+    );
+  }
+}

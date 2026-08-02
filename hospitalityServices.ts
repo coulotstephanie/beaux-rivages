@@ -1,3 +1,5 @@
+import { SIGNATURE_PACK_IMAGE } from "@/booking";
+
 export type HospitalityServiceSlug =
   | "essentiel"
   | "bebe"
@@ -76,7 +78,7 @@ export const hospitalityServices: HospitalityService[] = [
     action: "booking",
     intro:
       "Commencez votre séjour par une parenthèse gourmande. Une sélection de douceurs artisanales vous attend dès votre arrivée.",
-    image: "/images/destination/petit-dejeuner-ocean.jpg",
+    image: "/images/destination/experiences/panier-douceur-beaux-rivages.webp",
     imageAlt: "Panier Douceur Beaux Rivages composé de gourmandises artisanales",
     sections: [
       {
@@ -334,13 +336,14 @@ export const hospitalityServices: HospitalityService[] = [
     slug: "experience-signature",
     icon: "⭐",
     title: "Expérience Signature Beaux Rivages",
-    badge: "145 € par séjour",
+    badge: "À partir de 145 €",
     price: 145,
     action: "booking",
     intro:
       "Une maison prête à vivre, le confort jusque sur la plage et un accueil gourmand choisi selon vos envies.",
-    image: "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
-    imageAlt: "Grande table préparée pour l’Expérience Signature",
+    image: SIGNATURE_PACK_IMAGE,
+    imageAlt:
+      "Chambre authentique du Chai des Tortues préparée avec linge, peignoirs et serviettes pour l’Expérience Signature",
     sections: [
       {
         title: "Une maison prête à vivre",
@@ -376,7 +379,7 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     linenIncluded: true,
     practical: [
-      { label: "Tarif", value: "145 € par séjour" },
+      { label: "Tarif", value: "À partir de 145 € selon le nombre de voyageurs" },
       { label: "Maisons", value: "Disponible dans les trois maisons" },
       { label: "Préparation", value: "Installée avant votre arrivée" },
     ],
@@ -393,8 +396,8 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: "/images/properties/chai-des-tortues/editorial/chambre-attention.png",
-        alt: "Chambre préparée avec une attention",
+        src: SIGNATURE_PACK_IMAGE,
+        alt: "Chambre authentique du Chai préparée pour l’Expérience Signature",
       },
       {
         src: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",

@@ -39,10 +39,6 @@ const initialSelection: BookingSelection = {
 const experienceQueryMap: Partial<Record<string, BookingExperienceId>> = {
   romance: "romance",
   anniversaire: "anniversaire",
-  "lune-de-miel": "lune-de-miel",
-  "plateau-fruits-de-mer": "fruits-de-mer",
-  "balade-velo": "velo",
-  famille: "famille",
 };
 
 export function BookingExperience({
@@ -265,7 +261,11 @@ export function BookingExperience({
                 title="Les attentions qui donnent une autre dimension au séjour."
                 id="booking-step-title"
               />
-              <StayOptions value={selection.options} onChange={updateOptions} />
+              <StayOptions
+                value={selection.options}
+                guests={selection.guests}
+                onChange={updateOptions}
+              />
               <BookingExperiences selection={selection} onChange={updateExperiences} />
               <PersonalAttentionCard
                 value={selection.attention}

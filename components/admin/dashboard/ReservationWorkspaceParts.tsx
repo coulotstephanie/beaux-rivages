@@ -318,6 +318,9 @@ export function ReservationDetail({
           <a href={`tel:${reservation.guestPhone}`}>
             {reservation.guestPhone || "Téléphone non renseigné"}
           </a>
+          {reservation.guestId ? (
+            <a href={`?view=voyageurs&guest=${reservation.guestId}`}>Ouvrir la fiche CRM</a>
+          ) : null}
         </article>
         <article>
           <h3>Finances</h3>
@@ -488,6 +491,22 @@ export function ReservationDetail({
               </dd>
             </div>
           </dl>
+        </article>
+        <article>
+          <h3>Historique du séjour</h3>
+          {reservation.timeline.length ? (
+            <ol className="admin-reservation-timeline">
+              {reservation.timeline.map((event, index) => (
+                <li key={`${event.occurredAt}-${event.eventType}-${index}`}>
+                  <time>{dateTime(event.occurredAt)}</time>
+                  <strong>{event.eventType}</strong>
+                  <span>{event.origin}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="admin-empty">Aucun événement enregistré.</p>
+          )}
         </article>
       </div>
     </aside>

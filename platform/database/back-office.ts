@@ -87,6 +87,8 @@ export class SupabaseBackOfficeRepository {
       notesResult,
       reservationRequestsResult,
       reservationEventsResult,
+      paymentMethodsResult,
+      paymentRemindersResult,
     ] = await Promise.all([
       this.client.from("properties").select("id,slug,name,status").order("name"),
       this.client
@@ -102,7 +104,7 @@ export class SupabaseBackOfficeRepository {
       this.client
         .from("payments")
         .select(
-          "id,reservation_id,kind,status,amount_cents,refunded_cents,provider_payment_id,paid_at,created_at",
+          "id,reservation_id,kind,method,status,amount_cents,refunded_cents,provider_payment_id,received_at,bank_reference,iban_label,comment,evidence_path,paid_at,created_at",
         )
         .order("created_at", { ascending: false }),
       this.client
@@ -112,7 +114,7 @@ export class SupabaseBackOfficeRepository {
         .limit(500),
       this.client
         .from("invoices")
-        .select("id,reservation_id,number,status,total_cents,updated_at")
+        .select("id,reservation_id,number,kind,status,total_cents,updated_at")
         .order("updated_at", { ascending: false })
         .limit(500),
       this.client
@@ -182,6 +184,12 @@ export class SupabaseBackOfficeRepository {
         .select("reservation_id,event_type,origin,occurred_at")
         .order("occurred_at", { ascending: false })
         .limit(5000),
+      this.client.from("payment_method_settings").select("method,label,enabled").order("method"),
+      this.client
+        .from("payment_reminders")
+        .select("id,reservation_id,kind,channel,status,created_at")
+        .order("created_at", { ascending: false })
+        .limit(500),
     ]);
     const failed = [
       propertiesResult,
@@ -207,6 +215,8 @@ export class SupabaseBackOfficeRepository {
       notesResult,
       reservationRequestsResult,
       reservationEventsResult,
+      paymentMethodsResult,
+      paymentRemindersResult,
     ].find((result) => result.error);
     if (failed?.error) throw new Error(`BACK_OFFICE_READ_FAILED:${failed.error.code}`);
 
@@ -365,10 +375,15 @@ export class SupabaseBackOfficeRepository {
     const paymentRows = (paymentsResult.data ?? []) as Row[];
     const paidByReservation = new Map<string, number>();
     for (const payment of paymentRows.filter((row) =>
-      ["paid", "authorized"].includes(String(row.status)),
+      ["paid", "authorized", "partially_refunded"].includes(String(row.status)),
     )) {
       const id = String(payment.reservation_id);
-      paidByReservation.set(id, (paidByReservation.get(id) ?? 0) + Number(payment.amount_cents));
+      paidByReservation.set(
+        id,
+        (paidByReservation.get(id) ?? 0) +
+          Number(payment.amount_cents) -
+          Number(payment.refunded_cents),
+      );
     }
     const contractRows = (contractsResult.data ?? []) as Row[];
     const contractByReservation = new Map(
@@ -379,6 +394,33 @@ export class SupabaseBackOfficeRepository {
     );
     const confirmed = active.filter((reservation) =>
       ["confirmed", "completed"].includes(reservation.status),
+    );
+    const invoiceRows = (invoicesResult.data ?? []) as Row[];
+    const collectedRevenueCents = [...paidByReservation.values()].reduce(
+      (sum, amount) => sum + amount,
+      0,
+    );
+    const expectedDepositsCents = active.reduce(
+      (sum, reservation) => sum + reservation.depositDueCents,
+      0,
+    );
+    const receivedDepositsCents = active.reduce(
+      (sum, reservation) =>
+        sum + Math.min(reservation.depositDueCents, paidByReservation.get(reservation.id) ?? 0),
+      0,
+    );
+    const expectedBalancesCents = active.reduce(
+      (sum, reservation) => sum + reservation.balanceDueCents,
+      0,
+    );
+    const receivedBalancesCents = active.reduce(
+      (sum, reservation) =>
+        sum +
+        Math.min(
+          reservation.balanceDueCents,
+          Math.max(0, (paidByReservation.get(reservation.id) ?? 0) - reservation.depositDueCents),
+        ),
+      0,
     );
     const confirmedThisYear = confirmed.filter(
       (reservation) => reservation.arrival >= yearStart && reservation.arrival < yearEnd,
@@ -512,6 +554,22 @@ export class SupabaseBackOfficeRepository {
             Math.max(0, reservation.totalCents - (paidByReservation.get(reservation.id) ?? 0)),
           0,
         ),
+        bookedRevenueCents: active.reduce((sum, reservation) => sum + reservation.totalCents, 0),
+        collectedRevenueCents,
+        expectedDepositsCents,
+        receivedDepositsCents,
+        expectedBalancesCents,
+        receivedBalancesCents,
+        overduePaymentsCents: active.reduce((sum, reservation) => {
+          if (!reservation.balanceDueDate || reservation.balanceDueDate >= today) return sum;
+          return (
+            sum + Math.max(0, reservation.totalCents - (paidByReservation.get(reservation.id) ?? 0))
+          );
+        }, 0),
+        refundsCents: paymentRows.reduce((sum, payment) => sum + Number(payment.refunded_cents), 0),
+        creditNotesCents: invoiceRows
+          .filter((invoice) => invoice.kind === "credit_note" && invoice.status !== "void")
+          .reduce((sum, invoice) => sum + Number(invoice.total_cents), 0),
         averageStayNights: confirmedThisYear.length
           ? Math.round(
               (confirmedThisYear.reduce(
@@ -529,6 +587,40 @@ export class SupabaseBackOfficeRepository {
                 10_000,
             ) / 100
           : 0,
+      },
+      finance: {
+        methods: ((paymentMethodsResult.data ?? []) as Row[]).map((row) => ({
+          method: String(row.method),
+          label: String(row.label),
+          enabled: Boolean(row.enabled),
+        })),
+        payments: paymentRows.map((row) => {
+          const reservation = reservationById.get(String(row.reservation_id));
+          return {
+            id: String(row.id),
+            reservationId: String(row.reservation_id),
+            reservationReference: reservation?.reference ?? "—",
+            guestName: reservation?.guestName ?? "Voyageur",
+            kind: String(row.kind),
+            method: String(row.method ?? "card"),
+            status: String(row.status),
+            amountCents: Number(row.amount_cents),
+            refundedCents: Number(row.refunded_cents),
+            receivedAt: row.received_at ? String(row.received_at) : null,
+            bankReference: String(row.bank_reference ?? ""),
+            ibanLabel: String(row.iban_label ?? ""),
+            comment: String(row.comment ?? ""),
+            evidencePath: String(row.evidence_path ?? ""),
+          };
+        }),
+        reminders: ((paymentRemindersResult.data ?? []) as Row[]).map((row) => ({
+          id: String(row.id),
+          reservationReference: reservationById.get(String(row.reservation_id))?.reference ?? "—",
+          kind: String(row.kind),
+          channel: String(row.channel),
+          status: String(row.status),
+          createdAt: String(row.created_at),
+        })),
       },
       operational: {
         arrivals: active.filter((reservation) => reservation.arrival === today),
@@ -560,7 +652,7 @@ export class SupabaseBackOfficeRepository {
           reservationReference: reservationById.get(String(row.reservation_id))?.reference ?? "—",
           updatedAt: String(row.updated_at),
         })),
-        invoices: ((invoicesResult.data ?? []) as Row[]).map((row) => ({
+        invoices: invoiceRows.map((row) => ({
           id: String(row.id),
           number: String(row.number),
           status: String(row.status),
@@ -717,7 +809,7 @@ export class SupabaseBackOfficeRepository {
     };
   }
 
-  async execute(input: AdminOperationInput) {
+  async execute(input: AdminOperationInput, actorId?: string) {
     if (input.action === "create_reservation") {
       const calculated = await calculateQuote({
         propertySlug: input.propertySlug,
@@ -933,6 +1025,156 @@ export class SupabaseBackOfficeRepository {
         .single();
       if (error) throw new Error(`CONCIERGE_REQUEST_UPDATE_FAILED:${error.code}`);
       return data;
+    }
+    if (input.action === "record_payment") {
+      const { data: reservation, error: reservationError } = await this.client
+        .from("reservations")
+        .select("id,total_cents,deposit_due_cents,status")
+        .eq("id", input.reservationId)
+        .single();
+      if (reservationError) throw new Error(`RESERVATION_READ_FAILED:${reservationError.code}`);
+      const { data: existing, error: existingError } = await this.client
+        .from("payments")
+        .select("amount_cents,refunded_cents,status")
+        .eq("reservation_id", input.reservationId);
+      if (existingError) throw new Error(`PAYMENT_READ_FAILED:${existingError.code}`);
+      const netPaid = (existing ?? []).reduce(
+        (sum, payment) =>
+          ["paid", "authorized", "partially_refunded"].includes(payment.status)
+            ? sum + payment.amount_cents - payment.refunded_cents
+            : sum,
+        0,
+      );
+      if (netPaid + input.amountCents > reservation.total_cents)
+        throw new Error("PAYMENT_EXCEEDS_BALANCE");
+      const { data: payment, error } = await this.client
+        .from("payments")
+        .insert({
+          reservation_id: input.reservationId,
+          provider: "manual",
+          method: "bank_transfer",
+          idempotency_key: `bank-${input.reservationId}-${input.kind}`,
+          kind: input.kind,
+          status: "paid",
+          amount_cents: input.amountCents,
+          received_at: input.receivedAt,
+          paid_at: input.receivedAt,
+          bank_reference: input.bankReference,
+          iban_label: input.ibanLabel ?? null,
+          validated_by: actorId ?? null,
+          comment: input.comment ?? null,
+          evidence_path: input.evidencePath ?? null,
+          provider_payload: { source: "back_office" },
+        })
+        .select("id")
+        .single();
+      if (error) {
+        if (error.code === "23505") throw new Error("PAYMENT_ALREADY_RECORDED");
+        throw new Error(`PAYMENT_WRITE_FAILED:${error.code}`);
+      }
+      const newNetPaid = netPaid + input.amountCents;
+      const nextStatus =
+        newNetPaid >= reservation.deposit_due_cents &&
+        ["draft", "requested", "pending_payment"].includes(reservation.status)
+          ? "confirmed"
+          : reservation.status;
+      if (nextStatus !== reservation.status) {
+        const { error: statusError } = await this.client
+          .from("reservations")
+          .update({ status: nextStatus, confirmed_at: new Date().toISOString() })
+          .eq("id", input.reservationId);
+        if (statusError) throw new Error(`RESERVATION_UPDATE_FAILED:${statusError.code}`);
+      }
+      return payment;
+    }
+    if (input.action === "refund_manual_payment") {
+      const { data: payment, error: readError } = await this.client
+        .from("payments")
+        .select("id,reservation_id,amount_cents,refunded_cents,provider,status")
+        .eq("id", input.paymentId)
+        .single();
+      if (readError) throw new Error(`PAYMENT_READ_FAILED:${readError.code}`);
+      if (payment.provider !== "manual") throw new Error("MANUAL_REFUND_ONLY");
+      if (payment.refunded_cents + input.amountCents > payment.amount_cents)
+        throw new Error("REFUND_EXCEEDS_PAYMENT");
+      const refundedCents = payment.refunded_cents + input.amountCents;
+      const { data, error } = await this.client
+        .from("payments")
+        .update({
+          refunded_cents: refundedCents,
+          status: refundedCents === payment.amount_cents ? "refunded" : "partially_refunded",
+          validated_by: actorId ?? null,
+          comment: input.reason,
+        })
+        .eq("id", input.paymentId)
+        .eq("refunded_cents", payment.refunded_cents)
+        .select("id")
+        .single();
+      if (error) throw new Error(`PAYMENT_REFUND_FAILED:${error.code}`);
+      return data;
+    }
+    if (input.action === "create_credit_note") {
+      const number = `AV-${new Date().toISOString().replace(/\D/g, "").slice(0, 14)}`;
+      const { data, error } = await this.client
+        .from("invoices")
+        .insert({
+          reservation_id: input.reservationId,
+          number,
+          kind: "credit_note",
+          status: "issued",
+          total_cents: input.amountCents,
+          issued_at: new Date().toISOString(),
+        })
+        .select("id")
+        .single();
+      if (error) throw new Error(`CREDIT_NOTE_WRITE_FAILED:${error.code}`);
+      const { error: eventError } = await this.client.from("reservation_events").insert({
+        reservation_id: input.reservationId,
+        event_type: "credit_note.issued",
+        origin: "administration",
+        actor_id: actorId ?? null,
+        details: { number, amountCents: input.amountCents, reason: input.reason },
+      });
+      if (eventError) throw new Error(`CREDIT_NOTE_JOURNAL_FAILED:${eventError.code}`);
+      return data;
+    }
+    if (input.action === "create_payment_reminder") {
+      const day = new Date().toISOString().slice(0, 10);
+      const { data, error } = await this.client
+        .from("payment_reminders")
+        .insert({
+          reservation_id: input.reservationId,
+          kind: input.kind,
+          channel: input.channel,
+          status: input.channel === "manual" ? "sent" : "queued",
+          sent_at: input.channel === "manual" ? new Date().toISOString() : null,
+          created_by: actorId ?? null,
+          comment: input.comment ?? null,
+          idempotency_key: `${input.reservationId}-${input.kind}-${input.channel}-${day}`,
+        })
+        .select("id")
+        .single();
+      if (error) {
+        if (error.code === "23505") throw new Error("REMINDER_ALREADY_RECORDED");
+        throw new Error(`REMINDER_WRITE_FAILED:${error.code}`);
+      }
+      return data;
+    }
+    if (input.action === "update_payment_method") {
+      if (input.method === "bank_transfer" && !input.enabled)
+        throw new Error("BANK_TRANSFER_REQUIRED");
+      const { data, error } = await this.client
+        .from("payment_method_settings")
+        .update({
+          enabled: input.enabled,
+          updated_at: new Date().toISOString(),
+          updated_by: actorId,
+        })
+        .eq("method", input.method)
+        .select("method")
+        .single();
+      if (error) throw new Error(`PAYMENT_METHOD_UPDATE_FAILED:${error.code}`);
+      return { id: data.method };
     }
     const patch: Database["public"]["Tables"]["reservations"]["Update"] = { status: input.status };
     if (input.arrival) patch.arrival = input.arrival;

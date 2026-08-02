@@ -56,6 +56,21 @@ export const reviewProfiles: PropertyReviewProfile[] = [
         author: "Edith",
         platform: "Booking.com",
       },
+      {
+        quote: "Le logement est fantastique, très bien entretenu et équipé au top.",
+        author: "Cédric",
+        platform: "Booking.com",
+      },
+      {
+        quote: "La décoration est très soignée, les pièces sont très agréables et confortables.",
+        author: "Nelly",
+        platform: "Booking.com",
+      },
+      {
+        quote: "C’était tout simplement fabuleux : très confortable et parfaitement équipé.",
+        author: "Dianna",
+        platform: "Booking.com",
+      },
     ],
     themes: [
       { label: "Hospitalité", count: 31 },
@@ -99,6 +114,21 @@ export const reviewProfiles: PropertyReviewProfile[] = [
       {
         quote: "Pour deux familles, la maison est idéale, avec deux espaces distincts.",
         author: "Olena",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Superbe maison idéalement située, littéralement les pieds dans l’eau.",
+        author: "Alicia",
+        platform: "Booking.com",
+      },
+      {
+        quote: "La propreté est impeccable et la cuisine très bien équipée.",
+        author: "Karine",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Les hôtes sont aux petits soins et prennent régulièrement de nos nouvelles.",
+        author: "Erinyes83",
         platform: "Booking.com",
       },
     ],
@@ -145,6 +175,21 @@ export const reviewProfiles: PropertyReviewProfile[] = [
       {
         quote: "Le confort, l’espace dans l’appartement et la situation à côté de la plage.",
         author: "Audrey",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Le site est magnifique, très bien situé et joliment décoré.",
+        author: "Catherine",
+        platform: "Booking.com",
+      },
+      {
+        quote: "L’emplacement idéal, la résidence pleine de caractère et le calme.",
+        author: "Stéphane",
+        platform: "Booking.com",
+      },
+      {
+        quote: "Maison bien équipée dans une résidence très calme avec accès à la plage.",
+        author: "Marianne",
         platform: "Booking.com",
       },
     ],

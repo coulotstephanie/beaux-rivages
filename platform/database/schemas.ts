@@ -77,7 +77,7 @@ export const reservationQuoteSchema = z
     depositPercentage: z.union([z.literal(30), z.literal(100)]),
     fullPaymentRequired: z.boolean(),
     pricingVersion: z.string().min(1).max(50),
-    paymentMethod: z.enum(["bank_transfer", "holiday_vouchers"]),
+    paymentMethod: z.enum(["bank_transfer", "holiday_vouchers", "card"]),
     termsVersion: z.string().min(1).max(50),
     termsAcceptedAt: z.string().datetime(),
     cancellationVersion: z.string().min(1).max(50),
@@ -161,9 +161,7 @@ export const adminManualReservationSchema = z
       .max(30)
       .default([]),
     experiences: z
-      .array(
-        z.enum(["romance", "anniversaire", "lune-de-miel", "fruits-de-mer", "velo", "famille"]),
-      )
+      .array(z.enum(["romance", "anniversaire"]))
       .max(20)
       .default([]),
     specialRequests: reservationSpecialRequestsSchema.optional(),
@@ -326,6 +324,56 @@ export const adminSpecialRequestUpdateSchema = z
   })
   .strict();
 
+export const adminRecordPaymentSchema = z
+  .object({
+    action: z.literal("record_payment"),
+    reservationId: z.string().uuid(),
+    kind: z.enum(["deposit", "balance", "full"]),
+    amountCents: z.number().int().positive().max(10_000_000),
+    receivedAt: z.string().datetime(),
+    bankReference: z.string().trim().min(2).max(160),
+    ibanLabel: z.string().trim().max(120).optional(),
+    comment: z.string().trim().max(1000).optional(),
+    evidencePath: z.string().trim().max(500).optional(),
+  })
+  .strict();
+
+export const adminRefundPaymentSchema = z
+  .object({
+    action: z.literal("refund_manual_payment"),
+    paymentId: z.string().uuid(),
+    amountCents: z.number().int().positive().max(10_000_000),
+    reason: z.string().trim().min(10).max(1000),
+  })
+  .strict();
+
+export const adminCreditNoteSchema = z
+  .object({
+    action: z.literal("create_credit_note"),
+    reservationId: z.string().uuid(),
+    amountCents: z.number().int().positive().max(10_000_000),
+    reason: z.string().trim().min(10).max(1000),
+  })
+  .strict();
+
+export const adminPaymentReminderSchema = z
+  .object({
+    action: z.literal("create_payment_reminder"),
+    reservationId: z.string().uuid(),
+    kind: z.enum(["deposit", "balance"]),
+    channel: z.enum(["email", "manual"]).default("manual"),
+    comment: z.string().trim().max(1000).optional(),
+  })
+  .strict();
+
+export const adminPaymentMethodSchema = z
+  .object({
+    action: z.literal("update_payment_method"),
+    method: z.enum(["bank_transfer", "holiday_vouchers", "card"]),
+    enabled: z.boolean(),
+  })
+  .strict();
+
 export const adminOperationSchema = z.discriminatedUnion("action", [
   adminManualReservationSchema,
   adminBlockDatesSchema,
@@ -339,6 +387,11 @@ export const adminOperationSchema = z.discriminatedUnion("action", [
   adminReservationNoteSchema,
   adminConciergeOrderUpdateSchema,
   adminSpecialRequestUpdateSchema,
+  adminRecordPaymentSchema,
+  adminRefundPaymentSchema,
+  adminCreditNoteSchema,
+  adminPaymentReminderSchema,
+  adminPaymentMethodSchema,
 ]);
 
 export type AdminOperationInput = z.infer<typeof adminOperationSchema>;

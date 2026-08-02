@@ -16,6 +16,8 @@ import { PropertyFacts } from "./PropertyFacts";
 import { PropertyFilms } from "./PropertyFilms";
 import { PropertyHero } from "./PropertyHero";
 import { PropertyHighlights } from "./PropertyHighlights";
+import { PropertyHistoryStory } from "./PropertyHistoryStory";
+import { PropertySignatureDetails } from "./PropertySignatureDetails";
 import { PropertyDestinationLinks } from "./PropertyDestinationLinks";
 import { PropertyPracticalDetails } from "./PropertyPracticalDetails";
 import { PropertyDayStory } from "./PropertyDayStory";
@@ -71,6 +73,36 @@ export function PropertyPage({ property, children }: { property: Property; child
       <StructuredData data={createPropertyStructuredData(property)} />
       <Header />
       <PropertyHero property={property} />
+      <PropertyHistoryStory propertySlug={property.slug as PropertySlug} />
+
+      <PropertyDayStory scenes={presentation.dayStory} />
+
+      <PropertyFilms films={manifest.videos} poster={property.hero} />
+
+      <Section className="premium-gallery-section">
+        <Heading
+          eyebrow="La maison et ses horizons"
+          title="Les espaces, les paysages, l’atmosphère du séjour."
+          description="Parcourez en plein écran la maison et son environnement."
+        />
+        <FullscreenGallery images={property.gallery} />
+      </Section>
+
+      {reviewProfile && (
+        <Section tone="sand" className="property-review-section" id="avis-voyageurs">
+          <Heading
+            eyebrow="Pourquoi nos voyageurs reviennent"
+            title="Ce qu’ils retiennent vraiment de leur séjour."
+            description={`Plus de ${reviewProfile.airbnbReviewCount + (reviewProfile.otherSources?.reduce((total, source) => total + (source.reviewCount ?? 0), 0) ?? 0)} voyageurs nous ont déjà fait confiance pour cette maison.`}
+          />
+          <Container size="narrow">
+            <ReviewProfileCard profile={reviewProfile} />
+          </Container>
+        </Section>
+      )}
+
+      <PropertySignatureDetails propertySlug={property.slug as PropertySlug} />
+
       <PropertyFacts property={property} />
 
       <section id="histoire" className="property-story-premium">
@@ -87,7 +119,6 @@ export function PropertyPage({ property, children }: { property: Property; child
         <div className="property-story-premium__copy">
           <Badge>{presentation.storyEyebrow}</Badge>
           <h2>{presentation.storyTitle}</h2>
-          <p>{property.story}</p>
           <div className="property-signature-note">
             <span>La signature de la maison</span>
             <strong>{property.signatureTitle}</strong>
@@ -100,19 +131,6 @@ export function PropertyPage({ property, children }: { property: Property; child
       </section>
 
       <PropertyHighlights property={property} />
-
-      <Section className="premium-gallery-section">
-        <Heading
-          eyebrow="La maison et ses horizons"
-          title="Les espaces, les paysages, l’atmosphère du séjour."
-          description="Parcourez en plein écran la maison et son environnement."
-        />
-        <FullscreenGallery images={property.gallery} />
-      </Section>
-
-      <PropertyDayStory scenes={presentation.dayStory} />
-
-      <PropertyFilms films={manifest.videos} poster={property.hero} />
 
       {presentation.experiences && (
         <PropertyExperiences
@@ -141,18 +159,6 @@ export function PropertyPage({ property, children }: { property: Property; child
       <PropertyPracticalDetails property={property} />
       <PropertyDestinationLinks property={property} />
 
-      {reviewProfile && (
-        <Section tone="sand" className="property-review-section">
-          <Heading
-            eyebrow="Ils ont vécu Beaux Rivages"
-            title="Ce sont nos voyageurs qui racontent le mieux la maison."
-          />
-          <Container size="narrow">
-            <ReviewProfileCard profile={reviewProfile} />
-          </Container>
-        </Section>
-      )}
-
       {children}
 
       <section className="premium-property-cta">
@@ -162,7 +168,7 @@ export function PropertyPage({ property, children }: { property: Property; child
           <h2>{property.bookingTitle}</h2>
           <p>
             {property.bookingText} Réservation directe, échange avec Stéphanie, attentions
-            personnalisables et paiement par Chèques‑Vacances ou virement bancaire.
+            personnalisables et règlement sécurisé par virement bancaire.
           </p>
           <Button href={`/reserver?maison=${property.slug}`}>Choisir mes dates</Button>
         </Container>

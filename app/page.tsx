@@ -4,13 +4,13 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PropertyCard } from "@/components/PropertyCard";
 import { properties } from "@/data";
-import { Badge, Button, Card, Heading, Section } from "@/components/ui";
-import { FutureVisualScenes } from "@/components/FutureVisualScenes";
+import { Button, Card, Heading, Section } from "@/components/ui";
 import { siteMedia } from "@/media/site";
 import { PageStructuredData } from "@/components/PageStructuredData";
 import { staticPageSeo } from "@/content/fr/seo";
 import { createPageMetadata } from "@/seo";
 import { HeroVideo, VideoOverlay } from "@/components/media";
+import { totalPublicPlatformReviews, weightedAirbnbRating } from "@/reviews";
 
 const pageSeo = staticPageSeo["/"];
 
@@ -95,6 +95,28 @@ export default function HomePage() {
         </a>
       </section>
 
+      <Section id="maisons" tone="sand" className="premium-properties">
+        <Heading
+          eyebrow="Nos maisons"
+          title="Trois identités, un même niveau d’attention."
+          description="Chaque maison possède son rythme, ses matières, ses usages et son rapport particulier à l’océan."
+        />
+        <div className="property-grid">
+          {properties.map((property) => (
+            <PropertyCard
+              key={property.title}
+              title={property.title}
+              subtitle={property.intro}
+              href={`/maisons/${property.slug}`}
+              image={property.hero}
+              location={property.location}
+              facts={property.stats.slice(0, 4)}
+              bookingHref={`/reserver?maison=${property.slug}`}
+            />
+          ))}
+        </div>
+      </Section>
+
       <Section id="pourquoi" className="why-section">
         <Heading
           eyebrow="Pourquoi Beaux Rivages"
@@ -123,8 +145,8 @@ export default function HomePage() {
             <span>Avec Stéphanie & Bruno</span>
           </div>
           <div>
-            <strong>Chèques-Vacances</strong>
-            <span>Acceptés</span>
+            <strong>Virement bancaire</strong>
+            <span>Règlement direct et suivi</span>
           </div>
           <div>
             <strong>Conseils locaux</strong>
@@ -133,57 +155,31 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section id="maisons" tone="sand" className="premium-properties">
+      <Section className="home-islands" tone="sand">
         <Heading
-          eyebrow="Nos maisons"
-          title="Trois identités, un même niveau d’attention."
-          description="Chaque maison possède son rythme, ses matières, ses usages et son rapport particulier à l’océan."
+          eyebrow="Deux îles"
+          title="Deux horizons, une même invitation à ralentir."
+          description="Choisissez une destination, puis laissez les villages, les chemins et l’océan composer la suite."
         />
-        <div className="property-grid">
-          {properties.map((property) => (
-            <PropertyCard
-              key={property.title}
-              title={property.title}
-              subtitle={property.intro}
-              href={`/maisons/${property.slug}`}
-              image={property.hero}
-              location={property.location}
-              facts={property.stats.slice(0, 4)}
-              bookingHref={`/reserver?maison=${property.slug}`}
-            />
-          ))}
+        <div className="home-islands__grid">
+          <Link
+            href="/destinations/ile-de-re"
+            style={{ backgroundImage: `url(${siteMedia.destination.marsh})` }}
+          >
+            <span>Île de Ré</span>
+            <strong>Villages blancs, marais salants et chemins à vélo.</strong>
+            <small>Découvrir l’île →</small>
+          </Link>
+          <Link
+            href="/destinations/ile-d-oleron"
+            style={{ backgroundImage: `url(${siteMedia.destination.beach})` }}
+          >
+            <span>Île d’Oléron</span>
+            <strong>Forêts, plages sauvages et Fort Boyard à l’horizon.</strong>
+            <small>Découvrir l’île →</small>
+          </Link>
         </div>
       </Section>
-
-      <section className="local-signature" aria-labelledby="nina-metayer-title">
-        <div className="local-signature__visual">
-          <Image
-            src={siteMedia.destination.ninaMetayerFruitCake}
-            alt="Gâteau aux fruits et à la crème signé Nina Métayer"
-            fill
-            quality={90}
-            loading="lazy"
-            sizes="(max-width: 900px) 100vw, 52vw"
-          />
-        </div>
-        <div className="local-signature__copy">
-          <Badge>À Rivedoux-Plage</Badge>
-          <p className="local-signature__award">
-            Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024
-          </p>
-          <h2 id="nina-metayer-title">La pâtisserie de Nina Métayer, à quelques pas.</h2>
-          <p>
-            Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première
-            visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.
-          </p>
-          <div className="local-signature__actions">
-            <Button href="/carnet#gastronomie">Voir dans notre Carnet</Button>
-            <Button href="https://larochelle.delicatisserie.com/" variant="ghost">
-              Découvrir Chez Nina <span aria-hidden="true">↗</span>
-            </Button>
-          </div>
-        </div>
-      </section>
 
       <Section id="experiences" tone="dark" className="moments-section">
         <Heading
@@ -223,34 +219,23 @@ export default function HomePage() {
         </Button>
       </Section>
 
-      <FutureVisualScenes />
-
-      <section className="host-advice">
-        <div className="host-advice__visual">
-          <Image
-            src={siteMedia.destination.lane}
-            alt="Ruelle lumineuse au charme insulaire"
-            fill
-            quality={88}
-            loading="lazy"
-            sizes="(max-width: 900px) 100vw, 50vw"
-          />
+      <Section className="home-reviews" tone="sand">
+        <div className="home-reviews__metric">
+          <strong>{weightedAirbnbRating} / 5</strong>
+          <span>{totalPublicPlatformReviews} avis publics recensés</span>
         </div>
-        <div className="host-advice__copy">
-          <Badge>Le conseil de Stéphanie & Bruno</Badge>
-          <blockquote>
-            « Les plus belles vacances ne se mesurent pas en mètres carrés. Elles se mesurent en
-            souvenirs. »
-          </blockquote>
+        <div className="home-reviews__copy">
+          <p className="eyebrow">Ils ont vécu Beaux Rivages</p>
+          <h2>Ce sont nos voyageurs qui racontent le mieux les maisons.</h2>
           <p>
-            Nos recommandations viennent de notre vie sur les îles : des producteurs, artisans et
-            expériences que nous partageons comme nous le ferions avec des amis.
+            Le confort, l’emplacement, la propreté et une présence attentive reviennent séjour après
+            séjour.
           </p>
-          <Button href="/carnet" variant="ghost">
-            Ouvrir le Carnet Beaux Rivages <span aria-hidden="true">→</span>
+          <Button href="/avis" variant="ghost">
+            Lire les avis voyageurs <span aria-hidden="true">→</span>
           </Button>
         </div>
-      </section>
+      </Section>
 
       <Section className="premium-closing">
         <Heading

@@ -37,38 +37,89 @@ export function PremiumOperations({ data, view, busy, onSubmit }: Props) {
       <section className="admin-panel">
         <div className="admin-panel__heading">
           <div>
-            <p className="eyebrow">Encaissements & cautions</p>
+            <p className="eyebrow">Registre financier</p>
             <h2>Paiements</h2>
           </div>
           <p>{money(data.metrics.pendingPaymentsCents)} restant à suivre</p>
         </div>
-        <div className="admin-two-columns">
-          <article className="admin-card">
-            <h3>Transactions récentes</h3>
-            {data.pilotage.recentPayments.map((row) => (
-              <Line
-                key={row.id}
-                title={`${row.guestName} · ${money(row.amountCents)}`}
-                detail={`${row.reservationReference} · ${row.kind}`}
-                status={row.status}
-              />
-            ))}
+        <div className="admin-kpis">
+          <article>
+            <span>CA réservé</span>
+            <strong>{money(data.metrics.bookedRevenueCents)}</strong>
           </article>
-          <article className="admin-card">
-            <h3>Cautions</h3>
-            {data.operations.deposits.map((row) => (
-              <Line
-                key={row.id}
-                title={`${row.guestName} · ${money(row.amountCents)}`}
-                detail={`${row.reservationReference} · ${row.provider}`}
-                status={row.status}
-              />
-            ))}
-            {!data.operations.deposits.length && (
-              <p className="admin-empty">Aucune caution enregistrée.</p>
-            )}
+          <article>
+            <span>CA encaissé</span>
+            <strong>{money(data.metrics.collectedRevenueCents)}</strong>
+          </article>
+          <article>
+            <span>Acomptes reçus</span>
+            <strong>{money(data.metrics.receivedDepositsCents)}</strong>
+          </article>
+          <article>
+            <span>Soldes reçus</span>
+            <strong>{money(data.metrics.receivedBalancesCents)}</strong>
+          </article>
+          <article>
+            <span>En retard</span>
+            <strong>{money(data.metrics.overduePaymentsCents)}</strong>
+          </article>
+          <article>
+            <span>Remboursements</span>
+            <strong>{money(data.metrics.refundsCents)}</strong>
           </article>
         </div>
+        <PaymentRecordForm data={data} busy={busy} onSubmit={onSubmit} />
+        <div className="admin-two-columns">
+          <article className="admin-card">
+            <h3>Registre des virements</h3>
+            {data.finance.payments.map((row) => (
+              <div className="admin-health-row" key={row.id}>
+                <div>
+                  <strong>
+                    {row.guestName} · {money(row.amountCents - row.refundedCents)}
+                  </strong>
+                  <span>
+                    {row.reservationReference} · {row.kind} ·{" "}
+                    {row.bankReference || "Sans référence"}
+                  </span>
+                  {data.reservations.find((reservation) => reservation.id === row.reservationId)
+                    ?.guestId ? (
+                    <a
+                      href={`?view=voyageurs&guest=${data.reservations.find((reservation) => reservation.id === row.reservationId)?.guestId}`}
+                    >
+                      Fiche CRM
+                    </a>
+                  ) : null}
+                </div>
+                <span className="admin-status">{row.status}</span>
+              </div>
+            ))}
+            {!data.finance.payments.length && (
+              <p className="admin-empty">Aucun virement enregistré.</p>
+            )}
+          </article>
+          <article className="admin-card">
+            <h3>Rapprochement bancaire</h3>
+            {data.operational.pendingPayments.slice(0, 50).map((reservation) => {
+              const received = data.finance.payments
+                .filter((payment) => payment.reservationId === reservation.id)
+                .reduce((sum, payment) => sum + payment.amountCents - payment.refundedCents, 0);
+              return (
+                <Line
+                  key={reservation.id}
+                  title={`${reservation.reference} · ${reservation.guestName}`}
+                  detail={`${money(Math.max(0, reservation.totalCents - received))} à rapprocher`}
+                  status={
+                    reservation.balanceDueDate && reservation.balanceDueDate < data.today
+                      ? "retard"
+                      : "attendu"
+                  }
+                />
+              );
+            })}
+          </article>
+        </div>
+        <FinancialActions data={data} busy={busy} onSubmit={onSubmit} />
       </section>
     );
 
@@ -300,6 +351,27 @@ export function PremiumOperations({ data, view, busy, onSubmit }: Props) {
       </div>
       <div className="admin-two-columns">
         <article className="admin-card">
+          <h3>Modes de paiement</h3>
+          {data.finance.methods.map((method) => (
+            <label className="admin-checklist" key={method.method}>
+              <input
+                type="checkbox"
+                checked={method.enabled}
+                disabled={busy || method.method === "bank_transfer"}
+                onChange={(event) =>
+                  void onSubmit({
+                    action: "update_payment_method",
+                    method: method.method,
+                    enabled: event.target.checked,
+                  })
+                }
+              />
+              {method.label}
+              {method.method === "bank_transfer" ? " · obligatoire" : " · désactivé par défaut"}
+            </label>
+          ))}
+        </article>
+        <article className="admin-card">
           <h3>Calendriers connectés</h3>
           {data.pilotage.calendarSources.map((row) => (
             <Line key={row.id} title={row.property} detail={row.provider} status={row.status} />
@@ -344,6 +416,197 @@ function Line({ title, detail, status }: { title: string; detail: string; status
         <span>{detail}</span>
       </div>
       <span className="admin-status">{status}</span>
+    </div>
+  );
+}
+
+function PaymentRecordForm({ data, busy, onSubmit }: Omit<Props, "view">) {
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    void onSubmit({
+      action: "record_payment",
+      reservationId: form.get("reservationId"),
+      kind: form.get("kind"),
+      amountCents: Math.round(Number(form.get("amount")) * 100),
+      receivedAt: new Date(String(form.get("receivedAt"))).toISOString(),
+      bankReference: form.get("bankReference"),
+      ibanLabel: form.get("ibanLabel") || undefined,
+      comment: form.get("comment") || undefined,
+      evidencePath: form.get("evidencePath") || undefined,
+    });
+    event.currentTarget.reset();
+  };
+  return (
+    <form className="admin-editor admin-editor--compact" onSubmit={submit}>
+      <h3>Enregistrer un virement reçu</h3>
+      <div className="admin-form-grid">
+        <label>
+          Réservation
+          <select name="reservationId" required>
+            {data.operational.pendingPayments.map((reservation) => (
+              <option key={reservation.id} value={reservation.id}>
+                {reservation.reference} · {reservation.guestName}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Nature
+          <select name="kind">
+            <option value="deposit">Acompte reçu</option>
+            <option value="balance">Solde reçu</option>
+            <option value="full">Paiement intégral</option>
+          </select>
+        </label>
+        <label>
+          Montant reçu (€)
+          <input name="amount" type="number" min="0.01" step="0.01" required />
+        </label>
+        <label>
+          Date de réception
+          <input name="receivedAt" type="datetime-local" required />
+        </label>
+        <label>
+          Référence bancaire
+          <input name="bankReference" required minLength={2} />
+        </label>
+        <label>
+          Compte / IBAN utilisé
+          <input name="ibanLabel" placeholder="Compte principal" />
+        </label>
+        <label className="wide">
+          Commentaire
+          <input name="comment" />
+        </label>
+        <label className="wide">
+          Justificatif (chemin sécurisé)
+          <input name="evidencePath" />
+        </label>
+      </div>
+      <button type="submit" disabled={busy}>
+        Valider le virement
+      </button>
+    </form>
+  );
+}
+
+function FinancialActions({ data, busy, onSubmit }: Omit<Props, "view">) {
+  const submitReminder = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    void onSubmit({
+      action: "create_payment_reminder",
+      reservationId: form.get("reservationId"),
+      kind: form.get("kind"),
+      channel: "manual",
+      comment: form.get("comment") || undefined,
+    });
+    event.currentTarget.reset();
+  };
+  const submitRefund = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    void onSubmit({
+      action: "refund_manual_payment",
+      paymentId: form.get("paymentId"),
+      amountCents: Math.round(Number(form.get("amount")) * 100),
+      reason: form.get("reason"),
+    });
+    event.currentTarget.reset();
+  };
+  const submitCreditNote = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    void onSubmit({
+      action: "create_credit_note",
+      reservationId: form.get("reservationId"),
+      amountCents: Math.round(Number(form.get("amount")) * 100),
+      reason: form.get("reason"),
+    });
+    event.currentTarget.reset();
+  };
+  const refundable = data.finance.payments.filter(
+    (payment) => payment.status === "paid" || payment.status === "partially_refunded",
+  );
+  return (
+    <div className="admin-two-columns">
+      <form className="admin-editor admin-editor--compact" onSubmit={submitReminder}>
+        <h3>Journaliser une relance</h3>
+        <label>
+          Réservation
+          <select name="reservationId">
+            {data.operational.pendingPayments.map((reservation) => (
+              <option key={reservation.id} value={reservation.id}>
+                {reservation.reference} · {reservation.guestName}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Échéance
+          <select name="kind">
+            <option value="deposit">Acompte</option>
+            <option value="balance">Solde</option>
+          </select>
+        </label>
+        <label>
+          Commentaire
+          <input name="comment" />
+        </label>
+        <button type="submit" disabled={busy}>
+          Enregistrer la relance
+        </button>
+      </form>
+      <form className="admin-editor admin-editor--compact" onSubmit={submitRefund}>
+        <h3>Remboursement manuel</h3>
+        <label>
+          Paiement
+          <select name="paymentId">
+            {refundable.map((payment) => (
+              <option key={payment.id} value={payment.id}>
+                {payment.reservationReference} ·{" "}
+                {money(payment.amountCents - payment.refundedCents)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Montant (€)
+          <input name="amount" type="number" min="0.01" step="0.01" required />
+        </label>
+        <label>
+          Justification
+          <input name="reason" required minLength={10} />
+        </label>
+        <button type="submit" disabled={busy || !refundable.length}>
+          Enregistrer le remboursement
+        </button>
+      </form>
+      <form className="admin-editor admin-editor--compact" onSubmit={submitCreditNote}>
+        <h3>Créer un avoir</h3>
+        <label>
+          Réservation
+          <select name="reservationId">
+            {data.reservations.slice(0, 200).map((reservation) => (
+              <option key={reservation.id} value={reservation.id}>
+                {reservation.reference} · {reservation.guestName}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Montant (€)
+          <input name="amount" type="number" min="0.01" step="0.01" required />
+        </label>
+        <label>
+          Justification
+          <input name="reason" required minLength={10} />
+        </label>
+        <button type="submit" disabled={busy}>
+          Émettre l’avoir
+        </button>
+      </form>
     </div>
   );
 }

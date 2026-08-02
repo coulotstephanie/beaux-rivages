@@ -4,9 +4,10 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { StructuredData } from "@/components/StructuredData";
-import { experiences, getExperience } from "@/experiences";
+import { experiences, getExperience, getExperienceHref } from "@/experiences";
 import { SITE_URL } from "@/seo";
 import { ExperienceSections } from "@/components/experiences/ExperienceSections";
+import { getExperienceEditorial } from "@/experienceEditorial";
 
 export function generateStaticParams() {
   return experiences.map(({ slug }) => ({ slug }));
@@ -48,17 +49,24 @@ export default async function ExperienceDetailPage({
   const experience = getExperience(slug);
   if (!experience) notFound();
   const url = `${SITE_URL}/experiences/${experience.slug}`;
+  const editorial = getExperienceEditorial(experience.slug);
   const directPartners: Record<string, { href: string; label: string }> = {
     "atelier-macarons": {
-      href: "https://www.confetti-patisserie.com",
+      href: "https://www.confetti-patisserie.com/les-ateliers/",
       label: "Découvrir les ateliers chez Confetti",
     },
     "bien-etre": {
-      href: "https://www.reedukcoach.fr",
+      href: "https://www.reedukcoach.fr/",
       label: "Réserver auprès de Reéduk Coach",
     },
   };
-  const freeExperiences = ["lever-de-soleil", "coucher-de-soleil", "peche-a-pied", "famille"];
+  const freeExperiences = [
+    "lever-de-soleil",
+    "coucher-de-soleil",
+    "peche-a-pied",
+    "balade-velo",
+    "famille",
+  ];
   const partner = directPartners[experience.slug];
   const isFree = freeExperiences.includes(experience.slug);
   const included =
@@ -79,7 +87,7 @@ export default async function ExperienceDetailPage({
     .filter((item) => item.slug !== experience.slug)
     .map((item) => ({
       title: item.title,
-      href: `/experiences/${item.slug}`,
+      href: getExperienceHref(item.slug),
       image: item.image,
       imageAlt: item.imageAlt,
     }));
@@ -117,14 +125,29 @@ export default async function ExperienceDetailPage({
         <div>
           <p className="eyebrow light">{experience.eyebrow}</p>
           <h1>{experience.title}</h1>
-          <p>{experience.text}</p>
+          <p>{editorial.hook}</p>
         </div>
+      </section>
+      <section className="experience-emotional-story shell">
+        <p className="eyebrow">Ce que vous allez vivre</p>
+        <h2>{editorial.hook}</h2>
+        <p>{editorial.moment}</p>
       </section>
       <ExperienceSections
         presentation={
           experience.slug === "atelier-macarons"
-            ? `${experience.text} Les ateliers sont proposés directement par Confetti Pâtisserie et doivent être réservés selon leurs disponibilités.`
-            : (experience.story ?? experience.text)
+            ? `${experience.text} Réservation directement auprès de Confetti selon les disponibilités.`
+            : experience.slug === "bien-etre"
+              ? `${experience.story ?? experience.text} Réservation directement auprès de Rééduk Coach selon leurs disponibilités.`
+              : (experience.story ?? experience.text)
+        }
+        presentationLink={
+          experience.slug === "atelier-macarons"
+            ? {
+                label: "www.confetti-patisserie.com",
+                href: "https://www.confetti-patisserie.com",
+              }
+            : undefined
         }
         included={included}
         practical={[
@@ -208,6 +231,7 @@ export default async function ExperienceDetailPage({
             : []
         }
         similar={similar}
+        editorial={editorial}
       />
       <Footer />
     </main>

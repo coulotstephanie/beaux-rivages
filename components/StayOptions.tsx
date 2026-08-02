@@ -1,6 +1,6 @@
 "use client";
 
-import type { StayOptionId } from "@/booking";
+import type { GuestCounts, StayOptionId } from "@/booking";
 import { stayOptions } from "@/booking";
 import { SignaturePackCard } from "./SignaturePackCard";
 import {
@@ -11,9 +11,11 @@ import {
 
 export function StayOptions({
   value,
+  guests,
   onChange,
 }: {
   value: StayOptionId[];
+  guests: GuestCounts;
   onChange: (value: StayOptionId[]) => void;
 }) {
   const toggle = (id: StayOptionId) =>
@@ -77,7 +79,7 @@ export function StayOptions({
           ))}
         </div>
       </fieldset>
-      <SignaturePackCard selected={signatureSelected} onToggle={toggleSignature} />
+      <SignaturePackCard selected={signatureSelected} guests={guests} onToggle={toggleSignature} />
       {signatureSelected ? (
         <SignatureWelcomeBaskets
           included={includedBasket}

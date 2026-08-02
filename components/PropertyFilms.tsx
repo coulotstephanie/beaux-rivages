@@ -1,13 +1,7 @@
 import type { MediaAsset } from "@/media/types";
 import { Heading, Section } from "./ui";
 
-export function PropertyFilms({
-  films,
-  poster,
-}: {
-  films: readonly MediaAsset[];
-  poster: string;
-}) {
+export function PropertyFilms({ films, poster }: { films: readonly MediaAsset[]; poster: string }) {
   if (films.length === 0) return null;
 
   return (
@@ -25,7 +19,7 @@ export function PropertyFilms({
               muted
               playsInline
               preload="metadata"
-              poster={poster}
+              poster={film.poster ?? poster}
               aria-label={film.alt}
             >
               <source src={film.src} type="video/mp4" />

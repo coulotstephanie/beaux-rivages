@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { isDateOccupied, isDateRangeAvailable } from "@/lib/date-ranges";
 import { trackEvent } from "@/platform/analytics/events";
 import { useAvailabilityCalendar } from "../hooks";
 
@@ -68,14 +69,14 @@ export function AvailabilityCalendar({
 
   const selectDate = (date: Date) => {
     const value = toISO(date);
-    const occupied = blocks.some((block) => value >= block.startsOn && value < block.endsOn);
-    if (occupied) return;
+    const occupied = isDateOccupied(blocks, value);
+    const validDeparture = Boolean(
+      arrival && !departure && value > arrival && isDateRangeAvailable(blocks, arrival, value),
+    );
+    if (occupied && !validDeparture) return;
     if (!arrival || departure || value < arrival) onChange(value, null);
     else if (value > arrival) {
-      const crossesOccupiedStay = blocks.some(
-        (block) => arrival < block.endsOn && value > block.startsOn,
-      );
-      if (!crossesOccupiedStay) {
+      if (isDateRangeAvailable(blocks, arrival, value)) {
         onChange(arrival, value);
         trackEvent("search_availability", {
           property_slug: propertySlug,
@@ -138,8 +139,12 @@ export function AvailabilityCalendar({
             if (!date) return <span key={`empty-${index}`} />;
             const value = toISO(date);
             const disabled = date < today;
-            const occupied = blocks.some(
-              (block) => value >= block.startsOn && value < block.endsOn,
+            const occupied = isDateOccupied(blocks, value);
+            const validDeparture = Boolean(
+              arrival &&
+              !departure &&
+              value > arrival &&
+              isDateRangeAvailable(blocks, arrival, value),
             );
             const arrivalDay = blocks.some((block) => value === block.startsOn);
             const departureDay = blocks.some((block) => value === block.endsOn);
@@ -149,10 +154,10 @@ export function AvailabilityCalendar({
               <button
                 type="button"
                 key={value}
-                disabled={disabled || occupied || calendarStatus !== "ready"}
+                disabled={disabled || (occupied && !validDeparture) || calendarStatus !== "ready"}
                 className={`${selected ? "is-selected" : ""}${inRange ? " is-in-range" : ""}${occupied ? " is-occupied" : ""}${arrivalDay ? " is-arrival" : ""}${departureDay ? " is-departure" : ""}`}
                 onClick={() => selectDate(date)}
-                aria-label={`${date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}${occupied ? ", occupé" : arrivalDay ? ", arrivée" : departureDay ? ", départ" : ", disponible"}`}
+                aria-label={`${date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}${validDeparture ? ", départ possible" : occupied ? ", occupé" : arrivalDay ? ", arrivée" : departureDay ? ", départ et nouvelle arrivée possibles" : ", disponible"}`}
                 aria-pressed={selected}
               >
                 {date.getDate()}

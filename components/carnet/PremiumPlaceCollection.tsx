@@ -30,6 +30,13 @@ export function PremiumPlaceCollection() {
     } catch {
       setFavorites([]);
     }
+    const parameters = new URLSearchParams(window.location.search);
+    const requestedQuery = parameters.get("recherche");
+    const requestedCategory = parameters.get("categorie");
+    if (requestedQuery) setQuery(requestedQuery);
+    if (premiumMapCategories.some((item) => item.id === requestedCategory)) {
+      setCategory(requestedCategory as PremiumMapCategory);
+    }
   }, []);
   const visiblePlaces = useMemo(() => {
     const needle = query
@@ -72,6 +79,8 @@ export function PremiumPlaceCollection() {
     <section className="premium-place-collection" id="guides">
       <span id="gastronomie" className="legacy-carnet-anchor" aria-hidden="true" />
       <span id="marches" className="legacy-carnet-anchor" aria-hidden="true" />
+      <span id="plages" className="legacy-carnet-anchor" aria-hidden="true" />
+      <span id="producteurs" className="legacy-carnet-anchor" aria-hidden="true" />
       <div className="shell carnet-search">
         <label htmlFor="carnet-search">Rechercher dans le Carnet</label>
         <input

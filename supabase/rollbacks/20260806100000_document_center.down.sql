@@ -1,0 +1,10 @@
+begin;
+drop trigger if exists payment_create_receipt on public.payments;
+drop function if exists public.create_payment_receipt_document();
+drop table if exists public.document_audit_log;
+drop table if exists public.document_deliveries;
+drop table if exists public.document_signature_requests;
+drop table if exists public.document_records;
+drop table if exists public.document_templates;
+drop table if exists public.organization_document_settings;
+commit;

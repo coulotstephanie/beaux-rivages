@@ -2263,66 +2263,161 @@ export type Database = {
           },
         ]
       }
+      payment_method_settings: {
+        Row: {
+          enabled: boolean
+          label: string
+          method: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          enabled?: boolean
+          label: string
+          method: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          enabled?: boolean
+          label?: string
+          method?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      payment_reminders: {
+        Row: {
+          channel: string
+          comment: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          idempotency_key: string
+          kind: string
+          reservation_id: string
+          scheduled_for: string | null
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          channel?: string
+          comment?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          idempotency_key: string
+          kind: string
+          reservation_id: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          channel?: string
+          comment?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          idempotency_key?: string
+          kind?: string
+          reservation_id?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_reminders_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount_cents: number
+          bank_reference: string | null
+          comment: string | null
           created_at: string
           currency: string
+          evidence_path: string | null
           failure_code: string | null
           failure_message: string | null
           id: string
           idempotency_key: string
+          iban_label: string | null
           invoice_id: string | null
           kind: Database["public"]["Enums"]["payment_kind"]
+          method: string
           paid_at: string | null
           provider: string
           provider_payload: Json
           provider_payment_id: string | null
           provider_session_id: string | null
           refunded_cents: number
+          received_at: string | null
           reservation_id: string
           status: Database["public"]["Enums"]["payment_status"]
           updated_at: string
+          validated_by: string | null
         }
         Insert: {
           amount_cents: number
+          bank_reference?: string | null
+          comment?: string | null
           created_at?: string
           currency?: string
+          evidence_path?: string | null
           failure_code?: string | null
           failure_message?: string | null
           id?: string
           idempotency_key: string
+          iban_label?: string | null
           invoice_id?: string | null
           kind: Database["public"]["Enums"]["payment_kind"]
+          method?: string
           paid_at?: string | null
           provider?: string
           provider_payload?: Json
           provider_payment_id?: string | null
           provider_session_id?: string | null
           refunded_cents?: number
+          received_at?: string | null
           reservation_id: string
           status?: Database["public"]["Enums"]["payment_status"]
           updated_at?: string
+          validated_by?: string | null
         }
         Update: {
           amount_cents?: number
+          bank_reference?: string | null
+          comment?: string | null
           created_at?: string
           currency?: string
+          evidence_path?: string | null
           failure_code?: string | null
           failure_message?: string | null
           id?: string
           idempotency_key?: string
+          iban_label?: string | null
           invoice_id?: string | null
           kind?: Database["public"]["Enums"]["payment_kind"]
+          method?: string
           paid_at?: string | null
           provider?: string
           provider_payload?: Json
           provider_payment_id?: string | null
           provider_session_id?: string | null
           refunded_cents?: number
+          received_at?: string | null
           reservation_id?: string
           status?: Database["public"]["Enums"]["payment_status"]
           updated_at?: string
+          validated_by?: string | null
         }
         Relationships: [
           {

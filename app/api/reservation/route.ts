@@ -21,6 +21,7 @@ import { calculateQuote } from "@/platform/pricing/service";
 import { legalVersion } from "@/content/legal";
 import { reservationSpecialRequestsSchema } from "@/platform/database/schemas";
 import { reservationServiceItems } from "@/platform/reservations/context";
+import { assertPaymentMethodEnabled } from "@/platform/payments/methods";
 
 const reservationRequestSchema = z
   .object({
@@ -37,7 +38,7 @@ const reservationRequestSchema = z
     promotionCode: z.string().trim().max(40).optional(),
     guest: guestInputSchema,
     idempotencyKey: z.string().uuid(),
-    paymentMethod: z.enum(["bank_transfer", "holiday_vouchers"]),
+    paymentMethod: z.enum(["bank_transfer", "holiday_vouchers", "card"]),
     termsAccepted: z.literal(true),
     cancellationAccepted: z.literal(true),
   })
@@ -108,6 +109,11 @@ export async function POST(request: NextRequest) {
     return noStoreJson({ error: "Demande de réservation invalide." }, { status: 400 });
   }
   const input = parsed.data;
+  try {
+    await assertPaymentMethodEnabled(input.paymentMethod);
+  } catch {
+    return noStoreJson({ error: "Ce mode de règlement n’est pas disponible." }, { status: 409 });
+  }
   if (!isPropertySlug(input.propertySlug)) {
     return noStoreJson({ error: "Logement inconnu." }, { status: 400 });
   }

@@ -5,6 +5,7 @@ import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseStripePaymentRepository } from "@/platform/database/payments";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import { verifyStayAccessToken } from "@/platform/traveler/access";
+import { assertPaymentMethodEnabled } from "@/platform/payments/methods";
 
 export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 5);
@@ -20,6 +21,7 @@ export async function POST(request: NextRequest) {
   if (!token || !["deposit", "full-payment", "balance"].includes(purpose))
     return noStoreJson({ error: "Accès ou type de paiement invalide." }, { status: 400 });
   try {
+    await assertPaymentMethodEnabled("card");
     const stripeMode = configuredStripeMode();
     if (!stripeMode) {
       return noStoreJson(

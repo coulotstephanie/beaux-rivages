@@ -9,6 +9,7 @@ export type DashboardView =
   | "housekeeping"
   | "experiences-services"
   | "carnet"
+  | "patrimoine"
   | "livre-or"
   | "voyageurs"
   | "logements"
@@ -58,6 +59,7 @@ export const dashboardNavigation: {
     items: [
       { id: "experiences-services", label: "Expériences & Services" },
       { id: "carnet", label: "Carnet CMS" },
+      { id: "patrimoine", label: "Patrimoine" },
       { id: "livre-or", label: "Livre d’Or" },
     ],
   },

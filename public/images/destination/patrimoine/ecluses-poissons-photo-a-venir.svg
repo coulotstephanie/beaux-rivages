@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Photographie des écluses à poissons à venir</title><desc id="desc">Emplacement temporaire destiné à une photographie fournie par Stéphanie.</desc>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c8dedd"/><stop offset="1" stop-color="#e9d1aa"/></linearGradient></defs>
+  <rect width="1600" height="1000" fill="url(#g)"/><path d="M0 570 Q420 490 800 590 T1600 575 V1000 H0Z" fill="#5f8987"/>
+  <path d="M160 850 Q800 390 1440 850" fill="none" stroke="#746955" stroke-width="85" stroke-linecap="round"/><path d="M215 850 Q800 475 1385 850" fill="none" stroke="#b9a77f" stroke-width="23" stroke-dasharray="8 18"/>
+  <text x="800" y="900" text-anchor="middle" font-family="Georgia,serif" font-size="46" fill="#fff">Les Écluses à Poissons</text><text x="800" y="948" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" letter-spacing="4" fill="#fff">PHOTO DE STÉPHANIE À VENIR</text>
+</svg>

@@ -14,7 +14,6 @@ import {
 } from "@/components/admin/dashboard/navigation";
 import {
   BlockDatesForm,
-  DocumentList,
   ManualReservationForm,
   ReservationActions,
   ReservationDetail,
@@ -41,6 +40,9 @@ const HousekeepingAdmin = dynamic(() =>
 const CarnetCmsAdmin = dynamic(() =>
   import("@/components/admin/CarnetCmsAdmin").then((module) => module.CarnetCmsAdmin),
 );
+const HeritageMediaAdmin = dynamic(() =>
+  import("@/components/admin/HeritageMediaAdmin").then((module) => module.HeritageMediaAdmin),
+);
 const GuestBookAdmin = dynamic(() =>
   import("@/components/admin/GuestBookAdmin").then((module) => module.GuestBookAdmin),
 );
@@ -57,6 +59,12 @@ const FiscalityAdmin = dynamic(() =>
 );
 const LegalCenterAdmin = dynamic(() =>
   import("@/components/admin/LegalCenterAdmin").then((module) => module.LegalCenterAdmin),
+);
+const PremiumCrmAdmin = dynamic(() =>
+  import("@/components/admin/PremiumCrmAdmin").then((module) => module.PremiumCrmAdmin),
+);
+const DocumentCenterAdmin = dynamic(() =>
+  import("@/components/admin/DocumentCenterAdmin").then((module) => module.DocumentCenterAdmin),
 );
 
 function nights(reservation: BackOfficeReservation) {
@@ -497,6 +505,14 @@ export function AdminDashboard() {
                           >
                             Ouvrir
                           </button>
+                          {reservation.guestId ? (
+                            <a
+                              className="admin-link-button"
+                              href={`?view=voyageurs&guest=${reservation.guestId}`}
+                            >
+                              Fiche CRM
+                            </a>
+                          ) : null}
                           <ReservationActions
                             reservation={reservation}
                             busy={busy}
@@ -544,6 +560,7 @@ export function AdminDashboard() {
         <ExperienceServicesAdmin token={token} notify={setMessage} />
       )}
       {view === "carnet" && <CarnetCmsAdmin token={token} notify={setMessage} />}
+      {view === "patrimoine" && <HeritageMediaAdmin token={token} notify={setMessage} />}
       {view === "livre-or" && <GuestBookAdmin token={token} notify={setMessage} />}
       {view === "fiscalite" && <FiscalityAdmin token={token} notify={setMessage} />}
       {view === "juridique" && <LegalCenterAdmin token={token} notify={setMessage} />}
@@ -556,53 +573,7 @@ export function AdminDashboard() {
         <PremiumOperations data={data} view={view} busy={busy} onSubmit={operate} />
       )}
 
-      {view === "voyageurs" && (
-        <section className="admin-panel">
-          <div className="admin-panel__heading">
-            <div>
-              <p className="eyebrow">Relation voyageurs</p>
-              <h2>Historique et fidélité</h2>
-            </div>
-            <p>{data.guests.length} voyageur(s) connu(s)</p>
-          </div>
-          <div className="admin-guest-grid">
-            {data.guests.map((guest) => (
-              <article key={guest.id}>
-                <div className="admin-avatar" aria-hidden="true">
-                  {guest.name
-                    .split(" ")
-                    .map((part) => part[0])
-                    .slice(0, 2)
-                    .join("")}
-                </div>
-                <h3>{guest.name}</h3>
-                <a href={`mailto:${guest.email}`}>{guest.email}</a>
-                {guest.phone && <a href={`tel:${guest.phone}`}>{guest.phone}</a>}
-                <dl>
-                  <div>
-                    <dt>Séjours</dt>
-                    <dd>{guest.stays}</dd>
-                  </div>
-                  <div>
-                    <dt>Nuits</dt>
-                    <dd>{guest.nights}</dd>
-                  </div>
-                  <div>
-                    <dt>Animaux</dt>
-                    <dd>{guest.pets}</dd>
-                  </div>
-                </dl>
-                <small>Dernier départ : {shortDate(guest.lastStay)}</small>
-              </article>
-            ))}
-          </div>
-          {!data.guests.length && (
-            <p className="admin-empty">
-              Les futurs voyageurs apparaîtront ici après leur première demande.
-            </p>
-          )}
-        </section>
-      )}
+      {view === "voyageurs" && <PremiumCrmAdmin token={token} notify={setMessage} />}
 
       {view === "logements" && (
         <section className="admin-panel">
@@ -658,39 +629,7 @@ export function AdminDashboard() {
         </section>
       )}
 
-      {view === "documents" && (
-        <section className="admin-panel">
-          <div className="admin-panel__heading">
-            <div>
-              <p className="eyebrow">Centre documentaire</p>
-              <h2>Contrats et factures</h2>
-            </div>
-            <p>Suivi des générations, signatures et exports.</p>
-          </div>
-          <div className="admin-two-columns">
-            <article className="admin-card">
-              <h3>Contrats</h3>
-              <DocumentList rows={data.documents.contracts} />
-            </article>
-            <article className="admin-card">
-              <h3>Factures</h3>
-              <DocumentList
-                rows={data.documents.invoices.map((row) => ({
-                  ...row,
-                  number: `${row.number} · ${money(row.totalCents)}`,
-                }))}
-              />
-            </article>
-          </div>
-          <div className="admin-callout">
-            <h3>Générateur PDF Beaux Rivages</h3>
-            <p>
-              Les contrats HTML, PDF et imprimables sont prêts. L’envoi et la signature resteront
-              désactivés jusqu’à la validation juridique et au branchement Yousign.
-            </p>
-          </div>
-        </section>
-      )}
+      {view === "documents" && <DocumentCenterAdmin token={token} notify={setMessage} />}
 
       {view === "statistiques" && (
         <section className="admin-panel">

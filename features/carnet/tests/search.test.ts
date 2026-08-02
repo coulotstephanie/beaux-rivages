@@ -27,6 +27,7 @@ const entry = (overrides: Partial<CarnetEntry>): CarnetEntry => ({
   tags: ["famille", "local"],
   featured: true,
   status: "published",
+  sortOrder: 100,
   version: 1,
   metaTitle: "",
   metaDescription: "",

@@ -73,8 +73,44 @@ export type BackOfficeSnapshot = {
     revenueMonthCents: number;
     revenueYearCents: number;
     pendingPaymentsCents: number;
+    bookedRevenueCents: number;
+    collectedRevenueCents: number;
+    expectedDepositsCents: number;
+    receivedDepositsCents: number;
+    expectedBalancesCents: number;
+    receivedBalancesCents: number;
+    overduePaymentsCents: number;
+    refundsCents: number;
+    creditNotesCents: number;
     averageStayNights: number;
     directShare: number;
+  };
+  finance: {
+    methods: { method: string; label: string; enabled: boolean }[];
+    payments: {
+      id: string;
+      reservationId: string;
+      reservationReference: string;
+      guestName: string;
+      kind: string;
+      method: string;
+      status: string;
+      amountCents: number;
+      refundedCents: number;
+      receivedAt: string | null;
+      bankReference: string;
+      ibanLabel: string;
+      comment: string;
+      evidencePath: string;
+    }[];
+    reminders: {
+      id: string;
+      reservationReference: string;
+      kind: string;
+      channel: string;
+      status: string;
+      createdAt: string;
+    }[];
   };
   operational: {
     arrivals: BackOfficeReservation[];

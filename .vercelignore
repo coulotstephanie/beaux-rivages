@@ -1,2 +1,9 @@
 film-kit/*.mp4
 film-kit/*.webm
+audit-package/
+audit-package.zip
+source-images/
+supabase/.branches/
+.env
+.env.*
+!.env.example

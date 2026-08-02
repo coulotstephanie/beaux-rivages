@@ -18,6 +18,7 @@ export type Promotion =
       enabled: boolean;
       kind: "long-stay";
       percentage: number;
+      fixedAmount?: number;
       minimumNights: number;
     }
   | {
@@ -26,6 +27,7 @@ export type Promotion =
       enabled: boolean;
       kind: "last-minute";
       percentage: number;
+      fixedAmount?: number;
       maximumLeadDays: number;
     }
   | {
@@ -34,6 +36,7 @@ export type Promotion =
       enabled: boolean;
       kind: "early-booking";
       percentage: number;
+      fixedAmount?: number;
       minimumLeadDays: number;
     }
   | {
@@ -42,6 +45,7 @@ export type Promotion =
       enabled: boolean;
       kind: "code";
       percentage: number;
+      fixedAmount?: number;
       code: string;
       ranges?: DateRange[];
     }
@@ -51,6 +55,7 @@ export type Promotion =
       enabled: boolean;
       kind: "seasonal";
       percentage: number;
+      fixedAmount?: number;
       ranges: DateRange[];
     };
 
@@ -63,6 +68,8 @@ export type PropertyRatePlan = {
   maximumNightlyRate?: number;
   minimumNights: number;
   maximumNights: number;
+  /** ISO weekdays accepted for an arrival (1 = Monday, 7 = Sunday). */
+  allowedArrivalWeekdays?: number[];
   cleaningFee: number;
   securityDeposit: number;
   touristTax: {
@@ -107,3 +114,10 @@ export interface RateDistributionConnector {
     plan: PropertyRatePlan,
   ): Promise<{ provider: string; status: "accepted" | "unsupported"; externalId?: string }>;
 }
+
+export type RateDistributionStatus = {
+  provider: "airbnb" | "booking";
+  status: "not_connected" | "connected" | "available";
+  lastSynchronizationAt: string | null;
+  automaticPushEnabled: false;
+};

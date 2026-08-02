@@ -18,7 +18,35 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const result = await reservationEngine.search(parsed.data);
+  let result: Awaited<ReturnType<typeof reservationEngine.search>>;
+  try {
+    result = await reservationEngine.search(parsed.data);
+  } catch (error) {
+    const cause = error instanceof Error ? error.message : "UNKNOWN_QUOTE_ERROR";
+    console.error("BOOKING_QUOTE_CALCULATION_FAILED", {
+      reservation: request.headers.get("x-reservation-reference") ?? "quote-preview",
+      travelers: {
+        adults: parsed.data.adults,
+        children: parsed.data.children,
+        babies: parsed.data.babies,
+        pets: parsed.data.pets,
+      },
+      property: parsed.data.propertySlug,
+      options: parsed.data.options,
+      experiences: parsed.data.experiences,
+      calculationStep: cause.startsWith("PRICING_") ? "pricing-plan-loading" : "quote-calculation",
+      responsibleVariable: cause.split(":")[0],
+      cause,
+    });
+    return noStoreJson(
+      {
+        error:
+          "Le devis n’a pas pu être calculé. Aucun montant n’a été enregistré. Veuillez réessayer dans quelques instants.",
+        code: "QUOTE_CALCULATION_FAILED",
+      },
+      { status: 500 },
+    );
+  }
   if (!result.sourcesHealthy) {
     return noStoreJson(
       {

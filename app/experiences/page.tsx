@@ -20,14 +20,7 @@ export const metadata = createPageMetadata({
 export default function ExperiencesPage() {
   const localExperiences = experiences.filter(
     ({ slug }) =>
-      ![
-        "pack-signature",
-        "romance",
-        "anniversaire",
-        "demande-en-mariage",
-        "lune-de-miel",
-        "plateau-fruits-de-mer",
-      ].includes(slug),
+      !["pack-signature", "romance", "anniversaire", "demande-en-mariage"].includes(slug),
   );
   return (
     <main>
@@ -59,6 +52,40 @@ export default function ExperiencesPage() {
 
       <HospitalityServiceCollection services={hospitalityServices} />
 
+      <section className="experience-transition shell" aria-label="Hospitalité Beaux Rivages">
+        <p>Les plus beaux souvenirs sont souvent les plus simples.</p>
+      </section>
+
+      <section className="included-attentions shell" aria-labelledby="included-attentions-title">
+        <p className="eyebrow">Les attentions offertes</p>
+        <h2 id="included-attentions-title">Une hospitalité qui se ressent dans les détails.</h2>
+        <p>
+          Elles ne sont pas des options : elles font naturellement partie de l’accueil Beaux Rivages
+          et rendent la maison plus simple, plus chaleureuse et plus agréable à vivre.
+        </p>
+        <ul>
+          <li>
+            <strong>Bienvenue</strong>
+            <span>Cadeaux de bienvenue et eau fraîche à l’arrivée.</span>
+          </li>
+          <li>
+            <strong>Moments partagés</strong>
+            <span>Jeux de plage, livres et jeux de société.</span>
+          </li>
+          <li>
+            <strong>Voyager en famille</strong>
+            <span>Équipements bébé mis gratuitement à disposition selon la maison.</span>
+          </li>
+          <li>
+            <strong>Le plaisir de cuisiner</strong>
+            <span>
+              Cuisines particulièrement équipées et matériel pour préparer et déguster les fruits de
+              mer.
+            </span>
+          </li>
+        </ul>
+      </section>
+
       <section className="experience-collection-intro shell">
         <p className="eyebrow">Inspirations locales · hors packs</p>
         <h2>Des idées de journées pour découvrir les îles.</h2>
@@ -78,8 +105,8 @@ export default function ExperiencesPage() {
             Stéphanie & Bruno vous répondront avec une proposition sincère, adaptée à la saison, à
             la maison et à votre histoire.
           </p>
-          <Link href="/reserver?option=personal-arrival" className="secondary-button">
-            Composer mon séjour
+          <Link href="/contact" className="secondary-button">
+            Nous contacter
           </Link>
         </div>
       </section>

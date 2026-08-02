@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { BookingSelection } from "@/booking";
 import type { Property } from "@/data";
 import type { BookingQuote } from "./PriceSummary";
@@ -10,8 +10,10 @@ type BookingResult = {
   reference?: string;
   message?: string;
   error?: string;
-  paymentMethod?: "bank_transfer" | "holiday_vouchers";
+  paymentMethod?: "bank_transfer" | "holiday_vouchers" | "card";
 };
+
+type PaymentMethod = { method: "bank_transfer" | "holiday_vouchers" | "card"; label: string };
 
 export function DirectBookingForm({
   selection,
@@ -28,6 +30,18 @@ export function DirectBookingForm({
 }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [result, setResult] = useState<BookingResult>({});
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
+    { method: "bank_transfer", label: "Virement bancaire" },
+  ]);
+
+  useEffect(() => {
+    void fetch("/api/payment-methods", { cache: "no-store" })
+      .then(async (response) => (response.ok ? response.json() : null))
+      .then((payload: { methods?: PaymentMethod[] } | null) => {
+        if (payload?.methods?.length) setPaymentMethods(payload.methods);
+      })
+      .catch(() => undefined);
+  }, []);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -172,14 +186,18 @@ export function DirectBookingForm({
       </label>
       <fieldset className="direct-booking-form__payment">
         <legend>Mode de règlement</legend>
-        <label>
-          <input type="radio" name="paymentMethod" value="bank_transfer" required /> Virement
-          bancaire
-        </label>
-        <label>
-          <input type="radio" name="paymentMethod" value="holiday_vouchers" required />{" "}
-          Chèques‑Vacances
-        </label>
+        {paymentMethods.map((method, index) => (
+          <label key={method.method}>
+            <input
+              type="radio"
+              name="paymentMethod"
+              value={method.method}
+              defaultChecked={index === 0}
+              required
+            />{" "}
+            {method.label}
+          </label>
+        ))}
       </fieldset>
       {status === "error" ? (
         <p role="alert">

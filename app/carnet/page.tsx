@@ -8,7 +8,8 @@ import {
   PremiumInteractiveMap,
   PremiumPlaceCollection,
 } from "@/components/carnet";
-import { Heading, Section } from "@/components/ui";
+import { Badge, Button, Heading, Section } from "@/components/ui";
+import { FutureVisualScenes } from "@/components/FutureVisualScenes";
 import { createPageMetadata } from "@/seo";
 import { PageStructuredData } from "@/components/PageStructuredData";
 import { StructuredData } from "@/components/StructuredData";
@@ -16,6 +17,8 @@ import { staticPageSeo } from "@/content/fr/seo";
 import { siteMedia } from "@/media/site";
 import { premiumPlaces } from "@/carnetPremiumData";
 import { absoluteUrl } from "@/seo";
+import Image from "next/image";
+import Link from "next/link";
 
 const pageSeo = staticPageSeo["/carnet"];
 export const metadata = createPageMetadata({
@@ -59,7 +62,51 @@ export default function CarnetPage() {
       <Header />
       <CarnetHero />
       <CarnetNavigation />
+      <section className="local-signature" aria-labelledby="nina-metayer-title">
+        <div className="local-signature__visual">
+          <Image
+            src={siteMedia.destination.ninaMetayerFruitCake}
+            alt="Gâteau aux fruits et à la crème signé Nina Métayer"
+            fill
+            quality={90}
+            loading="lazy"
+            sizes="(max-width: 900px) 100vw, 52vw"
+          />
+        </div>
+        <div className="local-signature__copy">
+          <Badge>À Rivedoux-Plage</Badge>
+          <p className="local-signature__award">
+            Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024
+          </p>
+          <h2 id="nina-metayer-title">La pâtisserie de Nina Métayer, à quelques pas.</h2>
+          <p>
+            Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première
+            visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.
+          </p>
+          <div className="local-signature__actions">
+            <Button href="#guides">Voir dans notre Carnet</Button>
+            <Button href="https://larochelle.delicatisserie.com/" variant="ghost">
+              Découvrir Chez Nina <span aria-hidden="true">↗</span>
+            </Button>
+          </div>
+        </div>
+      </section>
+      <section className="carnet-small-happiness shell">
+        <Image
+          src="/images/destination/nina-metayer/selection-patisseries.jpg"
+          alt="Une sélection gourmande choisie par Stéphanie et Bruno"
+          width={720}
+          height={720}
+        />
+        <div>
+          <p className="eyebrow">Le carnet personnel</p>
+          <h2>Les petits bonheurs de Stéphanie &amp; Bruno</h2>
+          <p>Nos rituels, nos habitudes et ces adresses où nous revenons avec le même plaisir.</p>
+          <Link href="/nos-petits-bonheurs">Entrer dans notre quotidien →</Link>
+        </div>
+      </section>
       <PremiumPlaceCollection />
+      <FutureVisualScenes />
 
       <Section id="carte" tone="dark" className="carnet-map-section">
         <Heading
@@ -73,6 +120,32 @@ export default function CarnetPage() {
 
       <IdealDays />
       <CarnetExperiences />
+      <section className="host-advice">
+        <div className="host-advice__visual">
+          <Image
+            src={siteMedia.destination.lane}
+            alt="Ruelle lumineuse au charme insulaire"
+            fill
+            quality={88}
+            loading="lazy"
+            sizes="(max-width: 900px) 100vw, 50vw"
+          />
+        </div>
+        <div className="host-advice__copy">
+          <Badge>Le conseil de Stéphanie & Bruno</Badge>
+          <blockquote>
+            « Les plus belles vacances ne se mesurent pas en mètres carrés. Elles se mesurent en
+            souvenirs. »
+          </blockquote>
+          <p>
+            Nos recommandations viennent de notre vie sur les îles : des producteurs, artisans et
+            expériences que nous partageons comme nous le ferions avec des amis.
+          </p>
+          <Button href="/conseils" variant="ghost">
+            Tous nos conseils <span aria-hidden="true">→</span>
+          </Button>
+        </div>
+      </section>
       <Footer />
     </main>
   );

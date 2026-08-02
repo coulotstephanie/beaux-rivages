@@ -1,4 +1,4 @@
-import { bookingExperiences, getNights, stayOptions } from "@/booking";
+import { bookingExperiences, calculateSignaturePackPrice, getNights, stayOptions } from "@/booking";
 import type { Promotion, PropertyRatePlan, QuoteRequest } from "./contracts";
 import { ratePlanRepository } from "./repository";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
@@ -77,21 +77,31 @@ export async function calculateQuote(input: QuoteRequest) {
     plan.minimumNights,
     ...nightlyLines.map((line) => line.minimumNights),
   );
-  const stayIsValid = nights >= requiredMinimum && nights <= plan.maximumNights;
+  const arrivalIsoWeekday = new Date(`${input.arrival}T12:00:00Z`).getUTCDay() || 7;
+  const arrivalIsAllowed =
+    !plan.allowedArrivalWeekdays?.length || plan.allowedArrivalWeekdays.includes(arrivalIsoWeekday);
+  const stayIsValid = arrivalIsAllowed && nights >= requiredMinimum && nights <= plan.maximumNights;
   const accommodationBeforeDiscount = nightlyLines.reduce((sum, line) => sum + line.rate, 0);
   const applicablePromotions = plan.promotions.filter((promotion) =>
     promotionApplies(promotion, input, nights),
   );
-  const bestPromotion = applicablePromotions.sort((a, b) => b.percentage - a.percentage)[0];
+  const promotionValue = (promotion: Promotion) =>
+    promotion.fixedAmount ?? (accommodationBeforeDiscount * promotion.percentage) / 100;
+  const bestPromotion = applicablePromotions.sort(
+    (a, b) => promotionValue(b) - promotionValue(a),
+  )[0];
   const discount = bestPromotion
-    ? Math.round(accommodationBeforeDiscount * bestPromotion.percentage) / 100
+    ? Math.min(accommodationBeforeDiscount, Math.round(promotionValue(bestPromotion) * 100) / 100)
     : 0;
   const accommodation = accommodationBeforeDiscount - discount;
   const payingGuests = Math.max(1, input.adults + input.children);
   const optionLines = input.options.flatMap((id) => {
     const option = stayOptions.find((candidate) => candidate.id === id);
     if (!option) return [];
-    const unitPrice = plan.optionPrices[id] ?? option.price;
+    const unitPrice =
+      option.id === "signature"
+        ? calculateSignaturePackPrice({ adults: input.adults, children: input.children })
+        : (plan.optionPrices[id] ?? option.price);
     const quantity =
       option.id === "pet"
         ? Math.max(1, input.pets)
@@ -154,7 +164,13 @@ export async function calculateQuote(input: QuoteRequest) {
     propertySlug: input.propertySlug,
     currency: plan.currency,
     nights,
-    stayRules: { valid: stayIsValid, requiredMinimum, maximumNights: plan.maximumNights },
+    stayRules: {
+      valid: stayIsValid,
+      requiredMinimum,
+      maximumNights: plan.maximumNights,
+      arrivalIsAllowed,
+      allowedArrivalWeekdays: plan.allowedArrivalWeekdays ?? [1, 2, 3, 4, 5, 6, 7],
+    },
     nightlyLines,
     accommodationBeforeDiscount,
     promotion: bestPromotion
@@ -162,6 +178,7 @@ export async function calculateQuote(input: QuoteRequest) {
           id: bestPromotion.id,
           label: bestPromotion.label,
           percentage: bestPromotion.percentage,
+          fixedAmount: bestPromotion.fixedAmount,
           discount,
         }
       : null,

@@ -2,6 +2,7 @@ export type MediaAsset = {
   src: string;
   alt: string;
   caption?: string;
+  poster?: string;
   scope: "property" | "destination";
   owner?: string;
 };

@@ -1,0 +1,14 @@
+begin;
+drop trigger if exists reservation_item_sync_housekeeping on public.reservation_items;
+drop function if exists public.sync_reservation_item_to_housekeeping();
+drop trigger if exists reservation_generate_housekeeping on public.reservations;
+drop function if exists public.generate_housekeeping_for_reservation();
+drop index if exists public.housekeeping_one_task_per_reservation;
+alter table public.maintenance_incidents drop column if exists category_id;
+alter table public.operational_photos drop constraint if exists operational_photos_kind_check;
+alter table public.operational_photos add constraint operational_photos_kind_check check(kind in('before_arrival','after_departure','incident','maintenance','quality'));
+drop table if exists public.operational_audit_log;
+drop table if exists public.linen_rotations;
+drop table if exists public.incident_categories;
+drop table if exists public.housekeeping_templates;
+commit;

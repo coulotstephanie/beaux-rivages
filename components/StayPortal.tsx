@@ -144,8 +144,8 @@ export function StayPortal({ initialToken = "" }: { initialToken?: string }) {
           {stay.balanceRemaining > 0 && (
             <div className="stay-portal__payments">
               <p>
-                Règlement par virement bancaire ou Chèques‑Vacances, selon les instructions
-                transmises par Stéphanie et Bruno.
+                Règlement par virement bancaire, selon les instructions transmises par Stéphanie et
+                Bruno.
               </p>
             </div>
           )}

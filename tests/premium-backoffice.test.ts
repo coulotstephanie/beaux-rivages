@@ -60,6 +60,33 @@ test("le calendrier du Back Office affiche les périodes iCal des trois maisons"
   assert.match(board, /Débloquer/);
 });
 
+test("le calendrier Concierge pilote la journée et ouvre les dossiers de séjour", () => {
+  const board = readFileSync("components/admin/AdminCalendarBoard.tsx", "utf8");
+  const today = readFileSync("components/admin/CalendarTodayView.tsx", "utf8");
+  const detail = readFileSync("components/admin/dashboard/ReservationWorkspaceParts.tsx", "utf8");
+  assert.match(board, /CalendarTodayView/);
+  assert.match(board, /setSelectedReservation/);
+  assert.match(board, /Rechercher dans le calendrier|Rechercher/);
+  assert.match(board, /calendar-month/);
+  assert.match(board, /calendar-year/);
+  assert.match(board, /is-airbnb/);
+  assert.match(board, /is-booking/);
+  assert.match(today, /Centre de pilotage/);
+  assert.match(today, /Ouvrir le séjour/);
+  assert.match(today, /operations\.housekeeping/);
+  assert.match(today, /operations\.maintenance/);
+  assert.match(today, /operations\.notifications/);
+  assert.match(detail, /Historique du séjour/);
+  assert.match(detail, /reservation\.timeline/);
+});
+
+test("une panne calendrier ne transforme jamais la vue Concierge en dates libres", () => {
+  const board = readFileSync("components/admin/AdminCalendarBoard.tsx", "utf8");
+  assert.match(board, /setLoadFailed\(true\)/);
+  assert.match(board, /ne doivent pas être considérées comme libres/);
+  assert.doesNotMatch(board, /if \(!response\.ok\) return \[property\.slug, \[\]\]/);
+});
+
 test("les réservations annulées disparaissent des listes actives", () => {
   const dashboard = readFileSync("components/AdminDashboard.tsx", "utf8");
   const reservationList = readFileSync("components/admin/dashboard/ReservationList.tsx", "utf8");

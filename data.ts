@@ -73,9 +73,10 @@ export const properties: Property[] = [
         items: [
           "Ninja Dual Air Fryer, Cookeo et robot Kenwood chauffant",
           "Nespresso, Senseo, Dolce Gusto et cafetière filtre",
-          "Raclette, crêpière, plancha et trancheuse",
-          "Faitout à moules et matériel complet pour fruits de mer",
-          "Lave-vaisselle, four et grand réfrigérateur-congélateur",
+          "Raclette, crêpière, plancha et trancheuse à saucisson",
+          "Grand faitout à moules, couteau à huîtres et matériel pour fruits de mer",
+          "Lave-vaisselle, four, micro-ondes et réfrigérateur-congélateur",
+          "Batterie de cuisine, vaisselle et grands plats",
         ],
       },
       {
@@ -83,9 +84,11 @@ export const properties: Property[] = [
         items: [
           "Lit king size dans la suite et deux lits doubles",
           "Rideaux occultants, couettes et oreillers supplémentaires",
-          "Lit parapluie, chaise haute, poussette et baignoire pliante",
-          "Livres, jeux, parasol, nattes et siège de plage",
+          "Lit parapluie, chaise haute, poussette, baignoire pliante et tapis d’éveil",
+          "Livres, jeux de société, jeux de cartes et jouets de plage",
+          "Parasol, nattes et siège de plage",
           "Deux salles de bain et deux toilettes",
+          "Sèche-cheveux et lisseur",
         ],
       },
       {
@@ -94,8 +97,10 @@ export const properties: Property[] = [
           "Fibre Orange, TV Orange et enceinte Bluetooth",
           "Deux bureaux pour travailler au calme",
           "Lave-linge séchant et matériel d’entretien",
+          "Fer à repasser et étendoir",
           "Petit extérieur privatif pour le café ou l’apéritif",
-          "Arrivée autonome et animaux bienvenus",
+          "Arrivée autonome par boîte à clés",
+          "Animaux bienvenus selon les conditions Beaux Rivages",
         ],
       },
     ],
@@ -225,19 +230,19 @@ export const properties: Property[] = [
     gallery: curateGallery(
       propertyMedia["villa-raie-manta"].gallery,
       [
-        0, 1, 2, 3, 5, 7, 8, 9, 11, 12, 15, 16, 17, 20, 24, 25, 27, 28, 29, 31, 35, 36, 39, 41, 37,
-        38,
+        0, 1, 2, 3, 5, 7, 8, 9, 11, 12, 15, 16, 17, 20, 24, 25, 27, 28, 29, 30, 31, 32, 35, 36, 39,
+        41, 37, 38,
       ],
     ),
     amenityGroups: [
       {
-        title: "Vivre et partager",
+        title: "Cuisine et moments partagés",
         items: [
-          "Salon panoramique avec Apple TV et enceinte Bluetooth",
-          "Cuisine ouverte, Airfryer et robots de cuisine",
-          "Jardin clos, mobilier extérieur et barbecue",
-          "Fibre très haut débit et espace de travail",
-          "Table de ping-pong, jeux et livres",
+          "Cuisine ouverte avec lave-vaisselle, four et micro-ondes",
+          "Airfryer, robot pâtissier, mixeur et presse-agrumes",
+          "Nespresso, cafetière filtre, bouilloire et appareil à panini",
+          "Grand faitout à moules, couteau à huîtres et matériel pour fruits de mer",
+          "Batterie de cuisine, moules, casseroles, poêles et grands plats",
         ],
       },
       {
@@ -248,16 +253,27 @@ export const properties: Property[] = [
           "Chambre avec lits superposés",
           "Rideaux occultants et couchages supplémentaires",
           "Lit parapluie, chaise haute, baignoire et vaisselle bébé",
+          "Deux salles d’eau, trois toilettes, sèche-cheveux et lisseur",
         ],
       },
       {
-        title: "Au retour de la plage",
+        title: "Confort et loisirs",
         items: [
-          "Accès plage en traversant la route",
-          "Parasol, nattes, fauteuils et jouets de plage",
-          "Sèche-linge dans la maison",
-          "Deux salles de bain et trois toilettes",
-          "Animaux bienvenus selon les conditions Beaux Rivages",
+          "Salon panoramique avec Apple TV et enceinte Bluetooth",
+          "Fibre très haut débit et espace de travail",
+          "Livres, jeux de société, Monopoly, poker et Mikado",
+          "Badminton et kit de tennis de table pour la table extérieure",
+          "Kit couture et trousse de premiers secours",
+        ],
+      },
+      {
+        title: "Jardin et plage",
+        items: [
+          "Plage accessible en traversant la route",
+          "Jardin entièrement clos avec grande table et bains de soleil",
+          "Barbecue et gamelle double pour les animaux",
+          "Parasol, quatre nattes, deux fauteuils et jouets de plage",
+          "Stationnements gratuits à proximité",
         ],
       },
     ],
@@ -388,17 +404,20 @@ export const properties: Property[] = [
     ],
     gallery: curateGallery(
       propertyMedia["nid-d-ete"].gallery,
-      [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 16, 17, 18, 19, 22, 23, 26, 27, 29, 30, 32, 33],
+      [
+        0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 12, 15, 16, 17, 18, 19, 22, 23, 26, 27, 29, 30, 32,
+        33,
+      ],
     ),
     amenityGroups: [
       {
-        title: "De la maison à la plage",
+        title: "Plage et stationnement",
         items: [
           "Portail privé à 20 mètres",
           "Plage des Saumonards face à Fort Boyard",
           "Deux stationnements privatifs",
           "Local à vélos sécurisé",
-          "Transats, tente anti-UV, jeux et matériel de plage",
+          "Tente anti-UV, jeux, ballon et raquettes de plage",
         ],
       },
       {
@@ -406,19 +425,29 @@ export const properties: Property[] = [
         items: [
           "Lit parapluie, chaise haute et baignoire pliante",
           "Transat et tapis d’éveil",
-          "Vaisselle enfant, livres et jeux de société",
+          "Livres, Monopoly, jeux de cartes et jeux de société",
           "Table extérieure transformable en table de ping-pong",
           "Jardin clos et résidence sécurisée",
         ],
       },
       {
-        title: "Le confort au quotidien",
+        title: "Cuisine et pièce de vie",
         items: [
-          "Fibre et espace de travail dédié",
-          "Cuisine complète, robot multicuiseur et appareils conviviaux",
-          "Lave-linge et lave-vaisselle",
-          "Terrasse, voile d’ombrage et plancha électrique",
-          "Arrivée autonome et animaux bienvenus",
+          "Lave-vaisselle, four, micro-ondes, plaques et hotte",
+          "Réfrigérateur-congélateur, cafetière filtre et machine expresso",
+          "Robot multicuiseur Moulinex et batterie de cuisine complète",
+          "Raclette, grill, crêpière et matériel pour fruits de mer",
+          "Canapé convertible, grande télévision et enceinte Bluetooth",
+        ],
+      },
+      {
+        title: "Confort intérieur et extérieur",
+        items: [
+          "Fibre Orange et espace de travail dédié",
+          "Lave-linge, fer, table à repasser et étendoir",
+          "Grande douche à l’italienne, sèche-cheveux et rangements",
+          "Terrasse avec table pour six, deux transats et voile d’ombrage saisonnière",
+          "Plancha électrique, arrivée autonome et animaux bienvenus",
         ],
       },
     ],

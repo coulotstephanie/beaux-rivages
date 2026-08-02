@@ -63,7 +63,6 @@ const curatedPhotoOrder = [
   "/images/properties/villa-raie-manta/editorial/retour-plage-en-couple-fenetre-etage.png",
   "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
   "/images/properties/villa-raie-manta/cuisine.jpeg",
-  "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
   "/images/properties/villa-raie-manta/editorial/table-jeux-famille.png",
   "/images/properties/villa-raie-manta/chambre-rez-de-chaussee-sans-texte.png",
   "/images/properties/villa-raie-manta/chambre-modulable-sans-texte.png",
@@ -141,7 +140,7 @@ function inferredCategory(asset: MediaAsset): PhotoCategory {
   if (/(exterior|exterieur|terrasse|cour|facade|arrivee|velo-devant)/.test(path))
     return "Extérieurs";
   if (
-    /(detail|attention|aperitif|famille|romance|romantique|anniversaire|lune-de-miel|bebe|chien|chat|noel|paques)/.test(
+    /(detail|attention|aperitif|famille|romance|romantique|anniversaire|bebe|chien|chat|noel|paques)/.test(
       path,
     )
   )

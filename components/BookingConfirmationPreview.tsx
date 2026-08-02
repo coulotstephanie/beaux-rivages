@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { BookingSelection } from "@/booking";
-import { getNights } from "@/booking";
+import { getNights, SIGNATURE_PACK_IMAGE } from "@/booking";
 import type { Property } from "@/data";
 import { Badge } from "./ui";
 import { describeWelcomeBaskets } from "@/platform/reservations/welcome-baskets";
@@ -13,13 +13,19 @@ export function BookingConfirmationPreview({
   property: Property;
 }) {
   const guests = selection.guests.adults + selection.guests.children;
+  const hasSignaturePack = selection.options.includes("signature");
+  const previewImage = hasSignaturePack ? SIGNATURE_PACK_IMAGE : property.hero;
   const baskets = describeWelcomeBaskets(selection.options.map((code) => ({ code })));
   return (
     <section className="booking-confirmation-preview" aria-labelledby="preview-title">
       <div className="booking-confirmation-preview__image">
         <Image
-          src={property.hero}
-          alt={`Votre projet de séjour à ${property.title}`}
+          src={previewImage}
+          alt={
+            hasSignaturePack
+              ? "Pack Signature Beaux Rivages préparé dans une maison authentique"
+              : `Votre projet de séjour à ${property.title}`
+          }
           fill
           quality={88}
           loading="lazy"
@@ -46,9 +52,7 @@ export function BookingConfirmationPreview({
         <div className="booking-confirmation-preview__basket">
           <strong>Accueil gourmand</strong>
           <p>Panier inclus : {baskets.included}</p>
-          {selection.options.includes("signature") ? (
-            <p>Panier supplémentaire : {baskets.extra}</p>
-          ) : null}
+          {hasSignaturePack ? <p>Panier supplémentaire : {baskets.extra}</p> : null}
         </div>
         {selection.attention && (
           <blockquote>

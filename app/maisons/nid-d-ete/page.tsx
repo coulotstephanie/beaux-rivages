@@ -1,4 +1,5 @@
 import { PropertyPage } from "@/components/PropertyPage";
+import { NidHeritageTeaser } from "@/components/NidHeritageTeaser";
 import { getProperty } from "@/data";
 import { createPageMetadata, createPropertySeo } from "@/seo";
 
@@ -12,5 +13,9 @@ export const metadata = createPageMetadata({
 });
 
 export default function Page() {
-  return <PropertyPage property={property} />;
+  return (
+    <PropertyPage property={property}>
+      <NidHeritageTeaser />
+    </PropertyPage>
+  );
 }

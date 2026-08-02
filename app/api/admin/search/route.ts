@@ -4,6 +4,7 @@ import { getDatabaseClient, isDatabaseConfigured } from "@/platform/database/cli
 import { noStoreJson, rateLimit } from "@/platform/http/security";
 
 type Result = { id: string; label: string; view: string; kind: string };
+type QueryClient = { from(table: string): any }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 30);
@@ -16,35 +17,44 @@ export async function GET(request: NextRequest) {
   if (query.length < 2) return noStoreJson({ results: [] });
   const pattern = `%${query.replace(/[,%()]/g, " ")}%`;
   const client = getDatabaseClient();
-  const [guests, reservations, properties, contracts, carnet, messages] = await Promise.all([
-    client
-      .from("guests")
-      .select("id,first_name,last_name,email")
-      .or(`first_name.ilike.${pattern},last_name.ilike.${pattern},email.ilike.${pattern}`)
-      .limit(5),
-    client
-      .from("reservations")
-      .select("id,reference,channel")
-      .or(`reference.ilike.${pattern},channel.ilike.${pattern},external_reference.ilike.${pattern}`)
-      .limit(5),
-    client
-      .from("properties")
-      .select("id,name,slug")
-      .or(`name.ilike.${pattern},slug.ilike.${pattern}`)
-      .limit(4),
-    client.from("contracts").select("id,number").ilike("number", pattern).limit(4),
-    client
-      .from("carnet_entries")
-      .select("id,title,category")
-      .or(`title.ilike.${pattern},summary.ilike.${pattern},category.ilike.${pattern}`)
-      .limit(5),
-    client
-      .from("transactional_emails")
-      .select("id,template_key,status")
-      .ilike("template_key", pattern)
-      .limit(4),
-  ]);
-  const failed = [guests, reservations, properties, contracts, carnet, messages].find(
+  const [guests, reservations, properties, contracts, documents, carnet, messages] =
+    await Promise.all([
+      client
+        .from("guests")
+        .select("id,first_name,last_name,email")
+        .or(`first_name.ilike.${pattern},last_name.ilike.${pattern},email.ilike.${pattern}`)
+        .limit(5),
+      client
+        .from("reservations")
+        .select("id,reference,channel")
+        .or(
+          `reference.ilike.${pattern},channel.ilike.${pattern},external_reference.ilike.${pattern}`,
+        )
+        .limit(5),
+      client
+        .from("properties")
+        .select("id,name,slug")
+        .or(`name.ilike.${pattern},slug.ilike.${pattern}`)
+        .limit(4),
+      client.from("contracts").select("id,number").ilike("number", pattern).limit(4),
+      (client as unknown as QueryClient)
+        .from("document_records")
+        .select("id,number,kind")
+        .or(`number.ilike.${pattern},kind.ilike.${pattern}`)
+        .is("deleted_at", null)
+        .limit(8),
+      client
+        .from("carnet_entries")
+        .select("id,title,category")
+        .or(`title.ilike.${pattern},summary.ilike.${pattern},category.ilike.${pattern}`)
+        .limit(5),
+      client
+        .from("transactional_emails")
+        .select("id,template_key,status")
+        .ilike("template_key", pattern)
+        .limit(4),
+    ]);
+  const failed = [guests, reservations, properties, contracts, documents, carnet, messages].find(
     (result) => result.error,
   );
   if (failed?.error)
@@ -71,6 +81,12 @@ export async function GET(request: NextRequest) {
     ...(contracts.data ?? []).map((item) => ({
       id: item.id,
       label: `Contrat ${item.number}`,
+      view: "documents",
+      kind: "Document",
+    })),
+    ...(documents.data ?? []).map((item: { id: string; number: string; kind: string }) => ({
+      id: item.id,
+      label: `${item.kind} ${item.number}`,
       view: "documents",
       kind: "Document",
     })),

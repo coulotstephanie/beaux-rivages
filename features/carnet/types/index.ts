@@ -46,6 +46,7 @@ export type CarnetEntry = {
   tags: string[];
   featured: boolean;
   status: "draft" | "published" | "archived";
+  sortOrder: number;
   version: number;
   metaTitle: string;
   metaDescription: string;

@@ -46,6 +46,7 @@ export const carnetEntrySchema = z
     tags: z.array(z.string().trim().min(1).max(50)).max(20).default([]),
     featured: z.boolean().default(false),
     status: z.enum(["draft", "published", "archived"]).default("draft"),
+    sortOrder: z.number().int().min(0).max(10_000).default(100),
     metaTitle: z.string().trim().max(70).optional(),
     metaDescription: z.string().trim().max(170).optional(),
     openGraphImagePath: z.string().trim().max(500).optional(),

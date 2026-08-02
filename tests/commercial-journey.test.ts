@@ -16,7 +16,7 @@ test("complete direct-booking preparation calculates a family quote", async () =
     babies: 1,
     pets: 1,
     options: ["signature", "linen", "pet"],
-    experiences: ["famille"],
+    experiences: [],
   });
   assert.equal(quote.nights, 7);
   assert.equal(quote.stayRules.valid, true);
@@ -104,10 +104,14 @@ test("all transactional email stages render responsive branded HTML", () => {
 
 test("Stripe remains disabled without an environment secret", async () => {
   const previous = process.env.STRIPE_SECRET_KEY;
+  const previousTravelerPayments = process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED;
   delete process.env.STRIPE_SECRET_KEY;
+  process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED = "true";
   const adapter = new StripePaymentAdapter();
   await assert.rejects(() => adapter.refund({ paymentProviderId: "pi_test" }), /not configured/);
   if (previous) process.env.STRIPE_SECRET_KEY = previous;
+  if (previousTravelerPayments === undefined) delete process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED;
+  else process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED = previousTravelerPayments;
 });
 
 test("Stripe amount calculation never exceeds the authoritative database balance", () => {

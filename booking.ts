@@ -3,7 +3,7 @@ import type { Property } from "./data";
 export type BookingStep = 1 | 2 | 3 | 4;
 export type GuestCounts = { adults: number; children: number; babies: number; pets: number };
 export type AttentionType =
-  "Anniversaire" | "Lune de miel" | "Demande en mariage" | "Anniversaire de mariage" | "Autre";
+  "Anniversaire" | "Demande en mariage" | "Anniversaire de mariage" | "Autre";
 export type StayOptionId =
   | "signature"
   | "linen"
@@ -24,8 +24,7 @@ export type StayOption = {
   price: number;
   unit?: string;
 };
-export type BookingExperienceId =
-  "romance" | "anniversaire" | "lune-de-miel" | "fruits-de-mer" | "velo" | "famille";
+export type BookingExperienceId = "romance" | "anniversaire";
 export type BookingExperienceOption = {
   id: BookingExperienceId;
   label: string;
@@ -45,6 +44,23 @@ export type BookingSelection = {
   attention: AttentionType | null;
   attentionMessage: string;
 };
+
+export const SIGNATURE_PACK_BASE_PRICE = 145;
+export const SIGNATURE_PACK_ADDITIONAL_GUEST_PRICE = 20;
+export const SIGNATURE_PACK_IMAGE =
+  "/images/destination/experiences/experience-signature-chai-authentique.jpg";
+
+/**
+ * Unique pricing rule for the Pack Signature.
+ * Babies are deliberately excluded: only adults and children are paying guests.
+ */
+export function calculateSignaturePackPrice(guests: Pick<GuestCounts, "adults" | "children">) {
+  const payingGuests = Math.max(0, guests.adults) + Math.max(0, guests.children);
+  return (
+    SIGNATURE_PACK_BASE_PRICE +
+    Math.max(0, payingGuests - 2) * SIGNATURE_PACK_ADDITIONAL_GUEST_PRICE
+  );
+}
 
 export type BookingPropertyDetails = {
   beachDistance: string;
@@ -76,7 +92,7 @@ export const stayOptions: StayOption[] = [
     label: "Pack Signature Beaux Rivages",
     description:
       "Lits préparés, serviettes plage, deux peignoirs, panier et attention personnalisée.",
-    price: 145,
+    price: SIGNATURE_PACK_BASE_PRICE,
   },
   {
     id: "linen",
@@ -169,40 +185,10 @@ export const bookingExperiences: BookingExperienceOption[] = [
     price: 85,
     duration: "À l’arrivée",
   },
-  {
-    id: "lune-de-miel",
-    label: "Lune de miel",
-    description: "Champagne, pétales et attentions délicates dans l’intimité du Chai.",
-    price: 110,
-    duration: "Une soirée",
-    propertySlugs: ["chai-des-tortues"],
-  },
-  {
-    id: "fruits-de-mer",
-    label: "Plateau de fruits de mer",
-    description: "Une sélection de l’Atlantique prête à partager à la maison.",
-    price: 95,
-    duration: "Une soirée",
-  },
-  {
-    id: "velo",
-    label: "Échappée à vélo",
-    description: "Itinéraire conseillé et vélos préparés selon disponibilité.",
-    price: 60,
-    duration: "Une journée",
-  },
-  {
-    id: "famille",
-    label: "Parenthèse en famille",
-    description: "Jeux, petite surprise enfant et idées adaptées à la météo.",
-    price: 45,
-    duration: "Tout le séjour",
-  },
 ];
 
 export const attentions: AttentionType[] = [
   "Anniversaire",
-  "Lune de miel",
   "Demande en mariage",
   "Anniversaire de mariage",
   "Autre",
@@ -250,12 +236,8 @@ export function getBookingEstimate(selection: BookingSelection, property: Proper
 
 export function getBookingSuggestions(selection: BookingSelection) {
   const suggestions: BookingExperienceId[] = [];
-  if (selection.attention === "Lune de miel") suggestions.push("lune-de-miel");
   if (selection.attention === "Anniversaire" || selection.attention === "Anniversaire de mariage")
     suggestions.push("anniversaire");
-  if (selection.guests.children > 0 || selection.guests.babies > 0) suggestions.push("famille");
-  if (selection.propertySlug === "villa-raie-manta") suggestions.push("fruits-de-mer");
-  if (selection.propertySlug === "chai-des-tortues") suggestions.push("velo");
   if (selection.guests.adults === 2 && selection.guests.children === 0) suggestions.push("romance");
   return [...new Set(suggestions)].filter((id) => !selection.experiences.includes(id)).slice(0, 3);
 }

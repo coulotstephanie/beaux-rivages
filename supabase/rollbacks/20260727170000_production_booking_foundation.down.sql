@@ -8,8 +8,10 @@ drop policy if exists "staff upload private storage" on storage.objects;
 drop policy if exists "staff update private storage" on storage.objects;
 drop policy if exists "admins delete private storage" on storage.objects;
 
-delete from storage.buckets
-where id in ('contracts', 'signed-contracts', 'photos', 'avatars', 'documents', 'guestbook', 'invoices');
+-- Bucket deletion is deliberately delegated to the Supabase Storage API.
+-- Recent Storage releases reject direct SQL deletion to prevent orphaned
+-- objects; all SQL access policies are removed above, leaving these private
+-- buckets inaccessible until an operator verifies and removes them safely.
 
 drop table if exists public.audit_logs cascade;
 drop table if exists public.sync_runs cascade;

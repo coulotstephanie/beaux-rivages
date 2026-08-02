@@ -29,7 +29,7 @@ export type ReservationEmailInput = {
   balanceDue?: number;
   balanceDueDate?: string;
   fullPaymentRequired?: boolean;
-  paymentMethod?: "bank_transfer" | "holiday_vouchers";
+  paymentMethod?: "bank_transfer" | "holiday_vouchers" | "card";
   guest: { firstName: string; lastName: string; email: string; phone?: string };
   options?: string[];
   experiences?: string[];
@@ -63,9 +63,10 @@ function basketSummary(options: string[] = []) {
 }
 
 function paymentSummary(method: ReservationEmailInput["paymentMethod"]) {
-  return method === "holiday_vouchers"
-    ? "Règlement choisi : Chèques‑Vacances. Stéphanie ou Bruno vous transmettra les modalités de remise."
-    : "Règlement choisi : virement bancaire. Les coordonnées bancaires et l’échéancier seront transmis après validation de la demande.";
+  if (method === "holiday_vouchers")
+    return "Règlement choisi : Chèques‑Vacances. Stéphanie ou Bruno vous transmettra les modalités de remise.";
+  if (method === "card") return "Règlement choisi : carte bancaire.";
+  return "Règlement choisi : virement bancaire. Les coordonnées bancaires et l’échéancier seront transmis après validation de la demande.";
 }
 
 function scheduleSummary(input: ReservationEmailInput) {

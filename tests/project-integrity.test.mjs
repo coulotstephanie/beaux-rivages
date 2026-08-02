@@ -238,7 +238,6 @@ test("the premium experience collection includes all requested experiences", () 
     "romance",
     "anniversaire",
     "demande-en-mariage",
-    "plateau-fruits-de-mer",
     "atelier-macarons",
     "lever-de-soleil",
     "coucher-de-soleil",
@@ -313,7 +312,7 @@ test("the sitemap includes every centralized static route", () => {
 test("the sitemap publishes every detailed experience", () => {
   const sitemap = read("app/sitemap.ts");
   assert.match(sitemap, /experiences\.map/);
-  assert.match(sitemap, /\/experiences\/\$\{experience\.slug\}/);
+  assert.match(sitemap, /getExperienceHref\(experience\.slug\)/);
 });
 
 test("personalization selections are preserved into the booking journey", () => {
@@ -479,6 +478,36 @@ test("the persuasive galleries preserve every room type and lived-in family scen
     assert.match(source, /bedroom|bedrooms|chambre/i);
     assert.match(source, /exterior|exterieur|extérieur/i);
   }
+});
+
+test("property stories lead with emotion while preserving films and lived-in media", () => {
+  const page = read("components/PropertyPage.tsx");
+  const history = read("components/PropertyHistoryStory.tsx");
+  const details = read("components/PropertySignatureDetails.tsx");
+  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<PropertyDayStory"));
+  assert.ok(page.indexOf("<PropertyDayStory") < page.indexOf("<PropertyFilms"));
+  assert.ok(page.indexOf("<PropertyFilms") < page.indexOf("<FullscreenGallery"));
+  assert.ok(page.indexOf("<FullscreenGallery") < page.indexOf("Pourquoi nos voyageurs reviennent"));
+  assert.ok(
+    page.indexOf("Pourquoi nos voyageurs reviennent") < page.indexOf("<PropertySignatureDetails"),
+  );
+  assert.match(history, /Il y a des maisons que l’on n’oublie pas/);
+  assert.match(history, /Une maison où l’horizon entre avant vous/);
+  assert.match(history, /Un refuge d’été au cœur d’une histoire maritime/);
+  assert.match(details, /jeux et livres/);
+  assert.match(details, /media\.lifestyle/);
+});
+
+test("heritage pages use the host-led magazine structure without encyclopedic blocks", () => {
+  const detail = read("components/heritage/HeritageDetail.tsx");
+  assert.match(detail, /L’histoire du lieu/);
+  assert.match(detail, /Pourquoi le découvrir/);
+  assert.match(detail, /Les anecdotes de Stéphanie & Bruno/);
+  assert.match(detail, /Le conseil de Stéphanie & Bruno/);
+  assert.match(detail, /Autour de ce lieu/);
+  assert.doesNotMatch(detail, /heritage-timeline/);
+  assert.doesNotMatch(detail, /heritage-facts/);
+  assert.doesNotMatch(detail, /heritage-photo-slots/);
 });
 
 test("the useful map includes health, parking, charging and direct directions", () => {

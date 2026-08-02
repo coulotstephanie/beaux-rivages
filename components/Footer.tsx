@@ -6,6 +6,23 @@ export function Footer() {
   return (
     <footer id="contact" className="footer premium-footer">
       <Container size="wide">
+        <nav className="footer-discovery" aria-label="Découvrir ensuite">
+          <p className="eyebrow light">Découvrir ensuite</p>
+          <div>
+            <Link href="/maisons">
+              Nos maisons <span aria-hidden="true">→</span>
+            </Link>
+            <Link href="/destinations">
+              Les deux îles <span aria-hidden="true">→</span>
+            </Link>
+            <Link href="/carnet">
+              Le Carnet <span aria-hidden="true">→</span>
+            </Link>
+            <Link href="/patrimoine">
+              Le patrimoine <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </nav>
         <div className="premium-footer__top">
           <div>
             <p className="eyebrow light">Votre prochaine parenthèse</p>
@@ -24,10 +41,12 @@ export function Footer() {
           <div>
             <p className="premium-footer__label">Découvrir</p>
             <Link href="/maisons">Nos maisons</Link>
+            <Link href="/histoire-de-nos-maisons">L’histoire de nos maisons</Link>
             <Link href="/choisir">Choisir ma maison</Link>
             <Link href="/construisez-votre-sejour">Construire mon séjour</Link>
             <Link href="/inspiration">Inspirez-moi</Link>
             <Link href="/destinations">Destinations</Link>
+            <Link href="/patrimoine">Patrimoine</Link>
             <Link href="/experiences">Expériences</Link>
             <Link href="/carnet">Le Carnet</Link>
             <Link href="/phototheque">Photothèque</Link>

@@ -24,8 +24,8 @@ export async function PUT(request: NextRequest) {
   if (limited) return limited;
   if (!requireSameOrigin(request))
     return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
-  if (!(await authorizeStaff(request, ["admin"])))
-    return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
+  const identity = await authorizeStaff(request, ["admin"]);
+  if (!identity) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   if (!isDatabaseConfigured())
     return noStoreJson({ error: "Base non configurée." }, { status: 503 });
   const parsed = rateOverrideSchema.safeParse(await request.json().catch(() => null));
@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest) {
     );
   try {
     return noStoreJson(
-      { ok: true, result: await new RateOverrideRepository().create(parsed.data) },
+      { ok: true, result: await new RateOverrideRepository().create(parsed.data, identity.userId) },
       { status: 201 },
     );
   } catch (error) {

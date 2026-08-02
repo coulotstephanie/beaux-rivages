@@ -1,4 +1,5 @@
 import type { MediaAsset, PropertyMediaManifest } from "@/media/types";
+import { destinationMedia } from "@/media/destinations";
 
 const asset = (
   file: string,
@@ -193,11 +194,6 @@ const authenticFood = [
     "Plateau de charcuteries et fromages à partager",
     "Un plateau convivial pour l’apéritif",
   ),
-  propertyAsset(
-    "authentique/plateau-fruits-de-mer.jpg",
-    "Plateau de fruits de mer préparé avec fleurs et agrumes",
-    "Les saveurs de l’Atlantique",
-  ),
 ];
 const arrivalEntrance = propertyAsset(
   "airbnb-cour-d-entree-1.jpeg",
@@ -292,6 +288,7 @@ export const nidDEteMedia = {
     beach,
     shade,
     fortBoyard,
+    destinationMedia.fortBoyardAerial,
     ...authenticAerial,
     ...authenticFood,
   ],

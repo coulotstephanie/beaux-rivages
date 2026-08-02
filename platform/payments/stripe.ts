@@ -5,6 +5,7 @@ import type { PaymentPurpose, RefundGateway } from "./contracts";
 export type StripeMode = "test" | "live";
 
 export function configuredStripeMode(): StripeMode | null {
+  if (process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED !== "true") return null;
   const key = process.env.STRIPE_SECRET_KEY;
   const webhook = process.env.STRIPE_WEBHOOK_SECRET;
   if (!key || !webhook?.startsWith("whsec_")) return null;
@@ -14,6 +15,8 @@ export function configuredStripeMode(): StripeMode | null {
 }
 
 function stripeClient() {
+  if (process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED !== "true")
+    throw new Error("Traveler card payments are disabled.");
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("Stripe is not configured.");
   if (key.startsWith("sk_live_") && process.env.STRIPE_ALLOW_LIVE !== "true")

@@ -1,7 +1,7 @@
 /* Shared layouts, states and Design System primitives introduced by Sprint 1. */
 .ui-button--sm {
   min-height: 36px;
-  padding: 8px 14px;
+  padding: var(--space-2xs) 14px;
   font-size: 0.78rem;
 }
 .ui-button--md {
@@ -9,7 +9,7 @@
 }
 .ui-button--lg {
   min-height: 52px;
-  padding-inline: 28px;
+  padding-inline: var(--space-md);
 }
 .ui-button--danger {
   border-color: #8b372d;
@@ -35,12 +35,14 @@
 }
 .ui-card--interactive {
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
 }
 .ui-card--interactive:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-soft);
+  border-color: rgba(16, 43, 53, 0.22);
 }
 .ui-badge--success {
   color: #1f5d47;
@@ -64,10 +66,22 @@
   min-height: 44px;
   padding: 0.75rem 0.9rem;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   color: var(--deep);
   background: white;
   font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-button,
+  .ui-card--interactive {
+    transition: none;
+  }
+
+  .ui-button:hover,
+  .ui-card--interactive:hover {
+    transform: none;
+  }
 }
 .ui-textarea {
   min-height: 120px;

@@ -5,6 +5,11 @@ import type {
   TravelerCommercialProfile,
   UpsellContext,
 } from "./contracts";
+import {
+  calculateSignaturePackPrice,
+  SIGNATURE_PACK_BASE_PRICE,
+  SIGNATURE_PACK_IMAGE,
+} from "@/booking";
 
 export const loyaltyRules: Record<
   LoyaltyTier,
@@ -68,8 +73,8 @@ export const premiumExperiences = [
     code: "signature",
     label: "Pack Signature",
     description: "Une arrivée mise en scène avec les attentions Beaux Rivages.",
-    priceCents: 14900,
-    image: "/images/destination/pique-nique-plage.jpg",
+    priceCents: SIGNATURE_PACK_BASE_PRICE * 100,
+    image: SIGNATURE_PACK_IMAGE,
   },
   {
     code: "romance",
@@ -92,7 +97,7 @@ export const premiumExperiences = [
     description:
       "Biscuits artisanaux, confiture locale, caramels au beurre salé, jus de fruits et carte des producteurs.",
     priceCents: 4500,
-    image: "/images/destination/petit-dejeuner-ocean.jpg",
+    image: "/images/destination/experiences/panier-douceur-beaux-rivages.webp",
   },
   {
     code: "linen",
@@ -166,10 +171,23 @@ export function recommendExperiences(context: UpsellContext) {
   return [...scores.entries()]
     .sort((a, b) => b[1].score - a[1].score)
     .slice(0, 4)
-    .map(([code, score]) => ({
-      experience: premiumExperiences.find((item) => item.code === code)!,
-      reason: score.reason,
-    }));
+    .map(([code, score]) => {
+      const experience = premiumExperiences.find((item) => item.code === code)!;
+      return {
+        experience:
+          code === "signature"
+            ? {
+                ...experience,
+                priceCents:
+                  calculateSignaturePackPrice({
+                    adults: context.adults,
+                    children: context.children,
+                  }) * 100,
+              }
+            : experience,
+        reason: score.reason,
+      };
+    });
 }
 
 export function validateRevenuePromotion(

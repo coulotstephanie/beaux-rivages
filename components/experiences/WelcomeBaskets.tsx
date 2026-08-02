@@ -26,7 +26,7 @@ export const welcomeBaskets = [
     title: "Panier Douceur Beaux Rivages",
     intro:
       "Une sélection de gourmandises artisanales pour commencer votre séjour sur une note sucrée.",
-    image: "/images/destination/petit-dejeuner-ocean.jpg",
+    image: "/images/destination/experiences/panier-douceur-beaux-rivages.webp",
     imageAlt: "Panier Douceur Beaux Rivages composé de gourmandises artisanales",
     items: [
       "Une sélection de biscuits artisanaux de L’Atelier de la Biscuiterie de Ré",

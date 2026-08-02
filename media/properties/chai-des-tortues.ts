@@ -51,11 +51,6 @@ const editorialBedroom = propertyAsset(
   "Chambre du Chai préparée avec livre, eau et linge délicatement posé",
   "Une attention dans la chambre",
 );
-const editorialHoneymoon = propertyAsset(
-  "editorial/chambre-lune-de-miel.png",
-  "Chambre du Chai préparée pour une lune de miel avec pétales et champagne",
-  "Une lune de miel sous les poutres",
-);
 const editorialMorningCoffee = propertyAsset(
   "editorial/cafe-matinal-exterieur.png",
   "Café matinal sur le mange-debout en bois du petit extérieur",
@@ -191,7 +186,6 @@ const kitchen = [
 
 const bedrooms = [
   editorialBedroom,
-  editorialHoneymoon,
   propertyAsset(
     "professional/chambre-pierre-bois-habillee.png",
     "Une chambre du Chai préparée avec du linge naturel entre pierre et bois",
@@ -400,7 +394,6 @@ const propertyGallery = [
   bedrooms[4],
   bedrooms[5],
   editorialBedroom,
-  editorialHoneymoon,
 
   // Salles d’eau
   bathrooms[0],
@@ -450,12 +443,15 @@ export const chaiDesTortuesMedia = {
     beachTerrace,
     pastries,
     destinationMedia.village,
+    destinationMedia.reBridgeSunsetBike,
+    destinationMedia.beach,
   ],
   videos: [
     {
       src: "/videos/chai-des-tortues-film-sans-son.mp4",
       alt: "Visite vidéo du Chai des Tortues",
       caption: "Le Chai des Tortues, de la pierre à la lumière",
+      poster: hero.src,
       scope: "property",
       owner: "chai-des-tortues",
     },
@@ -463,6 +459,7 @@ export const chaiDesTortuesMedia = {
       src: "/videos/chai-des-tortues-chambre-1-sans-son.mp4",
       alt: "Visite vidéo d’une première chambre du Chai des Tortues",
       caption: "Une chambre du Chai, entre bois clair et douceur marine",
+      poster: bedrooms[1].src,
       scope: "property",
       owner: "chai-des-tortues",
     },
@@ -470,6 +467,7 @@ export const chaiDesTortuesMedia = {
       src: "/videos/chai-des-tortues-chambre-2-sans-son.mp4",
       alt: "Visite vidéo d’une seconde chambre du Chai des Tortues",
       caption: "Une seconde chambre du Chai et ses détails inspirés de l’océan",
+      poster: bedrooms[2].src,
       scope: "property",
       owner: "chai-des-tortues",
     },
@@ -483,14 +481,14 @@ export const chaiDesTortuesMedia = {
   ],
   editorial: {
     breakfast: pastries,
-    aperitif: beachTerrace,
-    market: destinationMedia.food,
+    aperitif: editorialAperitif,
+    market: editorialIsland,
     seafood: destinationMedia.food,
     family: editorialFamilyGames,
-    pets: destinationMedia.village,
-    beach: beachTerrace,
+    pets: editorialFamilyCat,
+    beach: destinationMedia.beach,
     cycling: bicycle,
-    kitchen: editorialIsland,
+    kitchen: kitchen[1],
     story: exterior[0],
     stone: details[1],
   },

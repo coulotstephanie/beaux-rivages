@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test("a traveler can reach the availability calendar", async ({ page }) => {
+  await page.route("**/api/calendar?property=*", (route) =>
+    route.fulfill({ json: { blocks: [], sources: [{ status: "success" }] } }),
+  );
   await page.goto("/reserver");
 
   await page.getByRole("radio", { name: /Le Chai des Tortues/i }).focus();
@@ -33,6 +36,13 @@ test("a traveler sees the real total and receives a clear request reference", as
     cleaningFee: 95,
     touristTax: 0,
     securityDeposit: { amount: 800, includedInTotal: false },
+    paymentSchedule: {
+      depositPercentage: 30,
+      depositDue: 226.5,
+      balanceDue: 528.5,
+      balanceDueDate: "2026-10-26",
+      fullPaymentRequired: false,
+    },
     optionLines: [],
     experienceLines: [],
     optionsTotal: 0,
@@ -42,11 +52,11 @@ test("a traveler sees the real total and receives a clear request reference", as
   await page.route("**/api/calendar?property=*", (route) =>
     route.fulfill({ json: { blocks: [], sources: [{ status: "success" }] } }),
   );
-  await page.route("**/api/pricing", (route) => route.fulfill({ json: quote }));
-  await page.route("**/api/quote", (route) =>
+  await page.route("**/api/pricing**", (route) => route.fulfill({ json: quote }));
+  await page.route("**/api/quote**", (route) =>
     route.fulfill({ json: { available: true, sourcesHealthy: true, quote } }),
   );
-  await page.route("**/api/reservation", (route) =>
+  await page.route("**/api/reservation**", (route) =>
     route.fulfill({
       status: 201,
       json: {
@@ -71,7 +81,8 @@ test("a traveler sees the real total and receives a clear request reference", as
   await page.getByLabel("Prénom").fill("Camille");
   await page.getByLabel("Nom", { exact: true }).fill("Martin");
   await page.getByLabel("Adresse e-mail").fill("camille@example.com");
-  await page.getByRole("checkbox", { name: /J’ai vérifié les dates/ }).check();
+  await page.getByRole("checkbox", { name: /Conditions Générales de Vente/ }).check();
+  await page.getByRole("checkbox", { name: /politique d’annulation/ }).check();
   await page.getByRole("button", { name: "Envoyer ma demande" }).click();
   await expect(page.getByText(/BR-TEST-001/)).toBeVisible();
   await expect(page.getByText(/Aucun paiement n’a été débité/)).toBeVisible();

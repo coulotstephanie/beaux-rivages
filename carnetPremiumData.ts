@@ -192,9 +192,12 @@ const placeImages = {
     "/images/destination/village-fleuri.jpeg",
     "Centre de Rivedoux-Plage à proximité du stationnement",
   ),
-  "sante-rivedoux": beauxRivagesPhoto(
-    "/images/destination/ruelle.jpeg",
-    "Rue de village à Rivedoux-Plage",
+  "sante-rivedoux": sourcedPhoto(
+    "/images/destination/guides/sante-ile-de-re.webp",
+    "Professionnel de santé travaillant avec un ordinateur et un stéthoscope",
+    "National Cancer Institute · Unsplash",
+    "Photographie diffusée par Destination Île de Ré",
+    "https://www.iledere.com/sinformer/informations-locales-et-pratiques/medecins-et-specialistes-sante/",
   ),
   "parking-goelands": beauxRivagesPhoto(
     "/images/properties/nid-d-ete/vue-plage.jpeg",
@@ -796,8 +799,8 @@ export const idealDays: IdealDay[] = [
     title: "La journée gastronomie",
     eyebrow: "Du marché à la grande table",
     description: "Des artisans, un panier, puis le plaisir de rapporter l’Atlantique à la maison.",
-    image: "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
-    imageAlt: "Table de fruits de mer préparée pour le dîner",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    imageAlt: "Produits locaux préparés pour un moment gourmand",
     stops: [
       {
         time: "08:00",
@@ -820,7 +823,7 @@ export const idealDays: IdealDay[] = [
       {
         time: "19:30",
         title: "À la maison",
-        detail: "Plateau de fruits de mer autour de la grande table.",
+        detail: "Dîner autour des produits rapportés du marché.",
       },
     ],
   },

@@ -26,7 +26,7 @@ const assurances = [
   },
   {
     title: "Règlement",
-    copy: "Le règlement des réservations directes s’effectue exclusivement par virement bancaire ou Chèques‑Vacances, selon les instructions transmises après validation.",
+    copy: "Le règlement des réservations directes s’effectue actuellement exclusivement par virement bancaire, selon les instructions transmises après validation.",
   },
   {
     title: "Contact direct",

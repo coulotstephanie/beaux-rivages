@@ -52,13 +52,13 @@ alter table public.reservation_events enable row level security;
 alter table public.reservation_documents enable row level security;
 
 create policy reservation_items_staff_read on public.reservation_items for select to authenticated
-using (public.current_app_role() in ('owner','admin','staff','accountant','maintenance'));
+using (public.current_app_role() is not null);
 create policy reservation_requests_staff_read on public.reservation_special_requests for select to authenticated
-using (public.current_app_role() in ('owner','admin','staff'));
+using (public.current_app_role() is not null);
 create policy reservation_events_staff_read on public.reservation_events for select to authenticated
-using (public.current_app_role() in ('owner','admin','staff','accountant','maintenance'));
+using (public.current_app_role() is not null);
 create policy reservation_documents_staff_read on public.reservation_documents for select to authenticated
-using (public.current_app_role() in ('owner','admin','staff','accountant'));
+using (public.current_app_role() is not null);
 
 create function public.persist_reservation_context()
 returns trigger language plpgsql security definer set search_path = '' as $$
@@ -119,7 +119,7 @@ begin
     where b.property_id=new.property_id
       and b.stay_range && daterange(new.arrival,new.departure,'[)')
       and (b.reservation_id is null or b.reservation_id <> new.id)
-  ) then raise exception using errcode='23P01', message='Reservation dates unavailable'; end if;
+  ) then raise exception using errcode='23P01', message='Property is not available for the requested dates'; end if;
   return new;
 end $$;
 create trigger reservation_no_overlap before insert or update of property_id,arrival,departure on public.reservations

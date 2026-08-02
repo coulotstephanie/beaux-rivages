@@ -35,14 +35,17 @@ test("Stripe reste fermé par défaut et distingue test et production", () => {
     key: process.env.STRIPE_SECRET_KEY,
     webhook: process.env.STRIPE_WEBHOOK_SECRET,
     allowLive: process.env.STRIPE_ALLOW_LIVE,
+    travelerPayments: process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED,
   };
   try {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
+    delete process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED;
     assert.equal(configuredStripeMode(), null);
 
     process.env.STRIPE_SECRET_KEY = "sk_test_example";
     process.env.STRIPE_WEBHOOK_SECRET = "whsec_example";
+    process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED = "true";
     assert.equal(configuredStripeMode(), "test");
 
     process.env.STRIPE_SECRET_KEY = "sk_live_example";
@@ -57,5 +60,8 @@ test("Stripe reste fermé par défaut et distingue test et production", () => {
     else process.env.STRIPE_WEBHOOK_SECRET = previous.webhook;
     if (previous.allowLive === undefined) delete process.env.STRIPE_ALLOW_LIVE;
     else process.env.STRIPE_ALLOW_LIVE = previous.allowLive;
+    if (previous.travelerPayments === undefined)
+      delete process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED;
+    else process.env.STRIPE_TRAVELER_PAYMENTS_ENABLED = previous.travelerPayments;
   }
 });

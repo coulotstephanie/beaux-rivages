@@ -109,8 +109,8 @@ const editorialAsianFamilyTable = asset(
 );
 const editorialFamilyTerraceAperitif = asset(
   "editorial/aperitif-famille-en-terrasse.png",
-  "Grands-parents, parents, enfants et bébé partageant un apéritif sur la terrasse de la Villa",
-  "L’apéritif en famille face à l’océan",
+  "Une famille réunie autour d’un plateau de fruits de mer sur la terrasse de Villa Raie Manta",
+  "Le plateau de fruits de mer en famille face à l’océan",
 );
 const ocean = asset(
   "vue-ocean.jpeg",
@@ -231,12 +231,6 @@ const authenticBathrooms = [
   ),
 ];
 const airbnbExterior = [
-  asset("airbnb-cour-d-entree-1.jpeg", "Entrée de Villa Raie Manta", "L’arrivée à Rivedoux-Plage"),
-  asset(
-    "airbnb-exterieur-1-1.jpeg",
-    "Jardin clos de Villa Raie Manta",
-    "Le jardin pour prolonger la journée",
-  ),
   asset(
     "airbnb-exterieur-2-1.jpeg",
     "Extérieur de Villa Raie Manta près de l’océan",
@@ -280,12 +274,7 @@ export const villaRaieMantaMedia = {
     ...airbnbBedrooms,
   ],
   bathrooms: [...authenticBathrooms, bathroom, ...airbnbBathrooms],
-  terrace: [
-    editorialFamilyTerraceAperitif,
-    editorialSeafood,
-    editorialBalineseLounger,
-    airbnbExterior[1],
-  ],
+  terrace: [editorialFamilyTerraceAperitif, editorialSeafood, editorialBalineseLounger],
   details: [
     editorialBirthday,
     editorialNewYear,

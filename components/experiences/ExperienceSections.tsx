@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ExperienceEditorial } from "@/experienceEditorial";
 
 export const freshWaterNote =
   "À votre arrivée, une carafe d’eau fraîche vous attend dans le réfrigérateur afin de commencer votre séjour dans les meilleures conditions.";
@@ -13,6 +14,7 @@ export type SimilarExperience = { title: string; href: string; image: string; im
 
 type Props = {
   presentation: string;
+  presentationLink?: { label: string; href: string };
   included: string[];
   practical: ExperiencePractical[];
   faq: ExperienceFaq[];
@@ -23,10 +25,13 @@ type Props = {
   similar: SimilarExperience[];
   sources?: { label: string; href: string }[];
   recommendedHouses?: { icon: string; title: string; text: string }[];
+  editorial?: ExperienceEditorial;
+  travelerReview?: { quote: string; source: string };
 };
 
 export function ExperienceSections({
   presentation,
+  presentationLink,
   included,
   practical,
   faq,
@@ -37,6 +42,8 @@ export function ExperienceSections({
   similar,
   sources = [],
   recommendedHouses = [],
+  editorial,
+  travelerReview,
 }: Props) {
   return (
     <>
@@ -44,6 +51,14 @@ export function ExperienceSections({
         <p className="eyebrow">Présentation</p>
         <h2>Une expérience pensée pour être simple à vivre.</h2>
         <p>{presentation}</p>
+        {presentationLink ? (
+          <p>
+            Site officiel :{" "}
+            <a href={presentationLink.href} target="_blank" rel="noopener noreferrer">
+              {presentationLink.label}
+            </a>
+          </p>
+        ) : null}
       </section>
 
       {included.length > 0 ? (
@@ -58,6 +73,29 @@ export function ExperienceSections({
               </li>
             ))}
           </ul>
+        </section>
+      ) : null}
+
+      {editorial ? (
+        <section className="experience-emotional-notes shell" aria-label="Nos conseils">
+          <article>
+            <p className="eyebrow">Le conseil de Stéphanie &amp; Bruno</p>
+            <p>{editorial.advice}</p>
+          </article>
+          <article>
+            <p className="eyebrow">Le petit détail</p>
+            <p>
+              <strong>{editorial.detail}</strong>
+            </p>
+          </article>
+        </section>
+      ) : null}
+
+      {travelerReview ? (
+        <section className="experience-traveler-review shell" aria-label="Avis voyageur">
+          <p className="eyebrow">L’expérience vécue par nos voyageurs</p>
+          <blockquote>“{travelerReview.quote}”</blockquote>
+          <cite>{travelerReview.source}</cite>
         </section>
       ) : null}
 

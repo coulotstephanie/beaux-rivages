@@ -1,0 +1,10 @@
+begin;
+drop trigger if exists guest_crm_profile_link on public.guests;
+drop function if exists public.link_guest_to_traveler_profile();
+drop table if exists public.crm_change_log;
+drop table if exists public.crm_activities;
+drop table if exists public.traveler_children;
+drop table if exists public.traveler_pets;
+drop table if exists public.guest_profile_links;
+drop table if exists public.traveler_profiles;
+commit;

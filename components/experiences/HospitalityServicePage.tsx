@@ -9,8 +9,10 @@ import { ExperienceSections } from "./ExperienceSections";
 import { ServiceGallery } from "./ServiceGallery";
 import { WelcomeBaskets } from "./WelcomeBaskets";
 import { hospitalityServices } from "@/hospitalityServices";
+import { getExperienceEditorial } from "@/experienceEditorial";
 
 export function HospitalityServicePage({ service }: { service: HospitalityService }) {
+  const editorial = getExperienceEditorial(service.slug);
   const url = `${SITE_URL}/${service.slug}`;
   const included = service.sections.flatMap(({ title, items }) =>
     items.map((item) => `${title} · ${item}`),
@@ -71,8 +73,13 @@ export function HospitalityServicePage({ service }: { service: HospitalityServic
           <span aria-hidden="true">{service.icon}</span>
           <p className="eyebrow light">{service.badge}</p>
           <h1>{service.title}</h1>
-          <p>{service.intro}</p>
+          <p>{editorial.hook}</p>
         </div>
+      </section>
+      <section className="experience-emotional-story shell">
+        <p className="eyebrow">Ce que vous allez vivre</p>
+        <h2>{editorial.hook}</h2>
+        <p>{editorial.moment}</p>
       </section>
       {service.slug === "experience-signature" ? (
         <div className="shell">
@@ -104,6 +111,7 @@ export function HospitalityServicePage({ service }: { service: HospitalityServic
         linenIncluded={service.linenIncluded}
         similar={similar}
         sources={service.sources}
+        editorial={editorial}
       />
       <section className="service-gallery-section shell">
         <p className="eyebrow">L’atmosphère</p>

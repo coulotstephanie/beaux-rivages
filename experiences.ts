@@ -1,4 +1,4 @@
-import type { StayOptionId } from "@/booking";
+import { SIGNATURE_PACK_IMAGE, type StayOptionId } from "@/booking";
 import { siteMedia } from "@/media/site";
 
 export type Experience = {
@@ -23,14 +23,26 @@ export type Experience = {
   checklist?: string[];
 };
 
+const canonicalExperienceRoutes: Record<string, string> = {
+  "pack-signature": "/experience-signature",
+  romance: "/romance",
+  anniversaire: "/anniversaire",
+  "demande-en-mariage": "/demande-en-mariage",
+};
+
+export function getExperienceHref(slug: string) {
+  return canonicalExperienceRoutes[slug] ?? `/experiences/${slug}`;
+}
+
 export const experiences: Experience[] = [
   {
     slug: "pack-signature",
     title: "Pack Signature Beaux Rivages",
     eyebrow: "L’expérience complète",
     text: "Lits préparés, serviettes de plage, deux peignoirs, panier d’accueil et attention personnelle : la maison vous attend jusque dans les détails.",
-    image: siteMedia.properties["chai-des-tortues"].kitchen[1].src,
-    imageAlt: "Grande table préparée au Chai des Tortues",
+    image: SIGNATURE_PACK_IMAGE,
+    imageAlt:
+      "Chambre authentique du Chai des Tortues préparée avec le linge de l’Expérience Signature",
     duration: "Tout le séjour",
     idealPeriod: "Toute l’année",
     recommendedProperty: { label: "Les trois maisons" },
@@ -75,19 +87,6 @@ export const experiences: Experience[] = [
     option: "personal-arrival",
   },
   {
-    slug: "lune-de-miel",
-    title: "Une lune de miel sous les poutres",
-    eyebrow: "Les premiers jours",
-    text: "Le Chai se fait refuge : pétales, champagne et attentions délicates composent une arrivée intime, pensée autour de votre histoire.",
-    image: "/images/properties/chai-des-tortues/editorial/chambre-lune-de-miel.png",
-    imageAlt: "Chambre du Chai des Tortues préparée pour une lune de miel",
-    duration: "Une soirée",
-    idealPeriod: "Toute l’année",
-    recommendedProperty: { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
-    audience: "Jeunes mariés",
-    option: "personal-arrival",
-  },
-  {
     slug: "demande-en-mariage",
     title: "Une demande en mariage face à l’océan",
     eyebrow: "Un instant unique",
@@ -99,30 +98,6 @@ export const experiences: Experience[] = [
     recommendedProperty: { slug: "villa-raie-manta", label: "Villa Raie Manta" },
     audience: "Couples",
     option: "personal-arrival",
-  },
-  {
-    slug: "plateau-fruits-de-mer",
-    title: "Plateau de fruits de mer",
-    eyebrow: "L’Atlantique à table",
-    text: "Un plateau choisi auprès de producteurs locaux, à ouvrir dans la cuisine puis à partager sans quitter la maison.",
-    image: "/images/properties/villa-raie-manta/editorial/table-fruits-de-mer.png",
-    imageAlt: "Plateau de fruits de mer dressé sur une grande table",
-    duration: "Une soirée",
-    idealPeriod: "Toute l’année",
-    recommendedProperty: { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
-    audience: "Gourmands, couples et familles",
-    option: "personal-arrival",
-    storyTitle: "Le meilleur de l’Atlantique, déjà prêt à partager.",
-    story:
-      "Huîtres, crevettes, bulots et coquillages sont sélectionnés selon l’arrivage auprès d’un poissonnier ou d’un producteur local. Le plateau est composé pour votre table, accompagné des essentiels et récupéré au moment convenu afin que vous n’ayez plus qu’à ouvrir une bouteille et vous installer.",
-    whyTitle: "Parce qu’un grand dîner peut rester merveilleusement simple.",
-    advice:
-      "La composition dépend de la pêche, de la saison et des allergies signalées. Nous adaptons les quantités au nombre de convives et pouvons conseiller un vin blanc local.",
-    checklist: [
-      "Composition selon l’arrivage et le nombre de convives",
-      "Pain, citron, beurre et sauces sur demande",
-      "Conseil d’accord et horaire de retrait ou livraison à confirmer",
-    ],
   },
   {
     slug: "atelier-macarons",
@@ -160,14 +135,14 @@ export const experiences: Experience[] = [
     audience: "Lève-tôt, photographes et couples",
     storyTitle: "Voir la plage avant que l’île ne s’éveille.",
     story:
-      "Nous vous indiquons le point de départ le plus juste selon la saison. Quelques minutes de marche suffisent pour rejoindre le rivage dans le silence, observer la lumière gagner l’eau et prolonger le moment avec un café ou un petit-déjeuner au retour.",
+      "Nous vous indiquons le point de départ le plus juste selon la saison. Quelques minutes de marche suffisent pour rejoindre le rivage dans le silence et observer la lumière gagner doucement l’eau.",
     whyTitle: "L’île semble entière lorsque l’on arrive avant les premiers pas.",
     advice:
       "L’heure de départ est adaptée au lever du soleil et à la météo. Prévoyez une couche chaude, même en été, et arrivez une quinzaine de minutes avant l’apparition du soleil.",
     checklist: [
       "Point d’observation conseillé selon la saison",
       "Horaire précis communiqué avant le séjour",
-      "Suggestion de marche et de petit-déjeuner au retour",
+      "Suggestion de marche douce au retour",
     ],
   },
   {

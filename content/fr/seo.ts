@@ -35,6 +35,26 @@ export const staticPageSeo = {
     breadcrumbs: [home, houses],
     schemaTypes: ["CollectionPage"],
   },
+  "/histoire-de-nos-maisons": {
+    title: "L’histoire de nos maisons | Beaux Rivages",
+    description:
+      "Trois maisons, trois récits : Fort Boyard et La Maison Heureuse, les pierres d’un ancien chai rétais et la lumière de l’océan.",
+    path: "/histoire-de-nos-maisons",
+    breadcrumbs: [
+      home,
+      houses,
+      { name: "L’histoire de nos maisons", path: "/histoire-de-nos-maisons" },
+    ],
+    schemaTypes: ["CollectionPage"],
+  },
+  "/patrimoine": {
+    title: "Patrimoine des îles de Ré et d’Oléron | Beaux Rivages",
+    description:
+      "Fort Boyard, Phare des Baleines, fortifications Vauban, abbaye, marais et ports : le magazine culturel personnel de Beaux Rivages.",
+    path: "/patrimoine",
+    breadcrumbs: [home, { name: "Patrimoine", path: "/patrimoine" }],
+    schemaTypes: ["CollectionPage"],
+  },
   "/avis": {
     title: "Avis voyageurs | Beaux Rivages",
     description:
@@ -57,6 +77,14 @@ export const staticPageSeo = {
       "Restaurants, producteurs, marchés, plages, balades et expériences : le magazine de voyage personnel de Stéphanie et Bruno sur Ré et Oléron.",
     path: "/carnet",
     breadcrumbs: [home, { name: "Le Carnet", path: "/carnet" }],
+    schemaTypes: ["CollectionPage"],
+  },
+  "/nos-petits-bonheurs": {
+    title: "Les petits bonheurs de Stéphanie & Bruno | Beaux Rivages",
+    description:
+      "Les habitudes, traditions et adresses préférées de Stéphanie et Bruno sur l’Île de Ré : une sélection personnelle racontée comme un carnet de souvenirs.",
+    path: "/nos-petits-bonheurs",
+    breadcrumbs: [home, { name: "Nos petits bonheurs", path: "/nos-petits-bonheurs" }],
     schemaTypes: ["CollectionPage"],
   },
   "/choisir": {
@@ -193,6 +221,18 @@ export const staticPageSeo = {
     path: "/phototheque",
     breadcrumbs: [home, { name: "Photothèque", path: "/phototheque" }],
     schemaTypes: ["CollectionPage"],
+  },
+  "/maison-heureuse-fort-boyard": {
+    title: "Dormir au cœur de l’histoire de Fort Boyard | Beaux Rivages",
+    description:
+      "Découvrez l’histoire de La Maison Heureuse à Boyardville, résidence inscrite Monument historique où se trouve Le Nid d’Été, face à Fort Boyard.",
+    path: "/maison-heureuse-fort-boyard",
+    breadcrumbs: [
+      home,
+      houses,
+      { name: "La Maison Heureuse et Fort Boyard", path: "/maison-heureuse-fort-boyard" },
+    ],
+    schemaTypes: ["WebPage"],
   },
   "/pourquoi-revenir": {
     title: "Pourquoi revenir | Beaux Rivages",

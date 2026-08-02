@@ -24,7 +24,7 @@ export const legalDocuments = {
       ],
       [
         "5. Acompte, solde et moyens de paiement",
-        "Pour une réservation effectuée au moins quatorze jours avant l’arrivée, l’acompte représente 30 % du montant total et le solde est exigible quatorze jours avant l’arrivée. Pour une réservation effectuée moins de quatorze jours avant l’arrivée, la totalité est exigible immédiatement et aucun acompte séparé n’est proposé. Les seuls moyens acceptés sont le virement bancaire et les Chèques‑Vacances. Les instructions sont communiquées après l’enregistrement de la demande.",
+        "Pour une réservation effectuée au moins quatorze jours avant l’arrivée, l’acompte représente 30 % du montant total et le solde est exigible quatorze jours avant l’arrivée. Pour une réservation effectuée moins de quatorze jours avant l’arrivée, la totalité est exigible immédiatement et aucun acompte séparé n’est proposé. Le règlement est actuellement accepté uniquement par virement bancaire. Les instructions sont communiquées après l’enregistrement de la demande.",
       ],
       [
         "6. Caution",
@@ -351,11 +351,11 @@ export const legalDocuments = {
       ],
       [
         "Comment régler ?",
-        "Uniquement par virement bancaire ou Chèques‑Vacances, selon les instructions transmises après validation.",
+        "Uniquement par virement bancaire, selon les instructions transmises après validation.",
       ],
       [
         "Les Chèques‑Vacances sont-ils acceptés ?",
-        "Oui, pour les réservations directes, selon les modalités précisées lors de la confirmation.",
+        "Pas encore. Ce mode de règlement restera masqué jusqu’à l’obtention de l’agrément et son activation officielle.",
       ],
       [
         "Comment est calculée la taxe de séjour ?",
