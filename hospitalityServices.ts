@@ -326,10 +326,6 @@ export const hospitalityServices: HospitalityService[] = [
         src: "/images/destination/editorial/famille-cerf-volant-chien.png",
         alt: "Famille et chien sur une plage de l’Atlantique",
       },
-      {
-        src: "/images/destination/editorial/enfants-jouent-avec-chien.png",
-        alt: "Jeu avec un chien au bord de l’océan",
-      },
     ],
   },
   {
@@ -396,10 +392,6 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: SIGNATURE_PACK_IMAGE,
-        alt: "Chambre authentique du Chai préparée pour l’Expérience Signature",
-      },
-      {
         src: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
         alt: "Panier apéritif présenté sur l’îlot",
       },
@@ -412,12 +404,12 @@ export const hospitalityServices: HospitalityService[] = [
   {
     slug: "romance",
     icon: "❤️",
-    title: "Expérience Romance Signature",
+    title: "Lune de miel (sur demande)",
     badge: "149 € par séjour",
     price: 149,
     action: "booking",
     intro:
-      "Une lumière douce, une attention personnelle et un moment gourmand à partager à deux, préparés avec discrétion avant votre arrivée.",
+      "Une lumière douce, une attention personnelle et un moment gourmand à partager à deux. Cette préparation est étudiée après échange avec Stéphanie & Bruno, selon les disponibilités de votre séjour.",
     image: "/images/properties/villa-raie-manta/editorial/diner-romantique-ocean.png",
     imageAlt: "Dîner romantique face à l’océan",
     sections: [
@@ -445,7 +437,7 @@ export const hospitalityServices: HospitalityService[] = [
           "Deux paires de chaussons",
           "Huile de massage",
           "Playlist romantique par QR Code",
-          "Arrivée anticipée ou départ tardif selon disponibilité",
+          "Arrivée anticipée ou départ tardif étudié sur demande, sans garantie automatique",
           "Attention personnalisée",
           "Carafe d’eau fraîche au réfrigérateur",
         ],
@@ -456,6 +448,10 @@ export const hospitalityServices: HospitalityService[] = [
       { label: "Tarif", value: "149 € par séjour" },
       { label: "Maisons", value: "Disponible dans les trois maisons" },
       { label: "Préparation", value: "Discrètement installée avant votre arrivée" },
+      {
+        label: "Confirmation",
+        value: "Après échange avec Stéphanie & Bruno, selon disponibilités",
+      },
     ],
     faq: [
       {
@@ -485,12 +481,12 @@ export const hospitalityServices: HospitalityService[] = [
   {
     slug: "demande-en-mariage",
     icon: "💍",
-    title: "Expérience Demande en Mariage",
+    title: "Demande en mariage (sur demande)",
     badge: "Organisation sur mesure · devis personnalisé",
     price: null,
     action: "quote",
     intro:
-      "Vous souhaitez faire votre demande en mariage dans un cadre exceptionnel ? Nous vous accompagnons avec discrétion afin de créer une expérience entièrement personnalisée.",
+      "Vous souhaitez faire votre demande en mariage dans un cadre exceptionnel ? Selon les disponibilités et après échange avec Stéphanie & Bruno, nous vous accompagnons avec discrétion afin de créer un moment entièrement personnalisé.",
     image: "/images/destination/experiences/demande-mariage-ocean.jpg",
     imageAlt: "Demande en mariage face à l’océan",
     sections: [
@@ -510,10 +506,6 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: "/images/destination/experiences/demande-mariage-ocean.jpg",
-        alt: "Demande en mariage au coucher du soleil",
-      },
-      {
         src: "/images/properties/villa-raie-manta/editorial/diner-romantique-ocean.png",
         alt: "Décoration romantique face à l’océan",
       },
@@ -522,12 +514,12 @@ export const hospitalityServices: HospitalityService[] = [
   {
     slug: "anniversaire",
     icon: "🎂",
-    title: "Expérience Anniversaire",
+    title: "Anniversaire sur mesure (sur demande)",
     badge: "Organisation sur mesure · devis personnalisé",
     price: null,
     action: "quote",
     intro:
-      "Racontez-nous la personne, l’âge et l’atmosphère souhaitée. Nous préparons une célébration personnelle, adaptée à la maison et à votre histoire.",
+      "Racontez-nous la personne, l’âge et l’atmosphère souhaitée. Selon les disponibilités et après échange avec Stéphanie & Bruno, nous préparons une célébration personnelle adaptée à la maison et à votre histoire.",
     image: "/images/properties/villa-raie-manta/editorial/table-anniversaire.png",
     imageAlt: "Table dressée pour un anniversaire",
     sections: [
@@ -554,10 +546,6 @@ export const hospitalityServices: HospitalityService[] = [
       {
         src: "/images/properties/nid-d-ete/editorial/chambre-anniversaire-enfant.png",
         alt: "Chambre préparée pour un anniversaire",
-      },
-      {
-        src: "/images/properties/villa-raie-manta/editorial/table-anniversaire.png",
-        alt: "Table d’anniversaire dressée",
       },
     ],
   },

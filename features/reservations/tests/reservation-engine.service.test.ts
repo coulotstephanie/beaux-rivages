@@ -21,7 +21,13 @@ const request: ReservationSearchRequest = {
 
 const quote = {
   nights: 7,
-  stayRules: { valid: true, requiredMinimum: 2, maximumNights: 28 },
+  stayRules: {
+    valid: true,
+    requiredMinimum: 2,
+    maximumNights: 28,
+    arrivalIsAllowed: true,
+    optimizeCalendarGaps: true,
+  },
 } as ReservationQuote;
 
 function createEngine(blocks: { startsOn: string; endsOn: string }[]) {
@@ -71,6 +77,19 @@ describe("ReservationEngineService", () => {
 
     await expect(engine.search(request)).resolves.toMatchObject({
       available: true,
+    });
+  });
+
+  it("allows a shorter stay when it exactly fills a reliable calendar gap", async () => {
+    const shortRequest = { ...request, departure: "2026-10-14" };
+    const { engine } = createEngine([
+      { startsOn: "2026-10-05", endsOn: "2026-10-12" },
+      { startsOn: "2026-10-14", endsOn: "2026-10-18" },
+    ]);
+
+    await expect(engine.search(shortRequest)).resolves.toMatchObject({
+      available: true,
+      quote: { stayRules: { valid: true, requiredMinimum: 1, gapOptimized: true } },
     });
   });
 });

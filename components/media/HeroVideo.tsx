@@ -24,7 +24,7 @@ export function HeroVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduceMotion = useReducedMotion();
-  const [canAutoplay, setCanAutoplay] = useState(false);
+  const [canAutoplay, setCanAutoplay] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -40,7 +40,13 @@ export function HeroVideo({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!canAutoplay || !video) return;
+    if (!video) return;
+    if (!canAutoplay) {
+      video.pause();
+      return;
+    }
+    video.muted = true;
+    video.defaultMuted = true;
     video.load();
     void video.play().catch(() => setPlaying(false));
   }, [canAutoplay]);
@@ -82,6 +88,7 @@ export function HeroVideo({
         poster={poster}
         aria-hidden="true"
         tabIndex={-1}
+        onLoadedData={() => setReady(true)}
         onCanPlay={() => setReady(true)}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}

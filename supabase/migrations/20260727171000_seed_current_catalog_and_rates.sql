@@ -25,13 +25,13 @@ cross join lateral (
 
 with season_values(slug, name, kind, begins_on, ends_on, priority, minimum_nights, nightly_rate_cents) as (
   values
-    ('chai-des-tortues', 'Moyenne saison 2026', 'mid', date '2026-04-01', date '2026-06-30', 200, 3, 27500),
+    ('chai-des-tortues', 'Moyenne saison 2026', 'mid', date '2026-04-01', date '2026-06-30', 200, 2, 27500),
     ('chai-des-tortues', 'Haute saison 2026', 'high', date '2026-07-01', date '2026-08-31', 300, 7, 33000),
     ('chai-des-tortues', 'Basse saison 2026-2027', 'low', date '2026-09-01', date '2027-03-31', 100, 2, 22000),
-    ('villa-raie-manta', 'Moyenne saison 2026', 'mid', date '2026-04-01', date '2026-06-30', 200, 3, 41000),
+    ('villa-raie-manta', 'Moyenne saison 2026', 'mid', date '2026-04-01', date '2026-06-30', 200, 2, 41000),
     ('villa-raie-manta', 'Haute saison 2026', 'high', date '2026-07-01', date '2026-08-31', 300, 7, 49500),
     ('villa-raie-manta', 'Basse saison 2026-2027', 'low', date '2026-09-01', date '2027-03-31', 100, 2, 33500),
-    ('nid-d-ete', 'Moyenne saison 2026', 'mid', date '2026-04-01', date '2026-06-30', 200, 3, 26000),
+    ('nid-d-ete', 'Moyenne saison 2026', 'mid', date '2026-04-01', date '2026-06-30', 200, 2, 26000),
     ('nid-d-ete', 'Haute saison 2026', 'high', date '2026-07-01', date '2026-08-31', 300, 7, 31000),
     ('nid-d-ete', 'Basse saison 2026-2027', 'low', date '2026-09-01', date '2027-03-31', 100, 2, 20500)
 ), inserted_seasons as (

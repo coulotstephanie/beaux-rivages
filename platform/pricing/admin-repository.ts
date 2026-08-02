@@ -7,6 +7,7 @@ type PricingEntity = "season" | "promotion" | "option" | "pricing_rule";
 
 export type PricingMutation =
   | { action: "arrival-days"; propertySlug: PropertySlug; weekdays: number[] }
+  | { action: "gap-optimization"; propertySlug: PropertySlug; enabled: boolean }
   | {
       action: "season";
       propertySlug: PropertySlug;
@@ -112,7 +113,7 @@ export class PricingAdminRepository {
         .eq("property_id", property.id),
       this.db
         .from("property_pricing_rules")
-        .select("allowed_arrival_weekdays,updated_at")
+        .select("allowed_arrival_weekdays,optimize_calendar_gaps,updated_at")
         .eq("property_id", property.id)
         .maybeSingle(),
       this.db
@@ -200,6 +201,29 @@ export class PricingAdminRepository {
       const value = {
         property_id: property.id,
         allowed_arrival_weekdays: input.weekdays,
+        updated_by: userId,
+      };
+      const saved = await this.db.from("property_pricing_rules").upsert(value).select("*").single();
+      if (saved.error) throw new Error(`PRICING_RULE_WRITE_FAILED:${saved.error.code}`);
+      await this.audit({
+        propertyId: property.id,
+        entityType: "pricing_rule",
+        action: "update",
+        previousValue: before.data,
+        newValue: saved.data,
+        userId,
+      });
+      return saved.data;
+    }
+    if (input.action === "gap-optimization") {
+      const before = await this.db
+        .from("property_pricing_rules")
+        .select("*")
+        .eq("property_id", property.id)
+        .maybeSingle();
+      const value = {
+        property_id: property.id,
+        optimize_calendar_gaps: input.enabled,
         updated_by: userId,
       };
       const saved = await this.db.from("property_pricing_rules").upsert(value).select("*").single();

@@ -150,6 +150,7 @@ export const adminManualReservationSchema = z
           "robes",
           "slippers",
           "personal-arrival",
+          "early-checkin",
           "late-checkout",
           "pet",
           "aperitif-basket",

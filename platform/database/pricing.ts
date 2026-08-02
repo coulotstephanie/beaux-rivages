@@ -64,7 +64,7 @@ export class SupabasePricingPlanReader {
         .maybeSingle(),
       client
         .from("property_pricing_rules" as "properties")
-        .select("allowed_arrival_weekdays")
+        .select("allowed_arrival_weekdays,optimize_calendar_gaps")
         .eq("property_id" as "id", property.id)
         .maybeSingle(),
     ]);
@@ -187,6 +187,13 @@ export class SupabasePricingPlanReader {
             allowed_arrival_weekdays?: number[];
           } | null)
       )?.allowed_arrival_weekdays ?? [1, 2, 3, 4, 5, 6, 7],
+      optimizeCalendarGaps:
+        (pricingRulesResult.error
+          ? null
+          : (pricingRulesResult.data as unknown as {
+              optimize_calendar_gaps?: boolean;
+            } | null)
+        )?.optimize_calendar_gaps ?? true,
       cleaningFee: baseRate.cleaning_fee_cents / 100,
       securityDeposit: baseRate.security_deposit_cents / 100,
       touristTax: touristTaxResult.data

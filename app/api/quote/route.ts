@@ -63,10 +63,14 @@ export async function POST(request: NextRequest) {
     return noStoreJson({ ...result, error: "Ces dates ne sont pas disponibles." }, { status: 409 });
   }
   if (!result.quote.stayRules.valid) {
+    const rules = result.quote.stayRules;
+    const error = !rules.arrivalIsAllowed
+      ? "Cette date d’arrivée n’est pas proposée pour la période sélectionnée. Choisissez une autre date ou contactez-nous."
+      : `Pour ces dates, la durée minimale est de ${rules.requiredMinimum} nuit${rules.requiredMinimum > 1 ? "s" : ""} et la durée maximale de ${rules.maximumNights} nuits.`;
     return noStoreJson(
       {
         ...result,
-        error: `La durée doit être comprise entre ${result.quote.stayRules.requiredMinimum} et ${result.quote.stayRules.maximumNights} nuits.`,
+        error,
       },
       { status: 422 },
     );

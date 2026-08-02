@@ -41,7 +41,7 @@ type PricingCenterSnapshot = {
     enabled: boolean;
     options: { code: string; name: string; pricing_mode: string } | null;
   }>;
-  rules: { allowed_arrival_weekdays: number[] };
+  rules: { allowed_arrival_weekdays: number[]; optimize_calendar_gaps?: boolean };
   history: Array<{
     id: string;
     entity_type: string;
@@ -544,6 +544,20 @@ export function RatesAdmin() {
                 );
               })}
             </div>
+            <label className="rates-gap-optimization">
+              <input
+                type="checkbox"
+                checked={center.rules.optimize_calendar_gaps ?? true}
+                onChange={(event) =>
+                  void mutateCenter(
+                    { action: "gap-optimization", enabled: event.target.checked },
+                    "Optimisation des trous du calendrier mise à jour.",
+                  )
+                }
+              />
+              Autoriser un séjour plus court lorsqu’il remplit exactement un trou entre deux
+              réservations
+            </label>
             <h2>Suppléments</h2>
             <div className="rates-options">
               {center.options.map(

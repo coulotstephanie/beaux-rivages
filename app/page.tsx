@@ -82,6 +82,7 @@ export default function HomePage() {
             sources={{
               mp4: siteMedia.video.homepageHero,
               webm: siteMedia.video.homepageHeroWebm,
+              mobileMp4: siteMedia.video.homepageHeroLegacy,
             }}
           />
         </div>

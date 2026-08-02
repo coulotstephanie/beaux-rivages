@@ -20,10 +20,31 @@ export class ReservationEngineService {
       this.pricingRepository.quote(request),
     ]);
 
+    const available = isDateRangeAvailable(availability.blocks, request.arrival, request.departure);
+    const fillsCalendarGap =
+      quote.stayRules.optimizeCalendarGaps &&
+      available &&
+      availability.blocks.some((block) => block.endsOn === request.arrival) &&
+      availability.blocks.some((block) => block.startsOn === request.departure);
+    const quoteWithOptimizedGap = fillsCalendarGap
+      ? {
+          ...quote,
+          stayRules: {
+            ...quote.stayRules,
+            valid:
+              quote.stayRules.arrivalIsAllowed &&
+              quote.nights >= 1 &&
+              quote.nights <= quote.stayRules.maximumNights,
+            requiredMinimum: 1,
+            gapOptimized: true,
+          },
+        }
+      : { ...quote, stayRules: { ...quote.stayRules, gapOptimized: false } };
+
     return {
-      available: isDateRangeAvailable(availability.blocks, request.arrival, request.departure),
+      available,
       sourcesHealthy: availability.sourcesHealthy,
-      quote,
+      quote: quoteWithOptimizedGap,
     };
   }
 }

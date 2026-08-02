@@ -42,7 +42,7 @@ test("signature is provider neutral and destructive actions are audited", async 
   );
   assert.match(schema, /prepare_signature/);
   assert.match(migration, /provider text not null default 'none'/);
-  assert.match(schema, /reason:z\.string\(\)\.min\(3\)/);
+  assert.match(schema, /reason\s*:\s*z\.string\(\)\.min\(3\)/);
   assert.match(repository, /document_audit_log/);
 });
 

@@ -12,7 +12,8 @@ const options = [
   ["aperitif-basket", "Panier Apéritif Beaux Rivages", 45, "produits artisanaux locaux", "option"],
   ["basket", "Panier Douceur Beaux Rivages", 45, "gourmandises artisanales", "option"],
   ["pet", "Accueil animal", 25, "par animal", "option"],
-  ["late-checkout", "Départ tardif", 55, "selon disponibilité", "option"],
+  ["early-checkin", "Arrivée anticipée (sur demande)", 55, "selon disponibilité", "option"],
+  ["late-checkout", "Départ tardif (sur demande)", 55, "selon disponibilité", "option"],
 ] as const;
 
 export function StayComposer() {

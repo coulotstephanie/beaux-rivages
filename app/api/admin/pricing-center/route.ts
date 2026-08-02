@@ -14,6 +14,7 @@ const mutation = z.discriminatedUnion("action", [
     propertySlug: slug,
     weekdays: z.array(z.number().int().min(1).max(7)).min(1),
   }),
+  z.object({ action: z.literal("gap-optimization"), propertySlug: slug, enabled: z.boolean() }),
   z.object({
     action: z.literal("season"),
     propertySlug: slug,

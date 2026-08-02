@@ -11,6 +11,7 @@ export type StayOptionId =
   | "robes"
   | "slippers"
   | "personal-arrival"
+  | "early-checkin"
   | "late-checkout"
   | "pet"
   | "aperitif-basket"
@@ -128,9 +129,17 @@ export const stayOptions: StayOption[] = [
     price: 35,
   },
   {
+    id: "early-checkin",
+    label: "Arrivée anticipée (sur demande)",
+    description:
+      "Étudiée individuellement selon les disponibilités, le calendrier des réservations et l’organisation du ménage. Elle n’est jamais garantie automatiquement.",
+    price: 55,
+  },
+  {
     id: "late-checkout",
-    label: "Départ tardif",
-    description: "Profitez de quelques heures supplémentaires, selon disponibilité.",
+    label: "Départ tardif (sur demande)",
+    description:
+      "Étudié individuellement selon les disponibilités, le planning des réservations et l’organisation du ménage. Il n’est jamais garanti automatiquement.",
     price: 55,
   },
   {

@@ -70,6 +70,7 @@ export type PropertyRatePlan = {
   maximumNights: number;
   /** ISO weekdays accepted for an arrival (1 = Monday, 7 = Sunday). */
   allowedArrivalWeekdays?: number[];
+  optimizeCalendarGaps?: boolean;
   cleaningFee: number;
   securityDeposit: number;
   touristTax: {

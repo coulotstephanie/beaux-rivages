@@ -65,7 +65,7 @@ export const properties: Property[] = [
     ],
     gallery: curateGallery(
       propertyMedia["chai-des-tortues"].gallery,
-      [0, 1, 2, 4, 6, 8, 9, 13, 15, 16, 17, 19, 20, 22, 23, 29, 30, 31, 35, 36, 39, 41, 42, 50],
+      [1, 2, 4, 6, 8, 9, 13, 15, 16, 17, 19, 20, 22, 23, 29, 30, 31, 35, 36, 39, 41, 42, 50],
     ),
     amenityGroups: [
       {
@@ -230,8 +230,8 @@ export const properties: Property[] = [
     gallery: curateGallery(
       propertyMedia["villa-raie-manta"].gallery,
       [
-        0, 1, 2, 3, 5, 7, 8, 9, 11, 12, 15, 16, 17, 20, 24, 25, 27, 28, 29, 30, 31, 32, 35, 36, 39,
-        41, 37, 38,
+        1, 2, 3, 5, 7, 8, 9, 11, 12, 15, 16, 17, 20, 24, 25, 27, 28, 29, 30, 31, 32, 35, 36, 39, 41,
+        37, 38,
       ],
     ),
     amenityGroups: [
@@ -404,10 +404,7 @@ export const properties: Property[] = [
     ],
     gallery: curateGallery(
       propertyMedia["nid-d-ete"].gallery,
-      [
-        0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 12, 15, 16, 17, 18, 19, 22, 23, 26, 27, 29, 30, 32,
-        33,
-      ],
+      [1, 2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 12, 15, 16, 17, 18, 19, 22, 23, 26, 27, 29, 30, 32, 33],
     ),
     amenityGroups: [
       {

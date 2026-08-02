@@ -23,6 +23,7 @@ const optionIds: StayOptionId[] = [
   "robes",
   "slippers",
   "personal-arrival",
+  "early-checkin",
   "late-checkout",
   "pet",
   "aperitif-basket",

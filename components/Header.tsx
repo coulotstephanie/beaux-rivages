@@ -76,28 +76,35 @@ function MobileGroup({
   label,
   links,
   close,
+  open,
+  toggle,
 }: {
   label: string;
   links: readonly (readonly [string, string])[];
   close: () => void;
+  open: boolean;
+  toggle: () => void;
 }) {
   return (
-    <details className="mobile-navigation__group">
-      <summary>{label}</summary>
-      <div>
+    <div className={`mobile-navigation__group${open ? " is-open" : ""}`}>
+      <button type="button" aria-expanded={open} onClick={toggle}>
+        {label}
+      </button>
+      <div hidden={!open}>
         {links.map(([title, href]) => (
           <Link href={href} onClick={close} key={href}>
             {title}
           </Link>
         ))}
       </div>
-    </details>
+    </div>
   );
 }
 
 export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileGroup, setMobileGroup] = useState<string | null>(null);
 
   useEffect(() => {
     const updateHeader = () => setScrolled(window.scrollY > 24);
@@ -118,7 +125,10 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [menuOpen]);
 
-  const closeMenu = () => setMenuOpen(false);
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setMobileGroup(null);
+  };
 
   return (
     <header
@@ -181,9 +191,27 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
           <Link href="/" onClick={closeMenu}>
             Accueil
           </Link>
-          <MobileGroup label="Nos maisons" links={houseLinks} close={closeMenu} />
-          <MobileGroup label="Découvrir les îles" links={islandLinks} close={closeMenu} />
-          <MobileGroup label="Le Carnet Beaux Rivages" links={carnetLinks} close={closeMenu} />
+          <MobileGroup
+            label="Nos maisons"
+            links={houseLinks}
+            close={closeMenu}
+            open={mobileGroup === "houses"}
+            toggle={() => setMobileGroup((value) => (value === "houses" ? null : "houses"))}
+          />
+          <MobileGroup
+            label="Découvrir les îles"
+            links={islandLinks}
+            close={closeMenu}
+            open={mobileGroup === "islands"}
+            toggle={() => setMobileGroup((value) => (value === "islands" ? null : "islands"))}
+          />
+          <MobileGroup
+            label="Le Carnet Beaux Rivages"
+            links={carnetLinks}
+            close={closeMenu}
+            open={mobileGroup === "carnet"}
+            toggle={() => setMobileGroup((value) => (value === "carnet" ? null : "carnet"))}
+          />
           <Link href="/reserver" onClick={closeMenu}>
             Réserver
           </Link>
