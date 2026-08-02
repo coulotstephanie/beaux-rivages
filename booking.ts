@@ -30,6 +30,8 @@ export type BookingExperienceOption = {
   id: BookingExperienceId;
   label: string;
   description: string;
+  image: string;
+  imageAlt: string;
   price: number;
   duration: string;
   propertySlugs?: string[];
@@ -183,16 +185,11 @@ export const bookingExperiences: BookingExperienceOption[] = [
     label: "Expérience Romance Signature",
     description:
       "Ambiance romantique, boisson au choix, gourmandises, peignoirs et attention personnalisée.",
+    image: "/images/properties/villa-raie-manta/editorial/chambre-romance.png",
+    imageAlt: "Chambre préparée avec des pétales pour l’Expérience Romance Signature",
     price: 149,
     duration: "À l’arrivée",
     propertySlugs: ["villa-raie-manta"],
-  },
-  {
-    id: "anniversaire",
-    label: "Anniversaire sur mesure",
-    description: "Ballons, banderole et décoration accordée à l’âge et aux goûts.",
-    price: 85,
-    duration: "À l’arrivée",
   },
 ];
 
@@ -245,8 +242,6 @@ export function getBookingEstimate(selection: BookingSelection, property: Proper
 
 export function getBookingSuggestions(selection: BookingSelection) {
   const suggestions: BookingExperienceId[] = [];
-  if (selection.attention === "Anniversaire" || selection.attention === "Anniversaire de mariage")
-    suggestions.push("anniversaire");
   if (selection.guests.adults === 2 && selection.guests.children === 0) suggestions.push("romance");
   return [...new Set(suggestions)].filter((id) => !selection.experiences.includes(id)).slice(0, 3);
 }

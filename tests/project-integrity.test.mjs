@@ -272,7 +272,7 @@ test("hospitality services expose seven visual, bookable or quote-ready journeys
   }
   assert.match(catalog, /gallery:/);
   assert.match(booking, /id: "pet"[\s\S]{0,300}price: 25/);
-  assert.match(booking, /id: "romance"[\s\S]{0,300}price: 149/);
+  assert.match(booking, /id: "romance"[\s\S]{0,500}price: 149/);
   assert.match(migration, /enable row level security/);
   assert.match(migration, /revoke all on public\.experience_requests from public, anon/);
   assert.match(requestApi, /requireSameOrigin/);

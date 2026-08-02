@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   bookingExperiences,
   getBookingSuggestions,
@@ -55,6 +56,13 @@ export function BookingExperiences({
           return (
             <label key={experience.id} className={selected ? "is-selected" : ""}>
               <input type="checkbox" checked={selected} onChange={() => toggle(experience.id)} />
+              <Image
+                src={experience.image}
+                alt={experience.imageAlt}
+                width={1070}
+                height={1426}
+                sizes="(max-width: 760px) 100vw, 50vw"
+              />
               <span className="booking-experiences__top">
                 <small>{experience.duration}</small>
                 <span aria-hidden="true">{selected ? "✓" : "+"}</span>
@@ -71,6 +79,13 @@ export function BookingExperiences({
       </div>
       <div className="booking-bespoke-grid" aria-label="Expériences sur mesure">
         <article>
+          <Image
+            src="/images/destination/experiences/demande-mariage-ocean.jpg"
+            alt="Demande en mariage face à l’océan"
+            width={1920}
+            height={1080}
+            sizes="(max-width: 760px) 100vw, 50vw"
+          />
           <small>Organisation sur mesure</small>
           <strong>💍 Demande en mariage</strong>
           <span>
@@ -79,12 +94,20 @@ export function BookingExperiences({
           <Link href="/demande-en-mariage">Demander un devis →</Link>
         </article>
         <article>
-          <small>Organisation sur mesure</small>
-          <strong>🎂 Anniversaire</strong>
+          <Image
+            src="/images/properties/villa-raie-manta/editorial/table-anniversaire.png"
+            alt="Table dressée pour un anniversaire sur mesure"
+            width={1536}
+            height={2048}
+            sizes="(max-width: 760px) 100vw, 50vw"
+          />
+          <small>Expérience sur mesure</small>
+          <strong>🎂 Anniversaire sur mesure (sur demande)</strong>
           <span>
-            Décoration, gâteau, fleurs, gourmandises et attentions entièrement personnalisées.
+            Chaque anniversaire est imaginé après échange avec vous, selon vos envies, votre
+            histoire et les disponibilités du séjour.
           </span>
-          <Link href="/anniversaire">Demander un devis →</Link>
+          <Link href="/anniversaire">Demander un devis personnalisé →</Link>
         </article>
       </div>
     </section>
