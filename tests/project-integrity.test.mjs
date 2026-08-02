@@ -433,8 +433,8 @@ test("booking journey locks the selected house and makes personalization optiona
 
   assert.match(journey, /hasInitialProperty \? 2 : 1/);
   assert.match(journey, /setPropertyLocked\(true\)/);
-  assert.match(journey, /Vous réservez actuellement/);
-  assert.match(journey, /Étape 4 · Facultatif/);
+  assert.match(journey, /🏡 Votre maison/);
+  assert.match(journey, /Toutes ces expériences sont entièrement facultatives/);
   assert.match(journey, /entièrement facultative/);
   assert.match(stepper, /step === 1 && propertyLocked/);
 });

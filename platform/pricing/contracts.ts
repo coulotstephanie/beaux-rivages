@@ -73,6 +73,11 @@ export type PropertyRatePlan = {
   optimizeCalendarGaps?: boolean;
   cleaningFee: number;
   securityDeposit: number;
+  financialPolicy?: {
+    depositPercentage: number;
+    fullPaymentThresholdDays: number;
+    balanceDueDays: number;
+  };
   touristTax: {
     mode: "fixed-per-adult-per-night" | "percentage";
     value: number;

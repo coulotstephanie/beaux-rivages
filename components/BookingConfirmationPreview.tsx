@@ -35,7 +35,7 @@ export function BookingConfirmationPreview({
         <Badge light>Votre séjour ressemblera à cela</Badge>
       </div>
       <div className="booking-confirmation-preview__copy">
-        <p className="eyebrow">Votre projet de séjour</p>
+        <p className="eyebrow">Votre réservation</p>
         <h2 id="preview-title">{property.title}</h2>
         <p>{property.intro}</p>
         <div>

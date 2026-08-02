@@ -131,19 +131,23 @@ export function DirectBookingForm({
         <h4 id="booking-conditions-title">Conditions de réservation</h4>
         {quote.paymentSchedule.fullPaymentRequired ? (
           <p>
-            <strong>Paiement intégral lors de la réservation.</strong> Cette demande intervient
-            moins de 14 jours avant l’arrivée : aucun acompte n’est proposé.
+            <strong>Paiement intégral lors de la réservation.</strong> Cette demande intervient{" "}
+            {quote.paymentSchedule.fullPaymentThresholdDays} jours ou moins avant l’arrivée : aucun
+            acompte n’est proposé.
           </p>
         ) : (
           <p>
-            <strong>Acompte de 30 % à la réservation.</strong> Solde à régler 14 jours avant votre
-            arrivée.
+            <strong>
+              Acompte de {quote.paymentSchedule.depositPercentage} % à la réservation.
+            </strong>{" "}
+            Solde à régler {quote.paymentSchedule.balanceDueDays} jours avant votre arrivée.
           </p>
         )}
         <p>
-          Annulation gratuite pendant 24 heures après la réservation, hors réservations effectuées
-          moins de 14 jours avant l’arrivée. Après ce délai, l’acompte reste acquis. À moins de 14
-          jours de l’arrivée, le séjour est intégralement dû.
+          Annulation gratuite pendant 24 heures après la réservation, hors réservations effectuées{" "}
+          {quote.paymentSchedule.fullPaymentThresholdDays} jours ou moins avant l’arrivée. Après ce
+          délai, l’acompte reste acquis. À {quote.paymentSchedule.fullPaymentThresholdDays} jours ou
+          moins de l’arrivée, le séjour est intégralement dû.
         </p>
       </aside>
       <div className="direct-booking-form__fields">
@@ -212,7 +216,7 @@ export function DirectBookingForm({
         </p>
       )}
       <button type="submit" disabled={status === "submitting" || !sourcesHealthy}>
-        {status === "submitting" ? "Enregistrement sécurisé…" : "Envoyer ma demande"}
+        {status === "submitting" ? "Enregistrement sécurisé…" : "Confirmer ma réservation"}
       </button>
       <small>
         Données utilisées uniquement pour traiter votre séjour. Aucun traceur publicitaire n’est

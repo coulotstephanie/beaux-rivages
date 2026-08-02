@@ -22,6 +22,8 @@ export type BookingQuote = {
     balanceDue: number;
     balanceDueDate: string;
     fullPaymentRequired: boolean;
+    fullPaymentThresholdDays: number;
+    balanceDueDays: number;
   };
   stayRules: { valid: boolean; requiredMinimum: number; maximumNights: number };
 };

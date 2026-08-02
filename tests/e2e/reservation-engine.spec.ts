@@ -74,7 +74,7 @@ test("a traveler sees the real total and receives a clear request reference", as
   await page.locator(".availability-calendar__days button:not([disabled])").nth(4).click();
   await page.getByRole("button", { name: /Continuer/i }).click();
   await page.getByRole("button", { name: /Continuer/i }).click();
-  await page.getByRole("button", { name: /Voir mon séjour/i }).click();
+  await page.getByRole("button", { name: /Voir ma réservation/i }).click();
 
   await expect(page.getByText("755 €", { exact: true }).last()).toBeVisible();
   await expect(page.getByText(/Disponibilité contrôlée/)).toBeVisible();
@@ -83,7 +83,7 @@ test("a traveler sees the real total and receives a clear request reference", as
   await page.getByLabel("Adresse e-mail").fill("camille@example.com");
   await page.getByRole("checkbox", { name: /Conditions Générales de Vente/ }).check();
   await page.getByRole("checkbox", { name: /politique d’annulation/ }).check();
-  await page.getByRole("button", { name: "Envoyer ma demande" }).click();
+  await page.getByRole("button", { name: "Confirmer ma réservation" }).click();
   await expect(page.getByText(/BR-TEST-001/)).toBeVisible();
   await expect(page.getByText(/Aucun paiement n’a été débité/)).toBeVisible();
 });

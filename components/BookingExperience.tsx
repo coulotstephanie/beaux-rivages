@@ -235,15 +235,14 @@ export function BookingExperience({
         <div className="booking-experience__main" ref={contentRef}>
           {propertyLocked && selectedProperty ? (
             <div className="booking-property-thread" role="status">
-              <span>Vous réservez actuellement</span>
-              <strong>{selectedProperty.title}</strong>
+              <strong>🏡 Votre maison : {selectedProperty.title}</strong>
               <small>{selectedProperty.location}</small>
             </div>
           ) : null}
           {step === 1 && (
             <section aria-labelledby="booking-step-title">
               <Heading
-                eyebrow="Étape 1 · Votre maison"
+                eyebrow="Votre maison"
                 title="Quelle atmosphère vous ressemble ?"
                 id="booking-step-title"
               />
@@ -257,7 +256,7 @@ export function BookingExperience({
           {step === 2 && (
             <section aria-labelledby="booking-step-title">
               <Heading
-                eyebrow="Étape 2 · Vos dates"
+                eyebrow="Vos dates"
                 title="Quand souhaitez-vous retrouver les îles ?"
                 id="booking-step-title"
               />
@@ -274,7 +273,7 @@ export function BookingExperience({
           {step === 3 && (
             <section aria-labelledby="booking-step-title">
               <Heading
-                eyebrow="Étape 3 · Les voyageurs"
+                eyebrow="Vos voyageurs"
                 title="Pour qui préparons-nous la maison ?"
                 id="booking-step-title"
               />
@@ -288,13 +287,13 @@ export function BookingExperience({
           {step === 4 && (
             <section aria-labelledby="booking-step-title">
               <Heading
-                eyebrow="Étape 4 · Facultatif"
-                title="Personnalisez votre séjour"
+                eyebrow="Facultatif"
+                title="Envie de rendre votre séjour encore plus mémorable ?"
                 id="booking-step-title"
               />
               <p className="booking-optional-intro">
-                Cette étape est entièrement facultative. Vous pouvez continuer sans ajouter aucune
-                attention ni expérience.
+                Toutes ces expériences sont entièrement facultatives. Vous pouvez poursuivre votre
+                réservation sans en sélectionner.
               </p>
               <StayOptions
                 value={selection.options}
@@ -312,7 +311,7 @@ export function BookingExperience({
           <div className="booking-experience__navigation">
             {step > 2 && (
               <button type="button" onClick={() => changeStep((step - 1) as BookingStep)}>
-                ← Retour
+                ← {step === 3 ? "Modifier mes dates" : "Revenir aux voyageurs"}
               </button>
             )}
             <button
@@ -324,7 +323,7 @@ export function BookingExperience({
               {finalValidation.status === "checking"
                 ? "Vérification…"
                 : step === 4
-                  ? "Voir mon séjour"
+                  ? "Voir ma réservation"
                   : "Continuer"}{" "}
               <span aria-hidden="true">→</span>
             </button>

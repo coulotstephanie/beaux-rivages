@@ -20,6 +20,13 @@ type Setting = {
   sourceUrl: string | null;
 };
 
+type FinancialSettings = {
+  depositPercentage: number;
+  fullPaymentThresholdDays: number;
+  balanceDueDays: number;
+  securityDepositCents: number;
+};
+
 export function FiscalityAdmin({
   token,
   notify,
@@ -28,16 +35,43 @@ export function FiscalityAdmin({
   notify: (value: string) => void;
 }) {
   const [settings, setSettings] = useState<Setting[]>([]);
+  const [financial, setFinancial] = useState<FinancialSettings | null>(null);
   const [busy, setBusy] = useState(true);
   const load = async () => {
     setBusy(true);
     try {
-      const response = await fetch("/api/admin/tourist-tax", {
-        headers: { Authorization: `Bearer ${token}` },
+      const headers = { Authorization: `Bearer ${token}` };
+      const [taxResponse, financialResponse] = await Promise.all([
+        fetch("/api/admin/tourist-tax", { headers }),
+        fetch("/api/admin/financial-settings", { headers }),
+      ]);
+      const [taxBody, financialBody] = await Promise.all([
+        taxResponse.json(),
+        financialResponse.json(),
+      ]);
+      if (!taxResponse.ok) return notify(taxBody.error ?? "Fiscalité indisponible.");
+      if (!financialResponse.ok)
+        return notify(financialBody.error ?? "Paramètres financiers indisponibles.");
+      setSettings(taxBody.settings);
+      setFinancial(financialBody.settings);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const saveFinancial = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!financial) return;
+    setBusy(true);
+    try {
+      const response = await fetch("/api/admin/financial-settings", {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify(financial),
       });
       const body = await response.json();
-      if (!response.ok) return notify(body.error ?? "Fiscalité indisponible.");
-      setSettings(body.settings);
+      if (!response.ok) return notify(body.error ?? "Enregistrement impossible.");
+      setFinancial(body.settings);
+      notify("Règles financières enregistrées.");
     } finally {
       setBusy(false);
     }
@@ -82,6 +116,69 @@ export function FiscalityAdmin({
         Les paramètres sont historisés par logement. Le montant enregistré lors d’une réservation
         reste figé.
       </p>
+      {financial ? (
+        <form className="admin-card" onSubmit={(event) => void saveFinancial(event)}>
+          <h3>Conditions de paiement</h3>
+          <p>Ces règles s’appliquent uniquement aux nouvelles réservations.</p>
+          <label>
+            Acompte à la réservation (%)
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={financial.depositPercentage}
+              onChange={(event) =>
+                setFinancial({ ...financial, depositPercentage: Number(event.target.value) })
+              }
+            />
+          </label>
+          <label>
+            Paiement intégral à partir de J-
+            <input
+              type="number"
+              min="0"
+              max="365"
+              value={financial.fullPaymentThresholdDays}
+              onChange={(event) =>
+                setFinancial({
+                  ...financial,
+                  fullPaymentThresholdDays: Number(event.target.value),
+                })
+              }
+            />
+          </label>
+          <label>
+            Échéance du solde à J-
+            <input
+              type="number"
+              min="0"
+              max="365"
+              value={financial.balanceDueDays}
+              onChange={(event) =>
+                setFinancial({ ...financial, balanceDueDays: Number(event.target.value) })
+              }
+            />
+          </label>
+          <label>
+            Dépôt de garantie (€)
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={financial.securityDepositCents / 100}
+              onChange={(event) =>
+                setFinancial({
+                  ...financial,
+                  securityDepositCents: Math.round(Number(event.target.value) * 100),
+                })
+              }
+            />
+          </label>
+          <button disabled={busy} type="submit">
+            Enregistrer les règles financières
+          </button>
+        </form>
+      ) : null}
       <div className="admin-card-grid">
         {settings.map((setting) => (
           <form

@@ -74,7 +74,7 @@ export const reservationQuoteSchema = z
     depositDueCents: cents.default(0),
     balanceDueCents: cents,
     balanceDueDate: isoDate,
-    depositPercentage: z.union([z.literal(30), z.literal(100)]),
+    depositPercentage: z.number().int().min(0).max(100),
     fullPaymentRequired: z.boolean(),
     pricingVersion: z.string().min(1).max(50),
     paymentMethod: z.enum(["bank_transfer", "holiday_vouchers", "card"]),

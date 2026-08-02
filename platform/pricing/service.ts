@@ -159,7 +159,12 @@ export async function calculateQuote(input: QuoteRequest) {
   const optionsTotal = optionLines.reduce((sum, line) => sum + line.total, 0);
   const experiencesTotal = experienceLines.reduce((sum, line) => sum + line.total, 0);
   const total = accommodation + plan.cleaningFee + touristTax + optionsTotal + experiencesTotal;
-  const paymentSchedule = buildPaymentSchedule(input.arrival, Math.round(total * 100));
+  const paymentSchedule = buildPaymentSchedule(
+    input.arrival,
+    Math.round(total * 100),
+    new Date(),
+    plan.financialPolicy,
+  );
   return {
     propertySlug: input.propertySlug,
     currency: plan.currency,

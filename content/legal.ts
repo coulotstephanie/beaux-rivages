@@ -193,14 +193,14 @@ export const legalDocuments = {
       ],
       [
         "Dans les 24 heures",
-        "L’annulation est gratuite et l’acompte intégralement remboursé lorsqu’elle intervient dans les vingt-quatre heures suivant la réservation. Cette faculté ne s’applique pas aux réservations effectuées moins de quatorze jours avant l’arrivée.",
+        "L’annulation est gratuite et l’acompte intégralement remboursé lorsqu’elle intervient dans les vingt-quatre heures suivant la réservation. Cette faculté ne s’applique pas aux réservations effectuées quinze jours ou moins avant l’arrivée.",
       ],
       [
         "Après 24 heures",
         "L’acompte de 30 % reste définitivement acquis à Beaux Rivages et n’est plus remboursable, sauf obligation légale contraire.",
       ],
       [
-        "À moins de 14 jours de l’arrivée",
+        "À 15 jours ou moins de l’arrivée",
         "Le séjour est intégralement dû. Le voyageur reste redevable de 100 % du montant de la réservation et aucun remboursement n’est effectué, sauf obligation légale contraire.",
       ],
       [

@@ -36,6 +36,7 @@ export class SupabasePricingPlanReader {
       guardrailsResult,
       touristTaxResult,
       pricingRulesResult,
+      financialSettingsResult,
     ] = await Promise.all([
       client
         .from("rates")
@@ -67,6 +68,13 @@ export class SupabasePricingPlanReader {
         .select("allowed_arrival_weekdays,optimize_calendar_gaps")
         .eq("property_id" as "id", property.id)
         .maybeSingle(),
+      client
+        .from("financial_settings" as "properties")
+        .select(
+          "deposit_percentage,full_payment_threshold_days,balance_due_days,security_deposit_cents",
+        )
+        .filter("id" as "slug", "eq", "true")
+        .maybeSingle(),
     ]);
     if (ratesResult.error) throw new Error(`PRICING_RATES_FAILED:${ratesResult.error.code}`);
     if (optionsResult.error) throw new Error(`PRICING_OPTIONS_FAILED:${optionsResult.error.code}`);
@@ -84,6 +92,8 @@ export class SupabasePricingPlanReader {
     // schema. Its absence must not disable every quote.
     if (pricingRulesResult.error && pricingRulesResult.error.code !== "PGRST205")
       throw new Error(`PRICING_RULES_FAILED:${pricingRulesResult.error.code}`);
+    if (financialSettingsResult.error && financialSettingsResult.error.code !== "PGRST205")
+      throw new Error(`FINANCIAL_SETTINGS_FAILED:${financialSettingsResult.error.code}`);
 
     const rates = ratesResult.data;
     const baseRate = rates.find((rate) => !rate.season_id && rate.weekdays.includes(1));
@@ -195,7 +205,35 @@ export class SupabasePricingPlanReader {
             } | null)
         )?.optimize_calendar_gaps ?? true,
       cleaningFee: baseRate.cleaning_fee_cents / 100,
-      securityDeposit: baseRate.security_deposit_cents / 100,
+      securityDeposit:
+        financialSettingsResult.error || !financialSettingsResult.data
+          ? baseRate.security_deposit_cents / 100
+          : Number(
+              (
+                financialSettingsResult.data as unknown as {
+                  security_deposit_cents: number;
+                }
+              ).security_deposit_cents,
+            ) / 100,
+      financialPolicy: financialSettingsResult.error
+        ? undefined
+        : {
+            depositPercentage: Number(
+              (financialSettingsResult.data as unknown as { deposit_percentage: number } | null)
+                ?.deposit_percentage ?? 30,
+            ),
+            fullPaymentThresholdDays: Number(
+              (
+                financialSettingsResult.data as unknown as {
+                  full_payment_threshold_days: number;
+                } | null
+              )?.full_payment_threshold_days ?? 15,
+            ),
+            balanceDueDays: Number(
+              (financialSettingsResult.data as unknown as { balance_due_days: number } | null)
+                ?.balance_due_days ?? 14,
+            ),
+          },
       touristTax: touristTaxResult.data
         ? {
             enabled: touristTaxResult.data.enabled,

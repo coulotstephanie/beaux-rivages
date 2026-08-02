@@ -96,21 +96,27 @@ test("the reservation payload rejects inconsistent financial totals", () => {
   assert.equal(result.success, false);
 });
 
-test("payment schedule requests 30% then the balance fourteen days before arrival", () => {
-  const schedule = buildPaymentSchedule("2026-10-20", 100000, new Date("2026-10-01T08:00:00.000Z"));
+test("payment schedule requests 30% at J-16 then the balance fourteen days before arrival", () => {
+  const schedule = buildPaymentSchedule("2026-10-17", 100000, new Date("2026-10-01T08:00:00.000Z"));
   assert.equal(schedule.depositDueCents, 30000);
   assert.equal(schedule.balanceDueCents, 70000);
-  assert.equal(schedule.balanceDueDate, "2026-10-06");
+  assert.equal(schedule.balanceDueDate, "2026-10-03");
   assert.equal(schedule.fullPaymentRequired, false);
 });
 
-test("payment schedule requests the full amount for a last-minute stay", () => {
-  const schedule = buildPaymentSchedule("2026-10-10", 100000, new Date("2026-10-01T08:00:00.000Z"));
-  assert.equal(schedule.depositDueCents, 100000);
-  assert.equal(schedule.balanceDueCents, 0);
-  assert.equal(schedule.depositPercentage, 100);
-  assert.equal(schedule.fullPaymentRequired, true);
-});
+for (const [label, arrival] of [
+  ["J-15", "2026-10-16"],
+  ["J-7", "2026-10-08"],
+  ["le jour même", "2026-10-01"],
+] as const) {
+  test(`payment schedule requests the full amount at ${label}`, () => {
+    const schedule = buildPaymentSchedule(arrival, 100000, new Date("2026-10-01T08:00:00.000Z"));
+    assert.equal(schedule.depositDueCents, 100000);
+    assert.equal(schedule.balanceDueCents, 0);
+    assert.equal(schedule.depositPercentage, 100);
+    assert.equal(schedule.fullPaymentRequired, true);
+  });
+}
 
 test("the SQL foundation enforces transactional occupancy conflicts and RLS", () => {
   assert.match(migration, /exclude using gist/);

@@ -29,6 +29,9 @@ export type ReservationEmailInput = {
   balanceDue?: number;
   balanceDueDate?: string;
   fullPaymentRequired?: boolean;
+  depositPercentage?: number;
+  fullPaymentThresholdDays?: number;
+  balanceDueDays?: number;
   paymentMethod?: "bank_transfer" | "holiday_vouchers" | "card";
   guest: { firstName: string; lastName: string; email: string; phone?: string };
   options?: string[];
@@ -75,7 +78,7 @@ function scheduleSummary(input: ReservationEmailInput) {
     currency: "EUR",
   });
   if (input.fullPaymentRequired)
-    return `<p><strong>Paiement exigé à la réservation : ${deposit}</strong><br>Cette réservation intervient moins de 14 jours avant l’arrivée.</p>`;
+    return `<p><strong>Paiement exigé à la réservation : ${deposit}</strong><br>Votre arrivée ayant lieu dans ${input.fullPaymentThresholdDays ?? 15} jours ou moins, le règlement intégral du séjour est demandé lors de la réservation.</p>`;
   const balance = (input.balanceDue ?? 0).toLocaleString("fr-FR", {
     style: "currency",
     currency: "EUR",
@@ -85,7 +88,7 @@ function scheduleSummary(input: ReservationEmailInput) {
         new Date(`${input.balanceDueDate}T12:00:00`),
       )
     : "à confirmer";
-  return `<p><strong>Acompte de 30 % : ${deposit}</strong><br>Solde : ${balance}<br>Échéance du solde : ${escapeHtml(due)}</p>`;
+  return `<p><strong>Acompte de ${input.depositPercentage ?? 30} % : ${deposit}</strong><br>Solde : ${balance}<br>Échéance du solde : ${escapeHtml(due)}</p>`;
 }
 
 export function travelerRequestEmail(input: ReservationEmailInput) {

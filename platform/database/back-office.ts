@@ -825,7 +825,11 @@ export class SupabaseBackOfficeRepository {
       if (!calculated.stayRules.valid) throw new Error("STAY_RULES_INVALID");
       const calculatedTotalCents = Math.round(calculated.total * 100);
       const totalCents = input.totalCents ?? calculatedTotalCents;
-      const schedule = buildPaymentSchedule(input.arrival, totalCents);
+      const schedule = buildPaymentSchedule(input.arrival, totalCents, new Date(), {
+        depositPercentage: calculated.paymentSchedule.depositPercentage,
+        fullPaymentThresholdDays: calculated.paymentSchedule.fullPaymentThresholdDays,
+        balanceDueDays: calculated.paymentSchedule.balanceDueDays,
+      });
       const services = reservationServiceItems(calculated.optionLines, calculated.experienceLines);
       const quote = {
         adults: input.adults,

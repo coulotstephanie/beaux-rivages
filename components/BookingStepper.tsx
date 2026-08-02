@@ -16,7 +16,7 @@ export function BookingStepper({
   onSelect: (step: BookingStep) => void;
 }) {
   return (
-    <nav className="booking-stepper" aria-label="Étapes de réservation">
+    <nav className="booking-stepper" aria-label="Progression de votre réservation">
       <ol>
         {labels.map((label, index) => {
           const step = (index + 1) as BookingStep;
@@ -31,7 +31,7 @@ export function BookingStepper({
                 onClick={() => onSelect(step)}
                 aria-current={current === step ? "step" : undefined}
               >
-                <span>{current > step ? "✓" : `0${step}`}</span>
+                <span aria-hidden="true">{current > step ? "✓" : "•"}</span>
                 <strong>{label}</strong>
               </button>
             </li>
