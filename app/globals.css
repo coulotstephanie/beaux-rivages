@@ -1331,7 +1331,8 @@ body.menu-open { overflow: hidden; }
 }
 .premium-property-card:hover .property-card__arrow { transform: none; }
 .premium-property-card .property-copy { flex:1; padding:32px; display:flex; flex-direction:column; }
-.property-card__facts { margin:1.4rem 0 0; padding:0; display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; list-style:none; margin-top:auto; }
+.property-card__footer { margin-top:auto; }
+.property-card__facts { margin:1.4rem 0 0; padding:0; display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; list-style:none; }
 .property-card__facts li { padding:.7rem; display:grid; gap:.1rem; border:1px solid var(--line); }
 .property-card__facts strong { color:var(--deep); font:400 1.15rem var(--font-serif); }
 .property-card__facts span { color:var(--muted); font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; }

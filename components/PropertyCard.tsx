@@ -43,21 +43,26 @@ export function PropertyCard({
         <p className="eyebrow">Maison Beaux Rivages</p>
         <h3>{title}</h3>
         <p>{subtitle}</p>
-        {facts.length > 0 ? (
-          <ul className="property-card__facts" aria-label={`Informations essentielles — ${title}`}>
-            {facts.map((fact) => (
-              <li key={fact.label}>
-                <strong>{fact.value}</strong>
-                <span>{fact.label}</span>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-        <div className="property-card__actions">
-          <Link href={href} className="text-link">
-            Découvrir <span aria-hidden="true">→</span>
-          </Link>
-          {bookingHref ? <Link href={bookingHref}>Réserver</Link> : null}
+        <div className="property-card__footer">
+          {facts.length > 0 ? (
+            <ul
+              className="property-card__facts"
+              aria-label={`Informations essentielles — ${title}`}
+            >
+              {facts.map((fact) => (
+                <li key={fact.label}>
+                  <strong>{fact.value}</strong>
+                  <span>{fact.label}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="property-card__actions">
+            <Link href={href} className="text-link">
+              Découvrir <span aria-hidden="true">→</span>
+            </Link>
+            {bookingHref ? <Link href={bookingHref}>Réserver</Link> : null}
+          </div>
         </div>
       </div>
     </article>
