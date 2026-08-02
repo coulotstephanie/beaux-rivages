@@ -5,6 +5,7 @@ import Image from "next/image";
 import {
   bookingExperiences,
   getBookingSuggestions,
+  isExperienceAvailableForProperty,
   type BookingExperienceId,
   type BookingSelection,
 } from "@/booking";
@@ -47,35 +48,32 @@ export function BookingExperiences({
         </div>
       )}
       <div className="booking-experiences__grid">
-        {bookingExperiences.map((experience) => {
-          const selected = selection.experiences.includes(experience.id);
-          const especiallySuited =
-            !experience.propertySlugs ||
-            !selection.propertySlug ||
-            experience.propertySlugs.includes(selection.propertySlug);
-          return (
-            <label key={experience.id} className={selected ? "is-selected" : ""}>
-              <input type="checkbox" checked={selected} onChange={() => toggle(experience.id)} />
-              <Image
-                src={experience.image}
-                alt={experience.imageAlt}
-                width={1070}
-                height={1426}
-                sizes="(max-width: 760px) 100vw, 50vw"
-              />
-              <span className="booking-experiences__top">
-                <small>{experience.duration}</small>
-                <span aria-hidden="true">{selected ? "✓" : "+"}</span>
-              </span>
-              <strong>{experience.label}</strong>
-              <span>{experience.description}</span>
-              <small>
-                À partir de {experience.price} €
-                {especiallySuited ? "" : " · autre maison conseillée"}
-              </small>
-            </label>
-          );
-        })}
+        {bookingExperiences
+          .filter((experience) =>
+            isExperienceAvailableForProperty(experience.id, selection.propertySlug),
+          )
+          .map((experience) => {
+            const selected = selection.experiences.includes(experience.id);
+            return (
+              <label key={experience.id} className={selected ? "is-selected" : ""}>
+                <input type="checkbox" checked={selected} onChange={() => toggle(experience.id)} />
+                <Image
+                  src={experience.image}
+                  alt={experience.imageAlt}
+                  width={1070}
+                  height={1426}
+                  sizes="(max-width: 760px) 100vw, 50vw"
+                />
+                <span className="booking-experiences__top">
+                  <small>{experience.duration}</small>
+                  <span aria-hidden="true">{selected ? "✓" : "+"}</span>
+                </span>
+                <strong>{experience.label}</strong>
+                <span>{experience.description}</span>
+                <small>À partir de {experience.price} €</small>
+              </label>
+            );
+          })}
       </div>
       <div className="booking-bespoke-grid" aria-label="Expériences sur mesure">
         <article>

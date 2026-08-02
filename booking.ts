@@ -193,6 +193,18 @@ export const bookingExperiences: BookingExperienceOption[] = [
   },
 ];
 
+export function isExperienceAvailableForProperty(
+  experienceId: BookingExperienceId,
+  propertySlug: string | null,
+) {
+  const experience = bookingExperiences.find((item) => item.id === experienceId);
+  return Boolean(
+    experience &&
+    (!experience.propertySlugs ||
+      (propertySlug !== null && experience.propertySlugs.includes(propertySlug))),
+  );
+}
+
 export const attentions: AttentionType[] = [
   "Anniversaire",
   "Demande en mariage",
@@ -243,5 +255,11 @@ export function getBookingEstimate(selection: BookingSelection, property: Proper
 export function getBookingSuggestions(selection: BookingSelection) {
   const suggestions: BookingExperienceId[] = [];
   if (selection.guests.adults === 2 && selection.guests.children === 0) suggestions.push("romance");
-  return [...new Set(suggestions)].filter((id) => !selection.experiences.includes(id)).slice(0, 3);
+  return [...new Set(suggestions)]
+    .filter(
+      (id) =>
+        !selection.experiences.includes(id) &&
+        isExperienceAvailableForProperty(id, selection.propertySlug),
+    )
+    .slice(0, 3);
 }

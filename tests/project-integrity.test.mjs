@@ -422,9 +422,21 @@ test("booking review prevents invalid navigation and capacity overflow", () => {
   const stepper = read("components/BookingStepper.tsx");
   const guests = read("components/GuestSelector.tsx");
   assert.match(journey, /maxAccessible/);
-  assert.match(stepper, /disabled=\{step > maxAccessible\}/);
+  assert.match(stepper, /disabled=\{step > maxAccessible \|\| \(step === 1 && propertyLocked\)\}/);
   assert.match(journey, /selectedProperty\?\.capacity/);
   assert.match(guests, /countedGuests >= maxGuests/);
+});
+
+test("booking journey locks the selected house and makes personalization optional", () => {
+  const journey = read("components/BookingExperience.tsx");
+  const stepper = read("components/BookingStepper.tsx");
+
+  assert.match(journey, /hasInitialProperty \? 2 : 1/);
+  assert.match(journey, /setPropertyLocked\(true\)/);
+  assert.match(journey, /Vous réservez actuellement/);
+  assert.match(journey, /Étape 4 · Facultatif/);
+  assert.match(journey, /entièrement facultative/);
+  assert.match(stepper, /step === 1 && propertyLocked/);
 });
 
 test("public review claims stay sourced and the direct request stays payment-free", () => {

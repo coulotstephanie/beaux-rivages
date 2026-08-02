@@ -9,6 +9,7 @@ import type {
   GuestCounts,
   StayOptionId,
 } from "@/booking";
+import { isExperienceAvailableForProperty } from "@/booking";
 import { emailBookingGateway } from "@/booking-submission";
 import { properties } from "@/data";
 import { AvailabilityCalendar } from "./AvailabilityCalendar";
@@ -50,18 +51,27 @@ export function BookingExperience({
   initialOptions?: StayOptionId[];
   initialExperiences?: string[];
 }) {
+  const hasInitialProperty = properties.some((property) => property.slug === initialProperty);
   const queriedExperiences = initialExperiences
     .map((slug) => experienceQueryMap[slug])
     .filter((id): id is BookingExperienceId => Boolean(id));
-  const [step, setStep] = useState<BookingStep>(1);
-  const [maxAccessible, setMaxAccessible] = useState<BookingStep>(1);
+  const [step, setStep] = useState<BookingStep>(hasInitialProperty ? 2 : 1);
+  const [maxAccessible, setMaxAccessible] = useState<BookingStep>(hasInitialProperty ? 2 : 1);
+  const [propertyLocked, setPropertyLocked] = useState(hasInitialProperty);
   const [selection, setSelection] = useState<BookingSelection>({
     ...initialSelection,
-    propertySlug: properties.some((property) => property.slug === initialProperty)
-      ? (initialProperty ?? null)
-      : null,
+    propertySlug: hasInitialProperty ? (initialProperty ?? null) : null,
     options: initialOptions,
-    experiences: [...new Set(queriedExperiences)],
+    experiences: [
+      ...new Set(
+        queriedExperiences.filter((id) =>
+          isExperienceAvailableForProperty(
+            id,
+            hasInitialProperty ? (initialProperty ?? null) : null,
+          ),
+        ),
+      ),
+    ],
     attentionMessage: "",
   });
   const [preview, setPreview] = useState(false);
@@ -116,6 +126,7 @@ export function BookingExperience({
   }, [step, selection.propertySlug]);
 
   const changeStep = (next: BookingStep) => {
+    if (propertyLocked && next === 1) return;
     setStep(next);
     setPreview(false);
     requestAnimationFrame(() =>
@@ -139,7 +150,14 @@ export function BookingExperience({
     setSelection((current) => {
       const adults = Math.min(current.guests.adults, capacity);
       const children = Math.min(current.guests.children, Math.max(0, capacity - adults));
-      return { ...current, propertySlug, guests: { ...current.guests, adults, children } };
+      return {
+        ...current,
+        propertySlug,
+        guests: { ...current.guests, adults, children },
+        experiences: current.experiences.filter((id) =>
+          isExperienceAvailableForProperty(id, propertySlug),
+        ),
+      };
     });
   };
   const updateOptions = (options: StayOptionId[]) =>
@@ -152,6 +170,7 @@ export function BookingExperience({
   const continueJourney = async () => {
     if (!canContinue) return;
     if (step < 4) {
+      if (step === 1) setPropertyLocked(true);
       const next = (step + 1) as BookingStep;
       setMaxAccessible((current) => Math.max(current, next) as BookingStep);
       changeStep(next);
@@ -204,11 +223,23 @@ export function BookingExperience({
     <>
       <div className="booking-stepper-wrap">
         <Container>
-          <BookingStepper current={step} maxAccessible={maxAccessible} onSelect={changeStep} />
+          <BookingStepper
+            current={step}
+            maxAccessible={maxAccessible}
+            propertyLocked={propertyLocked}
+            onSelect={changeStep}
+          />
         </Container>
       </div>
       <Container className="booking-experience">
         <div className="booking-experience__main" ref={contentRef}>
+          {propertyLocked && selectedProperty ? (
+            <div className="booking-property-thread" role="status">
+              <span>Vous réservez actuellement</span>
+              <strong>{selectedProperty.title}</strong>
+              <small>{selectedProperty.location}</small>
+            </div>
+          ) : null}
           {step === 1 && (
             <section aria-labelledby="booking-step-title">
               <Heading
@@ -257,10 +288,14 @@ export function BookingExperience({
           {step === 4 && (
             <section aria-labelledby="booking-step-title">
               <Heading
-                eyebrow="Étape 4 · Personnalisez votre séjour"
-                title="Les attentions qui donnent une autre dimension au séjour."
+                eyebrow="Étape 4 · Facultatif"
+                title="Personnalisez votre séjour"
                 id="booking-step-title"
               />
+              <p className="booking-optional-intro">
+                Cette étape est entièrement facultative. Vous pouvez continuer sans ajouter aucune
+                attention ni expérience.
+              </p>
               <StayOptions
                 value={selection.options}
                 guests={selection.guests}
@@ -275,7 +310,7 @@ export function BookingExperience({
             </section>
           )}
           <div className="booking-experience__navigation">
-            {step > 1 && (
+            {step > 2 && (
               <button type="button" onClick={() => changeStep((step - 1) as BookingStep)}>
                 ← Retour
               </button>
