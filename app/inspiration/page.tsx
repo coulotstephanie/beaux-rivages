@@ -49,6 +49,8 @@ export default function InspirationPage() {
             eyebrow: "Respirer",
             title: "Partir tôt. Suivre la lumière.",
             copy: "Ré se découvre entre deux silences.",
+            href: "/destinations/ile-de-re",
+            linkLabel: "Découvrir l’Île de Ré",
             credit: "Angelo Brathot · domaine public",
             source:
               "https://commons.wikimedia.org/wiki/File:Port_de_St_Martin-de-R%C3%A9_T_%2845053203774%29.jpg",
@@ -59,6 +61,8 @@ export default function InspirationPage() {
             eyebrow: "Regarder",
             title: "Laisser l’océan décider.",
             copy: "Oléron, plus vaste. Plus sauvage.",
+            href: "/destinations/ile-d-oleron",
+            linkLabel: "Découvrir l’Île d’Oléron",
             credit: "Dimimis · CC BY-SA 3.0",
             source: "https://commons.wikimedia.org/wiki/File:Pointe_de_Chassiron.jpg",
           },
@@ -68,6 +72,8 @@ export default function InspirationPage() {
             eyebrow: "S’échapper",
             title: "Une ville tournée vers le large.",
             copy: "La Rochelle à pied, du marché jusqu’aux tours.",
+            href: "/destinations/la-rochelle",
+            linkLabel: "Découvrir La Rochelle",
             credit: "Jebulon · CC0",
             source: "https://commons.wikimedia.org/wiki/File:Entrance_La_Rochelle_old_harbor.jpg",
           },
@@ -87,8 +93,8 @@ export default function InspirationPage() {
               <p className="eyebrow light">{scene.eyebrow}</p>
               <h2>{scene.title}</h2>
               <p>{scene.copy}</p>
-              <Link href="/carnet">
-                Ouvrir le Carnet <span aria-hidden="true">→</span>
+              <Link href={scene.href}>
+                {scene.linkLabel} <span aria-hidden="true">→</span>
               </Link>
             </div>
             <a
@@ -146,7 +152,7 @@ export default function InspirationPage() {
             « Gardez toujours un moment sans réservation. Les îles savent très bien proposer la
             suite. »
           </blockquote>
-          <Link href="/carnet">Voir leurs bonnes adresses →</Link>
+          <Link href="/carnet#guides">Voir leurs bonnes adresses →</Link>
           <Link href="/nos-petits-bonheurs">Découvrir leurs petits bonheurs →</Link>
         </div>
         <Image
