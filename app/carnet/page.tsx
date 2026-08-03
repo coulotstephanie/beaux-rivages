@@ -93,16 +93,19 @@ export default function CarnetPage() {
       </section>
       <section className="carnet-small-happiness shell">
         <Image
-          src={siteMedia.destination.reMarketFruit}
-          alt="Fruits colorés du marché choisis par Stéphanie et Bruno"
+          src="/images/destination/famille-coucher-soleil.jpg"
+          alt="Moment partagé en famille au coucher du soleil sur l’océan"
           width={720}
           height={720}
         />
         <div>
-          <p className="eyebrow">Le carnet personnel</p>
+          <p className="eyebrow">Anecdotes &amp; traditions</p>
           <h2>Ces petits bonheurs que nous avons envie de partager avec vous.</h2>
-          <p>Nos rituels, nos habitudes et ces adresses où nous revenons avec le même plaisir.</p>
-          <Link href="/nos-petits-bonheurs">Entrer dans notre quotidien →</Link>
+          <p>
+            Non pas un second guide d’adresses, mais les souvenirs, les rituels et les scènes
+            simples qui racontent notre vie sur les îles.
+          </p>
+          <Link href="/nos-petits-bonheurs">Lire nos histoires personnelles →</Link>
         </div>
       </section>
       <PremiumPlaceCollection />

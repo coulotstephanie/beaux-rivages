@@ -101,8 +101,9 @@ export default async function NosPetitsBonheursPage() {
           <p className="eyebrow light">Le carnet personnel</p>
           <h1>Les petits bonheurs de Stéphanie &amp; Bruno</h1>
           <p>
-            Nos habitudes, nos rituels et ces adresses où nous revenons avec le même plaisir. Pas un
-            guide touristique : quelques fragments de notre vraie vie sur l’île.
+            Des souvenirs, des traditions et quelques fragments de notre vraie vie sur l’île. Ici,
+            nous ne dressons pas une liste d’adresses : nous vous racontons les moments que nous
+            aimons vivre et partager.
           </p>
         </div>
       </section>
@@ -116,11 +117,12 @@ export default async function NosPetitsBonheursPage() {
       </nav>
 
       <section className="small-happiness-intro shell">
-        <p className="eyebrow">Nos habitudes sur l’île</p>
+        <p className="eyebrow">Notre journal des îles</p>
         <h2>Les souvenirs commencent souvent par une chose toute simple.</h2>
         <p>
-          Une fraise au marché, une table face au port, une pause après le vélo. Nous partageons ici
-          les moments que nous aimons vraiment — ceux que nous conseillerions à nos proches.
+          Une première fraise, une table face au port, une pause après le vélo ou un ciel rempli
+          d’ailes de kitesurf. Chaque chapitre raconte une émotion vécue, loin du format d’un guide
+          pratique.
         </p>
       </section>
 
@@ -150,7 +152,7 @@ export default async function NosPetitsBonheursPage() {
               ))}
             </div>
             <div className="small-happiness-story__copy">
-              <p className="eyebrow">Petit bonheur n° {String(index + 1).padStart(2, "0")}</p>
+              <p className="eyebrow">Souvenir n° {String(index + 1).padStart(2, "0")}</p>
               <h2>{entry.title}</h2>
               <h3>Notre anecdote</h3>
               <p>{entry.anecdote}</p>
