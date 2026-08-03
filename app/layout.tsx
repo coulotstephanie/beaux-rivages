@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { AmbientWaves } from "@/components/AmbientWaves";
 import { PremiumUX } from "@/components/PremiumUX";
 import { Analytics } from "@/components/Analytics";
 import { AppProviders } from "@/components/providers";
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             {children}
           </div>
           <PremiumUX />
+          <AmbientWaves />
           <Analytics />
           <LanguageExperience />
         </AppProviders>

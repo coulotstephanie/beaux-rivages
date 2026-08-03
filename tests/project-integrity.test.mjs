@@ -114,10 +114,12 @@ test("all property galleries expose practical spaces in a logical sequence", () 
   assert.match(nid, /\/\/ Salle d’eau et toilettes[\s\S]*\.\.\.airbnbBathroom/);
 });
 
-test("the public layout contains no ambient music player", () => {
+test("the public layout offers optional ocean waves without restoring classical music", () => {
   const layout = read("app/layout.tsx");
-  assert.doesNotMatch(layout, /AmbientSound/);
-  assert.ok(!existsSync(join(root, "components/AmbientSound.tsx")));
+  const waves = read("components/AmbientWaves.tsx");
+  assert.match(layout, /AmbientWaves/);
+  assert.match(waves, /Écouter les vagues/);
+  assert.doesNotMatch(waves, /vivaldi|Musique classique/i);
 });
 
 test("the homepage uses a reliable premium hero image", () => {
