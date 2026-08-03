@@ -25,6 +25,19 @@ type Chapter = {
 const villaChapters: readonly Chapter[] = [
   {
     number: "01",
+    eyebrow: "Face à l’océan",
+    title: "L’apéritif prend place devant la mer.",
+    text: "Depuis le salon à l’étage, la vue devient le décor naturel des retrouvailles. On ouvre les fenêtres, on prépare quelques douceurs et l’apéritif se prolonge face à l’océan.",
+    quote: "La vue mer comme invitée à chaque moment partagé.",
+    galleryLabel: "Explorer le salon face à l’océan",
+    images: [
+      villaRaieMantaMedia.livingRoom[3],
+      villaRaieMantaMedia.livingRoom[0],
+      villaRaieMantaMedia.livingRoom[4],
+    ],
+  },
+  {
+    number: "02",
     eyebrow: "L’arrivée",
     title: "L’océan donne immédiatement le ton.",
     text: "À Rivedoux-Plage, l’arrivée par le pont ouvre déjà le séjour sur l’horizon. Puis la Villa se découvre à quelques pas du rivage, tournée vers la lumière.",
@@ -36,7 +49,7 @@ const villaChapters: readonly Chapter[] = [
     ],
   },
   {
-    number: "02",
+    number: "03",
     eyebrow: "La maison se réveille",
     title: "La maison retrouve son rythme.",
     text: "Dans le salon, les enfants jouent, les retrouvailles se prolongent et chacun prend le temps de s’installer. La Villa devient immédiatement une maison à vivre.",
@@ -46,19 +59,6 @@ const villaChapters: readonly Chapter[] = [
       villaRaieMantaMedia.livingRoom[1],
       villaRaieMantaMedia.livingRoom[2],
       villaRaieMantaMedia.livingRoom[5],
-    ],
-  },
-  {
-    number: "03",
-    eyebrow: "Face à l’océan",
-    title: "L’apéritif prend place devant la mer.",
-    text: "Depuis le salon à l’étage, la vue devient le décor naturel des retrouvailles. On ouvre les fenêtres, on prépare quelques douceurs et l’apéritif se prolonge face à l’océan.",
-    quote: "La vue mer comme invitée à chaque moment partagé.",
-    galleryLabel: "Explorer le salon face à l’océan",
-    images: [
-      villaRaieMantaMedia.livingRoom[3],
-      villaRaieMantaMedia.livingRoom[0],
-      villaRaieMantaMedia.livingRoom[4],
     ],
   },
   {
