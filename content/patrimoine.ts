@@ -308,8 +308,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Fier d'Ars, Ars-en-Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/fier-d-ars-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie du Fier d’Ars fournie par Stéphanie",
+        src: "/images/destination/patrimoine/fier-d-ars-vue-aerienne.jpg",
+        alt: "Vue aérienne du Fier d’Ars et de ses marais façonnés par les chenaux",
       },
     ],
     source: {
@@ -343,8 +343,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Plage de Montamer, Sainte-Marie-de-Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/ecluses-poissons-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie des écluses à poissons fournie par Stéphanie",
+        src: "/images/destination/patrimoine/ecluse-a-poissons-ile-de-re.jpg",
+        alt: "Écluse à poissons en pierre découverte par la marée sur l’Île de Ré",
       },
     ],
     source: {

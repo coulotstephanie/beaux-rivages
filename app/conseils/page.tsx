@@ -16,8 +16,8 @@ const recommendationImages: Record<string, { src: string; alt: string }> = {
     alt: "Sélection de pâtisseries de Nina Métayer à Rivedoux-Plage",
   },
   "amore-di-nonna": {
-    src: "/images/properties/nid-d-ete/authentique/plateau-charcuterie.jpg",
-    alt: "Sélection généreuse de charcuteries à partager",
+    src: "/images/destination/guides/amore-di-nonna-specialites.webp",
+    alt: "Spécialités italiennes préparées par Amore di Nonna à Rivedoux-Plage",
   },
   "huitres-et-ma-re": {
     src: "/images/destination/huitres-vin-blanc.jpg",
@@ -67,23 +67,19 @@ export default function HostAdvicePage() {
         </div>
       </section>
       <section className="host-magazine shell">
-        {hostRecommendations.map((recommendation, index) => {
+        {hostRecommendations.map((recommendation) => {
           const image = recommendationImages[recommendation.slug] ?? {
             src: siteMedia.destination.food,
             alt: `Illustration de ${recommendation.name}`,
           };
           return (
-            <article key={recommendation.slug} className={index % 4 === 0 ? "is-featured" : ""}>
+            <article key={recommendation.slug}>
               <div className="host-magazine__media">
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
-                  sizes={
-                    index % 4 === 0
-                      ? "(max-width: 800px) 100vw, 60vw"
-                      : "(max-width: 800px) 100vw, 32vw"
-                  }
+                  sizes="(max-width: 800px) 100vw, 50vw"
                   loading="lazy"
                   quality={85}
                 />

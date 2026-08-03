@@ -3650,17 +3650,20 @@ body.menu-open { overflow: hidden; }
 .arrival-openings article a { color: var(--deep); font-weight: 700; }
 .arrival-map-section { padding: clamp(5rem,9vw,9rem) 0; color: white; background: var(--deep); }
 .arrival-map-section h2 { margin: .6rem 0 2rem; font-family: var(--font-serif); font-size: clamp(2.3rem,5vw,4.5rem); font-weight: 400; }
-.host-magazine { display: grid; grid-template-columns: repeat(2,1fr); gap: clamp(1rem,3vw,2rem); }
-.host-magazine article { display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; background: var(--sand); }
-.host-magazine article:nth-child(3n+1) { grid-column: 1 / -1; }
-.host-magazine__media { min-height: 300px; position: relative; overflow: hidden; }
+.host-magazine { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(1.25rem,3vw,2.25rem); align-items: stretch; }
+.host-magazine article { min-width: 0; min-height: 100%; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); background: var(--sand); }
+.host-magazine__media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
 .host-magazine__media img { object-fit: cover; transition: transform .7s ease; }
 .host-magazine article:hover img { transform: scale(1.025); }
-.host-magazine__copy { padding: clamp(1.5rem,4vw,3rem); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
-.host-magazine__copy h2 { margin: .6rem 0 1rem; font-family: var(--font-serif); font-size: clamp(1.8rem,3vw,3rem); font-weight: 400; }
+.host-magazine__copy { flex: 1; padding: clamp(1.8rem,4vw,3.25rem); display: flex; flex-direction: column; align-items: flex-start; }
+.host-magazine__copy > p:first-child { min-height: 2.4em; margin: 0; color: var(--gold-text); font-size: .7rem; font-weight: 700; letter-spacing: .1em; line-height: 1.45; text-transform: uppercase; }
+.host-magazine__copy h2 { min-height: 2.1em; margin: .8rem 0 .7rem; font-family: var(--font-serif); font-size: clamp(2rem,3vw,3.2rem); font-weight: 400; line-height: 1.02; }
+.host-magazine__copy h3 { min-height: 2.8em; margin: 0 0 1.25rem; color: var(--deep); font-size: 1rem; font-weight: 600; line-height: 1.4; }
 .host-magazine__copy p { color: var(--muted); line-height: 1.75; }
-.host-magazine__copy a { color: var(--deep); font-weight: 700; }
-.host-magazine__tip { padding-left: 1rem; border-left: 2px solid var(--gold); font-style: italic; }
+.host-magazine__copy blockquote { margin: 1.5rem 0; padding-block: 1.25rem; border-block: 1px solid var(--line); color: var(--deep); font: italic 1.05rem/1.55 var(--font-serif); }
+.host-magazine__copy a { margin-top: auto; padding-top: 1.5rem; border-bottom: 1px solid currentColor; color: var(--deep); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.host-magazine__tip { margin-bottom: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--gold); font-style: italic; }
+.host-magazine__tip strong { display: block; margin-bottom: .35rem; color: var(--deep); font-size: .68rem; font-style: normal; letter-spacing: .09em; text-transform: uppercase; }
 .returning-reviews { background: var(--sand); }
 .returning-reviews > div:last-child { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
 .season-films { padding: clamp(5rem,9vw,9rem) 0; color: white; background: var(--deep); }
@@ -3678,11 +3681,11 @@ body.menu-open { overflow: hidden; }
   .smart-weather__controls,.arrival-openings { grid-template-columns: 1fr; }
   .smart-weather__recommendations,.signature-builder__days,.returning-reviews > div:last-child { grid-template-columns: 1fr; }
   .host-magazine { grid-template-columns: 1fr; }
-  .host-magazine article,.host-magazine article:nth-child(3n+1) { grid-column: auto; }
+  .host-magazine article { grid-column: auto; }
 }
 @media (max-width: 620px) {
   .signature-builder__party,.signature-builder__interests,.arrival-checklist__grid,.season-films__grid { grid-template-columns: 1fr; }
-  .host-magazine article { grid-template-columns: 1fr; }
+  .host-magazine__copy > p:first-child,.host-magazine__copy h2,.host-magazine__copy h3 { min-height: 0; }
   .smart-weather__now { grid-template-columns: 1fr; }
   .smart-weather__now div { display: flex; align-items: baseline; justify-content: space-between; }
   .image-lightbox__zoom { top: 4.6rem; right: 1rem; }
