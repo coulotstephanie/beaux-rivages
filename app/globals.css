@@ -2947,6 +2947,7 @@ body.menu-open { overflow: hidden; }
 
 /* Carnet premium — guides, cartes et itinéraires */
 .premium-place-destination { padding-block: clamp(95px,10vw,145px); }
+.premium-place-collection__heading { padding-top: clamp(80px, 9vw, 130px); }
 .legacy-carnet-anchor { position: relative; top: -120px; display: block; visibility: hidden; }
 .premium-place-destination .ui-heading { max-width: 940px; }
 .premium-place-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }

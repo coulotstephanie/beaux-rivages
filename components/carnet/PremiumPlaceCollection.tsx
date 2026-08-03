@@ -83,6 +83,13 @@ export function PremiumPlaceCollection() {
       <span id="marches" className="legacy-carnet-anchor" aria-hidden="true" />
       <span id="plages" className="legacy-carnet-anchor" aria-hidden="true" />
       <span id="producteurs" className="legacy-carnet-anchor" aria-hidden="true" />
+      <div className="shell premium-place-collection__heading">
+        <Heading
+          eyebrow="Le carnet personnel de Stéphanie & Bruno"
+          title="Nos adresses coup de cœur"
+          description="Restaurants, artisans, producteurs, marchés et lieux de confiance : retrouvez toutes les adresses que nous avons personnellement choisies pour accompagner votre séjour."
+        />
+      </div>
       <div className="shell carnet-search">
         <label htmlFor="carnet-search">Rechercher dans le Carnet</label>
         <input
