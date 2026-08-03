@@ -28,9 +28,11 @@ import { StructuredData } from "./StructuredData";
 import { propertyMedia, type PropertySlug } from "@/media/properties";
 import type { MediaAsset } from "@/media/types";
 import { createPropertyStructuredData } from "@/seo";
+import { ChaiEditorialReport } from "./properties/ChaiEditorialReport";
 
 export function PropertyPage({ property, children }: { property: Property; children?: ReactNode }) {
   const presentation = getPropertyPresentation(property.slug);
+  const hasChaiEditorialReport = property.slug === "chai-des-tortues";
   const reviewProfile = reviewProfiles.find((profile) => profile.slug === property.slug);
   const manifest = propertyMedia[property.slug as PropertySlug];
   const manifestAssets: readonly MediaAsset[] = [
@@ -75,18 +77,24 @@ export function PropertyPage({ property, children }: { property: Property; child
       <PropertyHero property={property} />
       <PropertyHistoryStory propertySlug={property.slug as PropertySlug} />
 
-      <PropertyDayStory scenes={presentation.dayStory} />
+      {hasChaiEditorialReport ? (
+        <ChaiEditorialReport />
+      ) : (
+        <PropertyDayStory scenes={presentation.dayStory} />
+      )}
 
       <PropertyFilms films={manifest.videos} poster={property.hero} />
 
-      <Section className="premium-gallery-section">
-        <Heading
-          eyebrow="La maison et ses horizons"
-          title="Les espaces, les paysages, l’atmosphère du séjour."
-          description="Parcourez en plein écran la maison et son environnement."
-        />
-        <FullscreenGallery images={property.gallery} />
-      </Section>
+      {!hasChaiEditorialReport && (
+        <Section className="premium-gallery-section">
+          <Heading
+            eyebrow="La maison et ses horizons"
+            title="Les espaces, les paysages, l’atmosphère du séjour."
+            description="Parcourez en plein écran la maison et son environnement."
+          />
+          <FullscreenGallery images={property.gallery} />
+        </Section>
+      )}
 
       {reviewProfile && (
         <Section tone="sand" className="property-review-section" id="avis-voyageurs">
