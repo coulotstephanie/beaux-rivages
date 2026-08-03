@@ -1866,6 +1866,8 @@ body.menu-open { overflow: hidden; }
 .chai-report__mosaic.is-reversed { grid-template-columns: .85fr 1.55fr; }
 .chai-report__mosaic.is-reversed .chai-report__image--1 { grid-column: 2; }
 .chai-report__image img { object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.chai-report__image img[src*="airbnb-exterieur-2-1.jpeg"],
+.image-lightbox img[src*="airbnb-exterieur-2-1.jpeg"] { object-position: center center; }
 .chai-report__image:hover img, .chai-report__image:focus-visible img { transform: scale(1.025); }
 .chai-report__image-shade { position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(3,22,27,.62)); }
 .chai-report__caption { position: absolute; right: 24px; bottom: 20px; left: 24px; color: white; font-size: 14px; line-height: 1.35; }

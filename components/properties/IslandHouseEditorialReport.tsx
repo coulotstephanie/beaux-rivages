@@ -94,8 +94,8 @@ const villaChapters: readonly Chapter[] = [
     galleryLabel: "Explorer la galerie des chambres",
     images: [
       villaRaieMantaMedia.bedrooms[0],
-      villaRaieMantaMedia.bedrooms[1],
       villaRaieMantaMedia.bedrooms[9],
+      villaRaieMantaMedia.bedrooms[2],
     ],
   },
   {
