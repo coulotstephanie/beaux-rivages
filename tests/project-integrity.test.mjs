@@ -111,24 +111,18 @@ test("all property galleries expose practical spaces in a logical sequence", () 
   assert.match(nid, /\/\/ Salle d’eau et toilettes[\s\S]*\.\.\.airbnbBathroom/);
 });
 
-test("the ambient player uses the credited public-domain Vivaldi recording", () => {
-  const component = read("components/AmbientSound.tsx");
-  const credits = read("public/audio/README.md");
-  assert.match(component, /vivaldi-spring-largo\.m4a/);
-  assert.match(component, /vivaldi-spring-largo\.ogg/);
-  assert.match(component, /Vivaldi · Le Printemps/);
-  assert.match(component, /preload="metadata"/);
-  assert.match(component, /Musique classique/);
-  assert.match(credits, /domaine public/i);
-  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.m4a")));
-  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.ogg")));
+test("the public layout contains no ambient music player", () => {
+  const layout = read("app/layout.tsx");
+  assert.doesNotMatch(layout, /AmbientSound/);
+  assert.ok(!existsSync(join(root, "components/AmbientSound.tsx")));
 });
 
 test("the homepage uses a reliable premium hero image", () => {
   const page = read("app/page.tsx");
   assert.doesNotMatch(page, /<HeroVideo/);
-  assert.match(page, /src=\{siteMedia\.destination\.sea\}/);
+  assert.match(page, /saumonards-plage\.jpg/);
   assert.match(page, /priority/);
+  assert.match(page, /fetchPriority="high"/);
 });
 
 test("mobile navigation uses native iOS-compatible disclosures and exposes contact", () => {

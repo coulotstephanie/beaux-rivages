@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { AmbientSound } from "@/components/AmbientSound";
 import { PremiumUX } from "@/components/PremiumUX";
 import { Analytics } from "@/components/Analytics";
 import { AppProviders } from "@/components/providers";
@@ -53,7 +52,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             {children}
           </div>
           <PremiumUX />
-          <AmbientSound />
           <Analytics />
           <LanguageExperience />
         </AppProviders>

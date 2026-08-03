@@ -78,10 +78,12 @@ export default function HomePage() {
       <section className="premium-hero" aria-labelledby="home-title">
         <div className="premium-hero__media">
           <Image
-            src={siteMedia.destination.sea}
-            alt="L’océan Atlantique, horizon des maisons Beaux Rivages"
+            src="/images/destination/patrimoine/saumonards-plage.jpg"
+            alt="Plage de sable et océan dans la lumière des îles"
             fill
             priority
+            fetchPriority="high"
+            quality={92}
             sizes="100vw"
           />
         </div>
@@ -89,9 +91,9 @@ export default function HomePage() {
         <div id="home-title">
           <VideoOverlay />
         </div>
-        <a className="scroll-indicator" href="#pourquoi" aria-label="Faire défiler vers la suite">
+        <a className="scroll-indicator" href="#maisons" aria-label="Découvrir Beaux Rivages">
           <span />
-          Découvrir
+          Découvrir Beaux Rivages
         </a>
       </section>
 
