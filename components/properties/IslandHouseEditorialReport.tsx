@@ -129,7 +129,11 @@ const nidChapters: readonly Chapter[] = [
     title: "La Maison Heureuse apparaît sous les arbres.",
     text: "Le Nid d’Été se rejoint au cœur d’une résidence historique, dans le calme des allées arborées qui conduisent vers l’océan.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [nidDEteAuthenticMedia.residenceGate, nidDEteMedia.arrival[1], nidDEteMedia.arrival[2]],
+    images: [
+      nidDEteAuthenticMedia.residenceGate,
+      nidDEteMedia.exterior[2],
+      nidDEteAuthenticMedia.gardenLoungers,
+    ],
   },
   {
     number: "02",
@@ -186,11 +190,7 @@ const nidChapters: readonly Chapter[] = [
     title: "La vie se prolonge sous la voile.",
     text: "À l’ombre, les déjeuners, les apéritifs et les retours de plage se partagent dans un jardin clos, au calme de la résidence.",
     galleryLabel: "Explorer la galerie de la terrasse",
-    images: [
-      nidDEteMedia.terrace[1],
-      nidDEteAuthenticMedia.gardenLoungers,
-      nidDEteMedia.terrace[3],
-    ],
+    images: [nidDEteMedia.terrace[1], nidDEteMedia.terrace[3], nidDEteMedia.terrace[4]],
   },
   {
     number: "08",
