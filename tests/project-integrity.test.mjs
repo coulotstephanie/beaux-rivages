@@ -119,10 +119,15 @@ test("the public layout contains no ambient music player", () => {
 
 test("the homepage uses a reliable premium hero image", () => {
   const page = read("app/page.tsx");
+  const overlay = read("components/media/VideoOverlay.tsx");
   assert.doesNotMatch(page, /<HeroVideo/);
   assert.match(page, /saumonards-plage\.jpg/);
   assert.match(page, /priority/);
   assert.match(page, /fetchPriority="high"/);
+  assert.equal((overlay.match(/accent:/g) ?? []).length, 7);
+  assert.match(overlay, /setTimeout\(\(\) => setMessageVisible\(false\), 8000\)/);
+  assert.match(overlay, /8600/);
+  assert.match(overlay, /if \(reduceMotion\) return/);
 });
 
 test("mobile navigation uses native iOS-compatible disclosures and exposes contact", () => {
