@@ -155,8 +155,10 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Fort La Prée, La Flotte",
     images: [
       {
-        src: "/images/destination/patrimoine/fort-la-pree-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie du Fort La Prée fournie par Stéphanie",
+        src: "/images/destination/patrimoine/fort-la-pree-vue-aerienne.webp",
+        alt: "Vue aérienne du Fort La Prée entre les terres et le littoral de l’Île de Ré",
+        credit: "Edouard Salmon — Skystudio",
+        creditHref: "https://www.iledere.com/decouvrir/les-incontournables/le-fort-la-pree/",
       },
     ],
     source: {
