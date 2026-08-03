@@ -179,6 +179,31 @@ export const destinationMedia = {
     "Entrée du Vieux-Port de La Rochelle",
     "Les tours ouvrent la ville sur l’océan",
   ),
+  laRochelleTowers: destinationAsset(
+    "guides/tours-vieux-port-la-rochelle.jpg",
+    "Tours historiques à l’entrée du Vieux-Port de La Rochelle",
+    "Les tours du Vieux-Port",
+  ),
+  laRochelleHarbour: destinationAsset(
+    "guides/vieux-port-la-rochelle-ciel-couvert.jpg",
+    "Vieux-Port de La Rochelle et ses bateaux",
+    "Le Vieux-Port au rythme des marées",
+  ),
+  laRochelleMarket: destinationAsset(
+    "guides/marche-central-la-rochelle.jpg",
+    "Marché central de La Rochelle",
+    "Les halles de La Rochelle",
+  ),
+  laRochelleMaritimeMuseum: destinationAsset(
+    "guides/musee-maritime-la-rochelle.jpg",
+    "Navires du musée maritime de La Rochelle",
+    "Le patrimoine maritime rochelais",
+  ),
+  laRochelleSaintNicolas: destinationAsset(
+    "guides/quartier-saint-nicolas-la-rochelle.webp",
+    "Rue du quartier Saint-Nicolas à La Rochelle",
+    "Le quartier Saint-Nicolas",
+  ),
   flowerDunes: destinationAsset(
     "dunes-fleuries-barques.jpg",
     "Barques au pied de dunes couvertes de fleurs roses",
@@ -213,6 +238,21 @@ export const destinationMedia = {
     "oleron-authentique/fort-boyard-vue-aerienne.jpg",
     "Fort Boyard vu du ciel au milieu du pertuis d’Antioche",
     "Fort Boyard, entre Oléron et l’Île d’Aix",
+  ),
+  saumonardsBeach: destinationAsset(
+    "patrimoine/saumonards-plage.jpg",
+    "Plage des Saumonards ouverte sur le pertuis d’Antioche",
+    "La plage des Saumonards",
+  ),
+  saumonardsPines: destinationAsset(
+    "patrimoine/saumonards-fort-boyard-pins.jpeg",
+    "Fort Boyard aperçu depuis la plage des Saumonards bordée de pins",
+    "Entre les pins et Fort Boyard",
+  ),
+  boyardvillePort: destinationAsset(
+    "patrimoine/port-boyardville-stephanie.jpg",
+    "Port de Boyardville et ses bateaux",
+    "Le port de Boyardville",
   ),
   chassironPointAerial: destinationAsset(
     "oleron-authentique/phare-chassiron-pointe.jpg",

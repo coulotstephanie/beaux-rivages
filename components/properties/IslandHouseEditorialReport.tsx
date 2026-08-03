@@ -80,7 +80,11 @@ const villaChapters: readonly Chapter[] = [
     title: "Chacun retrouve son propre rythme.",
     text: "Suite, chambre modulable, chambre face à la mer et refuge des enfants composent une maison pensée pour se retrouver sans renoncer au calme.",
     galleryLabel: "Explorer la galerie des chambres",
-    images: villaRaieMantaMedia.bedrooms.slice(0, 3),
+    images: [
+      villaRaieMantaMedia.bedrooms[0],
+      villaRaieMantaMedia.bedrooms[1],
+      villaRaieMantaMedia.kitchen[0],
+    ],
   },
   {
     number: "07",
@@ -107,7 +111,7 @@ const villaChapters: readonly Chapter[] = [
     galleryLabel: "Explorer la galerie de l’horizon",
     images: [
       villaRaieMantaMedia.exterior[0],
-      destinationMedia.reSaintMartinNight,
+      villaRaieMantaMedia.exterior[1],
       destinationMedia.reBridgeSunsetBike,
     ],
   },

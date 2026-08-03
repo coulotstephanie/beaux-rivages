@@ -32,6 +32,11 @@ const editorialIsland = asset(
   "Îlot de cuisine animé par un retour du marché",
   "L’îlot prêt à cuisiner",
 );
+const editorialKitchenLife = asset(
+  "editorial/cuisine-fleurs-gourmandises.png",
+  "Cuisine de Villa Raie Manta fleurie avec du pain et des pâtisseries",
+  "Une cuisine vivante et accueillante",
+);
 const editorialSeafood = asset(
   "editorial/table-fruits-de-mer.png",
   "Table extérieure dressée autour d’un plateau de fruits de mer",
@@ -116,6 +121,11 @@ const ocean = asset(
   "vue-ocean.jpeg",
   "Vue sur l’océan depuis Villa Raie Manta",
   "L’art de vivre face à l’océan",
+);
+const authenticReBridge = asset(
+  "authentique/pont-ile-de-re.jpg",
+  "Pont de l’Île de Ré vu depuis la mer avec des voiliers",
+  "Le pont dessine l’horizon",
 );
 const kitchen = asset("cuisine.jpeg", "Cuisine contemporaine", "Cuisine et salle à manger");
 const childrenRoom = asset(
@@ -254,7 +264,7 @@ export const villaRaieMantaMedia = {
   slug: "villa-raie-manta",
   hero: editorialSalon,
   arrival: [airbnbExterior[0]],
-  exterior: [ocean, ...airbnbExterior],
+  exterior: [ocean, authenticReBridge, ...airbnbExterior],
   livingRoom: [
     editorialSalon,
     editorialFamilyPets,
@@ -263,7 +273,7 @@ export const villaRaieMantaMedia = {
     brightSalon,
     ...airbnbLivingRoom,
   ],
-  kitchen: [editorialIsland, kitchen, ...airbnbKitchen],
+  kitchen: [editorialKitchenLife, editorialIsland, kitchen, ...airbnbKitchen],
   bedrooms: [
     editorialBedroom,
     editorialBirthdayBedroom,
@@ -316,6 +326,7 @@ export const villaRaieMantaMedia = {
     brightSalon,
 
     // Cuisine et repas
+    editorialKitchenLife,
     kitchen,
     editorialIsland,
     ...airbnbKitchen,

@@ -445,9 +445,9 @@ export const destinationGuides: DestinationGuide[] = [
         caption: "La côte rocheuse de Chassiron",
       },
       {
-        src: siteMedia.properties["nid-d-ete"].hero.src,
-        alt: "Accès à la plage près du Nid d’Été",
-        caption: "La plage au bout du chemin",
+        src: siteMedia.destination.saumonardsBeach,
+        alt: "Plage des Saumonards",
+        caption: "Le sable et l’horizon des Saumonards",
       },
       {
         src: siteMedia.destination.beach,
@@ -460,9 +460,9 @@ export const destinationGuides: DestinationGuide[] = [
         caption: "L’île gourmande",
       },
       {
-        src: siteMedia.properties["nid-d-ete"].lifestyle[3].src,
-        alt: "Forêt près de Boyardville",
-        caption: "Sous les pins",
+        src: siteMedia.destination.saumonardsPines,
+        alt: "Pins et plage des Saumonards face à Fort Boyard",
+        caption: "Entre les pins et le pertuis",
       },
       {
         src: siteMedia.destination.chassiron,
@@ -508,7 +508,7 @@ export const destinationGuides: DestinationGuide[] = [
         eyebrow: "Les Saumonards",
         title: "Une plage face à Fort Boyard",
         copy: "Depuis Boyardville, la forêt accompagne les derniers mètres avant une plage familiale ouverte sur le pertuis.",
-        image: siteMedia.properties["nid-d-ete"].hero.src,
+        image: siteMedia.destination.saumonardsBeach,
         tips: ["Venir le matin en famille", "Revenir à l’heure dorée"],
       },
       {
@@ -522,7 +522,7 @@ export const destinationGuides: DestinationGuide[] = [
         eyebrow: "Sous les pins",
         title: "Traverser la forêt sans se presser",
         copy: "À pied ou à vélo, les pistes ombragées offrent une autre respiration entre deux baignades.",
-        image: siteMedia.properties["nid-d-ete"].lifestyle[3].src,
+        image: siteMedia.destination.saumonardsPines,
         tips: ["Emporter de l’eau", "Choisir les heures les plus fraîches"],
       },
     ],
@@ -533,7 +533,7 @@ export const destinationGuides: DestinationGuide[] = [
     kicker: "Vieux-Port · Arcades · Horizon maritime",
     introduction:
       "Une escapade urbaine à taille humaine, entre tours médiévales, marché couvert et promenades tournées vers l’océan.",
-    hero: siteMedia.destination.sea,
+    hero: siteMedia.destination.laRochelleTowers,
     essentials: [
       { label: "À privilégier", value: "Une journée à pied" },
       { label: "Notre moment", value: "Le port au matin" },
@@ -542,7 +542,7 @@ export const destinationGuides: DestinationGuide[] = [
     history: {
       title: "Une cité libre tournée vers l’Atlantique",
       copy: "Les tours du port, les arcades et les hôtels particuliers racontent une ville marchande et maritime. La Rochelle cultive depuis des siècles une indépendance d’esprit que l’on retrouve encore dans ses quartiers.",
-      image: siteMedia.destination.sea,
+      image: siteMedia.destination.laRochelleHarbour,
     },
     map: {
       label: "Nos repères à La Rochelle",
@@ -639,24 +639,24 @@ export const destinationGuides: DestinationGuide[] = [
     ],
     gallery: [
       {
-        src: siteMedia.destination.sea,
-        alt: "Bateau près de La Rochelle",
-        caption: "La ville tournée vers le large",
+        src: siteMedia.destination.laRochelleTowers,
+        alt: "Tours à l’entrée du Vieux-Port de La Rochelle",
+        caption: "Les tours ouvrent la ville sur l’océan",
       },
       {
-        src: siteMedia.destination.food,
-        alt: "Produits de l’Atlantique",
-        caption: "Le marché et les arrivages",
+        src: siteMedia.destination.laRochelleMarket,
+        alt: "Marché central de La Rochelle",
+        caption: "Les halles et les arrivages du matin",
       },
       {
-        src: siteMedia.destination.lane,
-        alt: "Ruelle fleurie",
-        caption: "Les rues à parcourir lentement",
+        src: siteMedia.destination.laRochelleSaintNicolas,
+        alt: "Quartier Saint-Nicolas à La Rochelle",
+        caption: "Les rues de Saint-Nicolas",
       },
       {
-        src: siteMedia.destination.bridge,
-        alt: "Littoral charentais au coucher du soleil",
-        caption: "Prolonger vers l’horizon",
+        src: siteMedia.destination.laRochelleMaritimeMuseum,
+        alt: "Musée maritime de La Rochelle",
+        caption: "La mémoire maritime de la ville",
       },
       {
         src: siteMedia.destination.laRochelleOldPort,
@@ -672,21 +672,21 @@ export const destinationGuides: DestinationGuide[] = [
         eyebrow: "Le Vieux-Port",
         title: "Entrer dans la ville par ses tours",
         copy: "Les quais offrent la plus belle introduction à La Rochelle avant de rejoindre les rues sous les arcades.",
-        image: siteMedia.destination.sea,
+        image: siteMedia.destination.laRochelleTowers,
         tips: ["Arriver avant 10 heures", "Parcourir les quais à pied"],
       },
       {
         eyebrow: "Le marché",
         title: "Composer un déjeuner rochelais",
         copy: "Sous les halles du XIXe siècle, poissons, légumes et produits charentais racontent la proximité de l’océan.",
-        image: siteMedia.destination.food,
+        image: siteMedia.destination.laRochelleMarket,
         tips: ["Privilégier les jours de grand marché", "Goûter selon les arrivages"],
       },
       {
         eyebrow: "Prolonger",
         title: "L’Île d’Aix et le littoral",
         copy: "Une traversée ou une promenade vers le large permet de retrouver Fort Boyard sous un autre angle.",
-        image: siteMedia.destination.bridge,
+        image: siteMedia.destination.laRochelleHarbour,
         tips: ["Réserver la traversée en saison", "Vérifier la météo marine"],
       },
     ],
