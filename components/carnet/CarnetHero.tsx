@@ -4,7 +4,7 @@ import { siteMedia } from "@/media/site";
 export function CarnetHero() {
   return (
     <section className="carnet-premium-hero">
-      <HeroBackground src={siteMedia.destination.food} />
+      <HeroBackground src={siteMedia.destination.sea} />
       <div className="carnet-premium-hero__veil" />
       <div className="carnet-premium-hero__content">
         <p className="eyebrow light">Le Carnet Beaux Rivages</p>

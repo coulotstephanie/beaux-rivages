@@ -137,8 +137,8 @@ const airbnbKitchen = [
 const airbnbBedrooms = [
   propertyAsset(
     "airbnb-chambre-1-2.jpeg",
-    "Rangements de la chambre principale",
-    "Le confort dans les détails",
+    "Chambre principale du Nid d’Été éclairée par la fenêtre",
+    "La chambre principale",
   ),
   propertyAsset("airbnb-chambre-2-1.jpeg", "Seconde chambre avec lit double", "La seconde chambre"),
 ];
@@ -182,6 +182,11 @@ const authenticAerial = [
     "Localisation du Nid d’Été dans la Maison Heureuse avec l’accès direct à la plage",
     "Le Nid d’Été à quelques mètres du sable",
   ),
+  propertyAsset(
+    "authentique/maison-heureuse-facade.jpeg",
+    "Façade historique de la Maison Heureuse à Boyardville",
+    "La Maison Heureuse, restaurée face à l’océan",
+  ),
 ];
 const authenticFood = [
   propertyAsset(
@@ -195,6 +200,53 @@ const authenticFood = [
     "Un plateau convivial pour l’apéritif",
   ),
 ];
+export const nidDEteAuthenticMedia = {
+  residenceGate: propertyAsset(
+    "authentique/portail-maison-heureuse.jpeg",
+    "Portail de la Maison Heureuse ouvrant sur l’allée vers l’océan",
+    "L’arrivée au cœur de la Maison Heureuse",
+  ),
+  residenceAerial: propertyAsset(
+    "authentique/maison-heureuse-chenal-plage.jpeg",
+    "Vue aérienne de la Maison Heureuse entre le chenal de Boyardville et la plage",
+    "La Maison Heureuse entre chenal, forêt et océan",
+  ),
+  residenceForestAerial: propertyAsset(
+    "authentique/maison-heureuse-vue-aerienne.jpg",
+    "Vue aérienne de la Maison Heureuse entre la forêt des Saumonards et l’océan",
+    "La résidence historique dans son écrin naturel",
+  ),
+  residenceFacade: propertyAsset(
+    "authentique/maison-heureuse-facade.jpeg",
+    "Façade historique jaune et blanche de la Maison Heureuse à Boyardville",
+    "La façade restaurée de la Maison Heureuse",
+  ),
+  fortFromBeach: propertyAsset(
+    "authentique/fort-boyard-depuis-saumonards.jpeg",
+    "Fort Boyard aperçu depuis la plage des Saumonards",
+    "Fort Boyard depuis les Saumonards",
+  ),
+  gardenLoungers: propertyAsset(
+    "authentique/transats-jardin.jpeg",
+    "Deux transats dans le jardin clos du Nid d’Été",
+    "Prendre le temps dans le jardin clos",
+  ),
+  preparedBedroom: propertyAsset(
+    "authentique/chambre-linge.jpeg",
+    "Chambre du Nid d’Été préparée avec linge et serviettes",
+    "La chambre préparée pour l’arrivée",
+  ),
+  seafoodPlatter: propertyAsset(
+    "authentique/plateau-fruits-de-mer.jpeg",
+    "Plateau de fruits de mer préparé pour un repas de vacances",
+    "Les saveurs de l’océan à partager",
+  ),
+  raclette: propertyAsset(
+    "authentique/raclette.jpg",
+    "Raclette partagée autour de la table du Nid d’Été",
+    "Une soirée raclette à la maison",
+  ),
+} as const;
 const arrivalEntrance = propertyAsset(
   "airbnb-cour-d-entree-1.jpeg",
   "Façade du Nid d’Été et emplacement de la boîte à clés",
@@ -259,16 +311,21 @@ const airbnbDetails = [
 export const nidDEteMedia = {
   slug: "nid-d-ete",
   hero: airbnbLivingRoom[0],
-  arrival: [arrivalEntrance, arrivalPlan],
-  exterior: airbnbExterior,
+  arrival: [nidDEteAuthenticMedia.residenceGate, arrivalEntrance, arrivalPlan],
+  exterior: [nidDEteAuthenticMedia.gardenLoungers, ...airbnbExterior.slice(1)],
   livingRoom: [editorialLivingRoom, editorialBeachReturn, editorialFamilyCat, ...airbnbLivingRoom],
   kitchen: [editorialBreakfast, editorialFamilyGames, ...airbnbKitchen, ...authenticFood],
-  bedrooms: [editorialBedroom, editorialChildrenBirthday, ...airbnbBedrooms],
+  bedrooms: [
+    editorialBedroom,
+    editorialChildrenBirthday,
+    nidDEteAuthenticMedia.preparedBedroom,
+    ...airbnbBedrooms,
+  ],
   bathrooms: [...authenticBathroom, ...airbnbBathroom],
   terrace: [
     editorialFamilyTerraceAperitif,
     editorialTerraceLunch,
-    airbnbExterior[0],
+    nidDEteAuthenticMedia.gardenLoungers,
     ...airbnbTerrace,
   ],
   details: [...airbnbDetails, ...airbnbTerrace.slice(0, 3)],
@@ -289,6 +346,9 @@ export const nidDEteMedia = {
     shade,
     fortBoyard,
     destinationMedia.fortBoyardAerial,
+    nidDEteAuthenticMedia.residenceAerial,
+    nidDEteAuthenticMedia.fortFromBeach,
+    nidDEteAuthenticMedia.seafoodPlatter,
     ...authenticAerial,
     ...authenticFood,
   ],
@@ -310,6 +370,7 @@ export const nidDEteMedia = {
     ...airbnbBedrooms,
     editorialBedroom,
     editorialChildrenBirthday,
+    nidDEteAuthenticMedia.preparedBedroom,
     editorialFamilyGames,
 
     // Salle d’eau et toilettes
@@ -317,11 +378,11 @@ export const nidDEteMedia = {
     ...airbnbBathroom,
 
     // Extérieur et terrasse
-    airbnbExterior[0],
     airbnbExterior[1],
     airbnbExterior[2],
     airbnbExterior[3],
     editorialTerraceLunch,
+    nidDEteAuthenticMedia.gardenLoungers,
     ...airbnbTerrace,
     airbnbDetails[1],
     ...authenticAerial,
@@ -333,6 +394,9 @@ export const nidDEteMedia = {
     family,
     sunset,
     fortBoyard,
+    nidDEteAuthenticMedia.fortFromBeach,
+    nidDEteAuthenticMedia.residenceAerial,
+    nidDEteAuthenticMedia.seafoodPlatter,
     beach,
     shade,
   ],

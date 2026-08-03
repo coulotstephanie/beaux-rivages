@@ -1,15 +1,24 @@
 import Image from "next/image";
 import { destinationMedia } from "@/media/destinations";
-import { nidDEteMedia } from "@/media/properties/nid-d-ete";
 import type { MediaAsset } from "@/media/types";
 
 const mosaic: readonly MediaAsset[] = [
-  nidDEteMedia.lifestyle[7],
-  nidDEteMedia.lifestyle[14],
-  nidDEteMedia.lifestyle[9],
-  nidDEteMedia.lifestyle[10],
-  nidDEteMedia.lifestyle[12],
-  nidDEteMedia.lifestyle[11],
+  {
+    src: "/images/destination/patrimoine/saumonards-plage.jpg",
+    alt: "La plage des Saumonards au bord de la forêt",
+    caption: "Le sable au bout des pins",
+    scope: "destination",
+  },
+  {
+    src: "/images/destination/patrimoine/fort-boyard-coucher-soleil.jpg",
+    alt: "Fort Boyard en silhouette dans la lumière du soir",
+    caption: "Le fort dans la lumière du soir",
+    scope: "destination",
+  },
+  destinationMedia.familyForeshore,
+  destinationMedia.flowerDunes,
+  destinationMedia.familySunset,
+  destinationMedia.sea,
 ];
 
 export function NidSaumonardsStory() {
@@ -49,7 +58,7 @@ export function NidSaumonardsStory() {
               src={asset.src}
               alt={asset.alt}
               fill
-              quality={86}
+              quality={85}
               loading="lazy"
               sizes="(max-width: 720px) 100vw, 33vw"
             />

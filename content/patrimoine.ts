@@ -377,8 +377,16 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Pont de l'Île de Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/pont-ile-de-re-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie du Pont de l’Île de Ré fournie par Stéphanie",
+        src: "/images/destination/patrimoine/pont-ile-de-re-stephanie.jpeg",
+        alt: "Pont de l’Île de Ré vu depuis le littoral avec des voiliers et des bateaux au premier plan",
+      },
+      {
+        src: "/images/destination/re-authentique/pont-coucher-soleil-velo.jpg",
+        alt: "Cycliste devant le pont de l’Île de Ré au coucher du soleil",
+      },
+      {
+        src: "/images/destination/re-authentique/pont-ile-de-re-vue-aerienne.jpg",
+        alt: "Pont de l’Île de Ré reliant La Rochelle à Rivedoux-Plage vu du ciel",
       },
     ],
     source: {

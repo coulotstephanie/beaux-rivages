@@ -66,7 +66,10 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   assert.doesNotMatch(manifest, /airbnb-buanderie-2-1\.jpeg/);
   assert.doesNotMatch(manifest, /airbnb-arriere-cour-5\.jpeg/);
   assert.match(manifest, /airbnb-toilettes\.jpeg/);
-  assert.match(manifest, /arrival: \[arrivalEntrance, arrivalPlan\]/);
+  assert.match(
+    manifest,
+    /arrival: \[nidDEteAuthenticMedia\.residenceGate, arrivalEntrance, arrivalPlan\]/,
+  );
   assert.doesNotMatch(manifest, /"Les repères de l’arrivée autonome"/);
   assert.match(manifest, /\.\.\.airbnbBedrooms,[\s\S]*\.\.\.airbnbBathroom/);
   assert.match(propertiesPage, /image=\{property\.hero\}/);

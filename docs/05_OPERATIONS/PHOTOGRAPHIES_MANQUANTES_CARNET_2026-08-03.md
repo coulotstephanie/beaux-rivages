@@ -12,6 +12,24 @@ Périmètre : Le Carnet Beaux Rivages et ses reportages liés aux trois maisons.
 
 ## Île de Ré — autour du Chai des Tortues et de Villa Raie Manta
 
+### Le Chai des Tortues — scènes à compléter
+
+- **Retour réel des Halles dans la cuisine du Chai.** Un panier posé sur l’îlot, puis la préparation du déjeuner, relieraient sans rupture le marché à la grande table.
+- **Premier café dans la lumière du séjour.** Une tasse, la pierre ancienne et une présence discrète permettraient de raconter un vrai matin dans la maison.
+- **Départ à pied vers le rivage depuis la porte du Chai.** Cette scène rendrait immédiatement perceptible la proximité de la plage.
+
+### Villa Raie Manta — scènes à compléter
+
+- **Premier café dans le salon panoramique avec l’océan en arrière-plan.** Cette prise de vue permettrait de réintroduire ultérieurement le récit du café sans promettre une scène absente.
+- **Retour des Halles dans la cuisine avec les produits visibles.** Elle ferait le lien entre les étals de l’île et la cuisine réelle de la Villa.
+- **Vue nocturne prise depuis le salon.** Une image personnelle du pont éclairé remplacerait avantageusement le document destination actuellement utilisé pour l’ambiance du soir.
+
+### Le Nid d’Été — scènes à compléter
+
+- **Le portail privé réellement ouvert sur la plage.** Cette photographie reste la prise de vue la plus importante pour expliquer l’accès exceptionnel aux Saumonards.
+- **Le chemin complet entre La Maison Heureuse et le sable.** Une courte série en mouvement rendrait la distance et l’absence de route immédiatement compréhensibles.
+- **Une matinée familiale dans le salon.** Une scène simple, non posée, enrichirait le réveil de la maison sans recourir uniquement à des vues d’aménagement.
+
 ### Les marchés où nous aimons flâner
 
 - **Façade des Halles de Rivedoux au début de la matinée.** Elle permettrait d’ouvrir le reportage par une image authentique du lieu, plutôt que par une photographie officielle.

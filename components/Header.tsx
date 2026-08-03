@@ -132,7 +132,7 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
           <Link href="/">Accueil</Link>
           <MegaMenu
             label="Nos maisons"
-            image="/images/properties/chai-des-tortues/editorial/espace-de-vie-retour-marche.png"
+            image="/images/properties/chai-des-tortues/port-fleuri.jpeg"
             imageAlt="Le Chai des Tortues"
             introduction="Trois maisons singulières, entre l’Île de Ré et l’Île d’Oléron."
             links={houseLinks}
@@ -146,7 +146,7 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
           />
           <MegaMenu
             label="Le Carnet Beaux Rivages"
-            image="/images/destination/nina-metayer/selection-patisseries.jpg"
+            image="/images/destination/nina-metayer/cookie-brownie.jpg"
             imageAlt="Une adresse gourmande du Carnet Beaux Rivages"
             introduction="Nos adresses, anecdotes, saisons et conseils personnels réunis comme dans un magazine."
             links={carnetLinks}

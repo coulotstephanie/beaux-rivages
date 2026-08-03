@@ -6,8 +6,8 @@ export function NidHeritageTeaser() {
     <section className="heritage-teaser">
       <div className="heritage-teaser__image">
         <Image
-          src="/images/properties/nid-d-ete/authentique/maison-heureuse-vue-aerienne.jpg"
-          alt="La Maison Heureuse entre la forêt des Saumonards et l’océan"
+          src="/images/destination/patrimoine/dune-boyardville.jpg"
+          alt="Le littoral de Boyardville entre dunes, forêt et océan"
           fill
           sizes="(max-width: 900px) 100vw, 50vw"
         />

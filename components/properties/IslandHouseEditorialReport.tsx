@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import type { GalleryImage } from "@/data";
-import { nidDEteMedia } from "@/media/properties/nid-d-ete";
+import { destinationMedia } from "@/media/destinations";
+import { nidDEteAuthenticMedia, nidDEteMedia } from "@/media/properties/nid-d-ete";
 import { villaRaieMantaMedia } from "@/media/properties/villa-raie-manta";
 import type { MediaAsset } from "@/media/types";
 import { ImageLightbox } from "@/components/ImageLightbox";
@@ -28,7 +29,11 @@ const villaChapters: readonly Chapter[] = [
     title: "L’océan donne immédiatement le ton.",
     text: "À Rivedoux-Plage, l’arrivée par le pont ouvre déjà le séjour sur l’horizon. Puis la Villa se découvre à quelques pas du rivage, tournée vers la lumière.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [villaRaieMantaMedia.arrival[0], ...villaRaieMantaMedia.exterior.slice(0, 2)],
+    images: [
+      villaRaieMantaMedia.arrival[0],
+      destinationMedia.reBridgeAerial,
+      destinationMedia.reMap,
+    ],
   },
   {
     number: "02",
@@ -37,16 +42,16 @@ const villaChapters: readonly Chapter[] = [
     text: "Au salon, la lumière glisse sur les lignes contemporaines et révèle le pont de l’Île de Ré dans le lointain.",
     quote: "Ici, l’horizon fait partie de l’architecture.",
     galleryLabel: "Explorer la galerie du salon panoramique",
-    images: villaRaieMantaMedia.livingRoom.slice(0, 3),
+    images: villaRaieMantaMedia.livingRoom.slice(1, 4),
   },
   {
     number: "03",
     eyebrow: "Le matin",
-    title: "Le premier café prend de la hauteur.",
+    title: "La lumière prend de la hauteur.",
     text: "Installé à l’étage, le salon offre un réveil face à la mer, dans une lumière qui transforme chaque matin.",
     quote: "Prendre le temps de regarder la lumière changer.",
     galleryLabel: "Explorer la galerie des pièces de vie",
-    images: villaRaieMantaMedia.livingRoom.slice(3, 6),
+    images: villaRaieMantaMedia.livingRoom.slice(4, 6),
   },
   {
     number: "04",
@@ -54,7 +59,11 @@ const villaChapters: readonly Chapter[] = [
     title: "Le retour des Halles rassemble la maison.",
     text: "La cuisine ouverte et la grande table accompagnent les produits rapportés du marché, les repas improvisés et les occasions que l’on choisit de célébrer.",
     galleryLabel: "Explorer la galerie de la cuisine",
-    images: villaRaieMantaMedia.kitchen.slice(0, 3),
+    images: [
+      destinationMedia.reMarketTomatoes,
+      destinationMedia.reMarketCheese,
+      villaRaieMantaMedia.kitchen[0],
+    ],
   },
   {
     number: "05",
@@ -63,7 +72,7 @@ const villaChapters: readonly Chapter[] = [
     text: "La terrasse prolonge les espaces de vie autour des saveurs de l’océan et d’un repas partagé face au large.",
     quote: "Les vacances se racontent aussi autour de la table.",
     galleryLabel: "Explorer la galerie des terrasses et des repas",
-    images: villaRaieMantaMedia.terrace.slice(0, 3),
+    images: [villaRaieMantaMedia.terrace[0], villaRaieMantaMedia.lifestyle[5]],
   },
   {
     number: "06",
@@ -98,8 +107,8 @@ const villaChapters: readonly Chapter[] = [
     galleryLabel: "Explorer la galerie de l’horizon",
     images: [
       villaRaieMantaMedia.exterior[0],
-      villaRaieMantaMedia.livingRoom[5],
-      villaRaieMantaMedia.lifestyle[8],
+      destinationMedia.reSaintMartinNight,
+      destinationMedia.reBridgeSunsetBike,
     ],
   },
   {
@@ -120,7 +129,7 @@ const nidChapters: readonly Chapter[] = [
     title: "La Maison Heureuse apparaît sous les arbres.",
     text: "Le Nid d’Été se rejoint au cœur d’une résidence historique, dans le calme des allées arborées qui conduisent vers l’océan.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [nidDEteMedia.arrival[0], nidDEteMedia.exterior[1], nidDEteMedia.exterior[2]],
+    images: [nidDEteAuthenticMedia.residenceGate, nidDEteMedia.arrival[1], nidDEteMedia.arrival[2]],
   },
   {
     number: "02",
@@ -128,14 +137,18 @@ const nidChapters: readonly Chapter[] = [
     title: "Un refuge dans une résidence historique.",
     text: "Liée au chantier de Fort Boyard puis devenue colonie de vacances, la Maison Heureuse conserve une architecture et une histoire profondément tournées vers l’océan.",
     galleryLabel: "Explorer la galerie de la Maison Heureuse",
-    images: [nidDEteMedia.lifestyle[15], nidDEteMedia.lifestyle[16], nidDEteMedia.exterior[1]],
+    images: [
+      nidDEteAuthenticMedia.residenceAerial,
+      nidDEteAuthenticMedia.residenceFacade,
+      nidDEteAuthenticMedia.residenceForestAerial,
+    ],
   },
   {
     number: "03",
     eyebrow: "La maison se réveille",
-    title: "Le vent passe dans les peupliers.",
-    text: "Dans la résidence historique de la Maison Heureuse, le matin commence dans l’ombre douce des grands arbres.",
-    quote: "Le calme avant les premiers pas vers la plage.",
+    title: "La maison s’éveille doucement.",
+    text: "Dans le salon, le matin commence dans une lumière douce. On se retrouve avant les premiers pas vers la plage.",
+    quote: "Le calme d’un intérieur pensé pour se retrouver.",
     galleryLabel: "Explorer la galerie des pièces de vie",
     images: nidDEteMedia.livingRoom.slice(0, 3),
   },
@@ -145,7 +158,7 @@ const nidChapters: readonly Chapter[] = [
     title: "La grande table suit le rythme des vacances.",
     text: "Petit-déjeuner, jeux de société, raclette ou dîner en famille : la cuisine et la table deviennent le point de rencontre après les journées dehors.",
     galleryLabel: "Explorer la galerie de la cuisine et des repas",
-    images: nidDEteMedia.kitchen.slice(0, 3),
+    images: [nidDEteMedia.kitchen[0], nidDEteMedia.kitchen[1], nidDEteAuthenticMedia.raclette],
   },
   {
     number: "05",
@@ -153,7 +166,11 @@ const nidChapters: readonly Chapter[] = [
     title: "Le confort retrouve une douceur familière.",
     text: "Les chambres accueillent aussi bien les nuits calmes que les attentions préparées pour célébrer un anniversaire ou simplement souhaiter la bienvenue.",
     galleryLabel: "Explorer la galerie des chambres",
-    images: nidDEteMedia.bedrooms.slice(0, 3),
+    images: [
+      nidDEteMedia.bedrooms[0],
+      nidDEteMedia.bedrooms[1],
+      nidDEteAuthenticMedia.preparedBedroom,
+    ],
   },
   {
     number: "06",
@@ -169,7 +186,11 @@ const nidChapters: readonly Chapter[] = [
     title: "La vie se prolonge sous la voile.",
     text: "À l’ombre, les déjeuners, les apéritifs et les retours de plage se partagent dans un jardin clos, au calme de la résidence.",
     galleryLabel: "Explorer la galerie de la terrasse",
-    images: nidDEteMedia.terrace.slice(0, 3),
+    images: [
+      nidDEteMedia.terrace[1],
+      nidDEteAuthenticMedia.gardenLoungers,
+      nidDEteMedia.terrace[3],
+    ],
   },
   {
     number: "08",
@@ -196,7 +217,11 @@ const nidChapters: readonly Chapter[] = [
     text: "La lumière descend sur la plage et dessine au loin la silhouette familière du fort.",
     quote: "Chaque soir offre une autre couleur.",
     galleryLabel: "Explorer la galerie de l’horizon",
-    images: [nidDEteMedia.lifestyle[11], nidDEteMedia.lifestyle[14], nidDEteMedia.lifestyle[13]],
+    images: [
+      nidDEteMedia.lifestyle[11],
+      nidDEteAuthenticMedia.fortFromBeach,
+      destinationMedia.fortBoyard,
+    ],
   },
 ];
 

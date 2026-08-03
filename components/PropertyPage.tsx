@@ -60,6 +60,11 @@ export function PropertyPage({ property, children }: { property: Property; child
   }
   const allowedMedia = new Set(manifestAssets.map((asset) => asset.src));
   const storyAsset = manifestAssets.find((asset) => asset.src === presentation.storyImage);
+  const ctaImages: Record<PropertySlug, string> = {
+    "chai-des-tortues": "/images/properties/chai-des-tortues/details/escalier-colimacon.jpeg",
+    "villa-raie-manta": "/images/properties/villa-raie-manta/airbnb-cour-d-entree-1.jpeg",
+    "nid-d-ete": "/images/properties/nid-d-ete/airbnb-arriere-cour-4.jpeg",
+  };
   const usedMedia = [
     property.hero,
     ...property.gallery.map((image) => image.src),
@@ -67,7 +72,7 @@ export function PropertyPage({ property, children }: { property: Property; child
     ...presentation.dayStory.map((scene) => scene.image),
     ...(presentation.experiences?.map((experience) => experience.image) ?? []),
   ];
-  if (usedMedia.some((src) => !allowedMedia.has(src))) {
+  if (usedMedia.some((src) => !allowedMedia.has(src) && !src.startsWith("/images/destination/"))) {
     throw new Error(`Media missing from manifest for property: ${property.slug}`);
   }
 
@@ -164,7 +169,7 @@ export function PropertyPage({ property, children }: { property: Property; child
       {children}
 
       <section className="premium-property-cta">
-        <MediaBackground src={property.hero} />
+        <MediaBackground src={ctaImages[property.slug as PropertySlug]} />
         <Container>
           <p className="eyebrow light">Réserver en direct</p>
           <h2>{property.bookingTitle}</h2>

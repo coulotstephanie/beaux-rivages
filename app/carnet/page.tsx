@@ -93,8 +93,8 @@ export default function CarnetPage() {
       </section>
       <section className="carnet-small-happiness shell">
         <Image
-          src="/images/destination/nina-metayer/selection-patisseries.jpg"
-          alt="Une sélection gourmande choisie par Stéphanie et Bruno"
+          src={siteMedia.destination.reMarketFruit}
+          alt="Fruits colorés du marché choisis par Stéphanie et Bruno"
           width={720}
           height={720}
         />

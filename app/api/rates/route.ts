@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const limited = rateLimit(request, 5);
+  const limited = rateLimit(request, 30);
   if (limited) return limited;
   if (!requireSameOrigin(request))
     return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
@@ -45,7 +45,7 @@ export async function PUT(request: NextRequest) {
             ? await new RateOverrideRepository().createBatch(parsed.data, identity.userId)
             : await new RateOverrideRepository().create(parsed.data, identity.userId),
       },
-      { status: 201 },
+      { status: 200 },
     );
   } catch (error) {
     const code = error instanceof Error ? error.message.split(":")[0] : "UNKNOWN";
@@ -54,7 +54,9 @@ export async function PUT(request: NextRequest) {
         error:
           code === "RATE_OUTSIDE_GUARDRAILS"
             ? "Le prix doit rester entre le minimum et le maximum autorisés."
-            : "Enregistrement impossible.",
+            : code === "RATE_OVERRIDE_READ_FAILED"
+              ? "Le tarif actuel n'a pas pu être relu. Réessayez dans un instant."
+              : "Le tarif n'a pas pu être enregistré. Réessayez ou contactez l'assistance.",
         code,
       },
       { status: code === "RATE_OUTSIDE_GUARDRAILS" ? 409 : 500 },

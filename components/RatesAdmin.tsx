@@ -397,25 +397,25 @@ export function RatesAdmin() {
     if (!entries.length) return setMessage("Sélectionnez au moins une date modifiable.");
     const detail = `${entries.length} jour(s) · ${name}`;
     if (!window.confirm(`Vous allez modifier ${detail}.\n\nConfirmer ?`)) return;
-    const response = await fetch("/api/rates", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        propertySlug: property,
-        name,
-        kind,
-        entries,
-      }),
-    });
-    const payload = (await response.json()) as { error?: string };
-    if (payload.error) return setMessage(payload.error);
-    setMessage(
-      `${entries.length} tarif(s) enregistré(s). La modification peut être annulée dans l’historique.`,
-    );
-    setSelection([]);
-    const refreshed = await fetch(`/api/rates?property=${property}&year=${year}`);
-    setDays(((await refreshed.json()) as { days: RateDay[] }).days);
-    await loadCenter();
+    try {
+      const response = await fetch("/api/rates", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ propertySlug: property, name, kind, entries }),
+      });
+      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+      if (!response.ok) {
+        setMessage(payload?.error ?? "Le tarif n'a pas pu être enregistré. Réessayez.");
+        return;
+      }
+      await Promise.all([loadRates(), loadCenter()]);
+      setSelection([]);
+      setMessage(
+        `${entries.length} tarif(s) enregistré(s). La modification peut être annulée dans l’historique.`,
+      );
+    } catch {
+      setMessage("La connexion a été interrompue. Vos dates restent sélectionnées : réessayez.");
+    }
   };
   const save = async () => {
     const entries = selection.map((date) => {

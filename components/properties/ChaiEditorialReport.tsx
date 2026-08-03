@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import type { GalleryImage } from "@/data";
+import { destinationMedia } from "@/media/destinations";
 import { chaiDesTortuesMedia } from "@/media/properties/chai-des-tortues";
 import { ImageLightbox } from "@/components/ImageLightbox";
 import { Container } from "@/components/ui";
@@ -33,7 +34,11 @@ const chapters: Chapter[] = [
     title: "Les Halles donnent le ton de la journée.",
     text: "À quelques minutes à pied, le marché inspire le déjeuner. Les paniers reviennent chargés de produits de l’île, prêts à rejoindre l’îlot central et la grande table.",
     galleryLabel: "Explorer la galerie du marché",
-    images: [media.lifestyle[0], media.editorial!.market, media.lifestyle[7]],
+    images: [
+      destinationMedia.reMarketLane,
+      destinationMedia.reMarketFruit,
+      destinationMedia.reMarketFish,
+    ],
   },
   {
     number: "03",
@@ -85,11 +90,11 @@ const chapters: Chapter[] = [
   },
   {
     number: "09",
-    eyebrow: "La plage",
+    eyebrow: "Le rivage",
     title: "L’océan attend à quelques pas.",
-    text: "À 250 mètres, le rivage change le tempo du séjour. On y part sans voiture, pour marcher, jouer, regarder la lumière ou simplement retrouver l’air marin.",
-    galleryLabel: "Explorer la galerie de la plage",
-    images: [media.editorial!.beach, media.lifestyle[11], media.lifestyle[6]],
+    text: "À 250 mètres, le rivage change le tempo du séjour. On y part sans voiture pour marcher, regarder la lumière et retrouver l’air marin.",
+    galleryLabel: "Explorer la galerie du rivage",
+    images: [media.editorial!.beach, destinationMedia.reBeachCairn, destinationMedia.reLove],
   },
   {
     number: "10",
@@ -97,7 +102,7 @@ const chapters: Chapter[] = [
     title: "Quand la maison garde la lumière.",
     text: "Après la plage et les chemins de l’île, le Chai redevient le point de rassemblement. Une partie, un apéritif ou un dîner aux chandelles suffit à prolonger la journée.",
     galleryLabel: "Explorer la galerie de la soirée",
-    images: [media.lifestyle[2], media.livingRoom[0], media.lifestyle[3]],
+    images: [media.lifestyle[2], media.lifestyle[0], media.lifestyle[3]],
   },
 ];
 
