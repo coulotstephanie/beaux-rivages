@@ -45,11 +45,24 @@ const villaChapters: readonly Chapter[] = [
     images: [
       villaRaieMantaMedia.livingRoom[1],
       villaRaieMantaMedia.livingRoom[2],
-      villaRaieMantaMedia.livingRoom[0],
+      villaRaieMantaMedia.livingRoom[5],
     ],
   },
   {
     number: "03",
+    eyebrow: "Face à l’océan",
+    title: "L’apéritif prend place devant la mer.",
+    text: "Depuis le salon à l’étage, la vue devient le décor naturel des retrouvailles. On ouvre les fenêtres, on prépare quelques douceurs et l’apéritif se prolonge face à l’océan.",
+    quote: "La vue mer comme invitée à chaque moment partagé.",
+    galleryLabel: "Explorer le salon face à l’océan",
+    images: [
+      villaRaieMantaMedia.livingRoom[3],
+      villaRaieMantaMedia.livingRoom[0],
+      villaRaieMantaMedia.livingRoom[4],
+    ],
+  },
+  {
+    number: "04",
     eyebrow: "La cuisine",
     title: "Le retour des Halles rassemble la maison.",
     text: "La cuisine ouverte et la grande table accompagnent les produits rapportés du marché, les repas improvisés et les occasions que l’on choisit de célébrer.",
@@ -61,7 +74,7 @@ const villaChapters: readonly Chapter[] = [
     ],
   },
   {
-    number: "04",
+    number: "05",
     eyebrow: "L’après-midi",
     title: "Un plateau de fruits de mer en famille.",
     text: "La terrasse prolonge les espaces de vie autour des saveurs de l’océan et d’un repas partagé face au large.",
@@ -74,7 +87,7 @@ const villaChapters: readonly Chapter[] = [
     ],
   },
   {
-    number: "05",
+    number: "06",
     eyebrow: "Les chambres",
     title: "Chacun retrouve son propre rythme.",
     text: "Suite, chambre modulable, chambre face à la mer et refuge des enfants composent une maison pensée pour se retrouver sans renoncer au calme.",
@@ -86,7 +99,7 @@ const villaChapters: readonly Chapter[] = [
     ],
   },
   {
-    number: "06",
+    number: "07",
     eyebrow: "Les salles d’eau",
     title: "Un confort simple à chaque niveau.",
     text: "Les salles d’eau et les toilettes indépendantes facilitent les séjours à plusieurs tout en conservant des lignes sobres et chaleureuses.",
@@ -94,7 +107,7 @@ const villaChapters: readonly Chapter[] = [
     images: villaRaieMantaMedia.bathrooms.slice(0, 3),
   },
   {
-    number: "07",
+    number: "08",
     eyebrow: "Les attentions",
     title: "Les occasions trouvent naturellement leur décor.",
     text: "Une chambre préparée, une partie en famille ou une table de fête : les détails transforment la Villa au fil des séjours.",
@@ -102,7 +115,7 @@ const villaChapters: readonly Chapter[] = [
     images: villaRaieMantaMedia.details.slice(0, 3),
   },
   {
-    number: "08",
+    number: "09",
     eyebrow: "Le coucher du soleil",
     title: "Le pont devient une ligne de lumière.",
     text: "Depuis le salon panoramique, le ciel et la mer changent de couleur tandis que l’île retrouve son calme.",
@@ -115,7 +128,7 @@ const villaChapters: readonly Chapter[] = [
     ],
   },
   {
-    number: "09",
+    number: "10",
     eyebrow: "La soirée",
     title: "Une table pour célébrer.",
     text: "La cuisine et la salle à manger réunissent toutes les générations autour d’un anniversaire préparé face à l’océan.",
