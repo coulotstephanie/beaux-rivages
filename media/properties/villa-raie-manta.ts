@@ -42,6 +42,11 @@ const editorialSeafood = asset(
   "Table extérieure dressée autour d’un plateau de fruits de mer",
   "Les fruits de mer en terrasse",
 );
+const authenticSeafoodPlatter = asset(
+  "plateau-fruits-de-mer-authentique.jpeg",
+  "Plateau de fruits de mer composé d’huîtres, crevettes et crustacés",
+  "Le beau plateau de fruits de mer",
+);
 const editorialBirthday = asset(
   "editorial/table-anniversaire.png",
   "Table d’anniversaire dressée dans la cuisine de Villa Raie Manta",
@@ -284,7 +289,12 @@ export const villaRaieMantaMedia = {
     ...airbnbBedrooms,
   ],
   bathrooms: [...authenticBathrooms, bathroom, ...airbnbBathrooms],
-  terrace: [editorialFamilyTerraceAperitif, editorialSeafood, editorialBalineseLounger],
+  terrace: [
+    editorialFamilyTerraceAperitif,
+    authenticSeafoodPlatter,
+    editorialSeafood,
+    editorialBalineseLounger,
+  ],
   details: [
     editorialBirthday,
     editorialNewYear,
