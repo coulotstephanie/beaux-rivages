@@ -57,7 +57,7 @@ const villaChapters: readonly Chapter[] = [
     galleryLabel: "Explorer la galerie de la vue mer",
     images: [
       villaRaieMantaMedia.livingRoom[4],
-      villaRaieMantaMedia.livingRoom[6],
+      destinationMedia.reBridgeSunsetBike,
       villaRaieMantaMedia.exterior[1],
     ],
   },
