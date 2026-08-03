@@ -5,7 +5,7 @@ import { authorizeStaff } from "@/platform/auth/server";
 import { noStoreJson, rateLimit } from "@/platform/http/security";
 import { requireSameOrigin } from "@/platform/http/security";
 import { isDatabaseConfigured } from "@/platform/database/client";
-import { rateOverrideSchema } from "@/features/revenue-management/schemas";
+import { rateOverrideBatchSchema, rateOverrideSchema } from "@/features/revenue-management/schemas";
 import { RateOverrideRepository } from "@/features/revenue-management/repositories";
 
 export async function GET(request: NextRequest) {
@@ -28,7 +28,9 @@ export async function PUT(request: NextRequest) {
   if (!identity) return noStoreJson({ error: "Permission insuffisante." }, { status: 403 });
   if (!isDatabaseConfigured())
     return noStoreJson({ error: "Base non configurée." }, { status: 503 });
-  const parsed = rateOverrideSchema.safeParse(await request.json().catch(() => null));
+  const body = await request.json().catch(() => null);
+  const batch = rateOverrideBatchSchema.safeParse(body);
+  const parsed = batch.success ? batch : rateOverrideSchema.safeParse(body);
   if (!parsed.success)
     return noStoreJson(
       { error: "Tarif invalide.", details: parsed.error.flatten() },
@@ -36,7 +38,13 @@ export async function PUT(request: NextRequest) {
     );
   try {
     return noStoreJson(
-      { ok: true, result: await new RateOverrideRepository().create(parsed.data, identity.userId) },
+      {
+        ok: true,
+        result:
+          "entries" in parsed.data
+            ? await new RateOverrideRepository().createBatch(parsed.data, identity.userId)
+            : await new RateOverrideRepository().create(parsed.data, identity.userId),
+      },
       { status: 201 },
     );
   } catch (error) {

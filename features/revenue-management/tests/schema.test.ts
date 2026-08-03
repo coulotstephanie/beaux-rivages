@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { rateOverrideSchema } from "../schemas";
+import { rateOverrideBatchSchema, rateOverrideSchema } from "../schemas";
 
 const validOverride = {
   propertySlug: "nid-d-ete",
@@ -31,6 +31,36 @@ describe("rateOverrideSchema", () => {
       rateOverrideSchema.safeParse({
         ...validOverride,
         nightlyRate: -1,
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("rateOverrideBatchSchema", () => {
+  it("accepte plusieurs dates non consécutives avec des prix distincts", () => {
+    expect(
+      rateOverrideBatchSchema.safeParse({
+        propertySlug: "nid-d-ete",
+        name: "Samedis de juillet",
+        kind: "weekend",
+        entries: [
+          { date: "2026-07-04", nightlyRate: 260 },
+          { date: "2026-07-11", nightlyRate: 275 },
+        ],
+      }).success,
+    ).toBe(true);
+  });
+
+  it("refuse une sélection vide ou supérieure à une année", () => {
+    const base = { propertySlug: "nid-d-ete", name: "Sélection", kind: "manual" } as const;
+    expect(rateOverrideBatchSchema.safeParse({ ...base, entries: [] }).success).toBe(false);
+    expect(
+      rateOverrideBatchSchema.safeParse({
+        ...base,
+        entries: Array.from({ length: 367 }, (_, day) => ({
+          date: `2026-01-${String((day % 28) + 1).padStart(2, "0")}`,
+          nightlyRate: 200,
+        })),
       }).success,
     ).toBe(false);
   });

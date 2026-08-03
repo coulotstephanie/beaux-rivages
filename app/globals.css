@@ -3531,13 +3531,23 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 
 .rates-admin { margin-top: 3rem; }
 .rates-admin__toolbar { padding: 1.2rem; display: grid; grid-template-columns: 1.2fr .7fr .8fr 1.2fr auto; align-items: end; gap: .8rem; background: white; }
+.rates-selection-bar,.rates-week-pattern { margin-top: .7rem; padding: .85rem 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: .7rem 1rem; background: white; border: 1px solid var(--line); }
+.rates-selection-bar strong { color: var(--deep); }
+.rates-selection-bar span,.rates-week-pattern small { color: var(--muted); font-size: .75rem; }
+.rates-selection-bar span { flex: 1 1 18rem; }
+.rates-selection-bar button { color: var(--deep); border: 1px solid var(--line); background: white; }
+.rates-week-pattern > strong { margin-right: auto; font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; }
+.rates-week-pattern label { grid-template-columns: auto 5rem auto; align-items: center; text-transform: none; }
+.rates-week-pattern input { width: 5rem; }
+.rates-week-pattern small { flex-basis: 100%; }
 .rates-admin__legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; color: var(--muted); font-size: .72rem; }
 .rates-year { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
 .rates-year section { padding: 1rem; background: white; }
 .rates-year h2 { font-family: var(--font-serif); font-weight: 400; }
 .rates-year section > div { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
-.rates-year button { min-width: 0; min-height: 54px; padding: .25rem; display: grid; place-items: center; color: var(--deep); border: 1px solid transparent; background: #f7f4ef; font-size: .65rem; }
+.rates-year button { min-width: 0; min-height: 62px; padding: .25rem; display: grid; place-items: center; color: var(--deep); border: 1px solid transparent; background: #f7f4ef; font-size: .65rem; }
 .rates-year button span,.rates-year button strong { display: block; }
+.rates-year button span { font-weight: 700; text-transform: capitalize; }
 .rates-year button strong { font-size: .6rem; }
 .rates-year button.is-weekend { background: #e9f0ef; }
 .rates-year button.is-season { background: #eee3d2; }
@@ -3578,6 +3588,8 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 @media (max-width: 650px) {
   .calendar-admin > form { align-items: stretch; flex-direction: column; }
   .calendar-admin__properties,.rates-year,.rates-admin__toolbar { grid-template-columns: 1fr; }
+  .rates-week-pattern { align-items: stretch; flex-direction: column; }
+  .rates-week-pattern > strong { margin-right: 0; }
   .rates-center-form { grid-template-columns: 1fr; }
 }
 

@@ -77,11 +77,13 @@ export function RatesAdmin() {
   const [property, setProperty] = useState<(typeof houses)[number]["slug"]>("chai-des-tortues");
   const [year, setYear] = useState(new Date().getFullYear());
   const [days, setDays] = useState<RateDay[]>([]);
-  const [selection, setSelection] = useState<{ start: string | null; end: string | null }>({
-    start: null,
-    end: null,
-  });
+  const [selection, setSelection] = useState<string[]>([]);
   const [bulkRate, setBulkRate] = useState("");
+  const [bulkOperation, setBulkOperation] = useState<
+    "fixed" | "add" | "subtract" | "increase" | "decrease"
+  >("fixed");
+  const [weekRate, setWeekRate] = useState("");
+  const [weekendRate, setWeekendRate] = useState("");
   const [rateName, setRateName] = useState("Ajustement calendrier");
   const [rateKind, setRateKind] = useState("manual");
   const [minimumNights, setMinimumNights] = useState("");
@@ -212,34 +214,87 @@ export function RatesAdmin() {
       : { average: 0, minimum: 0, maximum: 0 };
   }, [days]);
 
-  const select = (date: string) => {
-    if (!selection.start || selection.end || date < selection.start)
-      setSelection({ start: date, end: null });
-    else setSelection({ start: selection.start, end: date });
-  };
-  const selected = (date: string) =>
-    Boolean(
-      selection.start && date >= selection.start && date <= (selection.end ?? selection.start),
+  const selected = (date: string) => selection.includes(date);
+  const select = (date: string, extend: boolean) => {
+    if (extend && selection.length) {
+      const anchor = selection.at(-1)!;
+      const [start, end] = anchor < date ? [anchor, date] : [date, anchor];
+      const range = days
+        .filter((day) => day.date >= start && day.date <= end)
+        .map((day) => day.date);
+      setSelection((current) => [...new Set([...current, ...range])].sort());
+      return;
+    }
+    setSelection((current) =>
+      current.includes(date)
+        ? current.filter((value) => value !== date)
+        : [...current, date].sort(),
     );
-  const save = async () => {
+  };
+  const computeRate = (current: number) => {
+    const value = Number(bulkRate);
+    if (bulkOperation === "add") return current + value;
+    if (bulkOperation === "subtract") return current - value;
+    if (bulkOperation === "increase") return current * (1 + value / 100);
+    if (bulkOperation === "decrease") return current * (1 - value / 100);
+    return value;
+  };
+  const persistEntries = async (
+    entries: Array<{ date: string; nightlyRate: number; minimumNights?: number }>,
+    name = rateName,
+    kind = rateKind,
+  ) => {
+    if (!entries.length) return setMessage("Sélectionnez au moins une date modifiable.");
+    const detail = `${entries.length} jour(s) · ${name}`;
+    if (!window.confirm(`Vous allez modifier ${detail}.\n\nConfirmer ?`)) return;
     const response = await fetch("/api/rates", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         propertySlug: property,
-        name: rateName,
-        kind: rateKind,
-        ...selection,
-        nightlyRate: Number(bulkRate),
-        minimumNights: minimumNights ? Number(minimumNights) : undefined,
+        name,
+        kind,
+        entries,
       }),
     });
     const payload = (await response.json()) as { error?: string };
     if (payload.error) return setMessage(payload.error);
-    setMessage("Tarifs enregistrés.");
-    setSelection({ start: null, end: null });
+    setMessage(
+      `${entries.length} tarif(s) enregistré(s). La modification peut être annulée dans l’historique.`,
+    );
+    setSelection([]);
     const refreshed = await fetch(`/api/rates?property=${property}&year=${year}`);
     setDays(((await refreshed.json()) as { days: RateDay[] }).days);
+    await loadCenter();
+  };
+  const save = async () => {
+    const entries = selection.map((date) => {
+      const day = days.find((candidate) => candidate.date === date)!;
+      return {
+        date,
+        nightlyRate: Math.max(1, Math.round(computeRate(day.rate) * 100) / 100),
+        minimumNights: minimumNights ? Number(minimumNights) : undefined,
+      };
+    });
+    await persistEntries(entries);
+  };
+  const applyWeekPattern = async () => {
+    const protectedKinds = new Set(["Vacances scolaires", "Jour férié", "Pont", "Évènement"]);
+    const candidates = (selection.length ? days.filter((day) => selected(day.date)) : days).filter(
+      (day) => !protectedKinds.has(day.season),
+    );
+    const entries = candidates
+      .map((day) => {
+        const weekday = new Date(`${day.date}T12:00:00Z`).getUTCDay();
+        const weekend = weekday === 5 || weekday === 6;
+        return {
+          date: day.date,
+          nightlyRate: Number(weekend ? weekendRate : weekRate),
+          minimumNights: minimumNights ? Number(minimumNights) : undefined,
+        };
+      })
+      .filter((entry) => entry.nightlyRate > 0);
+    await persistEntries(entries, `Semaine / week-end ${year}`, "weekend");
   };
 
   const open = async () => {
@@ -282,15 +337,28 @@ export function RatesAdmin() {
           </select>
         </label>
         <label>
-          Nouveau prix
+          Action tarifaire
+          <select
+            value={bulkOperation}
+            onChange={(event) => setBulkOperation(event.target.value as typeof bulkOperation)}
+          >
+            <option value="fixed">Définir un prix fixe</option>
+            <option value="add">Ajouter (€)</option>
+            <option value="subtract">Retirer (€)</option>
+            <option value="increase">Augmenter (%)</option>
+            <option value="decrease">Diminuer (%)</option>
+          </select>
+        </label>
+        <label>
+          Valeur
           <input
             type="number"
-            min="1"
+            min="0.01"
+            step="0.01"
             inputMode="numeric"
             value={bulkRate}
             onChange={(event) => setBulkRate(event.target.value)}
-          />{" "}
-          €
+          />
         </label>
         <label>
           Libellé
@@ -316,13 +384,47 @@ export function RatesAdmin() {
             onChange={(event) => setMinimumNights(event.target.value)}
           />
         </label>
+        <button type="button" disabled={!selection.length || !bulkRate} onClick={() => void save()}>
+          Modifier {selection.length || "les"} jour(s)
+        </button>
+      </div>
+      <div className="rates-selection-bar" aria-label="Actions sur la sélection">
+        <strong>{selection.length} date(s) sélectionnée(s)</strong>
+        <span>Cliquez pour sélectionner librement · Maj + clic pour une plage</span>
+        <button type="button" disabled={!selection.length} onClick={() => setSelection([])}>
+          Annuler la sélection
+        </button>
+      </div>
+      <div className="rates-week-pattern">
+        <strong>Prix semaine / week-end</strong>
+        <label>
+          Dimanche à jeudi
+          <input
+            type="number"
+            min="1"
+            value={weekRate}
+            onChange={(event) => setWeekRate(event.target.value)}
+          />{" "}
+          €
+        </label>
+        <label>
+          Vendredi et samedi
+          <input
+            type="number"
+            min="1"
+            value={weekendRate}
+            onChange={(event) => setWeekendRate(event.target.value)}
+          />{" "}
+          €
+        </label>
         <button
           type="button"
-          disabled={!selection.start || !selection.end || !bulkRate}
-          onClick={() => void save()}
+          disabled={!weekRate || !weekendRate}
+          onClick={() => void applyWeekPattern()}
         >
-          Appliquer à la plage
+          Appliquer {selection.length ? "à la sélection" : `à ${year}`}
         </button>
+        <small>Les vacances, jours fériés, ponts et événements identifiés sont protégés.</small>
       </div>
       <div className="rates-admin__actions" aria-label="Import et duplication">
         <button type="button" onClick={exportCsv}>
@@ -422,11 +524,16 @@ export function RatesAdmin() {
                   type="button"
                   key={day.date}
                   className={`${day.season === "Week-end" ? "is-weekend" : day.season !== "Tarif standard" ? "is-season" : ""}${selected(day.date) ? " is-selected" : ""}`}
-                  onClick={() => select(day.date)}
+                  onClick={(event) => select(day.date, event.shiftKey)}
                   aria-pressed={selected(day.date)}
                   aria-label={`${new Date(`${day.date}T12:00:00Z`).toLocaleDateString("fr-FR")}, ${day.rate} euros, ${day.season}`}
                 >
-                  <span>{Number(day.date.slice(-2))}</span>
+                  <span>
+                    {new Date(`${day.date}T12:00:00Z`)
+                      .toLocaleDateString("fr-FR", { weekday: "short", timeZone: "UTC" })
+                      .replace(".", "")}{" "}
+                    {Number(day.date.slice(-2))}
+                  </span>
                   <strong>{day.rate} €</strong>
                 </button>
               ))}

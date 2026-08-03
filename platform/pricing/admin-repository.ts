@@ -3,7 +3,7 @@ import "server-only";
 import type { PropertySlug } from "@/platform/calendar/config";
 import { getDatabaseClient } from "@/platform/database/client";
 
-type PricingEntity = "season" | "promotion" | "option" | "pricing_rule";
+type PricingEntity = "season" | "promotion" | "option" | "pricing_rule" | "rate_override";
 
 export type PricingMutation =
   | { action: "arrival-days"; propertySlug: PropertySlug; weekdays: number[] }
@@ -173,8 +173,9 @@ export class PricingAdminRepository {
                   ? "rate_overrides"
                   : null;
       if (!table) throw new Error("PRICING_UNDO_UNSUPPORTED");
-      if (row.action === "create" && row.entity_id) {
-        const removed = await this.db.from(table).delete().eq("id", row.entity_id);
+      if (row.action === "create" && (row.entity_id || Array.isArray(row.new_value?.ids))) {
+        const ids = Array.isArray(row.new_value?.ids) ? row.new_value.ids : [row.entity_id];
+        const removed = await this.db.from(table).delete().in("id", ids);
         if (removed.error) throw new Error(`PRICING_UNDO_FAILED:${removed.error.code}`);
       } else if (row.previous_value) {
         const restored = await this.db.from(table).upsert(row.previous_value);
