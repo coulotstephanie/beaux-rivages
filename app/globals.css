@@ -3625,6 +3625,10 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .rates-center-list article i[data-season="high"] { background: #a46648; }
 .rates-center-list article i[data-season="custom"] { background: #6b3b47; }
 .rates-center-list article div,.rates-options label span { display: grid; gap: .2rem; }
+.rates-center-list article > div:not(.rates-center-actions) { min-width: 0; flex: 1 1 auto; }
+.rates-center-actions { margin-left: auto; display: flex !important; flex-wrap: wrap; justify-content: flex-end; gap: .3rem !important; }
+.rates-center-actions button { min-height: 34px; padding: .35rem .55rem; color: var(--deep); border: 1px solid var(--line); background: white; cursor: pointer; }
+.rates-center-actions button.is-danger { color: #8a2f2f; border-color: #d9b8b8; }
 .rates-center-list small,.rates-options small,.rates-center-note { color: var(--muted); }
 .rates-center-form { margin-top: 1rem; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; }
 .rates-center-form button { grid-column: 1 / -1; }
@@ -3649,6 +3653,8 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .rates-week-pattern { align-items: stretch; flex-direction: column; }
   .rates-week-pattern > strong { margin-right: 0; }
   .rates-center-form { grid-template-columns: 1fr; }
+  .rates-center-list article { align-items: flex-start; flex-wrap: wrap; }
+  .rates-center-actions { width: 100%; margin-left: 0; justify-content: flex-start; }
 }
 
 /* Expérience voyageur et pilotage */

@@ -24,7 +24,21 @@ const mutation = z.discriminatedUnion("action", [
     endsOn: date,
     nightlyRate: z.number().positive().max(10_000),
     minimumNights: z.number().int().min(1).max(60),
+    replaceOverrides: z.boolean().default(false),
   }),
+  z.object({
+    action: z.literal("season-update"),
+    propertySlug: slug,
+    id: z.string().uuid(),
+    name: z.string().trim().min(2).max(120),
+    kind: z.enum(["low", "mid", "high", "custom"]),
+    startsOn: date,
+    endsOn: date,
+    nightlyRate: z.number().positive().max(10_000),
+    minimumNights: z.number().int().min(1).max(60),
+    replaceOverrides: z.boolean().default(false),
+  }),
+  z.object({ action: z.literal("season-delete"), propertySlug: slug, id: z.string().uuid() }),
   z
     .object({
       action: z.literal("promotion"),
@@ -41,6 +55,28 @@ const mutation = z.discriminatedUnion("action", [
       (value) => value.percentage > 0 || value.fixedAmount,
       "Une réduction fixe ou en pourcentage est requise.",
     ),
+  z
+    .object({
+      action: z.literal("promotion-update"),
+      propertySlug: slug,
+      id: z.string().uuid(),
+      name: z.string().trim().min(2).max(120),
+      percentage: z.number().min(0).max(100),
+      fixedAmount: z.number().positive().max(10_000).optional(),
+      startsOn: date,
+      endsOn: date,
+    })
+    .refine(
+      (value) => value.percentage > 0 || value.fixedAmount,
+      "Une réduction fixe ou en pourcentage est requise.",
+    ),
+  z.object({
+    action: z.literal("promotion-toggle"),
+    propertySlug: slug,
+    id: z.string().uuid(),
+    enabled: z.boolean(),
+  }),
+  z.object({ action: z.literal("promotion-delete"), propertySlug: slug, id: z.string().uuid() }),
   z.object({
     action: z.literal("option"),
     propertySlug: slug,

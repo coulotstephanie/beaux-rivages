@@ -38,6 +38,39 @@ test("the unique pricing engine prioritizes a season over the standard rate", ()
   });
 });
 
+test("a custom price remains authoritative when a season is applied with preserved exceptions", () => {
+  const planWithException: PropertyRatePlan = {
+    ...plan,
+    seasons: [
+      ...plan.seasons,
+      {
+        id: "manual-14-july",
+        label: "Prix personnalisé",
+        kind: "manual",
+        startsOn: "2026-07-14",
+        endsOn: "2026-07-15",
+        nightlyRate: 310,
+        minimumNights: 3,
+      },
+    ],
+  };
+  assert.deepEqual(rateForDate(planWithException, "2026-07-14"), {
+    rate: 310,
+    season: "Prix personnalisé",
+    minimumNights: 3,
+  });
+  assert.equal(rateForDate(planWithException, "2026-07-15").rate, 250);
+});
+
+test("removing a season immediately restores the standard daily price", () => {
+  const withoutSeason = { ...plan, seasons: [] };
+  assert.deepEqual(rateForDate(withoutSeason, "2026-07-18"), {
+    rate: 120,
+    season: "Week-end",
+    minimumNights: 2,
+  });
+});
+
 test("arrival-day rules are exposed by the public quote", async () => {
   const quote = await calculateQuote({
     propertySlug: "chai-des-tortues",
@@ -61,4 +94,29 @@ test("pricing-center persistence is audited and platform push stays disabled", a
   const route = await readFile("app/api/admin/pricing-center/route.ts", "utf8");
   assert.match(route, /authorizeStaff\(request, \["admin"\]\)/);
   assert.match(route, /requireSameOrigin/);
+});
+
+test("pricing P0 exposes universal promotion actions and refreshes season data", async () => {
+  const [route, repository, component, migration] = await Promise.all([
+    readFile("app/api/admin/pricing-center/route.ts", "utf8"),
+    readFile("platform/pricing/admin-repository.ts", "utf8"),
+    readFile("components/RatesAdmin.tsx", "utf8"),
+    readFile("supabase/migrations/20260809120000_pricing_p0_promotions.sql", "utf8"),
+  ]);
+  for (const action of [
+    "promotion-update",
+    "promotion-toggle",
+    "promotion-delete",
+    "season-update",
+    "season-delete",
+  ]) {
+    assert.match(route, new RegExp(action));
+    assert.match(repository, new RegExp(action));
+  }
+  assert.match(component, /Promise\.all\(\[/);
+  assert.match(component, /loadRates\(\), loadKpis\(\)/);
+  assert.match(component, /Des prix personnalisés existent/);
+  assert.match(component, /Aucune promotion\./);
+  assert.match(migration, /delete from public\.promotions/);
+  assert.doesNotMatch(repository, /is_system|system_promotion/);
 });

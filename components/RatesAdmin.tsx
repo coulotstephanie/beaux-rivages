@@ -41,6 +41,7 @@ type PricingCenterSnapshot = {
     percentage: number;
     fixed_discount_cents?: number | null;
     enabled: boolean;
+    valid_range?: string | null;
   }>;
   options: Array<{
     price_cents: number;
@@ -61,6 +62,7 @@ type PricingCenterSnapshot = {
     last_synchronization_at: string | null;
     automatic_push_enabled: false;
   }>;
+  overrides: Array<{ id: string; begins_on: string; ends_on: string; name: string }>;
 };
 const weekdayLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const monthNames = [
@@ -113,6 +115,8 @@ export function RatesAdmin() {
     startsOn: `${new Date().getFullYear()}-01-01`,
     endsOn: `${new Date().getFullYear()}-12-31`,
   });
+  const [editingSeasonId, setEditingSeasonId] = useState<string | null>(null);
+  const [editingPromotionId, setEditingPromotionId] = useState<string | null>(null);
   const [message, setMessage] = useState(
     "Sélectionnez une plage pour préparer une modification groupée.",
   );
@@ -172,6 +176,21 @@ export function RatesAdmin() {
     setCenter(payload);
   }, [property]);
 
+  const loadRates = useCallback(async () => {
+    const response = await fetch(`/api/rates?property=${property}&year=${year}`);
+    const payload = (await response.json()) as { days?: RateDay[]; error?: string };
+    if (!response.ok || payload.error) throw new Error(payload.error ?? "Calendrier indisponible");
+    setDays(payload.days ?? []);
+  }, [property, year]);
+
+  const loadKpis = useCallback(async () => {
+    const response = await fetch(`/api/admin/revenue-management?year=${year}`);
+    const payload = (await response.json()) as { properties?: RevenueKpi[]; error?: string };
+    if (!response.ok || payload.error)
+      throw new Error(payload.error ?? "Statistiques indisponibles");
+    setKpis(payload.properties ?? []);
+  }, [year]);
+
   useEffect(() => {
     if (!authenticated) return;
     void loadCenter().catch(() =>
@@ -179,7 +198,11 @@ export function RatesAdmin() {
     );
   }, [authenticated, loadCenter]);
 
-  const mutateCenter = async (body: Record<string, unknown>, success: string) => {
+  const mutateCenter = async (
+    body: Record<string, unknown>,
+    success: string,
+    refreshCalendar = false,
+  ) => {
     const response = await fetch("/api/admin/pricing-center", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -188,8 +211,59 @@ export function RatesAdmin() {
     const payload = (await response.json()) as { error?: string };
     if (!response.ok || payload.error)
       return setMessage(payload.error ?? "Enregistrement impossible.");
-    await loadCenter();
+    await Promise.all([loadCenter(), ...(refreshCalendar ? [loadRates(), loadKpis()] : [])]);
     setMessage(success);
+  };
+
+  const parseRange = (value?: string | null) => {
+    if (!value) return { startsOn: "", endsOn: "" };
+    const [startsOn = "", endsOn = ""] = value.slice(1, -1).split(",");
+    return { startsOn, endsOn };
+  };
+
+  const seasonHasOverrides = (startsOn: string, endsOn: string) =>
+    center?.overrides.some(
+      (override) => override.begins_on <= endsOn && override.ends_on >= startsOn,
+    ) ?? false;
+
+  const saveSeason = async () => {
+    let replaceOverrides = false;
+    if (seasonHasOverrides(seasonDraft.startsOn, seasonDraft.endsOn)) {
+      replaceOverrides = window.confirm(
+        "Des prix personnalisés existent sur cette période.\n\nOK : remplacer tous les prix personnalisés.\nAnnuler : conserver les exceptions.",
+      );
+    }
+    await mutateCenter(
+      {
+        action: editingSeasonId ? "season-update" : "season",
+        ...(editingSeasonId ? { id: editingSeasonId } : {}),
+        ...seasonDraft,
+        nightlyRate: Number(seasonDraft.nightlyRate),
+        minimumNights: Number(seasonDraft.minimumNights),
+        replaceOverrides,
+      },
+      editingSeasonId
+        ? "Saison modifiée et calendrier recalculé."
+        : "Saison créée et calendrier recalculé.",
+      true,
+    );
+    setEditingSeasonId(null);
+  };
+
+  const savePromotion = async () => {
+    await mutateCenter(
+      {
+        action: editingPromotionId ? "promotion-update" : "promotion",
+        ...(editingPromotionId ? { id: editingPromotionId } : { kind: "seasonal" }),
+        name: promotionDraft.name,
+        startsOn: promotionDraft.startsOn,
+        endsOn: promotionDraft.endsOn,
+        percentage: promotionDraft.mode === "percentage" ? Number(promotionDraft.value) : 0,
+        fixedAmount: promotionDraft.mode === "fixed" ? Number(promotionDraft.value) : undefined,
+      },
+      editingPromotionId ? "Promotion modifiée." : "Promotion créée et historisée.",
+    );
+    setEditingPromotionId(null);
   };
 
   const exportCsv = () => {
@@ -697,6 +771,61 @@ export function RatesAdmin() {
                       · {season.minimum_nights ?? 1} nuit(s)
                     </small>
                   </div>
+                  <div className="rates-center-actions">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const rate = season.rates?.[0]?.nightly_rate_cents ?? 0;
+                        setEditingSeasonId(season.id);
+                        setSeasonDraft({
+                          name: season.name,
+                          kind: season.kind,
+                          startsOn: season.begins_on,
+                          endsOn: season.ends_on,
+                          nightlyRate: String(rate / 100),
+                          minimumNights: String(season.minimum_nights ?? 1),
+                        });
+                      }}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const rate = season.rates?.[0]?.nightly_rate_cents ?? 0;
+                        setEditingSeasonId(null);
+                        setSeasonDraft({
+                          name: `${season.name} (copie)`,
+                          kind: season.kind,
+                          startsOn: season.begins_on,
+                          endsOn: season.ends_on,
+                          nightlyRate: String(rate / 100),
+                          minimumNights: String(season.minimum_nights ?? 1),
+                        });
+                      }}
+                    >
+                      Dupliquer
+                    </button>
+                    <button
+                      type="button"
+                      className="is-danger"
+                      onClick={() => {
+                        if (
+                          !window.confirm(
+                            `Supprimer définitivement « ${season.name} » ?\n\nLes dates retrouveront le tarif standard ou la saison précédente.`,
+                          )
+                        )
+                          return;
+                        void mutateCenter(
+                          { action: "season-delete", id: season.id },
+                          "Saison supprimée et calendrier recalculé.",
+                          true,
+                        );
+                      }}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
@@ -745,20 +874,15 @@ export function RatesAdmin() {
               <button
                 type="button"
                 disabled={!seasonDraft.nightlyRate}
-                onClick={() =>
-                  void mutateCenter(
-                    {
-                      action: "season",
-                      ...seasonDraft,
-                      nightlyRate: Number(seasonDraft.nightlyRate),
-                      minimumNights: Number(seasonDraft.minimumNights),
-                    },
-                    "Saison créée et historisée.",
-                  )
-                }
+                onClick={() => void saveSeason()}
               >
-                Créer la saison
+                {editingSeasonId ? "Enregistrer la saison" : "Créer la saison"}
               </button>
+              {editingSeasonId && (
+                <button type="button" onClick={() => setEditingSeasonId(null)}>
+                  Annuler la modification
+                </button>
+              )}
             </div>
           </section>
           <section>
@@ -838,6 +962,9 @@ export function RatesAdmin() {
           <section>
             <h2>Promotions</h2>
             <div className="rates-center-list">
+              {center.promotions.length === 0 && (
+                <p className="rates-center-note">Aucune promotion.</p>
+              )}
               {center.promotions.map((promotion) => (
                 <article key={promotion.id}>
                   <div>
@@ -848,6 +975,83 @@ export function RatesAdmin() {
                         : `${promotion.percentage} %`}{" "}
                       · {promotion.enabled ? "Active" : "Inactive"}
                     </small>
+                  </div>
+                  <div className="rates-center-actions">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const range = parseRange(promotion.valid_range);
+                        const fallbackYear = new Date().getFullYear();
+                        setEditingPromotionId(promotion.id);
+                        setPromotionDraft({
+                          name: promotion.name,
+                          mode: promotion.fixed_discount_cents ? "fixed" : "percentage",
+                          value: String(
+                            promotion.fixed_discount_cents
+                              ? promotion.fixed_discount_cents / 100
+                              : promotion.percentage,
+                          ),
+                          startsOn: range.startsOn || `${fallbackYear}-01-01`,
+                          endsOn: range.endsOn || `${fallbackYear}-12-31`,
+                        });
+                      }}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const range = parseRange(promotion.valid_range);
+                        const fallbackYear = new Date().getFullYear();
+                        setEditingPromotionId(null);
+                        setPromotionDraft({
+                          name: `${promotion.name} (copie)`,
+                          mode: promotion.fixed_discount_cents ? "fixed" : "percentage",
+                          value: String(
+                            promotion.fixed_discount_cents
+                              ? promotion.fixed_discount_cents / 100
+                              : promotion.percentage,
+                          ),
+                          startsOn: range.startsOn || `${fallbackYear}-01-01`,
+                          endsOn: range.endsOn || `${fallbackYear}-12-31`,
+                        });
+                      }}
+                    >
+                      Dupliquer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        void mutateCenter(
+                          {
+                            action: "promotion-toggle",
+                            id: promotion.id,
+                            enabled: !promotion.enabled,
+                          },
+                          promotion.enabled ? "Promotion désactivée." : "Promotion activée.",
+                        )
+                      }
+                    >
+                      {promotion.enabled ? "Désactiver" : "Activer"}
+                    </button>
+                    <button
+                      type="button"
+                      className="is-danger"
+                      onClick={() => {
+                        if (
+                          !window.confirm(
+                            `Supprimer définitivement cette promotion ?\n\n« ${promotion.name} »\n\nCette action est irréversible.`,
+                          )
+                        )
+                          return;
+                        void mutateCenter(
+                          { action: "promotion-delete", id: promotion.id },
+                          "Promotion supprimée définitivement.",
+                        );
+                      }}
+                    >
+                      Supprimer
+                    </button>
                   </div>
                 </article>
               ))}
@@ -886,27 +1090,14 @@ export function RatesAdmin() {
                 value={promotionDraft.endsOn}
                 onChange={(e) => setPromotionDraft({ ...promotionDraft, endsOn: e.target.value })}
               />
-              <button
-                type="button"
-                onClick={() =>
-                  void mutateCenter(
-                    {
-                      action: "promotion",
-                      kind: "seasonal",
-                      name: promotionDraft.name,
-                      startsOn: promotionDraft.startsOn,
-                      endsOn: promotionDraft.endsOn,
-                      percentage:
-                        promotionDraft.mode === "percentage" ? Number(promotionDraft.value) : 0,
-                      fixedAmount:
-                        promotionDraft.mode === "fixed" ? Number(promotionDraft.value) : undefined,
-                    },
-                    "Promotion créée et historisée.",
-                  )
-                }
-              >
-                Créer la promotion
+              <button type="button" onClick={() => void savePromotion()}>
+                {editingPromotionId ? "Enregistrer la promotion" : "Créer la promotion"}
               </button>
+              {editingPromotionId && (
+                <button type="button" onClick={() => setEditingPromotionId(null)}>
+                  Annuler la modification
+                </button>
+              )}
             </div>
           </section>
           <section>
