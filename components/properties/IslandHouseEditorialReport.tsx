@@ -80,7 +80,11 @@ const villaChapters: readonly Chapter[] = [
     text: "La terrasse prolonge les espaces de vie autour des saveurs de l’océan et d’un repas partagé face au large.",
     quote: "Les vacances se racontent aussi autour de la table.",
     galleryLabel: "Explorer la galerie des terrasses et des repas",
-    images: [villaRaieMantaMedia.terrace[1], villaRaieMantaMedia.terrace[0]],
+    images: [
+      villaRaieMantaMedia.terrace[0],
+      villaRaieMantaMedia.terrace[1],
+      villaRaieMantaMedia.terrace[2],
+    ],
   },
   {
     number: "06",
