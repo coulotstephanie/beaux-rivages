@@ -9,9 +9,15 @@ export function CarnetHero() {
       <div className="carnet-premium-hero__content">
         <p className="eyebrow light">Le Carnet Beaux Rivages</p>
         <h1>Les îles, comme nous les partagerions avec des amis.</h1>
-        <p>Adresses choisies, cartes, itinéraires et expériences pour vivre Ré, Oléron et La Rochelle de l’intérieur.</p>
+        <p>
+          Entrez dans nos habitudes, nos rencontres et ces lieux où nous revenons avec le même
+          plaisir, entre Ré, Oléron et La Rochelle.
+        </p>
       </div>
-      <a href="#guides" aria-label="Commencer à parcourir le Carnet"><span />Ouvrir le carnet</a>
+      <a href="#guides" aria-label="Commencer à parcourir le Carnet">
+        <span />
+        Ouvrir le carnet
+      </a>
     </section>
   );
 }

@@ -1,9 +1,9 @@
 const carnetNavigation = [
-  { href: "#guides", title: "Guides" },
-  { href: "#carte", title: "Carte" },
-  { href: "#journees-ideales", title: "Journées idéales" },
-  { href: "/inspiration", title: "Inspiration" },
-  { href: "/nos-petits-bonheurs", title: "Petits bonheurs" },
+  { href: "#guides", title: "Nos adresses de cœur" },
+  { href: "#carte", title: "Se laisser guider" },
+  { href: "#journees-ideales", title: "Une journée à notre rythme" },
+  { href: "/inspiration", title: "Vivre les îles autrement" },
+  { href: "/nos-petits-bonheurs", title: "Nos petits bonheurs" },
 ];
 
 export function CarnetNavigation() {

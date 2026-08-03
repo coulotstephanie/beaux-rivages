@@ -78,7 +78,7 @@ export default function CarnetPage() {
           <p className="local-signature__award">
             Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024
           </p>
-          <h2 id="nina-metayer-title">La pâtisserie de Nina Métayer, à quelques pas.</h2>
+          <h2 id="nina-metayer-title">Une gourmandise d’exception, à quelques pas.</h2>
           <p>
             Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première
             visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.
@@ -100,7 +100,7 @@ export default function CarnetPage() {
         />
         <div>
           <p className="eyebrow">Le carnet personnel</p>
-          <h2>Les petits bonheurs de Stéphanie &amp; Bruno</h2>
+          <h2>Ces petits bonheurs que nous avons envie de partager avec vous.</h2>
           <p>Nos rituels, nos habitudes et ces adresses où nous revenons avec le même plaisir.</p>
           <Link href="/nos-petits-bonheurs">Entrer dans notre quotidien →</Link>
         </div>
@@ -110,9 +110,9 @@ export default function CarnetPage() {
 
       <Section id="carte" tone="dark" className="carnet-map-section">
         <Heading
-          eyebrow="S’orienter"
-          title="Toutes nos adresses sur de vraies cartes."
-          description="Adresses, marchés, plages, producteurs, Fort Boyard, vélo, parkings et bornes électriques : filtrez selon votre envie et votre destination."
+          eyebrow="Se laisser guider"
+          title="Retrouvez les lieux qui accompagnent nos journées sur les îles."
+          description="Marchés, plages, producteurs, Fort Boyard, vélo et repères pratiques restent réunis sur une carte précise, lorsque vient le moment de partir à leur rencontre."
           light
         />
         <PremiumInteractiveMap />

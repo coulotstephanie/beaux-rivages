@@ -11,9 +11,11 @@ import {
 import { Heading, Section } from "@/components/ui";
 
 const destinationCopy = {
-  "Île de Ré": "Artisans, villages, marchés et pistes : nos repères depuis Rivedoux.",
-  "Île d’Oléron": "Fort Boyard, ports, forêt et plages : Oléron au rythme des marées.",
-  "La Rochelle": "Vieux-Port, aquarium, tours, musées, shopping et solutions pratiques.",
+  "Île de Ré":
+    "Les tables, les marchés et les chemins que nous aimons retrouver depuis Rivedoux-Plage.",
+  "Île d’Oléron": "Des Saumonards à Boyardville, nos horizons préférés au rythme des marées.",
+  "La Rochelle":
+    "Une échappée que nous partageons volontiers, entre le Vieux-Port, les halles et les rencontres.",
 } as const;
 
 export function PremiumPlaceCollection() {
@@ -142,7 +144,7 @@ export function PremiumPlaceCollection() {
               className="premium-place-destination"
             >
               <Heading
-                eyebrow="Guide premium"
+                eyebrow="Les lieux où nous aimons revenir"
                 title={destination}
                 description={destinationCopy[destination]}
               />
