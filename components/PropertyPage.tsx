@@ -4,7 +4,6 @@ import type { Property } from "@/data";
 import { getPropertyPresentation } from "@/propertyPresentation";
 import { reviewProfiles } from "@/reviews";
 import { Footer } from "./Footer";
-import { FullscreenGallery } from "./FullscreenGallery";
 import { Header } from "./Header";
 import { HostRecommendation } from "./HostRecommendation";
 import { MediaBackground } from "./MediaBackground";
@@ -29,6 +28,7 @@ import { propertyMedia, type PropertySlug } from "@/media/properties";
 import type { MediaAsset } from "@/media/types";
 import { createPropertyStructuredData } from "@/seo";
 import { ChaiEditorialReport } from "./properties/ChaiEditorialReport";
+import { IslandHouseEditorialReport } from "./properties/IslandHouseEditorialReport";
 import { NidSaumonardsStory } from "./properties/NidSaumonardsStory";
 
 export function PropertyPage({ property, children }: { property: Property; children?: ReactNode }) {
@@ -78,26 +78,17 @@ export function PropertyPage({ property, children }: { property: Property; child
       <PropertyHero property={property} />
       <PropertyHistoryStory propertySlug={property.slug as PropertySlug} />
 
-      {hasChaiEditorialReport ? (
-        <ChaiEditorialReport />
+      {hasChaiEditorialReport ? <ChaiEditorialReport /> : null}
+
+      {property.slug === "villa-raie-manta" || property.slug === "nid-d-ete" ? (
+        <IslandHouseEditorialReport house={property.slug} />
       ) : (
-        <PropertyDayStory scenes={presentation.dayStory} />
+        !hasChaiEditorialReport && <PropertyDayStory scenes={presentation.dayStory} />
       )}
 
       {property.slug === "nid-d-ete" && <NidSaumonardsStory />}
 
       <PropertyFilms films={manifest.videos} poster={property.hero} />
-
-      {!hasChaiEditorialReport && (
-        <Section className="premium-gallery-section">
-          <Heading
-            eyebrow="La maison et ses horizons"
-            title="Les espaces, les paysages, l’atmosphère du séjour."
-            description="Parcourez en plein écran la maison et son environnement."
-          />
-          <FullscreenGallery images={property.gallery} />
-        </Section>
-      )}
 
       {reviewProfile && (
         <Section tone="sand" className="property-review-section" id="avis-voyageurs">

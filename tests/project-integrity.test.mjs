@@ -537,10 +537,10 @@ test("property stories lead with emotion while preserving films and lived-in med
   const page = read("components/PropertyPage.tsx");
   const history = read("components/PropertyHistoryStory.tsx");
   const details = read("components/PropertySignatureDetails.tsx");
-  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<PropertyDayStory"));
-  assert.ok(page.indexOf("<PropertyDayStory") < page.indexOf("<PropertyFilms"));
-  assert.ok(page.indexOf("<PropertyFilms") < page.indexOf("<FullscreenGallery"));
-  assert.ok(page.indexOf("<FullscreenGallery") < page.indexOf("Pourquoi nos voyageurs reviennent"));
+  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<ChaiEditorialReport"));
+  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<IslandHouseEditorialReport"));
+  assert.ok(page.indexOf("<IslandHouseEditorialReport") < page.indexOf("<PropertyFilms"));
+  assert.ok(page.indexOf("<PropertyFilms") < page.indexOf("Pourquoi nos voyageurs reviennent"));
   assert.ok(
     page.indexOf("Pourquoi nos voyageurs reviennent") < page.indexOf("<PropertySignatureDetails"),
   );
@@ -773,4 +773,22 @@ test("the Chai editorial report keeps chapter galleries isolated", () => {
   assert.match(report, /openGallery\(chapter\.images\)/);
   assert.match(report, /images=\{activeImages\}/);
   assert.match(report, /Explorer toute la maison/);
+});
+
+test("Villa Raie Manta and Le Nid d’Été share the Chai editorial signature", () => {
+  const page = read("components/PropertyPage.tsx");
+  const report = read("components/properties/IslandHouseEditorialReport.tsx");
+  const saumonards = read("components/properties/NidSaumonardsStory.tsx");
+
+  assert.match(page, /<IslandHouseEditorialReport house=\{property\.slug\}/);
+  assert.match(report, /"villa-raie-manta"/);
+  assert.match(report, /"nid-d-ete"/);
+  assert.match(report, /openGallery\(chapter\.images, imageIndex\)/);
+  assert.match(report, /openGallery\(chapter\.images\)/);
+  assert.match(report, /Explorer toute la maison/);
+  assert.match(saumonards, /destinationMedia\.kiteFamily/);
+  assert.match(page, /<NidSaumonardsStory \/>/);
+  assert.match(page, /<PropertyFilms films=\{manifest\.videos\}/);
+  assert.match(page, /<NearbyMap map=\{presentation\.map\}/);
+  assert.match(page, /<PropertyAmenitiesGrid property=\{property\}/);
 });
