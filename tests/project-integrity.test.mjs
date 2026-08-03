@@ -244,6 +244,33 @@ test("the Carnet exposes premium guides, interactive maps and ideal days", () =>
   assert.match(data, /export const idealDays/);
 });
 
+test("the Carnet preserves its content while using an editorial magazine rhythm", () => {
+  const collection = read("components/carnet/PremiumPlaceCollection.tsx");
+  const styles = read("app/globals.css");
+  const editorialMarkup = collection.slice(collection.indexOf("premium-place-card--editorial"));
+
+  for (const content of [
+    "place.description",
+    "place.hostTip",
+    "place.officialUrl",
+    "place.mapUrl",
+    "place.imageCredit",
+  ]) {
+    assert.match(collection, new RegExp(content.replace(".", "\\.")));
+  }
+
+  assert.ok(
+    editorialMarkup.indexOf("place.hostTip") < editorialMarkup.indexOf("<dl>"),
+    "The personal advice must precede the practical information",
+  );
+  assert.match(collection, /is-featured/);
+  assert.match(collection, /is-reversed/);
+  assert.match(collection, /is-portrait/);
+  assert.match(styles, /premium-place-card--editorial\.is-featured/);
+  assert.match(styles, /premium-place-card--editorial\.is-portrait/);
+  assert.match(styles, /carnet-experiences__grid article/);
+});
+
 test("the premium experience collection includes all requested experiences", () => {
   const data = read("experiences.ts");
   const page = read("app/experiences/page.tsx");

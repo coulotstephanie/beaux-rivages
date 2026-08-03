@@ -147,14 +147,25 @@ export function PremiumPlaceCollection() {
                 description={destinationCopy[destination]}
               />
               <div className="premium-place-grid">
-                {places.map((place) => (
-                  <article key={place.slug} className="premium-place-card">
+                {places.map((place, placeIndex) => (
+                  <article
+                    key={place.slug}
+                    className={`premium-place-card premium-place-card--editorial${
+                      placeIndex % 5 === 0 ? " is-featured" : ""
+                    }${placeIndex % 2 === 1 ? " is-reversed" : ""}${
+                      placeIndex % 5 === 2 ? " is-portrait" : ""
+                    }`}
+                  >
                     <div className="premium-place-card__media">
                       <Image
                         src={place.image}
                         alt={place.imageAlt}
                         fill
-                        sizes="(max-width: 800px) 100vw, 31vw"
+                        sizes={
+                          placeIndex % 5 === 0
+                            ? "(max-width: 800px) 100vw, 92vw"
+                            : "(max-width: 800px) 100vw, 58vw"
+                        }
                         loading="lazy"
                         quality={85}
                       />
@@ -178,6 +189,11 @@ export function PremiumPlaceCollection() {
                         </button>
                       </div>
                       <p>{place.description}</p>
+                      {place.hostTip ? (
+                        <blockquote>
+                          <span>Le conseil de Stéphanie &amp; Bruno</span>« {place.hostTip} »
+                        </blockquote>
+                      ) : null}
                       <dl>
                         <div>
                           <dt>Distance</dt>
@@ -192,11 +208,6 @@ export function PremiumPlaceCollection() {
                           <dd>{place.walkTime}</dd>
                         </div>
                       </dl>
-                      {place.hostTip ? (
-                        <blockquote>
-                          <span>Notre conseil</span>« {place.hostTip} »
-                        </blockquote>
-                      ) : null}
                       <div className="premium-place-card__actions">
                         <a href={place.officialUrl} target="_blank" rel="noreferrer">
                           Site officiel <span aria-hidden="true">↗</span>
