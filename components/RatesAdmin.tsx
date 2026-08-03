@@ -9,6 +9,12 @@ const houses = [
   { slug: "nid-d-ete", label: "Le Nid d’Été" },
 ] as const;
 type RateDay = { date: string; rate: number; season: string; minimumNights: number };
+type ReferenceDay = {
+  date: string;
+  kind: "school_holiday" | "public_holiday" | "bridge";
+  label: string;
+  zone?: "A" | "B" | "C";
+};
 type RevenueKpi = {
   propertySlug: string;
   propertyName: string;
@@ -76,6 +82,7 @@ export function RatesAdmin() {
   const [authenticated, setAuthenticated] = useState(false);
   const [property, setProperty] = useState<(typeof houses)[number]["slug"]>("chai-des-tortues");
   const [year, setYear] = useState(new Date().getFullYear());
+  const [referenceDays, setReferenceDays] = useState<ReferenceDay[]>([]);
   const [days, setDays] = useState<RateDay[]>([]);
   const [selection, setSelection] = useState<string[]>([]);
   const [bulkRate, setBulkRate] = useState("");
@@ -116,6 +123,33 @@ export function RatesAdmin() {
       .catch(() => setMessage("Impossible de charger le calendrier tarifaire."));
     return () => controller.abort();
   }, [property, year]);
+
+  useEffect(() => {
+    if (!authenticated) return;
+    const controller = new AbortController();
+    Promise.all(
+      (["A", "B", "C"] as const).map((zone) =>
+        fetch(`/api/admin/reference-calendar?year=${year}&zone=${zone}`, {
+          signal: controller.signal,
+        }).then(
+          (response) => response.json() as Promise<{ days?: ReferenceDay[]; warning?: string }>,
+        ),
+      ),
+    )
+      .then((payloads) => {
+        const unique = new Map<string, ReferenceDay>();
+        for (const payload of payloads)
+          for (const day of payload.days ?? [])
+            unique.set(`${day.date}:${day.kind}:${day.zone ?? "national"}`, day);
+        setReferenceDays([...unique.values()]);
+        if (payloads.every((payload) => payload.warning))
+          setMessage(
+            "Les vacances scolaires sont momentanément indisponibles ; les jours fériés restent affichés.",
+          );
+      })
+      .catch(() => setMessage("Le calendrier scolaire officiel est momentanément indisponible."));
+    return () => controller.abort();
+  }, [authenticated, year]);
 
   useEffect(() => {
     if (!authenticated) return;
@@ -213,6 +247,11 @@ export function RatesAdmin() {
         }
       : { average: 0, minimum: 0, maximum: 0 };
   }, [days]);
+  const referencesByDate = useMemo(() => {
+    const map = new Map<string, ReferenceDay[]>();
+    for (const day of referenceDays) map.set(day.date, [...(map.get(day.date) ?? []), day]);
+    return map;
+  }, [referenceDays]);
 
   const selected = (date: string) => selection.includes(date);
   const select = (date: string, extend: boolean) => {
@@ -513,30 +552,56 @@ export function RatesAdmin() {
         <span>Week-end</span>
         <span>Saison</span>
         <span>Plage sélectionnée</span>
+        <span className="is-school-holiday-a">Vacances · Zone A</span>
+        <span className="is-school-holiday-b">Vacances · Zone B</span>
+        <span className="is-school-holiday-c">Vacances · Zone C</span>
+        <span className="is-public-holiday">Jour férié</span>
+        <span className="is-bridge">Pont possible</span>
       </div>
       <div className="rates-year">
         {months.map((month) => (
           <section key={month.name}>
             <h2>{month.name}</h2>
             <div>
-              {month.days.map((day) => (
-                <button
-                  type="button"
-                  key={day.date}
-                  className={`${day.season === "Week-end" ? "is-weekend" : day.season !== "Tarif standard" ? "is-season" : ""}${selected(day.date) ? " is-selected" : ""}`}
-                  onClick={(event) => select(day.date, event.shiftKey)}
-                  aria-pressed={selected(day.date)}
-                  aria-label={`${new Date(`${day.date}T12:00:00Z`).toLocaleDateString("fr-FR")}, ${day.rate} euros, ${day.season}`}
-                >
-                  <span>
-                    {new Date(`${day.date}T12:00:00Z`)
-                      .toLocaleDateString("fr-FR", { weekday: "short", timeZone: "UTC" })
-                      .replace(".", "")}{" "}
-                    {Number(day.date.slice(-2))}
-                  </span>
-                  <strong>{day.rate} €</strong>
-                </button>
-              ))}
+              {month.days.map((day) =>
+                (() => {
+                  const references = referencesByDate.get(day.date) ?? [];
+                  const referenceClasses = references
+                    .map((item) => `is-${item.kind.replaceAll("_", "-")}`)
+                    .join(" ");
+                  const labels = references.map((item) => item.label).join(", ");
+                  return (
+                    <button
+                      type="button"
+                      key={day.date}
+                      className={`${day.season === "Week-end" ? "is-weekend" : day.season !== "Tarif standard" ? "is-season" : ""}${selected(day.date) ? " is-selected" : ""} ${referenceClasses}`}
+                      onClick={(event) => select(day.date, event.shiftKey)}
+                      aria-pressed={selected(day.date)}
+                      title={labels || undefined}
+                      aria-label={`${new Date(`${day.date}T12:00:00Z`).toLocaleDateString("fr-FR")}, ${day.rate} euros, ${day.season}${labels ? `, ${labels}` : ""}`}
+                    >
+                      <span>
+                        {new Date(`${day.date}T12:00:00Z`)
+                          .toLocaleDateString("fr-FR", { weekday: "short", timeZone: "UTC" })
+                          .replace(".", "")}{" "}
+                        {Number(day.date.slice(-2))}
+                      </span>
+                      <strong>{day.rate} €</strong>
+                      {references.length > 0 && (
+                        <span className="rates-reference-markers" aria-hidden="true">
+                          {references.map((reference) => (
+                            <i
+                              key={`${reference.kind}-${reference.zone ?? "national"}`}
+                              data-kind={reference.kind}
+                              data-zone={reference.zone}
+                            />
+                          ))}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })(),
+              )}
             </div>
           </section>
         ))}

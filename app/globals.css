@@ -3541,6 +3541,13 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .rates-week-pattern input { width: 5rem; }
 .rates-week-pattern small { flex-basis: 100%; }
 .rates-admin__legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; color: var(--muted); font-size: .72rem; }
+.rates-admin__legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.rates-admin__legend span::before { width: .65rem; height: .65rem; content: ""; border-radius: 50%; background: #d7ddd9; }
+.rates-admin__legend .is-school-holiday-a::before { background: #e8c969; }
+.rates-admin__legend .is-school-holiday-b::before { background: #d89f53; }
+.rates-admin__legend .is-school-holiday-c::before { background: #ba7d52; }
+.rates-admin__legend .is-public-holiday::before { background: #c86b48; }
+.rates-admin__legend .is-bridge::before { background: #6e9eb0; }
 .rates-year { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
 .rates-year section { padding: 1rem; background: white; }
 .rates-year h2 { font-family: var(--font-serif); font-weight: 400; }
@@ -3549,6 +3556,13 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .rates-year button span,.rates-year button strong { display: block; }
 .rates-year button span { font-weight: 700; text-transform: capitalize; }
 .rates-year button strong { font-size: .6rem; }
+.rates-reference-markers { min-height: .3rem; display: flex !important; gap: 2px; }
+.rates-reference-markers i { width: .3rem; height: .3rem; display: block; border-radius: 50%; background: #718a82; }
+.rates-reference-markers i[data-kind="school_holiday"][data-zone="A"] { background: #e8c969; }
+.rates-reference-markers i[data-kind="school_holiday"][data-zone="B"] { background: #d89f53; }
+.rates-reference-markers i[data-kind="school_holiday"][data-zone="C"] { background: #ba7d52; }
+.rates-reference-markers i[data-kind="public_holiday"] { background: #c86b48; }
+.rates-reference-markers i[data-kind="bridge"] { background: #6e9eb0; }
 .rates-year button.is-weekend { background: #e9f0ef; }
 .rates-year button.is-season { background: #eee3d2; }
 .rates-year button.is-selected { color: white; background: var(--deep); }
