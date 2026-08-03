@@ -274,8 +274,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Maison du Fier, Les Portes-en-Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/lilleau-des-niges-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie de Lilleau des Niges fournie par Stéphanie",
+        src: "/images/destination/patrimoine/lilleau-des-niges-vue-aerienne.jpg",
+        alt: "Vue aérienne des chenaux, vasières et anciens marais salants de Lilleau des Niges",
       },
     ],
     source: {
