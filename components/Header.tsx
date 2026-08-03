@@ -21,7 +21,7 @@ const islandLinks = [
   ["Patrimoine et monuments", "/patrimoine"],
   ["Villages, nature et plages", "/carnet#guides"],
   ["Gastronomie et marchés", "/carnet?categorie=restaurants#guides"],
-  ["Vélo et itinéraires", "/carnet?categorie=velo#carte"],
+  ["Vélo et itinéraires", "/velo-itineraires"],
   ["Fort Boyard", "/patrimoine/fort-boyard"],
 ] as const;
 

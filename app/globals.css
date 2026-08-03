@@ -4322,3 +4322,37 @@ body.menu-open { overflow: hidden; }
 .admin-media-grid > article { display:grid; gap:.8rem; padding:1rem; border:1px solid var(--admin-border,#d6d4cc); border-radius:8px; background:#fff; }
 .admin-media-grid__image { position:relative; min-height:220px; overflow:hidden; border-radius:5px; }
 .admin-media-grid__image img { object-fit:cover; }
+
+/* Guide vélo — deux îles, deux rythmes */
+.bike-guide-hero { min-height:78vh; position:relative; display:flex; align-items:flex-end; overflow:hidden; background:var(--deep); }
+.bike-guide-hero > img { object-fit:cover; }
+.bike-guide-hero__veil { position:absolute; inset:0; background:linear-gradient(180deg,rgba(8,39,51,.12),rgba(8,39,51,.82)); }
+.bike-guide-hero__copy { position:relative; z-index:1; padding-bottom:clamp(4rem,9vw,8rem); color:#fff; }
+.bike-guide-hero__copy h1 { max-width:950px; margin:.7rem 0 1.4rem; font-family:var(--font-serif); font-size:clamp(3rem,7vw,7.2rem); font-weight:400; line-height:.95; }
+.bike-guide-hero__copy > p:last-child { max-width:720px; margin:0; font-size:clamp(1rem,1.7vw,1.25rem); line-height:1.7; }
+.bike-guide-jump { display:flex; justify-content:center; gap:1rem; padding-block:2rem; border-bottom:1px solid var(--line); }
+.bike-guide-jump a { padding:.8rem 1.2rem; color:var(--deep); border:1px solid var(--line); border-radius:999px; text-decoration:none; }
+.bike-island { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(2rem,7vw,7rem); align-items:center; padding-block:clamp(5rem,10vw,10rem); }
+.bike-island__visual { min-height:680px; position:relative; overflow:hidden; }
+.bike-island__visual--right { grid-column:2; grid-row:1; }
+.bike-island__visual img { object-fit:cover; }
+.bike-island__visual a { position:absolute; z-index:1; right:1rem; bottom:1rem; padding:.45rem .7rem; color:#fff; background:rgba(8,39,51,.72); font-size:.72rem; text-decoration:none; }
+.bike-island__content h2,.bike-guide-note h2 { margin:.6rem 0 1.5rem; font-family:var(--font-serif); font-size:clamp(2.5rem,5vw,5rem); font-weight:400; line-height:1; }
+.bike-island__intro { color:var(--muted); font-size:1.07rem; line-height:1.8; }
+.bike-route-list { margin-top:2rem; border-top:1px solid var(--line); }
+.bike-route-list article { display:grid; grid-template-columns:2rem 1fr; gap:.8rem; padding:1.35rem 0; border-bottom:1px solid var(--line); }
+.bike-route-list article > span { color:var(--gold-text); font-size:1.25rem; }
+.bike-route-list h3 { margin:0 0 .35rem; color:var(--deep); font-family:var(--font-serif); font-size:1.45rem; font-weight:400; }
+.bike-route-list p { margin:0; color:var(--muted); line-height:1.65; }
+.bike-island__links { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:2rem; }
+.bike-island__links a { padding:.85rem 1rem; color:var(--deep); border:1px solid var(--deep); text-decoration:none; }
+.bike-guide-note { padding:clamp(5rem,10vw,9rem) 0; color:#fff; background:var(--deep); }
+.bike-guide-note .shell { max-width:900px; }
+.bike-guide-note p { max-width:760px; line-height:1.8; color:rgba(255,255,255,.78); }
+.bike-guide-note a { display:inline-block; margin-top:1.5rem; color:#fff; }
+@media (max-width:900px) {
+  .bike-guide-jump { align-items:stretch; flex-direction:column; }
+  .bike-guide-jump a { text-align:center; }
+  .bike-island { grid-template-columns:1fr; }
+  .bike-island__visual,.bike-island__visual--right { grid-column:auto; grid-row:auto; min-height:70vw; }
+}

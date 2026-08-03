@@ -34,6 +34,7 @@ const staticRoutes = [
   "/animaux",
   "/faq",
   "/inspiration",
+  "/velo-itineraires",
   "/personnaliser",
   "/phototheque",
   "/maison-heureuse-fort-boyard",
