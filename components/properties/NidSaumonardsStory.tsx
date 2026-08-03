@@ -36,7 +36,7 @@ export function NidSaumonardsStory() {
           src={destinationMedia.kiteFamily.src}
           alt={destinationMedia.kiteFamily.alt}
           fill
-          quality={92}
+          quality={90}
           loading="lazy"
           sizes="100vw"
         />
