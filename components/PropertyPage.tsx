@@ -29,6 +29,7 @@ import { propertyMedia, type PropertySlug } from "@/media/properties";
 import type { MediaAsset } from "@/media/types";
 import { createPropertyStructuredData } from "@/seo";
 import { ChaiEditorialReport } from "./properties/ChaiEditorialReport";
+import { NidSaumonardsStory } from "./properties/NidSaumonardsStory";
 
 export function PropertyPage({ property, children }: { property: Property; children?: ReactNode }) {
   const presentation = getPropertyPresentation(property.slug);
@@ -82,6 +83,8 @@ export function PropertyPage({ property, children }: { property: Property; child
       ) : (
         <PropertyDayStory scenes={presentation.dayStory} />
       )}
+
+      {property.slug === "nid-d-ete" && <NidSaumonardsStory />}
 
       <PropertyFilms films={manifest.videos} poster={property.hero} />
 

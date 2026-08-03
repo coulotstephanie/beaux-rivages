@@ -160,7 +160,9 @@ export function ChaiEditorialReport() {
 
             <Container className="chai-report__action">
               <button type="button" onClick={() => openImage(chapter.images[0].src)}>
-                Voir toutes les photos de {chapter.eyebrow.toLowerCase()}{" "}
+                {chapter.eyebrow === "Le marché"
+                  ? "Voir les photos du marché"
+                  : `Voir toutes les photos de ${chapter.eyebrow.toLowerCase()}`}{" "}
                 <span aria-hidden="true">→</span>
               </button>
             </Container>

@@ -3629,6 +3629,20 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .rates-center-actions { margin-left: auto; display: flex !important; flex-wrap: wrap; justify-content: flex-end; gap: .3rem !important; }
 .rates-center-actions button { min-height: 34px; padding: .35rem .55rem; color: var(--deep); border: 1px solid var(--line); background: white; cursor: pointer; }
 .rates-center-actions button.is-danger { color: #8a2f2f; border-color: #d9b8b8; }
+
+.nid-saumonards-story { padding: clamp(6rem,10vw,10rem) 0; color: var(--deep); background: #f4f0e8; }
+.nid-saumonards-story__copy { max-width: 880px; margin-bottom: clamp(2.5rem,6vw,5rem); text-align: center; }
+.nid-saumonards-story__copy h2 { margin: .45rem 0 1.5rem; font: 400 clamp(3rem,7vw,7rem)/.95 var(--font-serif); }
+.nid-saumonards-story__copy > p:not(.eyebrow) { max-width: 760px; margin: 0 auto 1rem; color: #526963; font-size: clamp(1rem,1.5vw,1.2rem); line-height: 1.8; }
+.nid-saumonards-story__copy > strong { max-width: 700px; margin: 2rem auto 0; display: block; font: italic 400 clamp(1.45rem,2.6vw,2.25rem)/1.35 var(--font-serif); }
+.nid-saumonards-story__hero { position: relative; width: 100%; min-height: min(78vw,860px); margin: 0; overflow: hidden; }
+.nid-saumonards-story__hero img { object-fit: cover; object-position: center 48%; }
+.nid-saumonards-story__mosaic { margin-top: clamp(1rem,2vw,1.6rem); display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(.55rem,1.2vw,1rem); }
+.nid-saumonards-story__mosaic figure { position: relative; min-height: clamp(260px,32vw,480px); margin: 0; overflow: hidden; background: #d9dfda; }
+.nid-saumonards-story__mosaic img { object-fit: cover; transition: transform .8s ease; }
+.nid-saumonards-story__mosaic figure:hover img { transform: scale(1.025); }
+.nid-saumonards-story__mosaic figcaption { position: absolute; inset: auto 0 0; z-index: 1; padding: 2.8rem 1rem 1rem; display: flex; align-items: flex-end; gap: .6rem; color: white; background: linear-gradient(transparent,rgba(5,31,34,.76)); }
+.nid-saumonards-story__mosaic figcaption span { color: #e1c596; font-size: .7rem; letter-spacing: .12em; }
 .rates-center-list small,.rates-options small,.rates-center-note { color: var(--muted); }
 .rates-center-form { margin-top: 1rem; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; }
 .rates-center-form button { grid-column: 1 / -1; }
@@ -3655,6 +3669,9 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
   .rates-center-form { grid-template-columns: 1fr; }
   .rates-center-list article { align-items: flex-start; flex-wrap: wrap; }
   .rates-center-actions { width: 100%; margin-left: 0; justify-content: flex-start; }
+  .nid-saumonards-story__hero { min-height: 72vh; }
+  .nid-saumonards-story__mosaic { grid-template-columns: 1fr; }
+  .nid-saumonards-story__mosaic figure { min-height: 72vw; }
 }
 
 /* Expérience voyageur et pilotage */
