@@ -84,6 +84,8 @@ export function RatesAdmin() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [referenceDays, setReferenceDays] = useState<ReferenceDay[]>([]);
   const [days, setDays] = useState<RateDay[]>([]);
+  const [calendarView, setCalendarView] = useState<"future" | "all" | "past">("all");
+  const [historyEditing, setHistoryEditing] = useState(false);
   const [selection, setSelection] = useState<string[]>([]);
   const [bulkRate, setBulkRate] = useState("");
   const [bulkOperation, setBulkOperation] = useState<
@@ -229,14 +231,18 @@ export function RatesAdmin() {
     await loadCenter();
   };
 
-  const months = useMemo(
-    () =>
-      monthNames.map((name, month) => ({
-        name,
-        days: days.filter((day) => new Date(`${day.date}T12:00:00Z`).getUTCMonth() === month),
-      })),
-    [days],
-  );
+  const months = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    const visibleDays = days.filter((day) => {
+      if (calendarView === "future") return day.date >= today;
+      if (calendarView === "past") return day.date < today;
+      return true;
+    });
+    return monthNames.map((name, month) => ({
+      name,
+      days: visibleDays.filter((day) => new Date(`${day.date}T12:00:00Z`).getUTCMonth() === month),
+    }));
+  }, [calendarView, days]);
   const rateStats = useMemo(() => {
     const values = days.map((day) => day.rate);
     return values.length
@@ -255,6 +261,13 @@ export function RatesAdmin() {
 
   const selected = (date: string) => selection.includes(date);
   const select = (date: string, extend: boolean) => {
+    const isPast = date < new Date().toISOString().slice(0, 10);
+    if (isPast && !historyEditing) {
+      setMessage(
+        "Cette date passée est conservée en lecture seule. Activez « Modifier l’historique » pour une correction exceptionnelle.",
+      );
+      return;
+    }
     if (extend && selection.length) {
       const anchor = selection.at(-1)!;
       const [start, end] = anchor < date ? [anchor, date] : [date, anchor];
@@ -268,6 +281,30 @@ export function RatesAdmin() {
       current.includes(date)
         ? current.filter((value) => value !== date)
         : [...current, date].sort(),
+    );
+  };
+
+  const goToToday = () => {
+    const today = new Date().toISOString().slice(0, 10);
+    setYear(new Date().getFullYear());
+    setCalendarView("all");
+    window.setTimeout(
+      () =>
+        document
+          .querySelector<HTMLElement>(`[data-rate-date="${today}"]`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" }),
+      150,
+    );
+  };
+
+  const goToYearStart = () => {
+    setCalendarView("all");
+    window.setTimeout(
+      () =>
+        document
+          .querySelector<HTMLElement>(".rates-year")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      50,
     );
   };
   const computeRate = (current: number) => {
@@ -552,11 +589,45 @@ export function RatesAdmin() {
         <span>Week-end</span>
         <span>Saison</span>
         <span>Plage sélectionnée</span>
+        <span className="is-past-date">Date passée · lecture seule</span>
         <span className="is-school-holiday-a">Vacances · Zone A</span>
         <span className="is-school-holiday-b">Vacances · Zone B</span>
         <span className="is-school-holiday-c">Vacances · Zone C</span>
         <span className="is-public-holiday">Jour férié</span>
         <span className="is-bridge">Pont possible</span>
+      </div>
+      <div className="rates-calendar-controls" aria-label="Affichage du calendrier tarifaire">
+        <label>
+          Dates affichées
+          <select
+            value={calendarView}
+            onChange={(event) => {
+              setCalendarView(event.target.value as typeof calendarView);
+              setSelection([]);
+            }}
+          >
+            <option value="future">Uniquement les dates futures</option>
+            <option value="all">Toute l’année</option>
+            <option value="past">Uniquement les dates passées</option>
+          </select>
+        </label>
+        <button type="button" onClick={goToToday}>
+          Aujourd’hui
+        </button>
+        <button type="button" onClick={goToYearStart}>
+          Début de l’année
+        </button>
+        <label className="rates-history-toggle">
+          <input
+            type="checkbox"
+            checked={historyEditing}
+            onChange={(event) => {
+              setHistoryEditing(event.target.checked);
+              setSelection([]);
+            }}
+          />
+          Modifier l’historique
+        </label>
       </div>
       <div className="rates-year">
         {months.map((month) => (
@@ -570,11 +641,13 @@ export function RatesAdmin() {
                     .map((item) => `is-${item.kind.replaceAll("_", "-")}`)
                     .join(" ");
                   const labels = references.map((item) => item.label).join(", ");
+                  const isPast = day.date < new Date().toISOString().slice(0, 10);
                   return (
                     <button
                       type="button"
                       key={day.date}
-                      className={`${day.season === "Week-end" ? "is-weekend" : day.season !== "Tarif standard" ? "is-season" : ""}${selected(day.date) ? " is-selected" : ""} ${referenceClasses}`}
+                      data-rate-date={day.date}
+                      className={`${day.season === "Week-end" ? "is-weekend" : day.season !== "Tarif standard" ? "is-season" : ""}${selected(day.date) ? " is-selected" : ""}${isPast ? " is-past" : ""} ${referenceClasses}`}
                       onClick={(event) => select(day.date, event.shiftKey)}
                       aria-pressed={selected(day.date)}
                       title={labels || undefined}

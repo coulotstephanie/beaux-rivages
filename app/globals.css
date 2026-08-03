@@ -3548,6 +3548,12 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .rates-admin__legend .is-school-holiday-c::before { background: #ba7d52; }
 .rates-admin__legend .is-public-holiday::before { background: #c86b48; }
 .rates-admin__legend .is-bridge::before { background: #6e9eb0; }
+.rates-admin__legend .is-past-date::before { background: #c7ccca; }
+.rates-calendar-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; margin: 0 0 1rem; padding: .85rem; border: 1px solid #dfe5e2; background: #f8faf9; }
+.rates-calendar-controls label { display: grid; gap: .3rem; color: var(--muted); font-size: .72rem; }
+.rates-calendar-controls select,.rates-calendar-controls button { min-height: 2.6rem; }
+.rates-calendar-controls .rates-history-toggle { display: flex; align-items: center; align-self: center; gap: .45rem; margin-left: auto; }
+.rates-calendar-controls .rates-history-toggle input { width: 1rem; height: 1rem; }
 .rates-year { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
 .rates-year section { padding: 1rem; background: white; }
 .rates-year h2 { font-family: var(--font-serif); font-weight: 400; }
@@ -3565,6 +3571,7 @@ body:has(.premium-property-page) .ambient-sound { bottom: 6.5rem; }
 .rates-reference-markers i[data-kind="bridge"] { background: #6e9eb0; }
 .rates-year button.is-weekend { background: #e9f0ef; }
 .rates-year button.is-season { background: #eee3d2; }
+.rates-year button.is-past { color: #6f7673; border-color: #d9dddb; background: #f0f2f1; opacity: .78; }
 .rates-year button.is-selected { color: white; background: var(--deep); }
 .rates-admin aside { margin-top: 1rem; }
 .rates-admin__actions { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1rem 0; }
