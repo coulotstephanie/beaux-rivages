@@ -38,20 +38,28 @@ const villaChapters: readonly Chapter[] = [
   {
     number: "02",
     eyebrow: "La maison se réveille",
-    title: "L’océan entre avec le jour.",
-    text: "Au salon, la lumière glisse sur les lignes contemporaines et révèle le pont de l’Île de Ré dans le lointain.",
-    quote: "Ici, l’horizon fait partie de l’architecture.",
-    galleryLabel: "Explorer la galerie du salon panoramique",
-    images: villaRaieMantaMedia.livingRoom.slice(1, 4),
+    title: "La maison retrouve son rythme.",
+    text: "Dans le salon, les enfants jouent, les retrouvailles se prolongent et chacun prend le temps de s’installer. La Villa devient immédiatement une maison à vivre.",
+    quote: "Un espace pensé pour être ensemble.",
+    galleryLabel: "Explorer la galerie de la vie au salon",
+    images: [
+      villaRaieMantaMedia.livingRoom[1],
+      villaRaieMantaMedia.livingRoom[2],
+      villaRaieMantaMedia.livingRoom[0],
+    ],
   },
   {
     number: "03",
     eyebrow: "Le matin",
-    title: "La lumière prend de la hauteur.",
-    text: "Installé à l’étage, le salon offre un réveil face à la mer, dans une lumière qui transforme chaque matin.",
-    quote: "Prendre le temps de regarder la lumière changer.",
-    galleryLabel: "Explorer la galerie des pièces de vie",
-    images: villaRaieMantaMedia.livingRoom.slice(4, 6),
+    title: "Depuis l’étage, l’horizon s’ouvre.",
+    text: "Les fenêtres du salon encadrent la mer et le pont de l’Île de Ré. La lumière change au fil des heures et donne à chaque matin une couleur différente.",
+    quote: "Prendre le temps de regarder l’océan.",
+    galleryLabel: "Explorer la galerie de la vue mer",
+    images: [
+      villaRaieMantaMedia.livingRoom[4],
+      villaRaieMantaMedia.livingRoom[6],
+      villaRaieMantaMedia.exterior[1],
+    ],
   },
   {
     number: "04",
@@ -72,7 +80,7 @@ const villaChapters: readonly Chapter[] = [
     text: "La terrasse prolonge les espaces de vie autour des saveurs de l’océan et d’un repas partagé face au large.",
     quote: "Les vacances se racontent aussi autour de la table.",
     galleryLabel: "Explorer la galerie des terrasses et des repas",
-    images: [villaRaieMantaMedia.terrace[0], villaRaieMantaMedia.lifestyle[5]],
+    images: [villaRaieMantaMedia.terrace[1], villaRaieMantaMedia.terrace[0]],
   },
   {
     number: "06",
@@ -83,7 +91,7 @@ const villaChapters: readonly Chapter[] = [
     images: [
       villaRaieMantaMedia.bedrooms[0],
       villaRaieMantaMedia.bedrooms[1],
-      villaRaieMantaMedia.kitchen[0],
+      villaRaieMantaMedia.bedrooms[9],
     ],
   },
   {

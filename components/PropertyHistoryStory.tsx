@@ -28,7 +28,7 @@ const stories = {
     ],
     quote: "Ici, le pont n’est plus un passage : il devient une ligne de lumière dans le paysage.",
     images: [
-      propertyMedia["villa-raie-manta"].bedrooms[4],
+      propertyMedia["villa-raie-manta"].bedrooms[2],
       propertyMedia["villa-raie-manta"].terrace[2],
       propertyMedia["villa-raie-manta"].bedrooms[3],
     ],
