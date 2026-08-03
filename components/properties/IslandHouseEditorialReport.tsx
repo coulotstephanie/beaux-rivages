@@ -68,9 +68,9 @@ const villaChapters: readonly Chapter[] = [
     text: "La cuisine ouverte et la grande table accompagnent les produits rapportés du marché, les repas improvisés et les occasions que l’on choisit de célébrer.",
     galleryLabel: "Explorer la galerie de la cuisine",
     images: [
+      villaRaieMantaMedia.kitchen[0],
       destinationMedia.reMarketTomatoes,
       destinationMedia.reMarketCheese,
-      villaRaieMantaMedia.kitchen[0],
     ],
   },
   {
