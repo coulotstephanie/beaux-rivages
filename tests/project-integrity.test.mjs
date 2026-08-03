@@ -733,3 +733,12 @@ test("welcome basket choice stays exclusive, priced and visible throughout the d
   assert.match(read("platform/contracts/html.ts"), /Accueil gourmand/);
   assert.match(read("supabase/migrations/20260801113000_welcome_baskets.sql"), /4500/);
 });
+
+test("the Chai editorial report keeps chapter galleries isolated", () => {
+  const report = read("components/properties/ChaiEditorialReport.tsx");
+
+  assert.match(report, /openGallery\(chapter\.images, imageIndex\)/);
+  assert.match(report, /openGallery\(chapter\.images\)/);
+  assert.match(report, /images=\{activeImages\}/);
+  assert.match(report, /Explorer toute la maison/);
+});
