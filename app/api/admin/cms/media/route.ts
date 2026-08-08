@@ -20,13 +20,19 @@ export async function GET(request: NextRequest) {
   const token = staffAccessToken(request);
   if (!identity || !token)
     return noStoreJson({ error: "Authentification requise." }, { status: 401 });
-  const { data, error } = await getUserDatabaseClient(token)
+  const database = getUserDatabaseClient(token);
+  const { data, error } = await database
     .from("cms_media_assets")
     .select("*")
     .is("archived_at", null)
     .order("created_at", { ascending: false });
   if (error) return noStoreJson({ error: "Médiathèque indisponible." }, { status: 500 });
-  return noStoreJson({ assets: data });
+  return noStoreJson({
+    assets: data.map((asset) => ({
+      ...asset,
+      url: database.storage.from(asset.bucket).getPublicUrl(asset.storage_path).data.publicUrl,
+    })),
+  });
 }
 
 export async function POST(request: NextRequest) {
@@ -74,7 +80,16 @@ export async function POST(request: NextRequest) {
     await database.storage.from("cms-media").remove([path]);
     return noStoreJson({ error: "Indexation du média impossible." }, { status: 500 });
   }
-  return noStoreJson({ asset: record.data }, { status: 201 });
+  return noStoreJson(
+    {
+      asset: {
+        ...record.data,
+        url: database.storage.from(record.data.bucket).getPublicUrl(record.data.storage_path).data
+          .publicUrl,
+      },
+    },
+    { status: 201 },
+  );
 }
 
 export async function PATCH(request: NextRequest) {

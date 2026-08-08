@@ -10,6 +10,7 @@ type Asset = {
   title: string | null;
   alt_text: string | null;
   tags: string[];
+  url?: string;
 };
 
 export function MediaLibraryAdmin({
@@ -99,7 +100,9 @@ export function MediaLibraryAdmin({
       </form>
       <div className="admin-property-grid">
         {assets.map((asset) => {
-          const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${asset.bucket}/${asset.storage_path}`;
+          const url =
+            asset.url ??
+            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${asset.bucket}/${asset.storage_path}`;
           return (
             <article key={asset.id}>
               {asset.kind === "image" ? (
