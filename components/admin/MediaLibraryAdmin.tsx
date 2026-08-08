@@ -69,6 +69,10 @@ export function MediaLibraryAdmin({
         <p>{assets.length} média(s)</p>
       </div>
       <form className="admin-editor" onSubmit={upload}>
+        <p>
+          Choisissez une photo sur votre ordinateur, puis cliquez sur le bouton de validation. Le
+          titre et la description sont préremplis et restent modifiables.
+        </p>
         <div className="admin-form-grid">
           <label>
             Fichier
@@ -76,6 +80,16 @@ export function MediaLibraryAdmin({
               name="file"
               type="file"
               required
+              onChange={(event) => {
+                const file = event.currentTarget.files?.[0];
+                const form = event.currentTarget.form;
+                if (!file || !form) return;
+                const label = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+                const title = form.elements.namedItem("title") as HTMLInputElement | null;
+                const alt = form.elements.namedItem("altText") as HTMLInputElement | null;
+                if (title && !title.value) title.value = label;
+                if (alt && !alt.value) alt.value = label;
+              }}
               accept={
                 videosOnly
                   ? "video/mp4,video/webm"
@@ -96,7 +110,9 @@ export function MediaLibraryAdmin({
             <input name="tags" placeholder="maison, chambre, été" />
           </label>
         </div>
-        <button disabled={busy}>{busy ? "Import…" : "Ajouter"}</button>
+        <button type="submit" disabled={busy}>
+          {busy ? "Import en cours…" : "Valider et ajouter à la photothèque"}
+        </button>
       </form>
       <div className="admin-property-grid">
         {assets.map((asset) => {

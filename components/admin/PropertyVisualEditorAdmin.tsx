@@ -453,10 +453,20 @@ export function PropertyVisualEditorAdmin({
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/avif"
                 required
+                onChange={(event) => {
+                  const file = event.currentTarget.files?.[0];
+                  const form = event.currentTarget.form;
+                  if (!file || !form) return;
+                  const label = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+                  const title = form.elements.namedItem("title") as HTMLInputElement | null;
+                  const alt = form.elements.namedItem("altText") as HTMLInputElement | null;
+                  if (title && !title.value) title.value = label;
+                  if (alt && !alt.value) alt.value = label;
+                }}
               />
               <input name="title" placeholder="Titre de la photo" required />
               <input name="altText" placeholder="Description de la photo" required />
-              <button>Importer</button>
+              <button type="submit">Valider, importer et utiliser cette photo</button>
             </form>
             <div className="visual-media__grid">
               {[
