@@ -33,3 +33,11 @@ test("l'API et l'interface imposent la même fenêtre de douze mois", () => {
   assert.match(component, /min=\{allowedDates\.start\}/);
   assert.match(component, /max=\{allowedDates\.end\}/);
 });
+
+test("l'import CSV historique respecte lui aussi les douze mois glissants", () => {
+  const route = readFileSync("app/api/rates/route.ts", "utf8");
+  const component = readFileSync("components/RatesAdmin.tsx", "utf8");
+  assert.match(route, /stayDates\.some\(\(stayDate\) => !isInsideRollingWindow/);
+  assert.match(component, /eligibleEntries = entries\.filter/);
+  assert.match(component, /ligne\(s\) hors fenêtre ignorée\(s\)/);
+});

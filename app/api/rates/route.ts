@@ -7,6 +7,7 @@ import { requireSameOrigin } from "@/platform/http/security";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { rateOverrideBatchSchema, rateOverrideSchema } from "@/features/revenue-management/schemas";
 import { RateOverrideRepository } from "@/features/revenue-management/repositories";
+import { isInsideRollingWindow } from "@/platform/pricing/channels";
 
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 40);
@@ -34,6 +35,16 @@ export async function PUT(request: NextRequest) {
   if (!parsed.success)
     return noStoreJson(
       { error: "Tarif invalide.", details: parsed.error.flatten() },
+      { status: 400 },
+    );
+  const today = new Date().toISOString().slice(0, 10);
+  const stayDates =
+    "entries" in parsed.data
+      ? parsed.data.entries.map((entry) => entry.date)
+      : [parsed.data.start, parsed.data.end];
+  if (stayDates.some((stayDate) => !isInsideRollingWindow(stayDate, today)))
+    return noStoreJson(
+      { error: "Les tarifs doivent rester dans les 12 mois glissants autorisés." },
       { status: 400 },
     );
   try {

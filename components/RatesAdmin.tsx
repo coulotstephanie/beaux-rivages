@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StaffAccess } from "@/components/admin/StaffAccess";
+import { isInsideRollingWindow } from "@/platform/pricing/channels";
 
 const houses = [
   { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
@@ -310,9 +311,16 @@ export function RatesAdmin() {
         setMessage("Aucune ligne valide. Format attendu : date;prix_eur;saison;minimum_nuits.");
         return;
       }
+      const today = new Date().toISOString().slice(0, 10);
+      const eligibleEntries = entries.filter((entry) => isInsideRollingWindow(entry.date, today));
+      const excluded = entries.length - eligibleEntries.length;
+      if (!eligibleEntries.length) {
+        setMessage("Aucun tarif du fichier ne se trouve dans les 12 mois glissants autorisés.");
+        return;
+      }
       let imported = 0;
-      for (let offset = 0; offset < entries.length; offset += 366) {
-        const batch = entries.slice(offset, offset + 366);
+      for (let offset = 0; offset < eligibleEntries.length; offset += 366) {
+        const batch = eligibleEntries.slice(offset, offset + 366);
         const response = await fetch("/api/rates", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -336,7 +344,9 @@ export function RatesAdmin() {
       }
       await Promise.all([loadRates(), loadCenter(), loadKpis()]);
       setCsvFile(null);
-      setMessage(`${imported} tarif(s) importé(s) et historisé(s) pour ${file.name}.`);
+      setMessage(
+        `${imported} tarif(s) importé(s) et historisé(s) pour ${file.name}.${excluded ? ` ${excluded} ligne(s) hors fenêtre ignorée(s).` : ""}`,
+      );
     } catch {
       setMessage("La connexion a été interrompue pendant l’import. Aucun tarif n’a été confirmé.");
     } finally {
