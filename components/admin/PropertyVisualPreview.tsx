@@ -62,8 +62,19 @@ export function PropertyVisualPreview({ slug }: { slug: EditablePropertySlug }) 
     if (removeMedia) {
       event.preventDefault();
       event.stopPropagation();
+      const item = removeMedia.closest<HTMLElement>("[data-editor-media-field]");
+      const mosaic = item?.parentElement;
+      const fields = mosaic
+        ? [...mosaic.querySelectorAll<HTMLElement>("[data-editor-media-field]")]
+            .map((node) => node.dataset.editorMediaField)
+            .filter((field): field is string => !!field)
+        : [];
       window.parent.postMessage(
-        { type: "property-preview-remove-media", field: removeMedia.dataset.editorRemoveMedia },
+        {
+          type: "property-preview-remove-media",
+          field: removeMedia.dataset.editorRemoveMedia,
+          fields,
+        },
         window.location.origin,
       );
       return;

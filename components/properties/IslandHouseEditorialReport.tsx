@@ -396,11 +396,9 @@ export function IslandHouseEditorialReport({
                       →
                     </span>
                   </span>
-                  {image.editorField.includes(".added-") ? (
-                    <span className="visual-remove" data-editor-remove-media={image.editorField}>
-                      Retirer
-                    </span>
-                  ) : null}
+                  <span className="visual-remove" data-editor-remove-media={image.editorField}>
+                    Retirer
+                  </span>
                 </button>
               ))}
               <button

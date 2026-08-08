@@ -134,7 +134,7 @@ export function PropertyVisualEditorAdmin({
             visualMediaOverrides,
             visualMediaOrder: {
               ...current.visualMediaOrder,
-              [group]: (current.visualMediaOrder[group] ?? []).filter(
+              [group]: (event.data.fields ?? current.visualMediaOrder[group] ?? []).filter(
                 (field) => field !== removedField,
               ),
             },

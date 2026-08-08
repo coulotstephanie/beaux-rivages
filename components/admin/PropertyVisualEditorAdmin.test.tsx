@@ -151,4 +151,41 @@ describe("PropertyVisualEditorAdmin", () => {
       ),
     );
   });
+
+  it("removes an original photo without removing the rest of its mosaic", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => response(document)),
+    );
+    render(<PropertyVisualEditorAdmin token="session" notify={vi.fn()} />);
+    await screen.findAllByText("À jour");
+    const iframe = screen.getByTitle("Aperçu de Villa Raie Manta") as HTMLIFrameElement;
+    const postMessage = vi.spyOn(iframe.contentWindow!, "postMessage");
+
+    fireEvent(
+      window,
+      new MessageEvent("message", {
+        origin: window.location.origin,
+        data: {
+          type: "property-preview-remove-media",
+          field: "editorial.0.1",
+          fields: ["editorial.0.0", "editorial.0.1", "editorial.0.2"],
+        },
+      }),
+    );
+
+    await waitFor(() =>
+      expect(postMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "property-preview-content",
+          content: expect.objectContaining({
+            visualMediaOrder: expect.objectContaining({
+              "editorial.0": ["editorial.0.0", "editorial.0.2"],
+            }),
+          }),
+        }),
+        window.location.origin,
+      ),
+    );
+  });
 });
