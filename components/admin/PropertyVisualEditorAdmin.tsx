@@ -239,6 +239,20 @@ export function PropertyVisualEditorAdmin({
     setAssets((payload.assets ?? []).filter((asset) => asset.kind === "image"));
     setMediaOpen(true);
   };
+  const openHeroMedia = () => {
+    setMediaAddTarget(null);
+    setMediaField("hero");
+    setMediaOpen(true);
+  };
+  const openAddMedia = () => {
+    const group = "editorial.0";
+    setMediaField(`${group}.added-${crypto.randomUUID()}`);
+    setMediaAddTarget({
+      group,
+      fields: content?.visualMediaOrder[group] ?? [`${group}.0`, `${group}.1`, `${group}.2`],
+    });
+    setMediaOpen(true);
+  };
   useEffect(() => {
     if (mediaOpen && !assets.length) void openMedia();
   }, [mediaOpen]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -330,6 +344,12 @@ export function PropertyVisualEditorAdmin({
             Mobile
           </button>
         </div>
+        <button type="button" disabled={!content} onClick={openHeroMedia}>
+          Remplacer la grande photo
+        </button>
+        <button type="button" disabled={!content} onClick={openAddMedia}>
+          + Ajouter une photo
+        </button>
         <button type="button" onClick={() => setShowGuides((value) => !value)}>
           {showGuides ? "Aperçu propre" : "Afficher les repères"}
         </button>
@@ -351,8 +371,8 @@ export function PropertyVisualEditorAdmin({
         </button>
       </header>
       <p className="visual-editor__help">
-        Cliquez sur un titre ou un texte pour écrire directement. Cliquez sur la grande photo pour
-        la remplacer.
+        Cliquez directement dans la page, ou utilisez les boutons « Remplacer la grande photo » et «
+        Ajouter une photo » ci-dessus.
       </p>
       <div className={`visual-editor__stage visual-editor__stage--${viewport}`}>
         <iframe

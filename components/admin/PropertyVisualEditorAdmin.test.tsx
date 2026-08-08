@@ -96,6 +96,24 @@ describe("PropertyVisualEditorAdmin", () => {
     expect(screen.getByText("Modifications non enregistrées")).toBeInTheDocument();
   });
 
+  it("keeps photo replacement and addition available outside the embedded preview", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        response(url.includes("/cms/media") ? { assets: [] } : document),
+      ),
+    );
+    render(<PropertyVisualEditorAdmin token="session" notify={vi.fn()} />);
+    await screen.findAllByText("À jour");
+
+    fireEvent.click(screen.getByRole("button", { name: "Remplacer la grande photo" }));
+    expect(await screen.findByRole("heading", { name: "Choisir une photo" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Fermer" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "+ Ajouter une photo" }));
+    expect(await screen.findByRole("heading", { name: "Choisir une photo" })).toBeInTheDocument();
+  });
+
   it("forwards a reordered mosaic immediately to the preview", async () => {
     vi.stubGlobal(
       "fetch",
