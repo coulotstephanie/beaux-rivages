@@ -1609,7 +1609,7 @@ body.menu-open { overflow: hidden; }
 .property-visual-preview [data-editor-text-field][contenteditable="plaintext-only"],
 .property-visual-preview [data-editor-field][contenteditable="plaintext-only"] { outline: 4px solid #2b8172; background: rgba(255,255,255,.94); color: #163832; }
 .visual-reorder { display: none; }
-.property-visual-preview.is-editing .visual-reorder { position: absolute; z-index: 5; top: .5rem; right: .5rem; display: flex; gap: .3rem; }
+.property-visual-preview.is-editing .visual-reorder { display: none; }
 .property-visual-preview .visual-reorder > span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: white; background: #163832; font-weight: 700; cursor: pointer; }
 .visual-add-media,.visual-remove { display: none; }
 .property-visual-preview.is-editing .visual-add-media { min-height: 150px; display: grid; place-items: center; border: 2px dashed #2b8172; color: #163832; background: rgba(255,255,255,.92); font-weight: 700; }
@@ -1626,7 +1626,7 @@ body.menu-open { overflow: hidden; }
 .visual-media__grid button:hover { border-color: #b78931; }
 .visual-media__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
 .visual-media__grid span { display: block; padding: .45rem; }
-@media (max-width: 800px) { .visual-editor__toolbar { align-items: stretch; } .visual-editor__toolbar > * { flex: 1 1 auto; } .visual-editor__toolbar .visual-editor__publish { flex-basis: 100%; } .visual-editor__savebar { right: .5rem; bottom: .5rem; left: .5rem; display: grid; grid-template-columns: 1fr 1fr; } .visual-editor__savebar span { grid-column: 1 / -1; } .visual-media__upload { grid-template-columns: 1fr; } }
+@media (max-width: 800px) { .visual-editor__toolbar { align-items: stretch; } .visual-editor__toolbar > * { flex: 1 1 auto; } .visual-editor__toolbar .visual-editor__publish { flex-basis: 100%; } .visual-editor__savebar { right: .5rem; bottom: .5rem; left: .5rem; display: grid; grid-template-columns: 1fr 1fr; } .visual-editor__savebar span { grid-column: 1 / -1; } .visual-media__upload { grid-template-columns: 1fr; } .property-visual-preview.is-editing .visual-reorder { position: absolute; z-index: 5; top: .5rem; right: .5rem; display: flex; gap: .3rem; } }
 
 /* Tarifs & Canaux — strictement privé */
 .channel-pricing { display: grid; gap: 1rem; }
