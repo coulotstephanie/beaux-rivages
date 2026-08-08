@@ -1611,9 +1611,10 @@ body.menu-open { overflow: hidden; }
 .visual-reorder { display: none; }
 .property-visual-preview.is-editing .visual-reorder { display: none; }
 .property-visual-preview .visual-reorder > span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: white; background: #163832; font-weight: 700; cursor: pointer; }
-.visual-add-media,.visual-remove { display: none; }
+.visual-add-media,.visual-remove,.visual-edit-media { display: none; }
+.property-visual-preview.is-editing .visual-edit-media { position: absolute; z-index: 6; left: .5rem; top: .5rem; display: block; padding: .5rem .7rem; border-radius: 2rem; color: white; background: #163832; font: 700 12px/1 sans-serif; pointer-events: none; }
 .property-visual-preview.is-editing .visual-add-media { min-height: 150px; display: grid; place-items: center; border: 2px dashed #2b8172; color: #163832; background: rgba(255,255,255,.92); font-weight: 700; }
-.property-visual-preview.is-editing .visual-remove { position: absolute; z-index: 6; left: .5rem; top: .5rem; display: block; padding: .45rem .65rem; border-radius: 2rem; color: white; background: #a1462f; font: 700 12px/1 sans-serif; cursor: pointer; }
+.property-visual-preview.is-editing .visual-remove { position: absolute; z-index: 6; right: .5rem; top: .5rem; display: block; padding: .45rem .65rem; border-radius: 2rem; color: white; background: #a1462f; font: 700 12px/1 sans-serif; cursor: pointer; }
 .visual-editor__page .site-header { position: absolute; }
 .visual-editor__page .property-sticky-booking { display: none; }
 .visual-media { position: fixed; z-index: 200; inset: 0; display: grid; place-items: center; padding: 1rem; background: rgba(8,24,21,.72); }

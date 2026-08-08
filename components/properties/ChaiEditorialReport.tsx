@@ -219,6 +219,7 @@ export function ChaiEditorialReport({
                   />
                   <span className="chai-report__image-shade" />
                   <span className="chai-report__caption">{image.caption}</span>
+                  <span className="visual-edit-media">Modifier la photo</span>
                   <span className="visual-reorder">
                     <span data-editor-reorder="previous" aria-label="Déplacer à gauche">
                       ←
