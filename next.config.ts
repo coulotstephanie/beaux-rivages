@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   images: {
+    // Keep property media available when the hosting image-transformation quota is exhausted.
+    // Originals are already web-sized and cached through the /images headers below.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1440, 1920],
     imageSizes: [32, 48, 64, 96, 128, 256, 384],
