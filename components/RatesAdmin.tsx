@@ -319,6 +319,7 @@ export function RatesAdmin() {
         return;
       }
       let imported = 0;
+      let guardrailApplied = 0;
       for (let offset = 0; offset < eligibleEntries.length; offset += 366) {
         const batch = eligibleEntries.slice(offset, offset + 366);
         const response = await fetch("/api/rates", {
@@ -328,10 +329,14 @@ export function RatesAdmin() {
             propertySlug: property,
             name: "Import CSV",
             kind: "manual",
+            importMode: "csv",
             entries: batch,
           }),
         });
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+          result?: { guardrailApplied?: number };
+        } | null;
         if (!response.ok) {
           setMessage(
             imported
@@ -341,11 +346,12 @@ export function RatesAdmin() {
           return;
         }
         imported += batch.length;
+        guardrailApplied += payload?.result?.guardrailApplied ?? 0;
       }
       await Promise.all([loadRates(), loadCenter(), loadKpis()]);
       setCsvFile(null);
       setMessage(
-        `${imported} tarif(s) importé(s) et historisé(s) pour ${file.name}.${excluded ? ` ${excluded} ligne(s) hors fenêtre ignorée(s).` : ""}`,
+        `${imported} tarif(s) importé(s) et historisé(s) pour ${file.name}.${guardrailApplied ? ` Garde-fou appliqué à ${guardrailApplied} date(s) ; le prix CSV d’origine est conservé dans l’historique.` : ""}${excluded ? ` ${excluded} ligne(s) hors fenêtre ignorée(s).` : ""}`,
       );
     } catch {
       setMessage("La connexion a été interrompue pendant l’import. Aucun tarif n’a été confirmé.");

@@ -41,3 +41,16 @@ test("l'import CSV historique respecte lui aussi les douze mois glissants", () =
   assert.match(component, /eligibleEntries = entries\.filter/);
   assert.match(component, /ligne\(s\) hors fenêtre ignorée\(s\)/);
 });
+
+test("l'import CSV applique le garde-fou administrable et conserve le prix source", () => {
+  const repository = readFileSync(
+    "features/revenue-management/repositories/rate-override.repository.ts",
+    "utf8",
+  );
+  const component = readFileSync("components/RatesAdmin.tsx", "utf8");
+  assert.match(repository, /from\("rate_guardrails"\)/);
+  assert.match(repository, /sourceNightlyRate: entry\.nightlyRate/);
+  assert.match(repository, /guardrail_applied_count/);
+  assert.match(component, /Garde-fou appliqué à/);
+  assert.match(component, /prix CSV d’origine est conservé dans l’historique/);
+});

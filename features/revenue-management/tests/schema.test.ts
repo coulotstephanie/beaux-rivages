@@ -51,6 +51,18 @@ describe("rateOverrideBatchSchema", () => {
     ).toBe(true);
   });
 
+  it("identifie explicitement un lot provenant d'un import CSV", () => {
+    expect(
+      rateOverrideBatchSchema.safeParse({
+        propertySlug: "villa-raie-manta",
+        name: "Import CSV",
+        kind: "manual",
+        importMode: "csv",
+        entries: [{ date: "2026-11-09", nightlyRate: 190, minimumNights: 2 }],
+      }).success,
+    ).toBe(true);
+  });
+
   it("refuse une sélection vide ou supérieure à une année", () => {
     const base = { propertySlug: "nid-d-ete", name: "Sélection", kind: "manual" } as const;
     expect(rateOverrideBatchSchema.safeParse({ ...base, entries: [] }).success).toBe(false);

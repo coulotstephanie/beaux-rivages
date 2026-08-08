@@ -82,7 +82,23 @@ export class RateOverrideRepository {
 
   async createBatch(input: RateOverrideBatchInput, userId?: string) {
     const propertyId = await this.propertyId(input.propertySlug);
-    const dates = [...new Set(input.entries.map((entry) => entry.date))];
+    let minimumRate = 0;
+    if (input.importMode === "csv") {
+      const guardrail = await this.client
+        .from("rate_guardrails")
+        .select("minimum_rate_cents")
+        .eq("property_id", propertyId)
+        .single();
+      if (guardrail.error) throw new Error(`RATE_GUARDRAIL_READ_FAILED:${guardrail.error.code}`);
+      minimumRate = guardrail.data.minimum_rate_cents / 100;
+    }
+    const entries = input.entries.map((entry) => ({
+      ...entry,
+      sourceNightlyRate: entry.nightlyRate,
+      nightlyRate:
+        input.importMode === "csv" ? Math.max(entry.nightlyRate, minimumRate) : entry.nightlyRate,
+    }));
+    const dates = [...new Set(entries.map((entry) => entry.date))];
     const previous = await this.client
       .from("rate_overrides")
       .select("id,begins_on,ends_on,kind,name,nightly_rate_cents,minimum_nights,updated_at")
@@ -91,7 +107,7 @@ export class RateOverrideRepository {
       .in("begins_on", dates);
     if (previous.error) throw new Error(`RATE_OVERRIDE_READ_FAILED:${previous.error.code}`);
 
-    const plan = planDailyRateOverrideWrites(previous.data, input.entries, input.kind);
+    const plan = planDailyRateOverrideWrites(previous.data, entries, input.kind);
     const row = (entry: RateOverrideBatchInput["entries"][number]) => ({
       property_id: propertyId,
       name: input.name,
@@ -144,7 +160,12 @@ export class RateOverrideRepository {
         new_value: {
           name: input.name,
           kind: input.kind,
-          entries: input.entries,
+          import_mode: input.importMode ?? null,
+          entries,
+          guardrail: input.importMode === "csv" ? { minimum_rate: minimumRate } : null,
+          guardrail_applied_count: entries.filter(
+            (entry) => entry.nightlyRate !== entry.sourceNightlyRate,
+          ).length,
           ids: [...updatedIds, ...insertedIds],
           disabled_duplicate_ids: plan.disableIds,
         },
@@ -152,6 +173,13 @@ export class RateOverrideRepository {
       } as never);
       if (audit.error) throw new Error(`PRICING_AUDIT_FAILED:${audit.error.code}`);
     }
-    return { count: input.entries.length, updated: updatedIds.length, created: insertedIds.length };
+    return {
+      count: entries.length,
+      updated: updatedIds.length,
+      created: insertedIds.length,
+      guardrailApplied: entries.filter((entry) => entry.nightlyRate !== entry.sourceNightlyRate)
+        .length,
+      minimumRate: input.importMode === "csv" ? minimumRate : null,
+    };
   }
 }
