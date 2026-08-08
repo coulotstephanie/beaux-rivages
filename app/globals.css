@@ -1937,7 +1937,6 @@ body.menu-open { overflow: hidden; }
 .chai-report__mosaic.is-reversed { grid-template-columns: .85fr 1.55fr; }
 .chai-report__mosaic.is-reversed .chai-report__image--1 { grid-column: 2; }
 .chai-report__image img { object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
-.chai-report__image img[src*="airbnb-exterieur-2-1.jpeg"],
 .image-lightbox img[src*="airbnb-exterieur-2-1.jpeg"] {
   object-fit: contain;
   object-position: center center;
