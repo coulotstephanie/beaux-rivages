@@ -17,6 +17,11 @@ vi.mock("@/components/PropertyPage", () => ({
 describe("PropertyVisualPreview", () => {
   beforeEach(() => vi.restoreAllMocks());
 
+  it("shows editing controls immediately while the iframe handshake loads", () => {
+    const { container } = render(<PropertyVisualPreview slug="villa-raie-manta" />);
+    expect(container.firstElementChild).toHaveClass("is-editing");
+  });
+
   it("edits a clicked title directly and reports the change", () => {
     const post = vi.spyOn(window, "postMessage");
     render(<PropertyVisualPreview slug="villa-raie-manta" />);

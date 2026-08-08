@@ -12,7 +12,10 @@ import {
 
 export function PropertyVisualPreview({ slug }: { slug: EditablePropertySlug }) {
   const [content, setContent] = useState(() => visualContentFromProperty(getProperty(slug)));
-  const [editing, setEditing] = useState(false);
+  // This component is only rendered inside the private visual editor. Start in
+  // edit mode so Safari cannot hide the add-photo zones while the parent/iframe
+  // message handshake is still loading.
+  const [editing, setEditing] = useState(true);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const receive = (event: MessageEvent<{ type?: string; content?: PropertyVisualContent }>) => {
