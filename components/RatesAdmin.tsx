@@ -13,7 +13,8 @@ type ReferenceDay = {
   date: string;
   kind: "school_holiday" | "public_holiday" | "bridge";
   label: string;
-  zone?: "A" | "B" | "C";
+  zone?: "A" | "B" | "C" | "DE" | "BE";
+  country?: "FR" | "DE" | "BE";
 };
 type RevenueKpi = {
   propertySlug: string;
@@ -117,6 +118,8 @@ export function RatesAdmin() {
   });
   const [editingSeasonId, setEditingSeasonId] = useState<string | null>(null);
   const [editingPromotionId, setEditingPromotionId] = useState<string | null>(null);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [csvImporting, setCsvImporting] = useState(false);
   const [message, setMessage] = useState(
     "Sélectionnez une plage pour préparer une modification groupée.",
   );
@@ -134,10 +137,13 @@ export function RatesAdmin() {
     if (!authenticated) return;
     const controller = new AbortController();
     Promise.all(
-      (["A", "B", "C"] as const).map((zone) =>
-        fetch(`/api/admin/reference-calendar?year=${year}&zone=${zone}`, {
-          signal: controller.signal,
-        }).then(
+      (["A", "B", "C", "DE", "BE"] as const).map((zone) =>
+        fetch(
+          `/api/admin/reference-calendar?year=${year}&zone=${zone}&country=${["DE", "BE"].includes(zone) ? zone : "FR"}`,
+          {
+            signal: controller.signal,
+          },
+        ).then(
           (response) => response.json() as Promise<{ days?: ReferenceDay[]; warning?: string }>,
         ),
       ),
@@ -279,30 +285,63 @@ export function RatesAdmin() {
   };
 
   const importCsv = async (file: File) => {
-    const rows = (await file.text()).split(/\r?\n/).slice(1).filter(Boolean);
-    let imported = 0;
-    for (const row of rows) {
-      const [date, rate, , minimum] = row.split(";");
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number(rate)) continue;
-      const response = await fetch("/api/rates", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          propertySlug: property,
-          name: "Import CSV",
-          kind: "manual",
-          start: date,
-          end: date,
-          nightlyRate: Number(rate),
-          minimumNights: Number(minimum) || undefined,
-        }),
+    setCsvImporting(true);
+    try {
+      const lines = (await file.text())
+        .replace(/^\uFEFF/, "")
+        .split(/\r?\n/)
+        .filter(Boolean);
+      const delimiter = lines[0]?.includes(";") ? ";" : ",";
+      const entries = lines.slice(1).flatMap((row) => {
+        const [rawDate = "", rawRate = "", , rawMinimum = ""] = row.split(delimiter);
+        const date = rawDate.trim();
+        const nightlyRate = Number(rawRate.trim().replace(",", "."));
+        const minimumNights = Number(rawMinimum.trim());
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || nightlyRate <= 0) return [];
+        return [
+          {
+            date,
+            nightlyRate,
+            ...(Number.isInteger(minimumNights) && minimumNights > 0 ? { minimumNights } : {}),
+          },
+        ];
       });
-      if (response.ok) imported += 1;
+      if (!entries.length) {
+        setMessage("Aucune ligne valide. Format attendu : date;prix_eur;saison;minimum_nuits.");
+        return;
+      }
+      let imported = 0;
+      for (let offset = 0; offset < entries.length; offset += 366) {
+        const batch = entries.slice(offset, offset + 366);
+        const response = await fetch("/api/rates", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            propertySlug: property,
+            name: "Import CSV",
+            kind: "manual",
+            entries: batch,
+          }),
+        });
+        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        if (!response.ok) {
+          setMessage(
+            imported
+              ? `${imported} tarif(s) importé(s), puis l’import s’est arrêté : ${payload?.error ?? "erreur serveur"}.`
+              : (payload?.error ?? "L’import CSV a échoué. Vérifiez le fichier et réessayez."),
+          );
+          return;
+        }
+        imported += batch.length;
+      }
+      await Promise.all([loadRates(), loadCenter(), loadKpis()]);
+      setCsvFile(null);
+      setMessage(`${imported} tarif(s) importé(s) et historisé(s) pour ${file.name}.`);
+    } catch {
+      setMessage("La connexion a été interrompue pendant l’import. Aucun tarif n’a été confirmé.");
+    } finally {
+      setCsvImporting(false);
     }
-    setMessage(`${imported} tarif(s) importé(s) et historisé(s).`);
-    const refreshed = await fetch(`/api/rates?property=${property}&year=${year}`);
-    setDays(((await refreshed.json()) as { days: RateDay[] }).days);
-    await loadCenter();
   };
 
   const months = useMemo(() => {
@@ -585,9 +624,16 @@ export function RatesAdmin() {
           <input
             type="file"
             accept=".csv,text/csv"
-            onChange={(event) => event.target.files?.[0] && void importCsv(event.target.files[0])}
+            onChange={(event) => setCsvFile(event.target.files?.[0] ?? null)}
           />
         </label>
+        <button
+          type="button"
+          disabled={!csvFile || csvImporting}
+          onClick={() => csvFile && void importCsv(csvFile)}
+        >
+          {csvImporting ? "Import en cours…" : "Valider l’import CSV"}
+        </button>
         <button
           type="button"
           onClick={() =>
@@ -667,6 +713,8 @@ export function RatesAdmin() {
         <span className="is-school-holiday-a">Vacances · Zone A</span>
         <span className="is-school-holiday-b">Vacances · Zone B</span>
         <span className="is-school-holiday-c">Vacances · Zone C</span>
+        <span className="is-school-holiday-de">Vacances · Allemagne</span>
+        <span className="is-school-holiday-be">Vacances · Belgique</span>
         <span className="is-public-holiday">Jour férié</span>
         <span className="is-bridge">Pont possible</span>
       </div>

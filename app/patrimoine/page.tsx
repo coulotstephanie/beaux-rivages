@@ -7,11 +7,15 @@ import { Container } from "@/components/ui";
 import { staticPageSeo } from "@/content/fr/seo";
 import { heritageSites } from "@/content/patrimoine";
 import { createPageMetadata } from "@/seo";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 
 const pageSeo = staticPageSeo["/patrimoine"];
 export const metadata = createPageMetadata({ ...pageSeo, image: heritageSites[0].images[0].src });
 
-export default function HeritageIndexPage() {
+export default async function HeritageIndexPage() {
+  const managedPage = await getPublishedCmsPage("patrimoine");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   return (
     <main className="heritage-index">
       <PageStructuredData {...pageSeo} />

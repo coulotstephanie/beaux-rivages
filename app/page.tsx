@@ -11,6 +11,8 @@ import { staticPageSeo } from "@/content/fr/seo";
 import { createPageMetadata } from "@/seo";
 import { VideoOverlay } from "@/components/media";
 import { totalPublicPlatformReviews, weightedAirbnbRating } from "@/reviews";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 
 const pageSeo = staticPageSeo["/"];
 
@@ -69,7 +71,9 @@ const moments = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const managedPage = await getPublishedCmsPage("accueil");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   return (
     <main>
       <PageStructuredData {...pageSeo} />

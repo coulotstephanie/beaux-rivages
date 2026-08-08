@@ -1,4 +1,4 @@
-export const staffRoles = ["admin", "concierge", "read_only"] as const;
+export const staffRoles = ["admin", "editor", "concierge", "read_only"] as const;
 
 export type StaffRole = (typeof staffRoles)[number];
 
@@ -11,8 +11,9 @@ export type StaffIdentity = {
 
 export const staffRolePriority: Record<StaffRole, number> = {
   admin: 1,
-  concierge: 2,
-  read_only: 3,
+  editor: 2,
+  concierge: 3,
+  read_only: 4,
 };
 
 export function isStaffRole(value: unknown): value is StaffRole {

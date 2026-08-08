@@ -4,10 +4,12 @@ import test from "node:test";
 import { isStaffRole, staffRolePriority, staffRoles } from "../platform/auth/contracts";
 
 test("les rôles du Back Office sont fermés et priorisés", () => {
-  assert.deepEqual(staffRoles, ["admin", "concierge", "read_only"]);
+  assert.deepEqual(staffRoles, ["admin", "editor", "concierge", "read_only"]);
   assert.equal(isStaffRole("admin"), true);
   assert.equal(isStaffRole("traveler"), false);
   assert.ok(staffRolePriority.admin < staffRolePriority.concierge);
+  assert.ok(staffRolePriority.admin < staffRolePriority.editor);
+  assert.ok(staffRolePriority.editor < staffRolePriority.concierge);
   assert.ok(staffRolePriority.concierge < staffRolePriority.read_only);
 });
 
@@ -22,7 +24,9 @@ test("l’autorisation vérifie le JWT Supabase et le rôle interne", () => {
 test("la connexion n’altère jamais le client Supabase privilégié", () => {
   const route = readFileSync("app/api/auth/staff/route.ts", "utf8");
   const provider = readFileSync("platform/auth/provider.ts", "utf8");
-  assert.match(route, /getStaffAuthClient\(\)\.auth\.signInWithPassword/);
+  assert.match(route, /const authClient = getStaffAuthClient\(\)/);
+  assert.match(route, /authClient\.auth\.signInWithPassword/);
+  assert.match(route, /authClient\.auth\.mfa\.verify/);
   assert.doesNotMatch(route, /getDatabaseClient\(\)\.auth\.signInWithPassword/);
   assert.match(provider, /NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY/);
   assert.match(provider, /persistSession: false/);

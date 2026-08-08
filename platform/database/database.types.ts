@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      staff_login_events: {
+        Row: { id: number; user_id: string | null; email_hash: string | null; outcome: string; ip_hash: string | null; user_agent: string | null; created_at: string }
+        Insert: { id?: never; user_id?: string | null; email_hash?: string | null; outcome: string; ip_hash?: string | null; user_agent?: string | null; created_at?: string }
+        Update: never
+        Relationships: []
+      }
+      staff_security_settings: {
+        Row: { user_id: string; mfa_required: boolean; idle_timeout_minutes: number; updated_at: string }
+        Insert: { user_id: string; mfa_required?: boolean; idle_timeout_minutes?: number; updated_at?: string }
+        Update: { mfa_required?: boolean; idle_timeout_minutes?: number; updated_at?: string }
+        Relationships: []
+      }
+      cms_blocks: {
+        Row: { id: string; page_id: string; parent_id: string | null; block_type: string; position: number; content: Json; settings: Json; visible: boolean; created_at: string; updated_at: string }
+        Insert: { id?: string; page_id: string; parent_id?: string | null; block_type: string; position?: number; content?: Json; settings?: Json; visible?: boolean; created_at?: string; updated_at?: string }
+        Update: { id?: string; page_id?: string; parent_id?: string | null; block_type?: string; position?: number; content?: Json; settings?: Json; visible?: boolean; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      cms_media_assets: {
+        Row: { id: string; property_id: string | null; kind: string; bucket: string; storage_path: string; title: string | null; alt_text: string | null; credit: string | null; tags: string[]; focal_point: Json; metadata: Json; checksum: string | null; archived_at: string | null; created_by: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; property_id?: string | null; kind: string; bucket?: string; storage_path: string; title?: string | null; alt_text?: string | null; credit?: string | null; tags?: string[]; focal_point?: Json; metadata?: Json; checksum?: string | null; archived_at?: string | null; created_by?: string | null; created_at?: string; updated_at?: string }
+        Update: { property_id?: string | null; title?: string | null; alt_text?: string | null; credit?: string | null; tags?: string[]; focal_point?: Json; metadata?: Json; archived_at?: string | null; updated_at?: string }
+        Relationships: []
+      }
+      cms_pages: {
+        Row: { id: string; page_type: string; slug: string; title: string; status: string; locale: string; seo: Json; published_at: string | null; created_by: string | null; updated_by: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; page_type?: string; slug: string; title: string; status?: string; locale?: string; seo?: Json; published_at?: string | null; created_by?: string | null; updated_by?: string | null; created_at?: string; updated_at?: string }
+        Update: { page_type?: string; slug?: string; title?: string; status?: string; locale?: string; seo?: Json; published_at?: string | null; updated_by?: string | null; updated_at?: string }
+        Relationships: []
+      }
+      cms_page_versions: {
+        Row: { id: number; page_id: string; version: number; snapshot: Json; reason: string | null; created_by: string | null; created_at: string }
+        Insert: { id?: never; page_id: string; version: number; snapshot: Json; reason?: string | null; created_by?: string | null; created_at?: string }
+        Update: { reason?: string | null }
+        Relationships: []
+      }
+      managed_links: {
+        Row: { id: string; key: string; label: string; url: string; active: boolean; last_checked_at: string | null; last_status: number | null; updated_at: string }
+        Insert: { id?: string; key: string; label: string; url: string; active?: boolean; last_checked_at?: string | null; last_status?: number | null; updated_at?: string }
+        Update: { key?: string; label?: string; url?: string; active?: boolean; last_checked_at?: string | null; last_status?: number | null; updated_at?: string }
+        Relationships: []
+      }
+      site_settings: {
+        Row: { key: string; value: Json; public: boolean; description: string | null; updated_by: string | null; updated_at: string }
+        Insert: { key: string; value: Json; public?: boolean; description?: string | null; updated_by?: string | null; updated_at?: string }
+        Update: { value?: Json; public?: boolean; description?: string | null; updated_by?: string | null; updated_at?: string }
+        Relationships: []
+      }
       app_user_roles: {
         Row: {
           created_at: string
@@ -4001,6 +4049,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cms_capture_page_version: {
+        Args: { target_page_id: string; page_snapshot: Json; change_reason?: string }
+        Returns: number
+      }
+      cms_restore_page: {
+        Args: { target_page_id: string; target_version: number }
+        Returns: string
+      }
+      cms_save_page: {
+        Args: { page_payload: Json; block_payload?: Json; change_reason?: string }
+        Returns: string
+      }
       publish_legal_document: {
         Args: { target_id: string }
         Returns: undefined
@@ -4103,7 +4163,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "concierge" | "read_only"
+      app_role: "admin" | "editor" | "concierge" | "read_only"
       contract_status:
         | "draft"
         | "generated"
@@ -4272,7 +4332,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "concierge", "read_only"],
+      app_role: ["admin", "editor", "concierge", "read_only"],
       contract_status: [
         "draft",
         "generated",

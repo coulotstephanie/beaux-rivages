@@ -110,10 +110,43 @@ function uniqueImages(images: readonly GalleryImage[]) {
   return Array.from(new Map(images.map((image) => [image.src, image])).values());
 }
 
-export function ChaiEditorialReport() {
+export function ChaiEditorialReport({
+  mediaOverrides = {},
+  mediaOrder = {},
+  textOverrides = {},
+}: {
+  mediaOverrides?: Record<string, GalleryImage>;
+  mediaOrder?: Record<string, string[]>;
+  textOverrides?: Record<string, string>;
+}) {
+  const renderedChapters = useMemo(
+    () =>
+      chapters.map((chapter, chapterIndex) => ({
+        ...chapter,
+        images: (() => {
+          const group = `editorial.${chapterIndex}`;
+          const baseItems = chapter.images.map((image, imageIndex) => ({
+            ...(mediaOverrides[`${group}.${imageIndex}`] ?? image),
+            editorField: `${group}.${imageIndex}`,
+          }));
+          const order = mediaOrder[group];
+          const addedItems = (order ?? [])
+            .filter((field) => !baseItems.some((item) => item.editorField === field))
+            .flatMap((field) =>
+              mediaOverrides[field] ? [{ ...mediaOverrides[field], editorField: field }] : [],
+            );
+          const items = [...baseItems, ...addedItems];
+          return order
+            ? order.flatMap((field) => items.find((item) => item.editorField === field) ?? [])
+            : items;
+        })(),
+      })),
+    [mediaOverrides, mediaOrder],
+  );
   const allImages = useMemo(
-    () => uniqueImages([...chapters.flatMap((chapter) => chapter.images), ...media.gallery]),
-    [],
+    () =>
+      uniqueImages([...renderedChapters.flatMap((chapter) => chapter.images), ...media.gallery]),
+    [renderedChapters],
   );
   const [activeImages, setActiveImages] = useState<GalleryImage[]>(allImages);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -128,24 +161,37 @@ export function ChaiEditorialReport() {
     <section className="chai-report" aria-labelledby="chai-report-title">
       <Container className="chai-report__intro">
         <p className="eyebrow">Le Chai des Tortues · Reportage</p>
-        <h2 id="chai-report-title">Une maison qui se découvre comme on feuillette un carnet.</h2>
-        <p>
-          De la première lumière sur les pierres aux longues soirées autour de la table, entrez dans
-          le rythme d’une maison de famille au cœur de Rivedoux-Plage.
+        <h2 id="chai-report-title" data-editor-text-field="report.title">
+          {textOverrides["report.title"] ??
+            "Une maison qui se découvre comme on feuillette un carnet."}
+        </h2>
+        <p data-editor-text-field="report.introduction">
+          {textOverrides["report.introduction"] ?? (
+            <>
+              De la première lumière sur les pierres aux longues soirées autour de la table, entrez
+              dans le rythme d’une maison de famille au cœur de Rivedoux-Plage.
+            </>
+          )}
         </p>
       </Container>
 
       <div className="chai-report__chapters">
-        {chapters.map((chapter, chapterIndex) => (
+        {renderedChapters.map((chapter, chapterIndex) => (
           <article className="chai-report__chapter" key={chapter.number}>
             <Container className="chai-report__copy">
               <span className="chai-report__number" aria-hidden="true">
                 {chapter.number}
               </span>
               <div>
-                <p className="eyebrow">{chapter.eyebrow}</p>
-                <h3>{chapter.title}</h3>
-                <p>{chapter.text}</p>
+                <p className="eyebrow" data-editor-text-field={`chapter.${chapterIndex}.eyebrow`}>
+                  {textOverrides[`chapter.${chapterIndex}.eyebrow`] ?? chapter.eyebrow}
+                </p>
+                <h3 data-editor-text-field={`chapter.${chapterIndex}.title`}>
+                  {textOverrides[`chapter.${chapterIndex}.title`] ?? chapter.title}
+                </h3>
+                <p data-editor-text-field={`chapter.${chapterIndex}.text`}>
+                  {textOverrides[`chapter.${chapterIndex}.text`] ?? chapter.text}
+                </p>
               </div>
             </Container>
 
@@ -156,6 +202,7 @@ export function ChaiEditorialReport() {
                   type="button"
                   key={image.src}
                   onClick={() => openGallery(chapter.images, imageIndex)}
+                  data-editor-media-field={image.editorField}
                 >
                   <Image
                     src={image.src}
@@ -168,11 +215,32 @@ export function ChaiEditorialReport() {
                         ? "(max-width: 760px) 100vw, 66vw"
                         : "(max-width: 760px) 100vw, 33vw"
                     }
+                    unoptimized={image.src.startsWith("http")}
                   />
                   <span className="chai-report__image-shade" />
                   <span className="chai-report__caption">{image.caption}</span>
+                  <span className="visual-reorder">
+                    <span data-editor-reorder="previous" aria-label="Déplacer à gauche">
+                      ←
+                    </span>
+                    <span data-editor-reorder="next" aria-label="Déplacer à droite">
+                      →
+                    </span>
+                  </span>
+                  {image.editorField.includes(".added-") ? (
+                    <span className="visual-remove" data-editor-remove-media={image.editorField}>
+                      Retirer
+                    </span>
+                  ) : null}
                 </button>
               ))}
+              <button
+                type="button"
+                className="visual-add-media"
+                data-editor-add-media={`editorial.${chapterIndex}`}
+              >
+                + Ajouter une photo
+              </button>
             </Container>
 
             <Container className="chai-report__action">

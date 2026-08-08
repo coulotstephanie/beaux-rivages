@@ -273,12 +273,46 @@ function uniqueImages(images: readonly GalleryImage[]) {
   return Array.from(new Map(images.map((image) => [image.src, image])).values());
 }
 
-export function IslandHouseEditorialReport({ house }: { house: SupportedHouse }) {
+export function IslandHouseEditorialReport({
+  house,
+  mediaOverrides = {},
+  mediaOrder = {},
+  textOverrides = {},
+}: {
+  house: SupportedHouse;
+  mediaOverrides?: Record<string, GalleryImage>;
+  mediaOrder?: Record<string, string[]>;
+  textOverrides?: Record<string, string>;
+}) {
   const report = reports[house];
+  const renderedChapters = useMemo(
+    () =>
+      report.chapters.map((chapter, chapterIndex) => ({
+        ...chapter,
+        images: (() => {
+          const group = `editorial.${chapterIndex}`;
+          const baseItems = chapter.images.map((image, imageIndex) => ({
+            ...(mediaOverrides[`${group}.${imageIndex}`] ?? image),
+            editorField: `${group}.${imageIndex}`,
+          }));
+          const order = mediaOrder[group];
+          const addedItems = (order ?? [])
+            .filter((field) => !baseItems.some((item) => item.editorField === field))
+            .flatMap((field) =>
+              mediaOverrides[field] ? [{ ...mediaOverrides[field], editorField: field }] : [],
+            );
+          const items = [...baseItems, ...addedItems];
+          return order
+            ? order.flatMap((field) => items.find((item) => item.editorField === field) ?? [])
+            : items;
+        })(),
+      })),
+    [report, mediaOverrides, mediaOrder],
+  );
   const allImages = useMemo(
     () =>
-      uniqueImages([...report.chapters.flatMap((chapter) => chapter.images), ...report.gallery]),
-    [report],
+      uniqueImages([...renderedChapters.flatMap((chapter) => chapter.images), ...report.gallery]),
+    [renderedChapters, report.gallery],
   );
   const [activeImages, setActiveImages] = useState<GalleryImage[]>(allImages);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -293,22 +327,40 @@ export function IslandHouseEditorialReport({ house }: { house: SupportedHouse })
     <section className="chai-report island-house-report" aria-labelledby={`${house}-report-title`}>
       <Container className="chai-report__intro">
         <p className="eyebrow">{report.eyebrow}</p>
-        <h2 id={`${house}-report-title`}>{report.title}</h2>
-        <p>{report.introduction}</p>
+        <h2 id={`${house}-report-title`} data-editor-text-field="report.title">
+          {textOverrides["report.title"] ?? report.title}
+        </h2>
+        <p data-editor-text-field="report.introduction">
+          {textOverrides["report.introduction"] ?? report.introduction}
+        </p>
       </Container>
 
       <div className="chai-report__chapters">
-        {report.chapters.map((chapter, chapterIndex) => (
+        {renderedChapters.map((chapter, chapterIndex) => (
           <article className="chai-report__chapter" key={chapter.number}>
             <Container className="chai-report__copy">
               <span className="chai-report__number" aria-hidden="true">
                 {chapter.number}
               </span>
               <div>
-                <p className="eyebrow">{chapter.eyebrow}</p>
-                <h3>{chapter.title}</h3>
-                <p>{chapter.text}</p>
-                {chapter.quote ? <blockquote>« {chapter.quote} »</blockquote> : null}
+                <p className="eyebrow" data-editor-text-field={`chapter.${chapterIndex}.eyebrow`}>
+                  {textOverrides[`chapter.${chapterIndex}.eyebrow`] ?? chapter.eyebrow}
+                </p>
+                <h3 data-editor-text-field={`chapter.${chapterIndex}.title`}>
+                  {textOverrides[`chapter.${chapterIndex}.title`] ?? chapter.title}
+                </h3>
+                <p data-editor-text-field={`chapter.${chapterIndex}.text`}>
+                  {textOverrides[`chapter.${chapterIndex}.text`] ?? chapter.text}
+                </p>
+                {chapter.quote ? (
+                  <blockquote>
+                    «{" "}
+                    <span data-editor-text-field={`chapter.${chapterIndex}.quote`}>
+                      {textOverrides[`chapter.${chapterIndex}.quote`] ?? chapter.quote}
+                    </span>{" "}
+                    »
+                  </blockquote>
+                ) : null}
               </div>
             </Container>
 
@@ -319,6 +371,7 @@ export function IslandHouseEditorialReport({ house }: { house: SupportedHouse })
                   type="button"
                   key={image.src}
                   onClick={() => openGallery(chapter.images, imageIndex)}
+                  data-editor-media-field={image.editorField}
                 >
                   <Image
                     src={image.src}
@@ -331,11 +384,32 @@ export function IslandHouseEditorialReport({ house }: { house: SupportedHouse })
                         ? "(max-width: 760px) 100vw, 66vw"
                         : "(max-width: 760px) 100vw, 33vw"
                     }
+                    unoptimized={image.src.startsWith("http")}
                   />
                   <span className="chai-report__image-shade" />
                   <span className="chai-report__caption">{image.caption}</span>
+                  <span className="visual-reorder">
+                    <span data-editor-reorder="previous" aria-label="Déplacer à gauche">
+                      ←
+                    </span>
+                    <span data-editor-reorder="next" aria-label="Déplacer à droite">
+                      →
+                    </span>
+                  </span>
+                  {image.editorField.includes(".added-") ? (
+                    <span className="visual-remove" data-editor-remove-media={image.editorField}>
+                      Retirer
+                    </span>
+                  ) : null}
                 </button>
               ))}
+              <button
+                type="button"
+                className="visual-add-media"
+                data-editor-add-media={`editorial.${chapterIndex}`}
+              >
+                + Ajouter une photo
+              </button>
             </Container>
 
             <Container className="chai-report__action">

@@ -9,6 +9,8 @@ import { staticPageSeo } from "@/content/fr/seo";
 import { CarnetRepository } from "@/features/carnet/repositories";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { absoluteUrl, createPageMetadata } from "@/seo";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 
 const pageSeo = staticPageSeo["/nos-petits-bonheurs"];
 
@@ -64,6 +66,8 @@ async function getEntries(): Promise<PetitBonheur[]> {
 }
 
 export default async function NosPetitsBonheursPage() {
+  const managedPage = await getPublishedCmsPage("nos-petits-bonheurs");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   const entries = await getEntries();
   const structuredData = {
     "@context": "https://schema.org",

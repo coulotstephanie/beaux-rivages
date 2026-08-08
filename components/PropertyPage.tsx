@@ -72,7 +72,14 @@ export function PropertyPage({ property, children }: { property: Property; child
     ...presentation.dayStory.map((scene) => scene.image),
     ...(presentation.experiences?.map((experience) => experience.image) ?? []),
   ];
-  if (usedMedia.some((src) => !allowedMedia.has(src) && !src.startsWith("/images/destination/"))) {
+  if (
+    usedMedia.some(
+      (src) =>
+        !allowedMedia.has(src) &&
+        !src.startsWith("/images/destination/") &&
+        !src.startsWith("http"),
+    )
+  ) {
     throw new Error(`Media missing from manifest for property: ${property.slug}`);
   }
 
@@ -83,10 +90,21 @@ export function PropertyPage({ property, children }: { property: Property; child
       <PropertyHero property={property} />
       <PropertyHistoryStory propertySlug={property.slug as PropertySlug} />
 
-      {hasChaiEditorialReport ? <ChaiEditorialReport /> : null}
+      {hasChaiEditorialReport ? (
+        <ChaiEditorialReport
+          mediaOverrides={property.visualMediaOverrides}
+          mediaOrder={property.visualMediaOrder}
+          textOverrides={property.visualTextOverrides}
+        />
+      ) : null}
 
       {property.slug === "villa-raie-manta" || property.slug === "nid-d-ete" ? (
-        <IslandHouseEditorialReport house={property.slug} />
+        <IslandHouseEditorialReport
+          house={property.slug}
+          mediaOverrides={property.visualMediaOverrides}
+          mediaOrder={property.visualMediaOrder}
+          textOverrides={property.visualTextOverrides}
+        />
       ) : (
         !hasChaiEditorialReport && <PropertyDayStory scenes={presentation.dayStory} />
       )}
@@ -128,8 +146,8 @@ export function PropertyPage({ property, children }: { property: Property; child
           <h2>{presentation.storyTitle}</h2>
           <div className="property-signature-note">
             <span>La signature de la maison</span>
-            <strong>{property.signatureTitle}</strong>
-            <p>{property.signatureText}</p>
+            <strong data-editor-field="signatureTitle">{property.signatureTitle}</strong>
+            <p data-editor-field="signatureText">{property.signatureText}</p>
           </div>
           <Button href={`/reserver?maison=${property.slug}`} variant="ghost">
             Préparer mon séjour <span aria-hidden="true">→</span>
@@ -172,10 +190,11 @@ export function PropertyPage({ property, children }: { property: Property; child
         <MediaBackground src={ctaImages[property.slug as PropertySlug]} />
         <Container>
           <p className="eyebrow light">Réserver en direct</p>
-          <h2>{property.bookingTitle}</h2>
+          <h2 data-editor-field="bookingTitle">{property.bookingTitle}</h2>
           <p>
-            {property.bookingText} Réservation directe, échange avec Stéphanie, attentions
-            personnalisables et règlement sécurisé par virement bancaire.
+            <span data-editor-field="bookingText">{property.bookingText}</span> Réservation directe,
+            échange avec Stéphanie, attentions personnalisables et règlement sécurisé par virement
+            bancaire.
           </p>
           <Button href={`/reserver?maison=${property.slug}`}>Choisir mes dates</Button>
         </Container>

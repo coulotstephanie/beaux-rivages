@@ -24,3 +24,16 @@ export function getDatabaseClient() {
   }
   return serverClient;
 }
+
+export function getUserDatabaseClient(accessToken: string) {
+  if (!isDatabaseConfigured()) throw new Error("SUPABASE_NOT_CONFIGURED");
+  return createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Client-Info": "beaux-rivages-cms",
+      },
+    },
+  });
+}

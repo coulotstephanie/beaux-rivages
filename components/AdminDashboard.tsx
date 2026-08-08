@@ -66,6 +66,26 @@ const PremiumCrmAdmin = dynamic(() =>
 const DocumentCenterAdmin = dynamic(() =>
   import("@/components/admin/DocumentCenterAdmin").then((module) => module.DocumentCenterAdmin),
 );
+const CmsPagesAdmin = dynamic(() =>
+  import("@/components/admin/CmsPagesAdmin").then((module) => module.CmsPagesAdmin),
+);
+const MediaLibraryAdmin = dynamic(() =>
+  import("@/components/admin/MediaLibraryAdmin").then((module) => module.MediaLibraryAdmin),
+);
+const SiteSettingsAdmin = dynamic(() =>
+  import("@/components/admin/SiteSettingsAdmin").then((module) => module.SiteSettingsAdmin),
+);
+const StaffUsersAdmin = dynamic(() =>
+  import("@/components/admin/StaffUsersAdmin").then((module) => module.StaffUsersAdmin),
+);
+const PropertyVisualEditorAdmin = dynamic(() =>
+  import("@/components/admin/PropertyVisualEditorAdmin").then(
+    (module) => module.PropertyVisualEditorAdmin,
+  ),
+);
+const ChannelPricingAdmin = dynamic(() =>
+  import("@/components/admin/ChannelPricingAdmin").then((module) => module.ChannelPricingAdmin),
+);
 
 function nights(reservation: BackOfficeReservation) {
   return Math.round(
@@ -108,6 +128,22 @@ export function AdminDashboard() {
     );
     return () => window.clearInterval(refresh);
   }, [data]);
+
+  useEffect(() => {
+    if (!data) return;
+    const idleMilliseconds = 30 * 60 * 1_000;
+    let timer = window.setTimeout(() => void signOut(), idleMilliseconds);
+    const reset = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => void signOut(), idleMilliseconds);
+    };
+    const events = ["pointerdown", "keydown", "scroll"] as const;
+    events.forEach((event) => window.addEventListener(event, reset, { passive: true }));
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach((event) => window.removeEventListener(event, reset));
+    };
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const normalized = query.trim();
@@ -562,72 +598,28 @@ export function AdminDashboard() {
       {view === "carnet" && <CarnetCmsAdmin token={token} notify={setMessage} />}
       {view === "patrimoine" && <HeritageMediaAdmin token={token} notify={setMessage} />}
       {view === "livre-or" && <GuestBookAdmin token={token} notify={setMessage} />}
+      {view === "avis" && <GuestBookAdmin token={token} notify={setMessage} />}
+      {view === "contenus" && <CmsPagesAdmin token={token} notify={setMessage} />}
+      {view === "seo" && <CmsPagesAdmin token={token} notify={setMessage} mode="seo" />}
+      {view === "phototheque" && <MediaLibraryAdmin token={token} notify={setMessage} />}
+      {view === "videos" && <MediaLibraryAdmin token={token} notify={setMessage} videosOnly />}
+      {view === "utilisateurs" && <StaffUsersAdmin token={token} notify={setMessage} />}
+      {view === "parametres" && <SiteSettingsAdmin token={token} notify={setMessage} />}
       {view === "fiscalite" && <FiscalityAdmin token={token} notify={setMessage} />}
       {view === "juridique" && <LegalCenterAdmin token={token} notify={setMessage} />}
       {(view === "calendrier" ||
         view === "paiements" ||
         view === "conciergerie" ||
         view === "menage" ||
-        view === "maintenance" ||
-        view === "parametres") && (
+        view === "maintenance") && (
         <PremiumOperations data={data} view={view} busy={busy} onSubmit={operate} />
       )}
 
+      {view === "promotions" && <ChannelPricingAdmin token={token} notify={setMessage} />}
+
       {view === "voyageurs" && <PremiumCrmAdmin token={token} notify={setMessage} />}
 
-      {view === "logements" && (
-        <section className="admin-panel">
-          <div className="admin-panel__heading">
-            <div>
-              <p className="eyebrow">Inventaire commercial</p>
-              <h2>Logements, tarifs et disponibilités</h2>
-            </div>
-            <div className="admin-actions">
-              <a href="/administration/tarifs">Modifier les tarifs</a>
-              <a href="/administration/calendriers">Gérer les calendriers</a>
-            </div>
-          </div>
-          <div className="admin-property-grid">
-            {data.properties.map((property) => (
-              <article key={property.id}>
-                <div>
-                  <Status value={property.status} />
-                  <h3>{property.name}</h3>
-                </div>
-                <strong>{property.occupancyRate} %</strong>
-                <span>occupation estimée</span>
-                <dl>
-                  <div>
-                    <dt>Nuits occupées</dt>
-                    <dd>{property.occupiedNights}</dd>
-                  </div>
-                  <div>
-                    <dt>Réservation directe</dt>
-                    <dd>{property.directNights}</dd>
-                  </div>
-                  <div>
-                    <dt>Plateformes</dt>
-                    <dd>{property.platformNights}</dd>
-                  </div>
-                  <div>
-                    <dt>CA direct</dt>
-                    <dd>{money(property.revenueCents)}</dd>
-                  </div>
-                </dl>
-                <a href={`/maisons/${property.slug}`}>Voir la page du logement</a>
-              </article>
-            ))}
-          </div>
-          <div className="admin-callout">
-            <h3>Tarifs, saisons, promotions et options</h3>
-            <p>
-              Le moteur tarifaire reste la source de vérité. Les réglages sont accessibles dans
-              l’espace Tarifs, sans modifier le code du site.
-            </p>
-            <a href="/administration/tarifs">Ouvrir le moteur tarifaire</a>
-          </div>
-        </section>
-      )}
+      {view === "logements" && <PropertyVisualEditorAdmin token={token} notify={setMessage} />}
 
       {view === "documents" && <DocumentCenterAdmin token={token} notify={setMessage} />}
 

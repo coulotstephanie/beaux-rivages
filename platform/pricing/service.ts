@@ -2,6 +2,8 @@ import { bookingExperiences, calculateSignaturePackPrice, getNights, stayOptions
 import type { Promotion, PropertyRatePlan, QuoteRequest } from "./contracts";
 import { ratePlanRepository } from "./repository";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
+import { frenchStayReferenceCalendar } from "@/platform/calendar/french-reference-calendar";
+import { minimumNightsForDate } from "./channels";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -69,10 +71,18 @@ function promotionApplies(promotion: Promotion, input: QuoteRequest, nights: num
 export async function calculateQuote(input: QuoteRequest) {
   const plan = await ratePlanRepository.get(input.propertySlug);
   const nights = getNights(input.arrival, input.departure);
-  const nightlyLines = eachNight(input.arrival, nights).map((date) => ({
-    date,
-    ...rateForDate(plan, date),
-  }));
+  const stayDates = eachNight(input.arrival, nights);
+  const referenceDays = await frenchStayReferenceCalendar(
+    stayDates.map((date) => Number(date.slice(0, 4))),
+  );
+  const nightlyLines = stayDates.map((date) => {
+    const rate = rateForDate(plan, date);
+    return {
+      date,
+      ...rate,
+      minimumNights: minimumNightsForDate(date, rate.minimumNights, referenceDays),
+    };
+  });
   const requiredMinimum = Math.max(
     plan.minimumNights,
     ...nightlyLines.map((line) => line.minimumNights),
@@ -212,11 +222,17 @@ export async function buildAnnualRates(
   year: number,
 ) {
   const plan = await ratePlanRepository.get(propertySlug);
+  const referenceDays = await frenchStayReferenceCalendar([year]);
   const cursor = new Date(Date.UTC(year, 0, 1, 12));
   const days: { date: string; rate: number; season: string; minimumNights: number }[] = [];
   while (cursor.getUTCFullYear() === year) {
     const date = cursor.toISOString().slice(0, 10);
-    days.push({ date, ...rateForDate(plan, date) });
+    const rate = rateForDate(plan, date);
+    days.push({
+      date,
+      ...rate,
+      minimumNights: minimumNightsForDate(date, rate.minimumNights, referenceDays),
+    });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
   }
   return { propertySlug, year, currency: plan.currency, days };

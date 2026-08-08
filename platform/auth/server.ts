@@ -11,7 +11,7 @@ import {
 
 export const staffAccessCookie = "br-staff-access";
 
-function bearerToken(request: NextRequest) {
+export function staffAccessToken(request: NextRequest) {
   return (
     request.headers
       .get("authorization")
@@ -24,7 +24,7 @@ function bearerToken(request: NextRequest) {
 
 export async function authorizeStaffToken(
   token: string,
-  allowedRoles: readonly StaffRole[] = ["admin", "concierge", "read_only"],
+  allowedRoles: readonly StaffRole[] = ["admin", "editor", "concierge", "read_only"],
 ): Promise<StaffIdentity | null> {
   if (token.length > 8_000) return null;
   if (!isDatabaseConfigured()) return null;
@@ -56,8 +56,8 @@ export async function authorizeStaffToken(
 
 export async function authorizeStaff(
   request: NextRequest,
-  allowedRoles: readonly StaffRole[] = ["admin", "concierge", "read_only"],
+  allowedRoles: readonly StaffRole[] = ["admin", "editor", "concierge", "read_only"],
 ) {
-  const token = bearerToken(request);
+  const token = staffAccessToken(request);
   return token ? authorizeStaffToken(token, allowedRoles) : null;
 }

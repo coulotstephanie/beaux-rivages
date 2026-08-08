@@ -6,13 +6,17 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { staticPageSeo } from "@/content/fr/seo";
 import { siteMedia } from "@/media/site";
 import { createPageMetadata } from "@/seo";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 import Image from "next/image";
 import Link from "next/link";
 
 const pageSeo = staticPageSeo["/inspiration"];
 export const metadata = createPageMetadata({ ...pageSeo, image: siteMedia.destination.marsh });
 
-export default function InspirationPage() {
+export default async function InspirationPage() {
+  const managedPage = await getPublishedCmsPage("inspiration");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   return (
     <main>
       <PageStructuredData {...pageSeo} />

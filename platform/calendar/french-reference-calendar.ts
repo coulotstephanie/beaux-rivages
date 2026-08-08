@@ -2,7 +2,16 @@ export type ReferenceCalendarDay = {
   date: string;
   kind: "school_holiday" | "public_holiday" | "bridge";
   label: string;
+  minimumNights?: number;
 };
+
+type OfficialHoliday = {
+  description: string;
+  start_date: string;
+  end_date: string;
+};
+
+const schoolCalendarCache = new Map<string, Promise<ReferenceCalendarDay[]>>();
 
 function iso(date: Date) {
   return date.toISOString().slice(0, 10);
@@ -52,12 +61,93 @@ export function frenchPublicCalendar(year: number): ReferenceCalendarDay[] {
     label,
     kind: "public_holiday",
   }));
-  for (const [date] of holidays) {
+  for (const [date, label] of holidays) {
     const value = new Date(`${date}T12:00:00Z`);
-    if (value.getUTCDay() === 2)
-      result.push({ date: iso(shifted(value, -1)), kind: "bridge", label: "Pont possible" });
-    if (value.getUTCDay() === 4)
-      result.push({ date: iso(shifted(value, 1)), kind: "bridge", label: "Pont possible" });
+    const bridgeStart = value.getUTCDay() === 2 ? -3 : value.getUTCDay() === 4 ? 0 : null;
+    if (bridgeStart != null) {
+      for (let offset = bridgeStart; offset < bridgeStart + 4; offset += 1)
+        result.push({
+          date: iso(shifted(value, offset)),
+          kind: "bridge",
+          label: `Pont de ${label}`,
+          minimumNights: 4,
+        });
+    }
   }
   return result;
+}
+
+function parisIso(value: string) {
+  const parts = new Intl.DateTimeFormat("fr-CA", {
+    timeZone: "Europe/Paris",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(value));
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((candidate) => candidate.type === type)?.value ?? "";
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
+async function frenchSchoolCalendar(year: number, zone: "A" | "B" | "C") {
+  const cacheKey = `${year}:${zone}`;
+  const cached = schoolCalendarCache.get(cacheKey);
+  if (cached) return cached;
+  const request = (async () => {
+    const where = `zones="Zone ${zone}" AND start_date <= date'${year}-12-31' AND end_date >= date'${year}-01-01'`;
+    const url = new URL(
+      "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-calendrier-scolaire/records",
+    );
+    url.searchParams.set("select", "description,start_date,end_date");
+    url.searchParams.set("where", where);
+    url.searchParams.set("limit", "100");
+    const response = await fetch(url, { next: { revalidate: 86_400 } });
+    if (!response.ok) throw new Error("OFFICIAL_SCHOOL_CALENDAR_UNAVAILABLE");
+    const payload = (await response.json()) as { results?: OfficialHoliday[] };
+    const unique = new Map<string, OfficialHoliday>();
+    for (const holiday of payload.results ?? [])
+      unique.set(`${holiday.description}:${holiday.start_date}:${holiday.end_date}`, holiday);
+    return [...unique.values()].flatMap((holiday) => {
+      if (/^Début des vacances/i.test(holiday.description)) return [];
+      const start = parisIso(holiday.start_date);
+      const end = parisIso(holiday.end_date);
+      const days: ReferenceCalendarDay[] = [];
+      for (
+        const day = new Date(`${start}T12:00:00Z`);
+        iso(day) < end;
+        day.setUTCDate(day.getUTCDate() + 1)
+      ) {
+        const date = iso(day);
+        if (date.startsWith(String(year)))
+          days.push({
+            date,
+            kind: "school_holiday",
+            label: `${holiday.description} · Zone ${zone}`,
+            minimumNights: 4,
+          });
+      }
+      return days;
+    });
+  })();
+  schoolCalendarCache.set(cacheKey, request);
+  try {
+    return await request;
+  } catch (error) {
+    schoolCalendarCache.delete(cacheKey);
+    throw error;
+  }
+}
+
+export async function frenchStayReferenceCalendar(
+  years: number[],
+  zone: "A" | "B" | "C" | "ALL" = "ALL",
+) {
+  const uniqueYears = [...new Set(years)];
+  const zones = zone === "ALL" ? (["A", "B", "C"] as const) : [zone];
+  const schoolDays = await Promise.all(
+    uniqueYears.flatMap((year) =>
+      zones.map((schoolZone) => frenchSchoolCalendar(year, schoolZone)),
+    ),
+  );
+  return [...schoolDays.flat(), ...uniqueYears.flatMap((year) => frenchPublicCalendar(year))];
 }
