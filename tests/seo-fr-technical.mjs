@@ -68,4 +68,17 @@ for (const legacyRoute of [
 const missing = await fetch(new URL("/page-seo-inexistante", origin), { redirect: "manual" });
 assert.equal(missing.status, 404, "Une URL inexistante doit rester une vraie 404");
 
+for (const locale of ["", "/en", "/de", "/es", "/nl"]) {
+  const route = `${locale}/patrimoine/phare-des-baleines`;
+  const response = await fetch(new URL(route, origin));
+  assert.equal(response.status, 200, `${route}: statut HTTP inattendu`);
+  const html = await response.text();
+  assert.match(html, /href="#vieille-tour"/, `${route}: lien #vieille-tour absent`);
+  assert.equal(
+    (html.match(/id="vieille-tour"/g) ?? []).length,
+    1,
+    `${route}: la cible #vieille-tour doit être unique`,
+  );
+}
+
 console.log(`SEO France: ${frenchRoutes.length} pages contrôlées, ${urls.length} URL uniques.`);

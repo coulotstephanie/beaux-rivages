@@ -40,7 +40,11 @@ export function HeritageGallery({
     <>
       <section className="heritage-detail__gallery shell" aria-label={`Photographies de ${title}`}>
         {images.map((image, index) => (
-          <figure key={`${image.src}-${index}`} className={index === 0 ? "is-wide" : ""}>
+          <figure
+            key={`${image.src}-${index}`}
+            id={image.src.includes("vieille-tour-des-baleines") ? "vieille-tour" : undefined}
+            className={index === 0 ? "is-wide" : ""}
+          >
             <button
               type="button"
               onClick={() => setActive(index)}
