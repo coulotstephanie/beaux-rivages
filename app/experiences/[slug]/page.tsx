@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { StructuredData } from "@/components/StructuredData";
 import { experiences, getExperience, getExperienceHref } from "@/experiences";
-import { SITE_URL } from "@/seo";
+import { languageAlternates, SITE_URL } from "@/seo";
 import { ExperienceSections } from "@/components/experiences/ExperienceSections";
 import { getExperienceEditorial } from "@/experienceEditorial";
 
@@ -21,13 +21,27 @@ export async function generateMetadata({
   const { slug } = await params;
   const experience = getExperience(slug);
   if (!experience) return {};
+  const descriptions: Record<string, string> = {
+    "lune-de-miel":
+      "Une maison préparée avec délicatesse et des attentions choisies ensemble pour célébrer votre lune de miel sur Ré ou Oléron.",
+    "atelier-macarons":
+      "Participez à un atelier macarons et pâtisserie chez Confetti à Rivedoux-Plage, recommandé par Stéphanie et Bruno.",
+  };
+  const titles: Record<string, string> = {
+    "balade-velo": "Balade à vélo sur Ré et Oléron | Beaux Rivages",
+    famille: "Journée en famille au bord de l’océan | Beaux Rivages",
+  };
+  const description = descriptions[slug] ?? experience.text;
   return {
-    title: `${experience.title} | Expérience Beaux Rivages`,
-    description: experience.text,
-    alternates: { canonical: `${SITE_URL}/experiences/${slug}` },
+    title: titles[slug] ?? `${experience.title} | Expérience Beaux Rivages`,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/experiences/${slug}`,
+      languages: languageAlternates(`/experiences/${slug}`),
+    },
     openGraph: {
       title: experience.title,
-      description: experience.text,
+      description,
       images: [experience.image],
     },
   };

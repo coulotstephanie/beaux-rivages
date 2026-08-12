@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { HospitalityServicePage } from "@/components/experiences/HospitalityServicePage";
 import { getHospitalityService } from "@/hospitalityServices";
+import { languageAlternates } from "@/seo";
 const service = getHospitalityService("experience-signature")!;
 export const metadata: Metadata = {
   title: `${service.title} | Beaux Rivages`,
   description: service.intro,
-  alternates: { canonical: "/experience-signature" },
+  alternates: { canonical: "/experience-signature", languages: languageAlternates("/experience-signature") },
   openGraph: { images: [service.image] },
 };
 export default function Page() {
