@@ -30,8 +30,18 @@ import { createPropertyStructuredData } from "@/seo";
 import { ChaiEditorialReport } from "./properties/ChaiEditorialReport";
 import { IslandHouseEditorialReport } from "./properties/IslandHouseEditorialReport";
 import { NidSaumonardsStory } from "./properties/NidSaumonardsStory";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as localize } from "@/i18n/lot1-client";
 
-export function PropertyPage({ property, children }: { property: Property; children?: ReactNode }) {
+export function PropertyPage({
+  property,
+  children,
+  locale = "fr",
+}: {
+  property: Property;
+  children?: ReactNode;
+  locale?: SupportedLocale;
+}) {
   const presentation = getPropertyPresentation(property.slug);
   const hasChaiEditorialReport = property.slug === "chai-des-tortues";
   const reviewProfile = reviewProfiles.find((profile) => profile.slug === property.slug);
@@ -86,12 +96,13 @@ export function PropertyPage({ property, children }: { property: Property; child
   return (
     <main className={`premium-property-page property-${property.slug}`}>
       <StructuredData data={createPropertyStructuredData(property)} />
-      <Header />
-      <PropertyHero property={property} />
+      <Header locale={locale} />
+      <PropertyHero property={property} locale={locale} />
       <PropertyHistoryStory propertySlug={property.slug as PropertySlug} />
 
       {hasChaiEditorialReport ? (
         <ChaiEditorialReport
+          locale={locale}
           mediaOverrides={property.visualMediaOverrides}
           mediaOrder={property.visualMediaOrder}
           textOverrides={property.visualTextOverrides}
@@ -100,6 +111,7 @@ export function PropertyPage({ property, children }: { property: Property; child
 
       {property.slug === "villa-raie-manta" || property.slug === "nid-d-ete" ? (
         <IslandHouseEditorialReport
+          locale={locale}
           house={property.slug}
           mediaOverrides={property.visualMediaOverrides}
           mediaOrder={property.visualMediaOrder}
@@ -109,16 +121,19 @@ export function PropertyPage({ property, children }: { property: Property; child
         !hasChaiEditorialReport && <PropertyDayStory scenes={presentation.dayStory} />
       )}
 
-      {property.slug === "nid-d-ete" && <NidSaumonardsStory />}
+      {property.slug === "nid-d-ete" && <NidSaumonardsStory locale={locale} />}
 
       <PropertyFilms films={manifest.videos} poster={property.hero} />
 
       {reviewProfile && (
         <Section tone="sand" className="property-review-section" id="avis-voyageurs">
           <Heading
-            eyebrow="Pourquoi nos voyageurs reviennent"
-            title="Ce qu’ils retiennent vraiment de leur séjour."
-            description={`Plus de ${reviewProfile.airbnbReviewCount + (reviewProfile.otherSources?.reduce((total, source) => total + (source.reviewCount ?? 0), 0) ?? 0)} voyageurs nous ont déjà fait confiance pour cette maison.`}
+            eyebrow={localize(locale, "Pourquoi nos voyageurs reviennent")}
+            title={localize(locale, "Ce qu’ils retiennent vraiment de leur séjour.")}
+            description={localize(
+              locale,
+              `Plus de ${reviewProfile.airbnbReviewCount + (reviewProfile.otherSources?.reduce((total, source) => total + (source.reviewCount ?? 0), 0) ?? 0)} voyageurs nous ont déjà fait confiance pour cette maison.`,
+            )}
           />
           <Container size="narrow">
             <ReviewProfileCard profile={reviewProfile} />
@@ -128,7 +143,7 @@ export function PropertyPage({ property, children }: { property: Property; child
 
       <PropertySignatureDetails propertySlug={property.slug as PropertySlug} />
 
-      <PropertyFacts property={property} />
+      <PropertyFacts property={property} locale={locale} />
 
       <section id="histoire" className="property-story-premium">
         <div className="property-story-premium__visual">
@@ -145,17 +160,17 @@ export function PropertyPage({ property, children }: { property: Property; child
           <Badge>{presentation.storyEyebrow}</Badge>
           <h2>{presentation.storyTitle}</h2>
           <div className="property-signature-note">
-            <span>La signature de la maison</span>
+            <span>{localize(locale, "La signature de la maison")}</span>
             <strong data-editor-field="signatureTitle">{property.signatureTitle}</strong>
             <p data-editor-field="signatureText">{property.signatureText}</p>
           </div>
           <Button href={`/reserver?maison=${property.slug}`} variant="ghost">
-            Préparer mon séjour <span aria-hidden="true">→</span>
+            {localize(locale, "Préparer mon séjour")} <span aria-hidden="true">→</span>
           </Button>
         </div>
       </section>
 
-      <PropertyHighlights property={property} />
+      <PropertyHighlights property={property} locale={locale} />
 
       {presentation.experiences && (
         <PropertyExperiences
@@ -173,15 +188,18 @@ export function PropertyPage({ property, children }: { property: Property; child
 
       <Section className="nearby-section">
         <Heading
-          eyebrow="Autour de la maison"
-          title="Les îles à portée de pas."
-          description="Sélectionnez un repère pour découvrir les essentiels autour de votre maison."
+          eyebrow={localize(locale, "Autour de la maison")}
+          title={localize(locale, "Les îles à portée de pas.")}
+          description={localize(
+            locale,
+            "Sélectionnez un repère pour découvrir les essentiels autour de votre maison.",
+          )}
         />
         <NearbyMap map={presentation.map} />
       </Section>
 
-      <PropertyAmenitiesGrid property={property} />
-      <PropertyPracticalDetails property={property} />
+      <PropertyAmenitiesGrid property={property} locale={locale} />
+      <PropertyPracticalDetails property={property} locale={locale} />
       <PropertyDestinationLinks property={property} />
 
       {children}
@@ -189,19 +207,23 @@ export function PropertyPage({ property, children }: { property: Property; child
       <section className="premium-property-cta">
         <MediaBackground src={ctaImages[property.slug as PropertySlug]} />
         <Container>
-          <p className="eyebrow light">Réserver en direct</p>
+          <p className="eyebrow light">{localize(locale, "Réserver en direct")}</p>
           <h2 data-editor-field="bookingTitle">{property.bookingTitle}</h2>
           <p>
-            <span data-editor-field="bookingText">{property.bookingText}</span> Réservation directe,
-            échange avec Stéphanie, attentions personnalisables et règlement sécurisé par virement
-            bancaire.
+            <span data-editor-field="bookingText">{property.bookingText}</span>{" "}
+            {localize(
+              locale,
+              "Réservation directe, échange avec Stéphanie, attentions personnalisables et règlement sécurisé par virement bancaire.",
+            )}
           </p>
-          <Button href={`/reserver?maison=${property.slug}`}>Choisir mes dates</Button>
+          <Button href={`/${locale === "fr" ? "" : `${locale}/`}reserver?maison=${property.slug}`}>
+            {localize(locale, "Choisir mes dates")}
+          </Button>
         </Container>
       </section>
 
-      <Footer />
-      <PropertyStickyBooking property={property} />
+      <Footer locale={locale} />
+      <PropertyStickyBooking property={property} locale={locale} />
     </main>
   );
 }

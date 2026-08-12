@@ -1,16 +1,27 @@
 import type { Property } from "@/data";
 import { Card, Container, Heading, Section } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
-export function PropertyPracticalDetails({ property }: { property: Property }) {
+export function PropertyPracticalDetails({
+  property,
+  locale = "fr",
+}: {
+  property: Property;
+  locale?: SupportedLocale;
+}) {
   if (!property.spaces.length) return null;
 
   return (
     <>
       <Section tone="sand" className="property-spaces">
         <Heading
-          eyebrow="La maison en détail"
-          title="Chaque espace a sa place dans le séjour."
-          description="Une lecture claire de la maison, de ses couchages et de ses espaces extérieurs."
+          eyebrow={tr(locale, "La maison en détail")}
+          title={tr(locale, "Chaque espace a sa place dans le séjour.")}
+          description={tr(
+            locale,
+            "Une lecture claire de la maison, de ses couchages et de ses espaces extérieurs.",
+          )}
         />
         <div className="property-spaces__grid">
           {property.spaces.map((space) => (
@@ -24,9 +35,9 @@ export function PropertyPracticalDetails({ property }: { property: Property }) {
 
       <Section className="property-practical">
         <Heading
-          eyebrow="Avant de venir"
-          title="Les repères utiles, simplement."
-          description="Les détails pratiques qui permettent d’arriver l’esprit libre."
+          eyebrow={tr(locale, "Avant de venir")}
+          title={tr(locale, "Les repères utiles, simplement.")}
+          description={tr(locale, "Les détails pratiques qui permettent d’arriver l’esprit libre.")}
         />
         <Container size="narrow">
           <dl className="property-practical__list">
@@ -38,7 +49,7 @@ export function PropertyPracticalDetails({ property }: { property: Property }) {
             ))}
           </dl>
           <div className="property-faq">
-            <h3>Questions fréquentes</h3>
+            <h3>{tr(locale, "Questions fréquentes")}</h3>
             {property.faq.map((item) => (
               <details key={item.question}>
                 <summary>{item.question}</summary>

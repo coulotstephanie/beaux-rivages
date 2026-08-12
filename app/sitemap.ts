@@ -32,6 +32,7 @@ const staticRoutes = [
   "/anniversaire",
   "/bebe",
   "/animaux",
+  "/sejours-professionnels",
   "/faq",
   "/inspiration",
   "/velo-itineraires",
@@ -84,6 +85,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     return productionLocales.map((locale) => ({
       url: languages[locale],
       alternates: { languages: { ...languages, "x-default": `${baseUrl}${route}` } },
+      lastModified: new Date("2026-08-12T00:00:00.000Z"),
       changeFrequency: (route === "" ? "weekly" : "monthly") as "weekly" | "monthly",
       priority:
         route === ""

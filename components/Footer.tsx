@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { BrandLogo } from "./BrandLogo";
 import { Button, Container, Divider } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
 
-export function Footer() {
+export function Footer({ locale: _locale = "fr" }: { locale?: SupportedLocale } = {}) {
+  void _locale;
   return (
     <footer id="contact" className="footer premium-footer">
       <Container size="wide">
@@ -48,6 +50,7 @@ export function Footer() {
             <Link href="/destinations">Destinations</Link>
             <Link href="/patrimoine">Patrimoine</Link>
             <Link href="/experiences">Expériences</Link>
+            <Link href="/sejours-professionnels">Séjours professionnels</Link>
             <Link href="/carnet">Le Carnet</Link>
             <Link href="/phototheque">Photothèque</Link>
           </div>

@@ -1,4 +1,4 @@
-import { PropertyPage } from "@/components/PropertyPage";
+import { LocalizedPropertyPage } from "@/components/LocalizedPropertyPage";
 import { getProperty } from "@/data";
 import { createPageMetadata, createPropertySeo } from "@/seo";
 import { getPublishedProperty } from "@/platform/property-editor/public";
@@ -13,5 +13,5 @@ export const metadata = createPageMetadata({
 });
 
 export default async function Page() {
-  return <PropertyPage property={await getPublishedProperty("villa-raie-manta")} />;
+  return <LocalizedPropertyPage property={await getPublishedProperty("villa-raie-manta")} />;
 }

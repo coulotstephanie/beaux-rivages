@@ -62,4 +62,18 @@ const es: MessageCatalog = {
     addToStay: "Añadir a mi estancia",
   },
 };
-export const messages: Record<SupportedLocale, MessageCatalog> = { fr, en, de, es };
+const nl: MessageCatalog = {
+  navigation: {
+    houses: "Onze huizen",
+    destinations: "De eilanden",
+    experiences: "Belevingen",
+    book: "Boeken",
+  },
+  actions: {
+    discover: "Ontdek",
+    continue: "Verder",
+    back: "Terug",
+    addToStay: "Aan mijn verblijf toevoegen",
+  },
+};
+export const messages: Record<SupportedLocale, MessageCatalog> = { fr, en, de, es, nl };

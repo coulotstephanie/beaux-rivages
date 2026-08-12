@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { BrandLogo } from "./BrandLogo";
 import { LanguageSelector } from "./LanguageSelector";
 import { PublicSiteSearch } from "./PublicSiteSearch";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr, localizedHref } from "@/i18n/lot1-client";
 
 const houseLinks = [
   ["Les trois maisons", "/maisons"],
@@ -40,27 +42,29 @@ function MegaMenu({
   imageAlt,
   introduction,
   links,
+  locale,
 }: {
   label: string;
   image: string;
   imageAlt: string;
   introduction: string;
   links: readonly (readonly [string, string])[];
+  locale: SupportedLocale;
 }) {
   return (
     <details className="mega-menu">
-      <summary>{label}</summary>
+      <summary>{tr(locale, label)}</summary>
       <div className="mega-menu__panel">
         <div className="mega-menu__visual">
           <Image src={image} alt={imageAlt} fill sizes="360px" />
         </div>
         <div className="mega-menu__content">
           <p className="eyebrow">Beaux Rivages</p>
-          <p>{introduction}</p>
+          <p>{tr(locale, introduction)}</p>
           <div className="mega-menu__links">
             {links.map(([title, href]) => (
-              <Link href={href} key={href}>
-                {title}
+              <Link href={localizedHref(locale, href)} key={href}>
+                {tr(locale, title)}
                 <span aria-hidden="true">→</span>
               </Link>
             ))}
@@ -76,18 +80,20 @@ function MobileGroup({
   label,
   links,
   close,
+  locale,
 }: {
   label: string;
   links: readonly (readonly [string, string])[];
   close: () => void;
+  locale: SupportedLocale;
 }) {
   return (
     <details className="mobile-navigation__group">
-      <summary>{label}</summary>
+      <summary>{tr(locale, label)}</summary>
       <div>
         {links.map(([title, href]) => (
-          <Link href={href} onClick={close} key={href}>
-            {title}
+          <Link href={localizedHref(locale, href)} onClick={close} key={href}>
+            {tr(locale, title)}
           </Link>
         ))}
       </div>
@@ -95,7 +101,13 @@ function MobileGroup({
   );
 }
 
-export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) {
+export function Header({
+  contrast = "light",
+  locale = "fr",
+}: {
+  contrast?: "light" | "dark";
+  locale?: SupportedLocale;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -128,14 +140,15 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
     >
       <div className="site-header__inner">
         <BrandLogo />
-        <nav className="desktop-navigation" aria-label="Navigation principale">
-          <Link href="/">Accueil</Link>
+        <nav className="desktop-navigation" aria-label={tr(locale, "Navigation principale")}>
+          <Link href={localizedHref(locale, "/")}>{tr(locale, "Accueil")}</Link>
           <MegaMenu
             label="Nos maisons"
             image="/images/properties/chai-des-tortues/port-fleuri.jpeg"
             imageAlt="Le Chai des Tortues"
             introduction="Trois maisons singulières, entre l’Île de Ré et l’Île d’Oléron."
             links={houseLinks}
+            locale={locale}
           />
           <MegaMenu
             label="Découvrir les îles"
@@ -143,6 +156,7 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
             imageAlt="Le littoral de l’Île de Ré"
             introduction="Patrimoine, villages, nature, plages et chemins pour découvrir les îles à votre rythme."
             links={islandLinks}
+            locale={locale}
           />
           <MegaMenu
             label="Le Carnet Beaux Rivages"
@@ -150,21 +164,25 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
             imageAlt="Une adresse gourmande du Carnet Beaux Rivages"
             introduction="Nos adresses, anecdotes, saisons et conseils personnels réunis comme dans un magazine."
             links={carnetLinks}
+            locale={locale}
           />
-          <Link href="/reserver">Réserver</Link>
-          <Link href="/contact">Contact</Link>
+          <Link href={localizedHref(locale, "/sejours-professionnels")}>
+            {tr(locale, "Séjours professionnels")}
+          </Link>
+          <Link href={localizedHref(locale, "/reserver")}>{tr(locale, "Réserver")}</Link>
+          <Link href={localizedHref(locale, "/contact")}>{tr(locale, "Contact")}</Link>
         </nav>
         <div className="site-header__actions">
           <LanguageSelector />
-          <Link href="/reserver" className="nav-cta">
-            Réserver
+          <Link href={localizedHref(locale, "/reserver")} className="nav-cta">
+            {tr(locale, "Réserver")}
           </Link>
           <button
             className="menu-toggle"
             type="button"
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
-            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={tr(locale, menuOpen ? "Fermer le menu" : "Ouvrir le menu")}
             onClick={() => setMenuOpen((value) => !value)}
           >
             <span />
@@ -175,22 +193,35 @@ export function Header({ contrast = "light" }: { contrast?: "light" | "dark" }) 
       <nav
         id="mobile-navigation"
         className="mobile-navigation"
-        aria-label="Navigation mobile"
+        aria-label={tr(locale, "Navigation mobile")}
         aria-hidden={!menuOpen}
         inert={!menuOpen}
       >
         <div className="mobile-navigation__inner">
-          <Link href="/" onClick={closeMenu}>
-            Accueil
+          <Link href={localizedHref(locale, "/")} onClick={closeMenu}>
+            {tr(locale, "Accueil")}
           </Link>
-          <MobileGroup label="Nos maisons" links={houseLinks} close={closeMenu} />
-          <MobileGroup label="Découvrir les îles" links={islandLinks} close={closeMenu} />
-          <MobileGroup label="Le Carnet Beaux Rivages" links={carnetLinks} close={closeMenu} />
-          <Link href="/reserver" onClick={closeMenu}>
-            Réserver
+          <MobileGroup label="Nos maisons" links={houseLinks} close={closeMenu} locale={locale} />
+          <MobileGroup
+            label="Découvrir les îles"
+            links={islandLinks}
+            close={closeMenu}
+            locale={locale}
+          />
+          <MobileGroup
+            label="Le Carnet Beaux Rivages"
+            links={carnetLinks}
+            close={closeMenu}
+            locale={locale}
+          />
+          <Link href={localizedHref(locale, "/sejours-professionnels")} onClick={closeMenu}>
+            {tr(locale, "Séjours professionnels")}
           </Link>
-          <Link href="/contact" onClick={closeMenu}>
-            Contact
+          <Link href={localizedHref(locale, "/reserver")} onClick={closeMenu}>
+            {tr(locale, "Réserver")}
+          </Link>
+          <Link href={localizedHref(locale, "/contact")} onClick={closeMenu}>
+            {tr(locale, "Contact")}
           </Link>
           <PublicSiteSearch onNavigate={closeMenu} />
         </div>

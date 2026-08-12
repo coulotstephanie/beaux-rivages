@@ -1,4 +1,4 @@
-import { PropertyPage } from "@/components/PropertyPage";
+import { LocalizedPropertyPage } from "@/components/LocalizedPropertyPage";
 import { NidHeritageTeaser } from "@/components/NidHeritageTeaser";
 import { getProperty } from "@/data";
 import { createPageMetadata, createPropertySeo } from "@/seo";
@@ -16,8 +16,8 @@ export const metadata = createPageMetadata({
 export default async function Page() {
   const managedProperty = await getPublishedProperty("nid-d-ete");
   return (
-    <PropertyPage property={managedProperty}>
+    <LocalizedPropertyPage property={managedProperty}>
       <NidHeritageTeaser />
-    </PropertyPage>
+    </LocalizedPropertyPage>
   );
 }

@@ -7,6 +7,8 @@ import { destinationMedia } from "@/media/destinations";
 import { chaiDesTortuesMedia } from "@/media/properties/chai-des-tortues";
 import { ImageLightbox } from "@/components/ImageLightbox";
 import { Container } from "@/components/ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 type Chapter = {
   number: string;
@@ -26,30 +28,18 @@ const chapters: Chapter[] = [
     title: "La pierre rétaise ouvre la porte.",
     text: "Au cœur de Rivedoux-Plage, la façade discrète laisse deviner une maison singulière. On pose les vélos, on pousse la porte et les volumes de l’ancien chai se révèlent peu à peu.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [media.arrival[0], media.exterior[2], media.exterior[3]],
+    images: [media.arrival[0], media.exterior[4], media.exterior[2]],
   },
   {
     number: "02",
-    eyebrow: "Le marché",
-    title: "Les Halles donnent le ton de la journée.",
-    text: "À quelques minutes à pied, le marché inspire le déjeuner. Les paniers reviennent chargés de produits de l’île, prêts à rejoindre l’îlot central et la grande table.",
-    galleryLabel: "Explorer la galerie du marché",
-    images: [
-      destinationMedia.reMarketLane,
-      destinationMedia.reMarketFruit,
-      destinationMedia.reMarketFish,
-    ],
-  },
-  {
-    number: "03",
     eyebrow: "La cuisine",
     title: "Une cuisine imaginée pour vraiment recevoir.",
     text: "Ici, cuisiner fait partie des vacances. Le bois, les grands plans de travail et les équipements généreux accompagnent aussi bien un dîner improvisé qu’un repas de fête.",
     galleryLabel: "Explorer la galerie de la cuisine",
-    images: [media.kitchen[1], media.kitchen[2], media.kitchen[5]],
+    images: [media.kitchen[10], media.kitchen[9], media.kitchen[1]],
   },
   {
-    number: "04",
+    number: "03",
     eyebrow: "Les repas",
     title: "La grande table rassemble la maison.",
     text: "On y partage les huîtres, les histoires de la journée et les plats que l’on prend enfin le temps de préparer. Les repas se prolongent naturellement sous la charpente.",
@@ -57,31 +47,31 @@ const chapters: Chapter[] = [
     images: [media.kitchen[7], media.lifestyle[4], media.kitchen[8]],
   },
   {
-    number: "05",
+    number: "04",
     eyebrow: "La pièce de vie",
     title: "Un même volume pour vivre ensemble.",
     text: "Salon, salle à manger et cuisine dialoguent sous les poutres. La pierre ancienne adoucit la lumière et donne à chaque moment, du café au dernier verre, une atmosphère particulière.",
     galleryLabel: "Explorer la galerie de la pièce de vie",
-    images: [media.livingRoom[1], media.livingRoom[2], media.livingRoom[3]],
+    images: [media.livingRoom[10], media.livingRoom[11], media.livingRoom[8]],
   },
   {
-    number: "06",
+    number: "05",
     eyebrow: "Les chambres",
     title: "Le calme gagne l’étage.",
     text: "Trois chambres accueillent les nuits dans une palette de bois clair, de linge naturel et de pierre préservée. Chacune conserve son caractère et la douceur d’une vraie maison.",
     galleryLabel: "Explorer la galerie des chambres",
-    images: [media.bedrooms[1], media.bedrooms[2], media.bedrooms[3]],
+    images: [media.bedrooms[13], media.bedrooms[12], media.bedrooms[10]],
   },
   {
-    number: "07",
+    number: "06",
     eyebrow: "Les salles d’eau",
     title: "Des matières franches, un confort contemporain.",
     text: "La pierre minérale, le bois brut et la robinetterie composent des espaces sobres et chaleureux, pensés pour que chacun trouve son rythme.",
     galleryLabel: "Explorer la galerie des salles d’eau",
-    images: [media.bathrooms[0], media.bathrooms[3], media.bathrooms[4]],
+    images: [media.bathrooms[9], media.bathrooms[10], media.bathrooms[0]],
   },
   {
-    number: "08",
+    number: "07",
     eyebrow: "Les détails",
     title: "Ce sont eux qui racontent l’ancien chai.",
     text: "Une charpente, un mur irrégulier, l’escalier noir ou une fenêtre ouverte sur la pierre : les traces du lieu n’ont pas été effacées, elles sont devenues le fil conducteur de la maison.",
@@ -89,7 +79,7 @@ const chapters: Chapter[] = [
     images: [media.details[0], media.details[2], media.details[3]],
   },
   {
-    number: "09",
+    number: "08",
     eyebrow: "Le rivage",
     title: "L’océan attend à quelques pas.",
     text: "À 250 mètres, le rivage change le tempo du séjour. On y part sans voiture pour marcher, regarder la lumière et retrouver l’air marin.",
@@ -97,7 +87,7 @@ const chapters: Chapter[] = [
     images: [media.editorial!.beach, destinationMedia.reBeachCairn, destinationMedia.reLove],
   },
   {
-    number: "10",
+    number: "09",
     eyebrow: "La soirée",
     title: "Quand la maison garde la lumière.",
     text: "Après la plage et les chemins de l’île, le Chai redevient le point de rassemblement. Une partie, un apéritif ou un dîner aux chandelles suffit à prolonger la journée.",
@@ -114,15 +104,21 @@ export function ChaiEditorialReport({
   mediaOverrides = {},
   mediaOrder = {},
   textOverrides = {},
+  locale = "fr",
 }: {
   mediaOverrides?: Record<string, GalleryImage>;
   mediaOrder?: Record<string, string[]>;
   textOverrides?: Record<string, string>;
+  locale?: SupportedLocale;
 }) {
   const renderedChapters = useMemo(
     () =>
       chapters.map((chapter, chapterIndex) => ({
         ...chapter,
+        eyebrow: tr(locale, chapter.eyebrow),
+        title: tr(locale, chapter.title),
+        text: tr(locale, chapter.text),
+        galleryLabel: tr(locale, chapter.galleryLabel),
         images: (() => {
           const group = `editorial.${chapterIndex}`;
           const baseItems = chapter.images.map((image, imageIndex) => ({
@@ -141,7 +137,7 @@ export function ChaiEditorialReport({
             : items;
         })(),
       })),
-    [mediaOverrides, mediaOrder],
+    [mediaOverrides, mediaOrder, locale],
   );
   const allImages = useMemo(
     () =>

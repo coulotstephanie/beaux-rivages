@@ -5,7 +5,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/administration/", "/api/", "/carnet-voyageur"],
+      disallow: [
+        "/administration",
+        "/administration/",
+        "/api/",
+        "/carnet-voyageur",
+        "/*?__locale=",
+      ],
     },
     sitemap: "https://www.beaux-rivages.com/sitemap.xml",
     host: "https://www.beaux-rivages.com",

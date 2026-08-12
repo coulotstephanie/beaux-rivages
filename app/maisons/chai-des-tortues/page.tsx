@@ -1,4 +1,4 @@
-import { PropertyPage } from "@/components/PropertyPage";
+import { LocalizedPropertyPage } from "@/components/LocalizedPropertyPage";
 import { getProperty } from "@/data";
 import { createPageMetadata, createPropertySeo } from "@/seo";
 import { GuestBookPreview } from "@/components/guestbook/GuestBookPreview";
@@ -16,8 +16,8 @@ export const metadata = createPageMetadata({
 export default async function Page() {
   const managedProperty = await getPublishedProperty("chai-des-tortues");
   return (
-    <PropertyPage property={managedProperty}>
+    <LocalizedPropertyPage property={managedProperty}>
       <GuestBookPreview />
-    </PropertyPage>
+    </LocalizedPropertyPage>
   );
 }

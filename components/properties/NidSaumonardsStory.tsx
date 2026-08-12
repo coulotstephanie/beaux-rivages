@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { destinationMedia } from "@/media/destinations";
 import type { MediaAsset } from "@/media/types";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 const mosaic: readonly MediaAsset[] = [
   {
@@ -21,12 +23,12 @@ const mosaic: readonly MediaAsset[] = [
   destinationMedia.sea,
 ];
 
-export function NidSaumonardsStory() {
+export function NidSaumonardsStory({ locale = "fr" }: { locale?: SupportedLocale }) {
   return (
     <section className="nid-saumonards-story" aria-labelledby="nid-saumonards-title">
       <div className="nid-saumonards-story__copy shell">
-        <p className="eyebrow">À quelques pas du Nid d’Été</p>
-        <h2 id="nid-saumonards-title">La plage des Saumonards</h2>
+        <p className="eyebrow">{tr(locale, "À quelques pas du Nid d’Été")}</p>
+        <h2 id="nid-saumonards-title">{tr(locale, "La plage des Saumonards")}</h2>
         <p>
           À quelques pas seulement de la Maison Heureuse, un portail privé s’ouvre sur la plage des
           Saumonards. Ici, les journées s’écoulent au rythme des marées, entre les pins maritimes,

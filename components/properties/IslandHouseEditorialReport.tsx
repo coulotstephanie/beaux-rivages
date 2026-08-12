@@ -9,6 +9,8 @@ import { villaRaieMantaMedia } from "@/media/properties/villa-raie-manta";
 import type { MediaAsset } from "@/media/types";
 import { ImageLightbox } from "@/components/ImageLightbox";
 import { Container } from "@/components/ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 type SupportedHouse = "villa-raie-manta" | "nid-d-ete";
 
@@ -93,9 +95,11 @@ const villaChapters: readonly Chapter[] = [
     text: "Suite, chambre modulable, chambre face à la mer et refuge des enfants composent une maison pensée pour se retrouver sans renoncer au calme.",
     galleryLabel: "Explorer la galerie des chambres",
     images: [
-      villaRaieMantaMedia.bedrooms[0],
+      villaRaieMantaMedia.bedrooms[6],
       villaRaieMantaMedia.bedrooms[9],
-      villaRaieMantaMedia.bedrooms[2],
+      villaRaieMantaMedia.bedrooms[10],
+      villaRaieMantaMedia.bedrooms[11],
+      villaRaieMantaMedia.bedrooms[4],
     ],
   },
   {
@@ -104,7 +108,7 @@ const villaChapters: readonly Chapter[] = [
     title: "Un confort simple à chaque niveau.",
     text: "Les salles d’eau et les toilettes indépendantes facilitent les séjours à plusieurs tout en conservant des lignes sobres et chaleureuses.",
     galleryLabel: "Explorer la galerie des salles d’eau",
-    images: villaRaieMantaMedia.bathrooms.slice(0, 3),
+    images: villaRaieMantaMedia.bathrooms,
   },
   {
     number: "08",
@@ -145,11 +149,7 @@ const nidChapters: readonly Chapter[] = [
     title: "La Maison Heureuse apparaît sous les arbres.",
     text: "Le Nid d’Été se rejoint au cœur d’une résidence historique, dans le calme des allées arborées qui conduisent vers l’océan.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [
-      nidDEteAuthenticMedia.residenceGate,
-      nidDEteMedia.exterior[2],
-      nidDEteAuthenticMedia.gardenLoungers,
-    ],
+    images: [nidDEteMedia.arrival[0], nidDEteMedia.arrival[1], nidDEteMedia.exterior[1]],
   },
   {
     number: "02",
@@ -186,11 +186,7 @@ const nidChapters: readonly Chapter[] = [
     title: "Le confort retrouve une douceur familière.",
     text: "Les chambres accueillent aussi bien les nuits calmes que les attentions préparées pour célébrer un anniversaire ou simplement souhaiter la bienvenue.",
     galleryLabel: "Explorer la galerie des chambres",
-    images: [
-      nidDEteMedia.bedrooms[0],
-      nidDEteMedia.bedrooms[1],
-      nidDEteAuthenticMedia.preparedBedroom,
-    ],
+    images: [nidDEteMedia.bedrooms[0], nidDEteMedia.bedrooms[1], nidDEteMedia.bedrooms[2]],
   },
   {
     number: "06",
@@ -198,7 +194,7 @@ const nidChapters: readonly Chapter[] = [
     title: "Tout le nécessaire, dans un espace contemporain.",
     text: "Douche, vasque, rangements et toilettes composent un espace pratique pour les retours de plage et les séjours en famille.",
     galleryLabel: "Explorer la galerie de la salle d’eau",
-    images: nidDEteMedia.bathrooms.slice(0, 3),
+    images: nidDEteMedia.bathrooms,
   },
   {
     number: "07",
@@ -206,7 +202,7 @@ const nidChapters: readonly Chapter[] = [
     title: "La vie se prolonge sous la voile.",
     text: "À l’ombre, les déjeuners, les apéritifs et les retours de plage se partagent dans un jardin clos, au calme de la résidence.",
     galleryLabel: "Explorer la galerie de la terrasse",
-    images: [nidDEteMedia.terrace[1], nidDEteMedia.terrace[3], nidDEteMedia.terrace[4]],
+    images: [nidDEteMedia.terrace[0], nidDEteMedia.terrace[1], nidDEteMedia.terrace[2]],
   },
   {
     number: "08",
@@ -234,9 +230,9 @@ const nidChapters: readonly Chapter[] = [
     quote: "Chaque soir offre une autre couleur.",
     galleryLabel: "Explorer la galerie de l’horizon",
     images: [
-      nidDEteMedia.lifestyle[11],
+      nidDEteMedia.lifestyle[14],
       nidDEteAuthenticMedia.fortFromBeach,
-      destinationMedia.fortBoyard,
+      nidDEteMedia.lifestyle[15],
     ],
   },
 ];
@@ -278,23 +274,51 @@ export function IslandHouseEditorialReport({
   mediaOverrides = {},
   mediaOrder = {},
   textOverrides = {},
+  locale = "fr",
 }: {
   house: SupportedHouse;
   mediaOverrides?: Record<string, GalleryImage>;
   mediaOrder?: Record<string, string[]>;
   textOverrides?: Record<string, string>;
+  locale?: SupportedLocale;
 }) {
   const report = reports[house];
   const renderedChapters = useMemo(
     () =>
       report.chapters.map((chapter, chapterIndex) => ({
         ...chapter,
+        eyebrow: tr(locale, chapter.eyebrow),
+        title: tr(locale, chapter.title),
+        text: tr(locale, chapter.text),
+        quote: chapter.quote ? tr(locale, chapter.quote) : undefined,
+        galleryLabel: tr(locale, chapter.galleryLabel),
         images: (() => {
           const group = `editorial.${chapterIndex}`;
-          const baseItems = chapter.images.map((image, imageIndex) => ({
-            ...(mediaOverrides[`${group}.${imageIndex}`] ?? image),
-            editorField: `${group}.${imageIndex}`,
-          }));
+          const isProtectedMediaSelection =
+            (house === "villa-raie-manta" &&
+              (chapterIndex === 0 || chapterIndex === 5 || chapterIndex === 6)) ||
+            (house === "nid-d-ete" && chapterIndex === 5);
+          const baseItems = chapter.images.map((image, imageIndex) => {
+            const override = mediaOverrides[`${group}.${imageIndex}`];
+            const isMisplacedVillaBlueBedroom =
+              house === "villa-raie-manta" &&
+              chapterIndex === 0 &&
+              Boolean(
+                override?.src.includes("chambre-bleue") || override?.src.includes("harry-potter"),
+              );
+            const isRetiredNidArrivalLounger =
+              house === "nid-d-ete" &&
+              chapterIndex === 0 &&
+              override?.src.endsWith("/authentique/transats-jardin.jpeg");
+            return {
+              ...(isRetiredNidArrivalLounger ||
+              isMisplacedVillaBlueBedroom ||
+              isProtectedMediaSelection
+                ? image
+                : (override ?? image)),
+              editorField: `${group}.${imageIndex}`,
+            };
+          });
           const order = mediaOrder[group];
           const addedItems = (order ?? [])
             .filter((field) => !baseItems.some((item) => item.editorField === field))
@@ -302,12 +326,13 @@ export function IslandHouseEditorialReport({
               mediaOverrides[field] ? [{ ...mediaOverrides[field], editorField: field }] : [],
             );
           const items = [...baseItems, ...addedItems];
+          if (isProtectedMediaSelection) return baseItems;
           return order
             ? order.flatMap((field) => items.find((item) => item.editorField === field) ?? [])
             : items;
         })(),
       })),
-    [report, mediaOverrides, mediaOrder],
+    [report, mediaOverrides, mediaOrder, house, locale],
   );
   const allImages = useMemo(
     () =>

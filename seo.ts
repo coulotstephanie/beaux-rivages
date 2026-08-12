@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { PageSeoConfig } from "@/content/fr/seo";
 import type { Property } from "@/data";
 import type { DestinationGuide } from "@/destinationGuides";
+import { productionLocales, type SupportedLocale } from "@/i18n/config";
 
 export const SITE_URL = "https://www.beaux-rivages.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/destination/marais-coucher-soleil.jpeg";
@@ -18,14 +19,32 @@ export function absoluteUrl(path: string) {
   return `${SITE_URL}${path === "/" ? "" : path}`;
 }
 
-export function createPageMetadata({ title, description, path, image, openGraphTitle }: PageMetadataInput): Metadata {
+export function localizedUrl(path: string, locale: SupportedLocale) {
+  const normalized = path === "/" ? "" : path;
+  return `${SITE_URL}${locale === "fr" ? "" : `/${locale}`}${normalized}`;
+}
+
+export function languageAlternates(path: string) {
+  return {
+    ...Object.fromEntries(productionLocales.map((locale) => [locale, localizedUrl(path, locale)])),
+    "x-default": absoluteUrl(path),
+  };
+}
+
+export function createPageMetadata({
+  title,
+  description,
+  path,
+  image,
+  openGraphTitle,
+}: PageMetadataInput): Metadata {
   const canonical = absoluteUrl(path);
   const socialImage = absoluteUrl(image ?? DEFAULT_SOCIAL_IMAGE);
 
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: { canonical, languages: languageAlternates(path) },
     openGraph: {
       title: openGraphTitle ?? title,
       description,
@@ -132,19 +151,21 @@ export function createPropertyStructuredData(property: Property): Record<string,
   const lodgingId = `${url}#lodging`;
   const capacity = Number(property.capacity.match(/\d+/)?.[0] ?? 0);
   const bedrooms = Number(property.stats.find((stat) => stat.label === "chambres")?.value ?? 0);
-  const bathroomsFromStats = Number(property.stats.find((stat) => stat.label.includes("salle"))?.value ?? 0);
-  const bathrooms = bathroomsFromStats || property.spaces.filter((space) =>
-    /salle(?:s)? (?:de bain|d’eau)/i.test(space.title),
-  ).reduce((total, space) => {
-    const statedCount = Number(space.title.match(/\d+/)?.[0] ?? 0);
-    if (statedCount) return total + statedCount;
-    if (/\bdeux\b/i.test(space.title)) return total + 2;
-    return total + 1;
-  }, 0);
+  const bathroomsFromStats = Number(
+    property.stats.find((stat) => stat.label.includes("salle"))?.value ?? 0,
+  );
+  const bathrooms =
+    bathroomsFromStats ||
+    property.spaces
+      .filter((space) => /salle(?:s)? (?:de bain|d’eau)/i.test(space.title))
+      .reduce((total, space) => {
+        const statedCount = Number(space.title.match(/\d+/)?.[0] ?? 0);
+        if (statedCount) return total + statedCount;
+        if (/\bdeux\b/i.test(space.title)) return total + 2;
+        return total + 1;
+      }, 0);
   const pageSchemas = createPageStructuredData(config).map((schema) =>
-    schema["@type"] === "WebPage"
-      ? { ...schema, mainEntity: { "@id": lodgingId } }
-      : schema,
+    schema["@type"] === "WebPage" ? { ...schema, mainEntity: { "@id": lodgingId } } : schema,
   );
 
   return [
@@ -173,7 +194,9 @@ export function createPropertyStructuredData(property: Property): Record<string,
       containedInPlace: {
         "@type": "TouristDestination",
         name: property.location.split(" · ")[1],
-        url: absoluteUrl(property.slug === "nid-d-ete" ? "/destinations/ile-d-oleron" : "/destinations/ile-de-re"),
+        url: absoluteUrl(
+          property.slug === "nid-d-ete" ? "/destinations/ile-d-oleron" : "/destinations/ile-de-re",
+        ),
       },
       image: property.gallery.map((image) => absoluteUrl(image.src)),
       amenityFeature: property.amenityGroups.flatMap((group) =>
@@ -191,15 +214,17 @@ export function createPropertyStructuredData(property: Property): Record<string,
       mainEntityOfPage: url,
     },
     ...(property.faq.length
-      ? [{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: property.faq.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: { "@type": "Answer", text: item.answer },
-          })),
-        }]
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: property.faq.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: { "@type": "Answer", text: item.answer },
+            })),
+          },
+        ]
       : []),
     ...pageSchemas,
   ];

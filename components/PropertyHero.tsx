@@ -2,8 +2,16 @@ import Image from "next/image";
 import type { Property } from "@/data";
 import { BLUR_DATA_URL } from "@/media";
 import { Badge, Button, Container } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr, localizedHref } from "@/i18n/lot1-client";
 
-export function PropertyHero({ property }: { property: Property }) {
+export function PropertyHero({
+  property,
+  locale = "fr",
+}: {
+  property: Property;
+  locale?: SupportedLocale;
+}) {
   return (
     <section className="premium-property-hero" data-editor-field="hero" data-editor-kind="image">
       <Image
@@ -31,15 +39,21 @@ export function PropertyHero({ property }: { property: Property }) {
           <span data-editor-field="capacity">{property.capacity}</span>
         </div>
         <div className="premium-property-hero__actions">
-          <Button href={`/reserver?maison=${property.slug}`}>Imaginer mon séjour</Button>
+          <Button href={localizedHref(locale, `/reserver?maison=${property.slug}`)}>
+            {tr(locale, "Imaginer mon séjour")}
+          </Button>
           <Button href="#histoire" variant="secondary">
-            Entrer dans la maison
+            {tr(locale, "Entrer dans la maison")}
           </Button>
         </div>
       </Container>
-      <a href="#histoire" className="property-scroll-cue" aria-label="Découvrir la maison">
+      <a
+        href="#histoire"
+        className="property-scroll-cue"
+        aria-label={tr(locale, "Découvrir la maison")}
+      >
         <span />
-        Découvrir
+        {tr(locale, "Découvrir")}
       </a>
     </section>
   );
