@@ -122,6 +122,41 @@ const editorialFamilyTerraceAperitif = asset(
   "Une famille réunie autour d’un plateau de fruits de mer sur la terrasse de Villa Raie Manta",
   "Le plateau de fruits de mer en famille face à l’océan",
 );
+const editorialGuestArrival = asset(
+  "editorial/arrivee-famille-facade.png",
+  "Une famille arrivant avec ses bagages devant la façade de Villa Raie Manta",
+  "L’arrivée à Villa Raie Manta",
+);
+const editorialOceanBreakfast = asset(
+  "editorial/petit-dejeuner-vue-ocean.png",
+  "Un couple partageant un petit-déjeuner dans le salon avec vue sur l’océan",
+  "Le petit-déjeuner face à l’océan",
+);
+const editorialRemoteWork = asset(
+  "editorial/teletravail-vue-ocean.png",
+  "Une professionnelle travaillant sur ordinateur face à l’océan",
+  "Télétravailler face à l’horizon",
+);
+const editorialSeniorsTerrace = asset(
+  "editorial/seniors-terrasse.png",
+  "Un couple de seniors profitant du transat balinais sur la terrasse",
+  "Une pause au soleil sur la terrasse",
+);
+const editorialFamilyBeachDeparture = asset(
+  "editorial/depart-plage-en-famille.png",
+  "Une famille quittant la Villa avec serviettes, chapeaux et jeux de plage",
+  "La plage commence devant la porte",
+);
+const editorialFamilyDogsTerrace = asset(
+  "editorial/famille-chiens-terrasse.png",
+  "Une famille jouant avec deux chiens sur la terrasse de Villa Raie Manta",
+  "La terrasse accueille toute la famille",
+);
+const editorialQuietOceanEvening = asset(
+  "editorial/soiree-calme-vue-ocean.png",
+  "Un couple profitant d’une soirée calme face au coucher du soleil sur l’océan",
+  "La soirée face à l’horizon",
+);
 const ocean = asset(
   "vue-ocean.jpeg",
   "Vue sur l’océan depuis Villa Raie Manta",
@@ -196,8 +231,13 @@ const airbnbBedrooms = [
   ),
   asset(
     "chambre-modulable-sans-texte.png",
-    "Chambre avec deux lits simples réunissables",
-    "La chambre modulable",
+    "Chambre bleue à l’étage avec deux lits simples réunissables",
+    "La chambre bleue à l’étage",
+  ),
+  asset(
+    "chambre-bleue-harry-potter-retouchee.png",
+    "Deux enfants dans la chambre bleue à l’étage avec deux lits et une décoration inspirée de Harry Potter",
+    "La chambre bleue pensée pour les enfants",
   ),
   asset(
     "chambre-vue-mer-sans-texte.png",
@@ -206,11 +246,18 @@ const airbnbBedrooms = [
   ),
   asset("chambre-enfants-sans-texte.png", "Chambre avec lits superposés", "La chambre des enfants"),
 ];
-const airbnbBathrooms = [
+const additionalBathroomAngles = [
   asset(
     "airbnb-salle-de-bains-entiere-2-1.jpeg",
     "Seconde salle d’eau à l’étage",
     "Une salle d’eau à chaque niveau",
+  ),
+];
+const toilets = [
+  asset(
+    "authentique/toilettes-independantes.jpg",
+    "Toilettes indépendantes décorées d’une photographie de l’océan",
+    "Les toilettes indépendantes",
   ),
   asset(
     "airbnb-toilettes-avec-lavabo-1-1.jpeg",
@@ -239,11 +286,6 @@ const authenticBathrooms = [
     "Douche et vasque en bois de Villa Raie Manta",
     "La douche et son meuble vasque",
   ),
-  asset(
-    "authentique/toilettes-independantes.jpg",
-    "Toilettes indépendantes décorées d’une photographie de l’océan",
-    "Les toilettes indépendantes",
-  ),
 ];
 const airbnbExterior = [
   asset(
@@ -267,13 +309,17 @@ const airbnbLeisure = [
 
 export const villaRaieMantaMedia = {
   slug: "villa-raie-manta",
-  hero: editorialSalon,
-  arrival: [airbnbExterior[0]],
+  hero: ocean,
+  arrival: [editorialGuestArrival, airbnbExterior[0]],
   exterior: [ocean, authenticReBridge, ...airbnbExterior],
   livingRoom: [
     editorialSalon,
     editorialFamilyPets,
     editorialBeachReturn,
+    editorialOceanBreakfast,
+    editorialRemoteWork,
+    editorialFamilyBeachDeparture,
+    editorialQuietOceanEvening,
     salonSea,
     brightSalon,
     ...airbnbLivingRoom,
@@ -288,12 +334,14 @@ export const villaRaieMantaMedia = {
     doubleRoom,
     ...airbnbBedrooms,
   ],
-  bathrooms: [...authenticBathrooms, bathroom, ...airbnbBathrooms],
+  bathrooms: [...authenticBathrooms, bathroom, ...additionalBathroomAngles, ...toilets],
   terrace: [
     editorialFamilyTerraceAperitif,
     authenticSeafoodPlatter,
     editorialSeafood,
     editorialBalineseLounger,
+    editorialSeniorsTerrace,
+    editorialFamilyDogsTerrace,
   ],
   details: [
     editorialBirthday,
@@ -310,6 +358,10 @@ export const villaRaieMantaMedia = {
     editorialFamilyTable,
     editorialAsianFamilyTable,
     editorialFamilyTerraceAperitif,
+    editorialFamilyBeachDeparture,
+    editorialSeniorsTerrace,
+    editorialFamilyDogsTerrace,
+    editorialQuietOceanEvening,
     ocean,
     editorialBalineseLounger,
     editorialFamilyGames,
@@ -319,8 +371,13 @@ export const villaRaieMantaMedia = {
   gallery: [
     // Ouverture et arrivée
     editorialSalon,
+    editorialGuestArrival,
     editorialFamilyPets,
     editorialBeachReturn,
+    editorialOceanBreakfast,
+    editorialRemoteWork,
+    editorialFamilyBeachDeparture,
+    editorialQuietOceanEvening,
     editorialCandlelightDinner,
     editorialMultigenerationalBirthday,
     editorialFamilyTable,
@@ -351,6 +408,7 @@ export const villaRaieMantaMedia = {
     airbnbBedrooms[2],
     airbnbBedrooms[3],
     airbnbBedrooms[4],
+    airbnbBedrooms[5],
     doubleRoom,
     editorialBedroom,
     editorialBirthdayBedroom,
@@ -360,11 +418,14 @@ export const villaRaieMantaMedia = {
     // Salles d’eau et toilettes
     ...authenticBathrooms,
     bathroom,
-    ...airbnbBathrooms,
+    ...additionalBathroomAngles,
+    ...toilets,
 
     // Terrasse et loisirs
     editorialSeafood,
     editorialBalineseLounger,
+    editorialSeniorsTerrace,
+    editorialFamilyDogsTerrace,
     ...airbnbLeisure,
   ],
 } satisfies PropertyMediaManifest;

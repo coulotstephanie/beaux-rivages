@@ -126,6 +126,36 @@ const editorialFamilyTerraceAperitif = propertyAsset(
   "Plusieurs générations réunies avec un bébé et un chat autour de la table de la terrasse",
   "L’apéritif en famille sous la voile",
 );
+const editorialGuestArrival = propertyAsset(
+  "editorial/arrivee-famille-bagages.png",
+  "Une famille arrivant avec ses bagages devant le Nid d’Été",
+  "L’arrivée au Nid d’Été",
+);
+const editorialRemoteWork = propertyAsset(
+  "editorial/teletravail-piece-de-vie.png",
+  "Une professionnelle travaillant sur ordinateur à la grande table du Nid d’Été",
+  "Télétravailler au calme à Boyardville",
+);
+const editorialBabySetup = propertyAsset(
+  "editorial/parents-installation-lit-bebe.png",
+  "De jeunes parents installant un lit bébé dans une chambre du Nid d’Été",
+  "Tout préparer pour le séjour de bébé",
+);
+const editorialFamilyCycling = propertyAsset(
+  "editorial/depart-velo-en-famille.png",
+  "Une famille préparant ses vélos devant le Nid d’Été pour partir vers la plage",
+  "La plage à vélo depuis le Nid",
+);
+const editorialSeniorsResidence = propertyAsset(
+  "editorial/seniors-residence-arboree.png",
+  "Un couple de seniors se promenant dans la résidence arborée du Nid d’Été",
+  "Une promenade paisible dans la résidence",
+);
+const editorialChristmasDinner = propertyAsset(
+  "editorial/repas-noel-intergenerationnel.png",
+  "Plusieurs générations réunies autour d’un repas de Noël au Nid d’Été",
+  "Noël autour de la grande table",
+);
 const airbnbKitchen = [
   propertyAsset(
     "airbnb-cuisine-entiere-2.jpeg",
@@ -142,23 +172,11 @@ const airbnbBedrooms = [
   ),
   propertyAsset("airbnb-chambre-2-1.jpeg", "Seconde chambre avec lit double", "La seconde chambre"),
 ];
-const airbnbBathroom = [
+const bathroomHighlights = [
   propertyAsset(
-    "airbnb-salle-de-bain-1.jpeg",
-    "Salle d’eau avec douche à l’italienne",
-    "La salle d’eau",
-  ),
-  propertyAsset(
-    "airbnb-toilettes.jpeg",
-    "Toilettes suspendues du Nid d’Été",
-    "Les toilettes de la salle d’eau",
-  ),
-];
-const authenticBathroom = [
-  propertyAsset(
-    "authentique/salle-eau-ensemble.jpg",
-    "Salle d’eau complète du Nid d’Été avec douche et toilettes suspendues",
-    "La salle d’eau dans son ensemble",
+    "lavabo-detail.jpeg",
+    "Lavabo du Nid d’Été cadré de face avec sa vasque et son miroir éclairé",
+    "Le lavabo bien centré",
   ),
   propertyAsset(
     "authentique/douche.jpg",
@@ -166,9 +184,16 @@ const authenticBathroom = [
     "La douche et le meuble vasque",
   ),
   propertyAsset(
-    "authentique/toilettes.jpg",
+    "airbnb-toilettes.jpeg",
     "Toilettes suspendues et sèche-serviettes du Nid d’Été",
-    "Les toilettes de la salle d’eau",
+    "Les toilettes bien cadrées",
+  ),
+];
+const additionalBathroomPhotos = [
+  propertyAsset(
+    "authentique/salle-eau-ensemble.jpg",
+    "Salle d’eau complète du Nid d’Été avec douche et toilettes suspendues",
+    "La salle d’eau dans son ensemble",
   ),
 ];
 const authenticAerial = [
@@ -311,17 +336,35 @@ const airbnbDetails = [
 export const nidDEteMedia = {
   slug: "nid-d-ete",
   hero: airbnbLivingRoom[0],
-  arrival: [nidDEteAuthenticMedia.residenceGate, arrivalEntrance, arrivalPlan],
-  exterior: [nidDEteAuthenticMedia.gardenLoungers, ...airbnbExterior.slice(1)],
-  livingRoom: [editorialLivingRoom, editorialBeachReturn, editorialFamilyCat, ...airbnbLivingRoom],
-  kitchen: [editorialBreakfast, editorialFamilyGames, ...airbnbKitchen, ...authenticFood],
+  arrival: [editorialGuestArrival, nidDEteAuthenticMedia.residenceGate, arrivalEntrance, arrivalPlan],
+  exterior: [
+    editorialFamilyCycling,
+    editorialSeniorsResidence,
+    nidDEteAuthenticMedia.gardenLoungers,
+    ...airbnbExterior.slice(1),
+  ],
+  livingRoom: [
+    editorialLivingRoom,
+    editorialBeachReturn,
+    editorialFamilyCat,
+    editorialRemoteWork,
+    ...airbnbLivingRoom,
+  ],
+  kitchen: [
+    editorialBreakfast,
+    editorialFamilyGames,
+    editorialChristmasDinner,
+    ...airbnbKitchen,
+    ...authenticFood,
+  ],
   bedrooms: [
     editorialBedroom,
     editorialChildrenBirthday,
+    editorialBabySetup,
     nidDEteAuthenticMedia.preparedBedroom,
     ...airbnbBedrooms,
   ],
-  bathrooms: [...authenticBathroom, ...airbnbBathroom],
+  bathrooms: [...bathroomHighlights, ...additionalBathroomPhotos],
   terrace: [
     editorialFamilyTerraceAperitif,
     editorialTerraceLunch,
@@ -355,6 +398,7 @@ export const nidDEteMedia = {
   videos: [],
   gallery: [
     // Ouverture et pièces de vie
+    editorialGuestArrival,
     ...airbnbLivingRoom,
     ...airbnbKitchen,
     editorialLivingRoom,
@@ -365,22 +409,27 @@ export const nidDEteMedia = {
     editorialFamilyTable,
     editorialFamilyTerraceAperitif,
     editorialBreakfast,
+    editorialChristmasDinner,
+    editorialRemoteWork,
 
     // Chambres
     ...airbnbBedrooms,
     editorialBedroom,
     editorialChildrenBirthday,
+    editorialBabySetup,
     nidDEteAuthenticMedia.preparedBedroom,
     editorialFamilyGames,
 
     // Salle d’eau et toilettes
-    ...authenticBathroom,
-    ...airbnbBathroom,
+    ...bathroomHighlights,
+    ...additionalBathroomPhotos,
 
     // Extérieur et terrasse
     airbnbExterior[1],
     airbnbExterior[2],
     airbnbExterior[3],
+    editorialFamilyCycling,
+    editorialSeniorsResidence,
     editorialTerraceLunch,
     nidDEteAuthenticMedia.gardenLoungers,
     ...airbnbTerrace,

@@ -21,11 +21,7 @@ const originalHero = propertyAsset(
   "Le vaste espace de vie du Chai des Tortues sous sa charpente en bois",
   "Le Chai des Tortues",
 );
-const hero = propertyAsset(
-  "editorial/espace-de-vie-retour-marche.png",
-  "Pièce de vie du Chai des Tortues préparée pour un retour du marché",
-  "Du marché à la maison",
-);
+const hero = originalHero;
 const editorialAperitif = propertyAsset(
   "editorial/salon-aperitif.png",
   "Apéritif aux huîtres sur la table basse du salon",
@@ -33,8 +29,8 @@ const editorialAperitif = propertyAsset(
 );
 const editorialIsland = propertyAsset(
   "editorial/ilot-retour-marche.png",
-  "Îlot du Chai animé par les produits rapportés du marché",
-  "Le retour du marché sur l’îlot",
+  "Îlot du Chai préparé avec des produits frais à partager",
+  "L’îlot prêt à partager",
 );
 const editorialCelebration = propertyAsset(
   "editorial/table-de-fete.png",
@@ -66,6 +62,16 @@ const editorialFamilyGames = propertyAsset(
   "Jeu de société en famille autour de la table ronde du Chai",
   "Une partie sous les pierres",
 );
+const editorialFamilyGameLived = propertyAsset(
+  "editorial/jeu-de-societe-en-famille.png",
+  "Parents et enfants réunis autour d’un jeu de société dans le salon du Chai",
+  "Une partie en famille dans le salon",
+);
+const editorialFriendsGame = propertyAsset(
+  "editorial/jeu-de-societe-entre-amis.png",
+  "Groupe d’amis réuni autour d’un jeu de société dans le salon du Chai",
+  "Une partie entre amis",
+);
 const editorialMarketCouple = propertyAsset(
   "editorial/retour-marche-en-couple.png",
   "Un couple préparant le dîner avec les produits du marché dans la grande pièce du Chai",
@@ -91,8 +97,100 @@ const editorialFamilyTable = propertyAsset(
   "Grands-parents, parents, enfants et bébé partageant un grand repas dans le Chai",
   "Le grand déjeuner sous les poutres",
 );
+const editorialQuietBedroom = propertyAsset(
+  "editorial/chambre-moment-calme.png",
+  "Deux femmes profitant d’un moment calme dans une chambre du Chai",
+  "Un moment calme dans la chambre",
+);
+const editorialFamilyBedroom = propertyAsset(
+  "editorial/chambre-en-famille.png",
+  "Une famille réunie autour de jeux et de livres dans une chambre du Chai",
+  "La chambre devient un refuge en famille",
+);
+const editorialFamilyOuting = propertyAsset(
+  "editorial/preparation-balade-en-famille.png",
+  "Une grand-mère et sa petite-fille préparant une balade sur une carte dans le Chai",
+  "Préparer ensemble la prochaine balade",
+);
+const editorialBeachDeparture = propertyAsset(
+  "editorial/depart-pour-la-plage.png",
+  "Une famille préparant chapeaux, jeux et tapis avant de partir à la plage",
+  "Le départ pour la plage",
+);
+const editorialSeniorBedroom = propertyAsset(
+  "editorial/chambre-sejour-seniors.png",
+  "Un couple de seniors profitant d’une chambre lumineuse du Chai",
+  "Une chambre accueillante pour toutes les générations",
+);
+const editorialWelcomeShower = propertyAsset(
+  "editorial/douche-produits-accueil.png",
+  "Douche minérale du Chai préparée avec linge et produits d’accueil",
+  "La douche préparée pour l’arrivée",
+);
+const editorialBabyBathroom = propertyAsset(
+  "editorial/salle-eau-avec-baignoire-bebe.png",
+  "Salle d’eau du Chai équipée d’une baignoire pour bébé",
+  "Le confort pensé aussi pour les tout-petits",
+);
+const editorialBabyBedroom = propertyAsset(
+  "editorial/chambre-equipee-pour-bebe.png",
+  "Chambre-suite du Chai préparée avec un lit bébé et les affaires d’un nourrisson",
+  "Tout est prêt pour accueillir bébé",
+);
+const editorialGuestArrival = propertyAsset(
+  "editorial/arrivee-voyageurs-facade.png",
+  "Voyageuses arrivant avec leurs bagages, un enfant, un chien et un vélo devant le Chai",
+  "L’arrivée au Chai des Tortues",
+);
+const editorialCourtyardMoment = propertyAsset(
+  "editorial/moment-a-deux-dans-la-cour.png",
+  "Un couple partageant un moment dans la petite cour en pierre du Chai",
+  "Une pause à deux dans la cour",
+);
+const editorialFamilyBreakfast = propertyAsset(
+  "editorial/petit-dejeuner-en-famille.png",
+  "Deux parents et un enfant partageant un petit-déjeuner autour de l’îlot du Chai",
+  "Le petit-déjeuner autour de l’îlot",
+);
+const editorialRemoteWork = propertyAsset(
+  "editorial/teletravail-coin-bureau.png",
+  "Deux professionnels travaillant avec un ordinateur dans le coin bureau du Chai",
+  "Travailler sur l’île, habiter le Chai",
+);
 
-const arrival = [editorialBicycleArrival];
+const newLivedMoments = [
+  propertyAsset("editorial/repas-fruits-de-mer-famille.png", "Famille réunie autour d’un repas de fruits de mer au Chai", "Les saveurs de l’île en famille"),
+  propertyAsset("editorial/anniversaire-en-famille.png", "Une famille célébrant un anniversaire dans la cuisine du Chai", "Un anniversaire à la maison"),
+  propertyAsset("editorial/patisserie-intergenerationnelle.png", "Trois générations préparant des pâtisseries autour de l’îlot", "Pâtisser entre générations"),
+  propertyAsset("editorial/sejour-cocooning-famille.png", "Une famille profitant d’un moment cocooning dans le salon", "Le plaisir de rester à la maison"),
+  propertyAsset("editorial/repas-entre-amis.png", "Amis préparant et partageant un repas dans la grande pièce de vie", "La grande table entre amis"),
+  propertyAsset("editorial/chambre-romantique.png", "Chambre-suite préparée avec peignoirs, pétales, champagne et chocolats", "Une escapade romantique"),
+  propertyAsset("editorial/sejour-avec-chien.png", "Un couple séjournant avec son chien dans le salon du Chai", "Les vacances avec son compagnon"),
+  propertyAsset("editorial/diner-romantique.png", "Un couple partageant un dîner romantique dans le Chai", "Un dîner à deux"),
+  propertyAsset("editorial/baby-shower.png", "Amies réunies autour d’une future maman pour une baby shower", "Célébrer l’arrivée de bébé"),
+];
+
+const newCelebrations = [
+  propertyAsset("editorial/raclette-entre-amis.png", "Amis réunis autour d’une raclette dans la grande pièce de vie", "Une soirée raclette entre amis"),
+  propertyAsset("editorial/ramadan-repas-familial.png", "Famille réunie autour d’un repas de Ramadan", "Le repas partagé en famille"),
+  propertyAsset("editorial/hanoucca-patisserie-famille.png", "Famille préparant des douceurs pour Hanoucca autour de l’îlot", "Les douceurs de Hanoucca"),
+  propertyAsset("editorial/diwali-en-famille.png", "Famille célébrant Diwali dans le salon du Chai", "Diwali en famille"),
+  propertyAsset("editorial/noel-cadeaux-en-famille.png", "Famille ouvrant les cadeaux de Noël dans le salon", "Noël réunit la famille"),
+  propertyAsset("editorial/paques-patisserie-famille.png", "Parents et enfants préparant les douceurs de Pâques", "Pâques autour de l’îlot"),
+  propertyAsset("editorial/halloween-en-famille.png", "Famille préparant Halloween dans la grande pièce de vie", "Halloween à la maison"),
+  propertyAsset("editorial/fete-repas-famille-musulmane.png", "Famille musulmane réunie autour d’un repas de fête", "Une fête autour de la grande table"),
+  propertyAsset("editorial/nouvel-an-entre-amis.png", "Amis de plusieurs générations célébrant le Nouvel An", "Passer la nouvelle année ensemble"),
+  propertyAsset("editorial/anniversaire-enfant-chambre.png", "Une mère offrant un petit-déjeuner d’anniversaire à son enfant dans une chambre", "Un réveil d’anniversaire"),
+];
+
+const latestLivedMoments = [
+  propertyAsset("editorial/petit-dejeuner-intergenerationnel.png", "Trois générations préparant un petit-déjeuner autour de l’îlot", "Le petit-déjeuner réunit les générations"),
+  propertyAsset("editorial/jeu-pere-grand-pere-enfants.png", "Père, grand-père et enfants réunis autour d’un jeu dans le salon", "Une partie entre générations"),
+  propertyAsset("editorial/parents-nourrisson-chambre.png", "Jeunes parents installant leur nourrisson dans une chambre équipée d’un lit bébé", "Les premiers séjours avec bébé"),
+  propertyAsset("editorial/petit-dejeuner-au-lit-seniors.png", "Couple de seniors partageant un petit-déjeuner au lit dans une chambre", "Un matin tout en douceur"),
+];
+
+const arrival = [editorialGuestArrival, editorialBicycleArrival];
 
 const exterior = [
   editorialMorningCoffee,
@@ -111,6 +209,7 @@ const exterior = [
     "La rue calme devant la façade du Chai des Tortues",
     "Au cœur de Rivedoux-Plage",
   ),
+  editorialCourtyardMoment,
 ];
 
 const livingRoom = [
@@ -146,6 +245,18 @@ const livingRoom = [
     "Le séjour du Chai ouvert sur la cuisine",
     "Une pièce de vie pensée pour les vacances",
   ),
+  editorialFamilyGameLived,
+  editorialFriendsGame,
+  editorialFamilyOuting,
+  editorialBeachDeparture,
+  editorialRemoteWork,
+  newLivedMoments[3],
+  newLivedMoments[6],
+  newCelebrations[3],
+  newCelebrations[4],
+  newCelebrations[6],
+  newCelebrations[8],
+  latestLivedMoments[1],
 ];
 
 const kitchen = [
@@ -163,7 +274,7 @@ const kitchen = [
   propertyAsset(
     "kitchen/cuisine-et-table.jpeg",
     "La cuisine du Chai et la table familiale",
-    "Du marché à la grande table",
+    "De la cuisine à la grande table",
   ),
   propertyAsset(
     "kitchen/cuisine-equipee.jpeg",
@@ -182,6 +293,24 @@ const kitchen = [
   ),
   editorialCelebration,
   editorialChristmas,
+  propertyAsset(
+    "editorial/cuisine-familiale.png",
+    "Parents et enfant préparant un repas ensemble dans la cuisine du Chai",
+    "La cuisine en famille",
+  ),
+  editorialFamilyBreakfast,
+  newLivedMoments[0],
+  newLivedMoments[1],
+  newLivedMoments[2],
+  newLivedMoments[4],
+  newLivedMoments[7],
+  newLivedMoments[8],
+  newCelebrations[0],
+  newCelebrations[1],
+  newCelebrations[2],
+  newCelebrations[5],
+  newCelebrations[7],
+  latestLivedMoments[0],
 ];
 
 const bedrooms = [
@@ -231,6 +360,14 @@ const bedrooms = [
     "Une chambre sous la charpente en bois clair",
     "Des nuits sous les poutres",
   ),
+  editorialQuietBedroom,
+  editorialFamilyBedroom,
+  editorialSeniorBedroom,
+  editorialBabyBedroom,
+  newLivedMoments[5],
+  newCelebrations[9],
+  latestLivedMoments[2],
+  latestLivedMoments[3],
 ];
 
 const bathrooms = [
@@ -279,6 +416,8 @@ const bathrooms = [
     "La douche de la seconde salle d’eau",
     "Le confort pour toute la maison",
   ),
+  editorialWelcomeShower,
+  editorialBabyBathroom,
 ];
 
 const utilities = [
@@ -355,27 +494,33 @@ const pastries = destinationAsset(
 const propertyGallery = [
   // Ouverture et arrivée
   hero,
+  editorialGuestArrival,
   editorialBicycleArrival,
   exterior[2],
   exterior[3],
   exterior[1],
   editorialMorningCoffee,
+  editorialCourtyardMoment,
 
   // Pièce de vie
   livingRoom[1],
   livingRoom[2],
   livingRoom[3],
-  originalHero,
   livingRoom[5],
   livingRoom[6],
   livingRoom[7],
   editorialAperitif,
   editorialFamilyGames,
+  editorialFamilyGameLived,
+  editorialFriendsGame,
   editorialMarketCouple,
   editorialFamilyCat,
   editorialCandlelightDinner,
   editorialMultigenerationalChristmas,
   editorialFamilyTable,
+  editorialFamilyOuting,
+  editorialBeachDeparture,
+  editorialRemoteWork,
 
   // Cuisine et grande table
   kitchen[1],
@@ -387,6 +532,11 @@ const propertyGallery = [
   kitchen[6],
   editorialCelebration,
   editorialChristmas,
+  kitchen[9],
+  editorialFamilyBreakfast,
+  ...newLivedMoments,
+  ...newCelebrations,
+  ...latestLivedMoments,
 
   // Chambres
   bedrooms[2],
@@ -394,6 +544,10 @@ const propertyGallery = [
   bedrooms[4],
   bedrooms[5],
   editorialBedroom,
+  editorialQuietBedroom,
+  editorialFamilyBedroom,
+  editorialSeniorBedroom,
+  editorialBabyBedroom,
 
   // Salles d’eau
   bathrooms[0],
@@ -405,6 +559,8 @@ const propertyGallery = [
   bathrooms[6],
   bathrooms[7],
   bathrooms[8],
+  editorialWelcomeShower,
+  editorialBabyBathroom,
 
   // Espaces pratiques
   utilities[0],
@@ -437,6 +593,7 @@ export const chaiDesTortuesMedia = {
     editorialCandlelightDinner,
     editorialMultigenerationalChristmas,
     editorialFamilyTable,
+    ...newLivedMoments,
     bicycle,
     port,
     destinationMedia.food,
@@ -480,12 +637,12 @@ export const chaiDesTortuesMedia = {
     beachTerrace,
   ],
   editorial: {
-    breakfast: pastries,
+    breakfast: editorialFamilyBreakfast,
     aperitif: editorialAperitif,
     market: editorialIsland,
     seafood: destinationMedia.food,
     family: editorialFamilyGames,
-    pets: editorialFamilyCat,
+    pets: newLivedMoments[6],
     beach: destinationMedia.beach,
     cycling: bicycle,
     kitchen: kitchen[1],

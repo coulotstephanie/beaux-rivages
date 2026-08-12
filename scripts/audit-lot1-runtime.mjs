@@ -9,7 +9,7 @@ const locales = process.env.LOT1_LOCALES
 const allPages = [
   { name: "home", path: "/", images: 11 },
   { name: "chai", path: "/maisons/chai-des-tortues", images: 49 },
-  { name: "villa", path: "/maisons/villa-raie-manta", images: 56 },
+  { name: "villa", path: "/maisons/villa-raie-manta", images: 57 },
   { name: "nid", path: "/maisons/nid-d-ete", images: 58 },
 ];
 const requestedPages = process.env.LOT1_PAGES?.split(",");

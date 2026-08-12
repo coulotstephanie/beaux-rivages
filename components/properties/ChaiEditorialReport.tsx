@@ -28,7 +28,7 @@ const chapters: Chapter[] = [
     title: "La pierre rétaise ouvre la porte.",
     text: "Au cœur de Rivedoux-Plage, la façade discrète laisse deviner une maison singulière. On pose les vélos, on pousse la porte et les volumes de l’ancien chai se révèlent peu à peu.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [media.arrival[0], media.exterior[3], media.exterior[2]],
+    images: [media.arrival[0], media.exterior[4], media.exterior[2]],
   },
   {
     number: "02",
@@ -36,7 +36,7 @@ const chapters: Chapter[] = [
     title: "Une cuisine imaginée pour vraiment recevoir.",
     text: "Ici, cuisiner fait partie des vacances. Le bois, les grands plans de travail et les équipements généreux accompagnent aussi bien un dîner improvisé qu’un repas de fête.",
     galleryLabel: "Explorer la galerie de la cuisine",
-    images: [media.kitchen[8], media.kitchen[7], media.kitchen[1]],
+    images: [media.kitchen[10], media.kitchen[9], media.kitchen[1]],
   },
   {
     number: "03",
@@ -52,7 +52,7 @@ const chapters: Chapter[] = [
     title: "Un même volume pour vivre ensemble.",
     text: "Salon, salle à manger et cuisine dialoguent sous les poutres. La pierre ancienne adoucit la lumière et donne à chaque moment, du café au dernier verre, une atmosphère particulière.",
     galleryLabel: "Explorer la galerie de la pièce de vie",
-    images: [media.livingRoom[5], media.livingRoom[6], media.livingRoom[7]],
+    images: [media.livingRoom[10], media.livingRoom[11], media.livingRoom[8]],
   },
   {
     number: "05",
@@ -60,7 +60,7 @@ const chapters: Chapter[] = [
     title: "Le calme gagne l’étage.",
     text: "Trois chambres accueillent les nuits dans une palette de bois clair, de linge naturel et de pierre préservée. Chacune conserve son caractère et la douceur d’une vraie maison.",
     galleryLabel: "Explorer la galerie des chambres",
-    images: [media.bedrooms[9], media.bedrooms[8], media.bedrooms[7]],
+    images: [media.bedrooms[13], media.bedrooms[12], media.bedrooms[10]],
   },
   {
     number: "06",
@@ -68,7 +68,7 @@ const chapters: Chapter[] = [
     title: "Des matières franches, un confort contemporain.",
     text: "La pierre minérale, le bois brut et la robinetterie composent des espaces sobres et chaleureux, pensés pour que chacun trouve son rythme.",
     galleryLabel: "Explorer la galerie des salles d’eau",
-    images: [media.bathrooms[9], media.bathrooms[8], media.bathrooms[0]],
+    images: [media.bathrooms[9], media.bathrooms[10], media.bathrooms[0]],
   },
   {
     number: "07",

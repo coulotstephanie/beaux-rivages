@@ -24,6 +24,20 @@ type Chapter = {
   images: readonly MediaAsset[];
 };
 
+const villaArrivalPebbles: MediaAsset = {
+  src: "https://ydqtqfkzmovjdkmldhqr.supabase.co/storage/v1/object/public/cms-media/2026-08-08/03e59294-a2e0-4798-850c-1d72975f8189-image-112.jpeg",
+  alt: "Les Galets sur la plage",
+  scope: "property",
+  owner: "villa-raie-manta",
+};
+
+const villaArrivalBridge: MediaAsset = {
+  src: "https://ydqtqfkzmovjdkmldhqr.supabase.co/storage/v1/object/public/cms-media/2026-08-08/c95869de-aa9b-4c36-8f08-ec8d310239aa-image-139.jpeg",
+  alt: "Le Pont de l'île de Ré au coucher du soleil, vue du salon",
+  scope: "property",
+  owner: "villa-raie-manta",
+};
+
 const villaChapters: readonly Chapter[] = [
   {
     number: "01",
@@ -45,9 +59,9 @@ const villaChapters: readonly Chapter[] = [
     text: "À Rivedoux-Plage, l’arrivée par le pont ouvre déjà le séjour sur l’horizon. Puis la Villa se découvre à quelques pas du rivage, tournée vers la lumière.",
     galleryLabel: "Explorer la galerie de l’arrivée",
     images: [
+      villaArrivalPebbles,
       villaRaieMantaMedia.arrival[0],
-      destinationMedia.reBridgeAerial,
-      destinationMedia.reMap,
+      villaArrivalBridge,
     ],
   },
   {
@@ -60,7 +74,7 @@ const villaChapters: readonly Chapter[] = [
     images: [
       villaRaieMantaMedia.livingRoom[1],
       villaRaieMantaMedia.livingRoom[2],
-      villaRaieMantaMedia.livingRoom[5],
+      villaRaieMantaMedia.lifestyle[2],
     ],
   },
   {
@@ -72,6 +86,7 @@ const villaChapters: readonly Chapter[] = [
     images: [
       villaRaieMantaMedia.kitchen[0],
       destinationMedia.reMarketTomatoes,
+      villaRaieMantaMedia.lifestyle[4],
       destinationMedia.reMarketCheese,
     ],
   },
@@ -98,7 +113,7 @@ const villaChapters: readonly Chapter[] = [
       villaRaieMantaMedia.bedrooms[6],
       villaRaieMantaMedia.bedrooms[9],
       villaRaieMantaMedia.bedrooms[10],
-      villaRaieMantaMedia.bedrooms[8],
+      villaRaieMantaMedia.bedrooms[11],
       villaRaieMantaMedia.bedrooms[4],
     ],
   },
@@ -194,7 +209,7 @@ const nidChapters: readonly Chapter[] = [
     title: "Tout le nécessaire, dans un espace contemporain.",
     text: "Douche, vasque, rangements et toilettes composent un espace pratique pour les retours de plage et les séjours en famille.",
     galleryLabel: "Explorer la galerie de la salle d’eau",
-    images: nidDEteMedia.bathrooms.slice(0, 4),
+    images: nidDEteMedia.bathrooms,
   },
   {
     number: "07",
