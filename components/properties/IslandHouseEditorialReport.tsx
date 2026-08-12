@@ -315,6 +315,10 @@ export function IslandHouseEditorialReport({
             (house === "nid-d-ete" && chapterIndex === 5);
           const baseItems = chapter.images.map((image, imageIndex) => {
             const override = mediaOverrides[`${group}.${imageIndex}`];
+            const isRetiredVillaDuplicate =
+              house === "villa-raie-manta" &&
+              ((chapterIndex === 1 && imageIndex === 1) ||
+                (chapterIndex === 3 && imageIndex === 3));
             const isMisplacedVillaBlueBedroom =
               house === "villa-raie-manta" &&
               chapterIndex === 0 &&
@@ -326,7 +330,8 @@ export function IslandHouseEditorialReport({
               chapterIndex === 0 &&
               override?.src.endsWith("/authentique/transats-jardin.jpeg");
             const selected = {
-              ...(isRetiredNidArrivalLounger ||
+              ...(isRetiredVillaDuplicate ||
+              isRetiredNidArrivalLounger ||
               isMisplacedVillaBlueBedroom ||
               isProtectedMediaSelection
                 ? image
