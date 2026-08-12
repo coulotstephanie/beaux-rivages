@@ -5,6 +5,7 @@ export interface TransactionalEmailProvider {
     subject: string;
     html: string;
     idempotencyKey: string;
+    replyTo?: string;
   }): Promise<{ messageId: string; status: "queued" | "sent" }>;
 }
 
@@ -16,6 +17,7 @@ export class ConfigurableEmailProvider implements TransactionalEmailProvider {
     subject: string;
     html: string;
     idempotencyKey: string;
+    replyTo?: string;
   }): Promise<{ messageId: string; status: "queued" | "sent" }> {
     const provider = process.env.EMAIL_PROVIDER as TransactionalEmailProviderName | undefined;
     if (!provider) throw new Error("Transactional email provider is not configured.");
@@ -35,7 +37,13 @@ export class ConfigurableEmailProvider implements TransactionalEmailProvider {
         "Idempotency-Key": input.idempotencyKey,
         "User-Agent": "Beaux-Rivages/1.0",
       },
-      body: JSON.stringify({ from, to: [input.to], subject: input.subject, html: input.html }),
+      body: JSON.stringify({
+        from,
+        to: [input.to],
+        subject: input.subject,
+        html: input.html,
+        ...(input.replyTo ? { reply_to: input.replyTo } : {}),
+      }),
     });
     const payload = (await response.json().catch(() => null)) as {
       id?: string;

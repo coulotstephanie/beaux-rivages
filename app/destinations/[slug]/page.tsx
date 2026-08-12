@@ -16,7 +16,10 @@ function getSeo(slug: string): PageSeoConfig | null {
   const path = `/destinations/${guide.slug}` as `/${string}`;
   return {
     title: `Guide ${guide.title} | Beaux Rivages`,
-    description: `${guide.introduction} Le guide personnel de Stéphanie et Bruno.`,
+    description:
+      slug === "ile-d-oleron"
+        ? "Découvrez l’Île d’Oléron depuis Boyardville : plages, forêt des Saumonards, ports ostréicoles et vue sur Fort Boyard."
+        : `${guide.introduction} Le guide personnel de Stéphanie et Bruno.`,
     path,
     breadcrumbs: [
       { name: "Accueil", path: "/" },

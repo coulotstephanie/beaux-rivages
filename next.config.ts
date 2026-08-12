@@ -13,6 +13,21 @@ const nextConfig: NextConfig = {
     qualities: [85, 88, 90, 95],
     minimumCacheTTL: 2_592_000,
   },
+  async redirects() {
+    return [
+      { source: "/teletravail", destination: "/sejours-professionnels", permanent: true },
+      {
+        source: "/teletravail-ile-de-re",
+        destination: "/sejours-professionnels",
+        permanent: true,
+      },
+      {
+        source: "/sejours-professionnels-ile-de-re",
+        destination: "/sejours-professionnels",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     const securityHeaders = [
       { key: "X-Content-Type-Options", value: "nosniff" },

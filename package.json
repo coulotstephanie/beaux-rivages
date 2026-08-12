@@ -18,6 +18,7 @@
     "test:e2e:list": "playwright test --list",
     "audit:i18n:lot1": "node scripts/audit-lot1-runtime.mjs",
     "test:site": "node tests/crawl-site.mjs",
+    "test:seo-fr": "node tests/seo-fr-technical.mjs",
     "db:push": "supabase db push --linked",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --linked --schema public > platform/database/database.types.ts",

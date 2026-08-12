@@ -21,19 +21,62 @@ export async function generateMetadata({ params }: HeritagePageProps): Promise<M
   const isFortLaPree = site.slug === "fort-la-pree";
   const isChateliers = site.slug === "abbaye-des-chateliers";
   const isMaraisSalants = site.slug === "marais-salants-ile-de-re";
+  const conciseSeo: Record<string, { title: string; description: string }> = {
+    "lilleau-des-niges": {
+      title: "Lilleau des Niges : réserve naturelle | Beaux Rivages",
+      description:
+        "Découvrez la réserve naturelle de Lilleau des Niges au cœur des marais de l’Île de Ré, ses oiseaux migrateurs et nos conseils de visite.",
+    },
+    "fier-d-ars": {
+      title: "Le Fier d’Ars sur l’Île de Ré | Beaux Rivages",
+      description:
+        "Explorez le Fier d’Ars, paysage sauvage entre océan et marais salants, avec nos conseils et itinéraires depuis les maisons Beaux Rivages.",
+    },
+    "ecluses-a-poissons-ile-de-re": {
+      title: "Écluses à poissons de l’Île de Ré | Beaux Rivages",
+      description:
+        "Découvrez les écluses à poissons de l’Île de Ré, leur histoire et leur fonctionnement, avec nos conseils pour les observer à marée basse.",
+    },
+    "pont-de-l-ile-de-re": {
+      title: "Le pont de l’Île de Ré : histoire et vue | Beaux Rivages",
+      description:
+        "Découvrez l’histoire du pont de l’Île de Ré, ses points de vue et nos conseils pour rejoindre les maisons Beaux Rivages à Rivedoux-Plage.",
+    },
+    "foret-des-saumonards": {
+      title: "Forêt des Saumonards à Oléron | Beaux Rivages",
+      description:
+        "Promenez-vous dans la forêt des Saumonards entre pins, dunes et océan, près de Boyardville et du Nid d’Été, face à Fort Boyard.",
+    },
+    "citadelle-du-chateau-d-oleron": {
+      title: "Citadelle du Château-d’Oléron | Beaux Rivages",
+      description:
+        "Découvrez la citadelle du Château-d’Oléron, son histoire, ses remparts et nos conseils pour préparer votre visite depuis Boyardville.",
+    },
+    "cabanes-ostreicoles-chateau-d-oleron": {
+      title: "Cabanes ostréicoles du Château-d’Oléron | Beaux Rivages",
+      description:
+        "Découvrez les cabanes ostréicoles colorées du Château-d’Oléron, les chenaux et les savoir-faire locaux depuis Le Nid d’Été à Boyardville.",
+    },
+    "phare-de-chassiron": {
+      title: "Phare de Chassiron : visite à Oléron | Beaux Rivages",
+      description:
+        "Découvrez le phare de Chassiron à la pointe nord de l’Île d’Oléron, son jardin, son panorama et nos conseils pour préparer votre visite.",
+    },
+  };
+  const concise = conciseSeo[site.slug];
   return createPageMetadata({
-    title: isBaleines
+    title: concise?.title ?? (isBaleines
       ? "Phare des Baleines : histoire, visite et conseils | Beaux Rivages"
       : isSaintMartin
-        ? "Saint-Martin-de-Ré et fortifications Vauban UNESCO | Beaux Rivages"
+        ? "Fortifications Vauban à Saint-Martin-de-Ré | Beaux Rivages"
         : isFortLaPree
           ? "Fort La Prée : histoire et visite sur l’Île de Ré | Beaux Rivages"
           : isChateliers
             ? "Abbaye des Châteliers : histoire et visite | Beaux Rivages"
             : isMaraisSalants
               ? "Marais salants de l’Île de Ré : sel et sauniers | Beaux Rivages"
-              : `${site.title} — patrimoine de ${site.island} | Beaux Rivages`,
-    description: isBaleines
+              : `${site.title} — patrimoine de ${site.island} | Beaux Rivages`),
+    description: concise?.description ?? (isBaleines
       ? "Découvrez l’histoire du Phare des Baleines, sa Vieille Tour, ses 257 marches, son panorama et les conseils de Stéphanie & Bruno pour préparer votre visite."
       : isSaintMartin
         ? "Découvrez Saint-Martin-de-Ré, ses remparts Vauban inscrits à l’UNESCO, son port historique et les conseils de Stéphanie & Bruno pour préparer votre visite."
@@ -43,7 +86,7 @@ export async function generateMetadata({ params }: HeritagePageProps): Promise<M
             ? "Découvrez l’Abbaye des Châteliers : neuf siècles d’histoire cistercienne, ses ruines, son rôle dans la vigne et les conseils de Stéphanie & Bruno."
             : isMaraisSalants
               ? "Découvrez les marais salants de l’Île de Ré, le métier de saunier, la fleur de sel, la biodiversité et nos conseils pour préparer votre visite."
-              : `${site.subtitle}. Histoire, conseils de visite et itinéraires depuis les maisons Beaux Rivages.`,
+              : `${site.subtitle}. Histoire, conseils de visite et itinéraires depuis les maisons Beaux Rivages.`),
     path: `/patrimoine/${site.slug}`,
     image: site.images[0].src,
   });

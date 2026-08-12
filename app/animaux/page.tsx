@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { HospitalityServicePage } from "@/components/experiences/HospitalityServicePage";
 import { getHospitalityService } from "@/hospitalityServices";
+import { languageAlternates } from "@/seo";
 const service = getHospitalityService("animaux")!;
 export const metadata: Metadata = {
   title: `${service.title} | Beaux Rivages`,
   description: service.intro,
-  alternates: { canonical: "/animaux" },
+  alternates: { canonical: "/animaux", languages: languageAlternates("/animaux") },
   openGraph: { images: [service.image] },
 };
 export default function Page() {
