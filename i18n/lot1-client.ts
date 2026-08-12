@@ -1,4 +1,3 @@
-"use client";
 import de from "./translations/de.json";
 import en from "./translations/en.json";
 import es from "./translations/es.json";
@@ -14,6 +13,15 @@ export function clientLocalize(locale: SupportedLocale, source: string) {
     (legacy[locale] as Record<string, string>)[source] ??
     source
   );
+}
+export function clientLocalizeDeep<T>(locale: SupportedLocale, value: T): T {
+  if (typeof value === "string") return clientLocalize(locale, value) as T;
+  if (Array.isArray(value)) return value.map((item) => clientLocalizeDeep(locale, item)) as T;
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, clientLocalizeDeep(locale, item)]),
+    ) as T;
+  return value;
 }
 export function clientMessage(
   locale: SupportedLocale,

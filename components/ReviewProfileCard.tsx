@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { PropertyReviewProfile } from "@/reviews";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr, localizedHref } from "@/i18n/lot1-client";
 
-export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile }) {
+export function ReviewProfileCard({ profile, locale = "fr" }: { profile: PropertyReviewProfile; locale?: SupportedLocale }) {
   const maxCount = Math.max(...profile.themes.map((theme) => theme.count));
 
   return (
@@ -11,10 +13,13 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
           <p className="eyebrow">{profile.island}</p>
           <h3>{profile.property}</h3>
         </div>
-        <div className="review-score" aria-label={`${profile.airbnbRating} sur 5`}>
+        <div
+          className="review-score"
+          aria-label={tr(locale, `${profile.airbnbRating} sur 5`)}
+        >
           <strong>{profile.airbnbRating}</strong>
           <span>/ 5</span>
-          <small>{profile.airbnbReviewCount} avis Airbnb</small>
+          <small>{profile.airbnbReviewCount} {tr(locale, "avis Airbnb")}</small>
         </div>
       </div>
 
@@ -22,12 +27,12 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
       <p className="review-summary">{profile.summary}</p>
 
       {profile.verifiedQuotes && (
-        <div className="review-verified-quotes" aria-label="Extraits d’avis voyageurs vérifiés">
+        <div className="review-verified-quotes" aria-label={tr(locale, "Extraits d’avis voyageurs vérifiés")}>
           {profile.verifiedQuotes.map((review) => (
             <blockquote key={`${review.author}-${review.quote}`}>
               <p>« {review.quote} »</p>
               <footer>
-                {review.author} · avis vérifié sur {review.platform}
+                {review.author} {tr(locale, "· avis vérifié sur")} {review.platform}
               </footer>
             </blockquote>
           ))}
@@ -36,7 +41,7 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
 
       <div
         className="review-theme-list"
-        aria-label={`Thèmes les plus cités pour ${profile.property}`}
+        aria-label={tr(locale, `Thèmes les plus cités pour ${profile.property}`)}
       >
         {profile.themes.map((theme) => (
           <div className="review-theme" key={theme.label}>
@@ -52,12 +57,12 @@ export function ReviewProfileCard({ profile }: { profile: PropertyReviewProfile 
       </div>
 
       <div className="review-card-actions">
-        <Link href={`/maisons/${profile.slug}`}>
-          Découvrir la maison <span>→</span>
+        <Link href={localizedHref(locale, `/maisons/${profile.slug}`)}>
+          {tr(locale, "Découvrir la maison")} <span>→</span>
         </Link>
         <div>
           <a href={profile.sourceUrl} target="_blank" rel="noreferrer">
-            Voir sur Airbnb
+            {tr(locale, "Voir sur Airbnb")}
           </a>
           {profile.otherSources?.map((source) => (
             <a href={source.sourceUrl} target="_blank" rel="noreferrer" key={source.platform}>

@@ -4,6 +4,11 @@ import { isSupportedLocale, type SupportedLocale } from "@/i18n/config";
 const localePrefix = /^\/(en|de|es|nl)(?=\/|$)/;
 
 export function middleware(request: NextRequest) {
+  const forwardedLocale = request.headers.get("x-beaux-rivages-locale");
+  if (forwardedLocale && isSupportedLocale(forwardedLocale)) {
+    const forwardedHeaders = new Headers(request.headers);
+    return NextResponse.next({ request: { headers: forwardedHeaders } });
+  }
   const match = request.nextUrl.pathname.match(localePrefix);
   const locale: SupportedLocale = match && isSupportedLocale(match[1]) ? match[1] : "fr";
   const requestHeaders = new Headers(request.headers);

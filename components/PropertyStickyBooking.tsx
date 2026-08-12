@@ -11,7 +11,7 @@ export function PropertyStickyBooking({
   locale?: SupportedLocale;
 }) {
   return (
-    <aside className="property-sticky-booking" aria-label="Réservation">
+    <aside className="property-sticky-booking" aria-label={tr(locale, "Réservation")}>
       <div>
         <strong>{property.title}</strong>
         <span>

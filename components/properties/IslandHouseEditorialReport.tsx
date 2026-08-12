@@ -98,7 +98,7 @@ const villaChapters: readonly Chapter[] = [
       villaRaieMantaMedia.bedrooms[6],
       villaRaieMantaMedia.bedrooms[9],
       villaRaieMantaMedia.bedrooms[10],
-      villaRaieMantaMedia.bedrooms[11],
+      villaRaieMantaMedia.bedrooms[8],
       villaRaieMantaMedia.bedrooms[4],
     ],
   },
@@ -194,7 +194,7 @@ const nidChapters: readonly Chapter[] = [
     title: "Tout le nécessaire, dans un espace contemporain.",
     text: "Douche, vasque, rangements et toilettes composent un espace pratique pour les retours de plage et les séjours en famille.",
     galleryLabel: "Explorer la galerie de la salle d’eau",
-    images: nidDEteMedia.bathrooms,
+    images: nidDEteMedia.bathrooms.slice(0, 4),
   },
   {
     number: "07",
@@ -310,13 +310,18 @@ export function IslandHouseEditorialReport({
               house === "nid-d-ete" &&
               chapterIndex === 0 &&
               override?.src.endsWith("/authentique/transats-jardin.jpeg");
-            return {
+            const selected = {
               ...(isRetiredNidArrivalLounger ||
               isMisplacedVillaBlueBedroom ||
               isProtectedMediaSelection
                 ? image
                 : (override ?? image)),
               editorField: `${group}.${imageIndex}`,
+            };
+            return {
+              ...selected,
+              alt: tr(locale, selected.alt),
+              caption: selected.caption ? tr(locale, selected.caption) : selected.caption,
             };
           });
           const order = mediaOrder[group];
@@ -351,12 +356,12 @@ export function IslandHouseEditorialReport({
   return (
     <section className="chai-report island-house-report" aria-labelledby={`${house}-report-title`}>
       <Container className="chai-report__intro">
-        <p className="eyebrow">{report.eyebrow}</p>
+        <p className="eyebrow">{tr(locale, report.eyebrow)}</p>
         <h2 id={`${house}-report-title`} data-editor-text-field="report.title">
-          {textOverrides["report.title"] ?? report.title}
+          {textOverrides["report.title"] ?? tr(locale, report.title)}
         </h2>
         <p data-editor-text-field="report.introduction">
-          {textOverrides["report.introduction"] ?? report.introduction}
+          {textOverrides["report.introduction"] ?? tr(locale, report.introduction)}
         </p>
       </Container>
 
@@ -413,17 +418,17 @@ export function IslandHouseEditorialReport({
                   />
                   <span className="chai-report__image-shade" />
                   <span className="chai-report__caption">{image.caption}</span>
-                  <span className="visual-edit-media">Modifier la photo</span>
+                  <span className="visual-edit-media">{tr(locale, "Modifier la photo")}</span>
                   <span className="visual-reorder">
-                    <span data-editor-reorder="previous" aria-label="Déplacer à gauche">
+                    <span data-editor-reorder="previous" aria-label={tr(locale, "Déplacer à gauche")}>
                       ←
                     </span>
-                    <span data-editor-reorder="next" aria-label="Déplacer à droite">
+                    <span data-editor-reorder="next" aria-label={tr(locale, "Déplacer à droite")}>
                       →
                     </span>
                   </span>
                   <span className="visual-remove" data-editor-remove-media={image.editorField}>
-                    Retirer
+                    {tr(locale, "Retirer")}
                   </span>
                 </button>
               ))}
@@ -432,7 +437,7 @@ export function IslandHouseEditorialReport({
                 className="visual-add-media"
                 data-editor-add-media={`editorial.${chapterIndex}`}
               >
-                + Ajouter une photo
+                {tr(locale, "+ Ajouter une photo")}
               </button>
             </Container>
 
@@ -446,10 +451,10 @@ export function IslandHouseEditorialReport({
       </div>
 
       <Container className="chai-report__all">
-        <p className="eyebrow">La maison en images</p>
-        <h3>Continuer la visite, en plein écran.</h3>
+        <p className="eyebrow">{tr(locale, "La maison en images")}</p>
+        <h3>{tr(locale, "Continuer la visite, en plein écran.")}</h3>
         <button type="button" onClick={() => openGallery(allImages)}>
-          Explorer toute la maison ({allImages.length} photos) <span aria-hidden="true">→</span>
+          {tr(locale, "Explorer toute la maison (")}{allImages.length} {tr(locale, "photos)")} <span aria-hidden="true">→</span>
         </button>
       </Container>
 

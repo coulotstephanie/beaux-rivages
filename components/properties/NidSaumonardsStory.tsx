@@ -30,22 +30,18 @@ export function NidSaumonardsStory({ locale = "fr" }: { locale?: SupportedLocale
         <p className="eyebrow">{tr(locale, "À quelques pas du Nid d’Été")}</p>
         <h2 id="nid-saumonards-title">{tr(locale, "La plage des Saumonards")}</h2>
         <p>
-          À quelques pas seulement de la Maison Heureuse, un portail privé s’ouvre sur la plage des
-          Saumonards. Ici, les journées s’écoulent au rythme des marées, entre les pins maritimes,
-          le sable fin et la silhouette de Fort Boyard à l’horizon.
+          {tr(locale, "À quelques pas seulement de la Maison Heureuse, un portail privé s’ouvre sur la plage des Saumonards. Ici, les journées s’écoulent au rythme des marées, entre les pins maritimes, le sable fin et la silhouette de Fort Boyard à l’horizon.")}
         </p>
         <p>
-          C’est le lieu des vacances simples et précieuses : les enfants courent pieds nus, les
-          chiens jouent librement sur la plage, les cerfs-volants colorent le ciel et les familles
-          partagent ces instants dont on se souvient longtemps.
+          {tr(locale, "C’est le lieu des vacances simples et précieuses : les enfants courent pieds nus, les chiens jouent librement sur la plage, les cerfs-volants colorent le ciel et les familles partagent ces instants dont on se souvient longtemps.")}
         </p>
-        <strong>C’est cette sensation de liberté qui fait la magie des Saumonards.</strong>
+        <strong>{tr(locale, "C’est cette sensation de liberté qui fait la magie des Saumonards.")}</strong>
       </div>
 
       <figure className="nid-saumonards-story__hero">
         <Image
           src={destinationMedia.kiteFamily.src}
-          alt={destinationMedia.kiteFamily.alt}
+          alt={tr(locale, destinationMedia.kiteFamily.alt)}
           fill
           quality={90}
           loading="lazy"
@@ -53,12 +49,12 @@ export function NidSaumonardsStory({ locale = "fr" }: { locale?: SupportedLocale
         />
       </figure>
 
-      <div className="nid-saumonards-story__mosaic shell" aria-label="Une journée aux Saumonards">
+      <div className="nid-saumonards-story__mosaic shell" aria-label={tr(locale, "Une journée aux Saumonards")}>
         {mosaic.map((asset, index) => (
           <figure key={asset.src}>
             <Image
               src={asset.src}
-              alt={asset.alt}
+              alt={tr(locale, asset.alt)}
               fill
               quality={85}
               loading="lazy"
@@ -66,7 +62,7 @@ export function NidSaumonardsStory({ locale = "fr" }: { locale?: SupportedLocale
             />
             <figcaption>
               <span>0{index + 1}</span>
-              {asset.caption}
+              {asset.caption ? tr(locale, asset.caption) : null}
             </figcaption>
           </figure>
         ))}

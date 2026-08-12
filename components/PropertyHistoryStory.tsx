@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { propertyMedia, type PropertySlug } from "@/media/properties";
 import { Button, Container } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr, localizedHref } from "@/i18n/lot1-client";
 
 const stories = {
   "chai-des-tortues": {
@@ -67,24 +69,24 @@ const stories = {
   },
 } as const;
 
-export function PropertyHistoryStory({ propertySlug }: { propertySlug: PropertySlug }) {
+export function PropertyHistoryStory({ propertySlug, locale = "fr" }: { propertySlug: PropertySlug; locale?: SupportedLocale }) {
   const story = stories[propertySlug];
 
   return (
     <section className="property-history-story" id="histoire-de-la-maison">
       <Container size="wide">
         <div className="property-history-story__heading">
-          <p className="eyebrow">{story.eyebrow}</p>
-          <h2>{story.title}</h2>
+          <p className="eyebrow">{tr(locale, story.eyebrow)}</p>
+          <h2>{tr(locale, story.title)}</h2>
         </div>
         <div className="property-history-story__layout">
           <div className="property-history-story__copy">
             {story.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+              <p key={paragraph}>{tr(locale, paragraph)}</p>
             ))}
-            <blockquote>« {story.quote} »</blockquote>
-            <Button href={story.href} variant="ghost">
-              Poursuivre cette histoire <span aria-hidden="true">→</span>
+            <blockquote>« {tr(locale, story.quote)} »</blockquote>
+            <Button href={localizedHref(locale, story.href)} variant="ghost">
+              {tr(locale, "Poursuivre cette histoire")} <span aria-hidden="true">→</span>
             </Button>
           </div>
           <div className="property-history-story__gallery">
@@ -92,7 +94,7 @@ export function PropertyHistoryStory({ propertySlug }: { propertySlug: PropertyS
               <figure key={`${image.src}-${index}`}>
                 <Image
                   src={image.src}
-                  alt={image.alt}
+                  alt={tr(locale, image.alt)}
                   fill
                   quality={85}
                   loading="lazy"

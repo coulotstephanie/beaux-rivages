@@ -3,14 +3,16 @@
 import { useState } from "react";
 import type { PropertyPresentation } from "@/propertyPresentation";
 import { Badge } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
-export function NearbyMap({ map }: { map: PropertyPresentation["map"] }) {
+export function NearbyMap({ map, locale = "fr" }: { map: PropertyPresentation["map"]; locale?: SupportedLocale }) {
   const [active, setActive] = useState(0);
   const place = map.places[active];
 
   return (
     <div className="nearby-map">
-      <div className="nearby-map__canvas" aria-label="Carte schématique interactive des alentours">
+      <div className="nearby-map__canvas" aria-label={tr(locale, "Carte schématique interactive des alentours")}>
         <span className="nearby-map__water" />
         <span className="nearby-map__road road-a" />
         <span className="nearby-map__road road-b" />
@@ -32,7 +34,7 @@ export function NearbyMap({ map }: { map: PropertyPresentation["map"] }) {
       <div className="nearby-map__panel" aria-live="polite">
         <Badge>{place.type}</Badge>
         <h3>{place.name}</h3>
-        <p>{place.distance} depuis la maison</p>
+        <p>{place.distance} {tr(locale, "depuis la maison")}</p>
         <div>
           {map.places.map((item, index) => (
             <button type="button" key={item.name} onClick={() => setActive(index)} className={active === index ? "is-active" : ""} aria-pressed={active === index}>

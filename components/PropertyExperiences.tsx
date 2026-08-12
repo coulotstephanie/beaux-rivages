@@ -2,22 +2,26 @@ import Image from "next/image";
 import { BLUR_DATA_URL } from "@/media";
 import type { PropertyPresentation } from "@/propertyPresentation";
 import { Heading, Section } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 type Experiences = NonNullable<PropertyPresentation["experiences"]>;
 
 export function PropertyExperiences({
   experiences,
   heading,
+  locale = "fr",
 }: {
   experiences: Experiences;
   heading?: PropertyPresentation["experiencesHeading"];
+  locale?: SupportedLocale;
 }) {
   return (
     <Section tone="sand" className="property-experiences" aria-labelledby="property-experiences-title">
       <Heading
-        eyebrow={heading?.eyebrow ?? "L’art de vivre au Chai"}
-        title={heading?.title ?? "Des journées simples, pleinement vécues."}
-        description={heading?.description ?? "Le marché, l’océan et la grande cuisine composent des vacances qui suivent naturellement le rythme de l’île."}
+        eyebrow={heading?.eyebrow ?? tr(locale, "L’art de vivre au Chai")}
+        title={heading?.title ?? tr(locale, "Des journées simples, pleinement vécues.")}
+        description={heading?.description ?? tr(locale, "Le marché, l’océan et la grande cuisine composent des vacances qui suivent naturellement le rythme de l’île.")}
         id="property-experiences-title"
       />
       <div className="property-experiences__grid">

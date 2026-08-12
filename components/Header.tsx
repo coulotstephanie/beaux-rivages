@@ -56,7 +56,7 @@ function MegaMenu({
       <summary>{tr(locale, label)}</summary>
       <div className="mega-menu__panel">
         <div className="mega-menu__visual">
-          <Image src={image} alt={imageAlt} fill sizes="360px" />
+          <Image src={image} alt={tr(locale, imageAlt)} fill sizes="360px" />
         </div>
         <div className="mega-menu__content">
           <p className="eyebrow">Beaux Rivages</p>
@@ -70,7 +70,7 @@ function MegaMenu({
             ))}
           </div>
         </div>
-        <PublicSiteSearch />
+        <PublicSiteSearch locale={locale} />
       </div>
     </details>
   );
@@ -139,7 +139,7 @@ export function Header({
       className={`site-header site-header--${contrast}${scrolled ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}`}
     >
       <div className="site-header__inner">
-        <BrandLogo />
+        <BrandLogo locale={locale} />
         <nav className="desktop-navigation" aria-label={tr(locale, "Navigation principale")}>
           <Link href={localizedHref(locale, "/")}>{tr(locale, "Accueil")}</Link>
           <MegaMenu
@@ -173,7 +173,7 @@ export function Header({
           <Link href={localizedHref(locale, "/contact")}>{tr(locale, "Contact")}</Link>
         </nav>
         <div className="site-header__actions">
-          <LanguageSelector />
+          <LanguageSelector locale={locale} />
           <Link href={localizedHref(locale, "/reserver")} className="nav-cta">
             {tr(locale, "Réserver")}
           </Link>
@@ -223,7 +223,7 @@ export function Header({
           <Link href={localizedHref(locale, "/contact")} onClick={closeMenu}>
             {tr(locale, "Contact")}
           </Link>
-          <PublicSiteSearch onNavigate={closeMenu} />
+          <PublicSiteSearch onNavigate={closeMenu} locale={locale} />
         </div>
       </nav>
     </header>

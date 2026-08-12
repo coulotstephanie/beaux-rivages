@@ -1,10 +1,12 @@
 import type { PropertyPresentation } from "@/propertyPresentation";
 import { Heading, Section } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
-export function PropertyExperienceTimeline({ timeline }: { timeline: PropertyPresentation["timeline"] }) {
+export function PropertyExperienceTimeline({ timeline, locale = "fr" }: { timeline: PropertyPresentation["timeline"]; locale?: SupportedLocale }) {
   return (
     <Section tone="dark" className="experience-timeline">
-      <Heading eyebrow="Une journée idéale" title="Prendre le temps, du premier café à la lumière du soir." light />
+      <Heading eyebrow={tr(locale, "Une journée idéale")} title={tr(locale, "Prendre le temps, du premier café à la lumière du soir.")} light />
       <ol>
         {timeline.map((step) => (
           <li key={step.time}>

@@ -2,6 +2,8 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { Modal } from "@/components/ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 type ModalState = {
   title: string;
@@ -16,7 +18,7 @@ type ModalContextValue = {
 
 const ModalContext = createContext<ModalContextValue | null>(null);
 
-export function ModalProvider({ children }: { children: ReactNode }) {
+export function ModalProvider({ children, locale = "fr" }: { children: ReactNode; locale?: SupportedLocale }) {
   const [modal, setModal] = useState<ModalState | null>(null);
   const closeModal = useCallback(() => setModal(null), []);
   const openModal = useCallback((next: ModalState) => setModal(next), []);
@@ -30,6 +32,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
         onClose={closeModal}
         title={modal?.title ?? ""}
         description={modal?.description}
+        closeLabel={tr(locale, "Fermer")}
       >
         {modal?.content}
       </Modal>

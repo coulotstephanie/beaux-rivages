@@ -3,6 +3,8 @@ import { BLUR_DATA_URL } from "@/media";
 import { propertyMedia, type PropertySlug } from "@/media/properties";
 import type { MediaAsset } from "@/media/types";
 import { Container } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 const copy: Record<
   PropertySlug,
@@ -76,7 +78,7 @@ const copy: Record<
   },
 };
 
-export function PropertySignatureDetails({ propertySlug }: { propertySlug: PropertySlug }) {
+export function PropertySignatureDetails({ propertySlug, locale = "fr" }: { propertySlug: PropertySlug; locale?: SupportedLocale }) {
   const content = copy[propertySlug];
   const media = propertyMedia[propertySlug];
   const livedInMedia = media.lifestyle;
@@ -109,11 +111,11 @@ export function PropertySignatureDetails({ propertySlug }: { propertySlug: Prope
     >
       <Container size="wide">
         <div className="property-signature-details__heading">
-          <p className="eyebrow">Les petits détails qui font la différence</p>
+          <p className="eyebrow">{tr(locale, "Les petits détails qui font la différence")}</p>
           <h2 id={`${propertySlug}-signature-details-title`}>
-            Une maison préparée pour être vécue.
+            {tr(locale, "Une maison préparée pour être vécue.")}
           </h2>
-          <p>{content.introduction}</p>
+          <p>{tr(locale, content.introduction)}</p>
         </div>
         <div className="property-signature-details__grid">
           {content.cards.map((card, index) => {
@@ -124,7 +126,7 @@ export function PropertySignatureDetails({ propertySlug }: { propertySlug: Prope
                   <div>
                     <Image
                       src={image.src}
-                      alt={image.alt}
+                      alt={tr(locale, image.alt)}
                       fill
                       quality={85}
                       loading="lazy"
@@ -135,8 +137,8 @@ export function PropertySignatureDetails({ propertySlug }: { propertySlug: Prope
                   </div>
                 )}
                 <span>0{index + 1}</span>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
+                <h3>{tr(locale, card.title)}</h3>
+                <p>{tr(locale, card.text)}</p>
               </article>
             );
           })}

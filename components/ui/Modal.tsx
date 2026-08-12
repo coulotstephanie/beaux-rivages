@@ -9,6 +9,7 @@ type ModalProps = {
   title: string;
   description?: string;
   children: ReactNode;
+  closeLabel?: string;
 };
 
 export function Modal(props: ModalProps) {

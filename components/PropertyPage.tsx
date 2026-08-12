@@ -31,7 +31,11 @@ import { ChaiEditorialReport } from "./properties/ChaiEditorialReport";
 import { IslandHouseEditorialReport } from "./properties/IslandHouseEditorialReport";
 import { NidSaumonardsStory } from "./properties/NidSaumonardsStory";
 import type { SupportedLocale } from "@/i18n/config";
-import { clientLocalize as localize } from "@/i18n/lot1-client";
+import {
+  clientLocalize as localize,
+  clientLocalizeDeep as localizeDeep,
+  localizedHref,
+} from "@/i18n/lot1-client";
 
 export function PropertyPage({
   property,
@@ -42,9 +46,12 @@ export function PropertyPage({
   children?: ReactNode;
   locale?: SupportedLocale;
 }) {
-  const presentation = getPropertyPresentation(property.slug);
+  const presentation = localizeDeep(locale, getPropertyPresentation(property.slug));
   const hasChaiEditorialReport = property.slug === "chai-des-tortues";
-  const reviewProfile = reviewProfiles.find((profile) => profile.slug === property.slug);
+  const reviewProfile = localizeDeep(
+    locale,
+    reviewProfiles.find((profile) => profile.slug === property.slug),
+  );
   const manifest = propertyMedia[property.slug as PropertySlug];
   const manifestAssets: readonly MediaAsset[] = [
     manifest.hero,
@@ -98,7 +105,7 @@ export function PropertyPage({
       <StructuredData data={createPropertyStructuredData(property)} />
       <Header locale={locale} />
       <PropertyHero property={property} locale={locale} />
-      <PropertyHistoryStory propertySlug={property.slug as PropertySlug} />
+      <PropertyHistoryStory propertySlug={property.slug as PropertySlug} locale={locale} />
 
       {hasChaiEditorialReport ? (
         <ChaiEditorialReport
@@ -123,7 +130,7 @@ export function PropertyPage({
 
       {property.slug === "nid-d-ete" && <NidSaumonardsStory locale={locale} />}
 
-      <PropertyFilms films={manifest.videos} poster={property.hero} />
+      <PropertyFilms films={localizeDeep(locale, manifest.videos)} poster={property.hero} locale={locale} />
 
       {reviewProfile && (
         <Section tone="sand" className="property-review-section" id="avis-voyageurs">
@@ -136,12 +143,12 @@ export function PropertyPage({
             )}
           />
           <Container size="narrow">
-            <ReviewProfileCard profile={reviewProfile} />
+            <ReviewProfileCard profile={reviewProfile} locale={locale} />
           </Container>
         </Section>
       )}
 
-      <PropertySignatureDetails propertySlug={property.slug as PropertySlug} />
+      <PropertySignatureDetails propertySlug={property.slug as PropertySlug} locale={locale} />
 
       <PropertyFacts property={property} locale={locale} />
 
@@ -149,7 +156,7 @@ export function PropertyPage({
         <div className="property-story-premium__visual">
           <Image
             src={presentation.storyImage}
-            alt={storyAsset?.alt ?? `Atmosphère de ${property.title}`}
+            alt={localize(locale, storyAsset?.alt ?? `Atmosphère de ${property.title}`)}
             fill
             quality={85}
             loading="lazy"
@@ -164,7 +171,7 @@ export function PropertyPage({
             <strong data-editor-field="signatureTitle">{property.signatureTitle}</strong>
             <p data-editor-field="signatureText">{property.signatureText}</p>
           </div>
-          <Button href={`/reserver?maison=${property.slug}`} variant="ghost">
+          <Button href={localizedHref(locale, `/reserver?maison=${property.slug}`)} variant="ghost">
             {localize(locale, "Préparer mon séjour")} <span aria-hidden="true">→</span>
           </Button>
         </div>
@@ -176,14 +183,16 @@ export function PropertyPage({
         <PropertyExperiences
           experiences={presentation.experiences}
           heading={presentation.experiencesHeading}
+          locale={locale}
         />
       )}
 
-      <PropertyExperienceTimeline timeline={presentation.timeline} />
+      <PropertyExperienceTimeline timeline={presentation.timeline} locale={locale} />
 
       <HostRecommendation
         slugs={property.recommendationSlugs}
         fallback={{ title: property.signatureTitle, copy: property.signatureText }}
+        locale={locale}
       />
 
       <Section className="nearby-section">
@@ -195,12 +204,12 @@ export function PropertyPage({
             "Sélectionnez un repère pour découvrir les essentiels autour de votre maison.",
           )}
         />
-        <NearbyMap map={presentation.map} />
+        <NearbyMap map={presentation.map} locale={locale} />
       </Section>
 
       <PropertyAmenitiesGrid property={property} locale={locale} />
       <PropertyPracticalDetails property={property} locale={locale} />
-      <PropertyDestinationLinks property={property} />
+      <PropertyDestinationLinks property={property} locale={locale} />
 
       {children}
 

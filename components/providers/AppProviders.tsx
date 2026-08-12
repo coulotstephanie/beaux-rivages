@@ -7,15 +7,16 @@ import { SessionProvider } from "./SessionProvider";
 import { SupabaseProvider } from "./SupabaseProvider";
 import { ThemeProvider } from "./ThemeProvider";
 import { ToastProvider } from "./ToastProvider";
+import type { SupportedLocale } from "@/i18n/config";
 
-export function AppProviders({ children }: { children: ReactNode }) {
+export function AppProviders({ children, locale = "fr" }: { children: ReactNode; locale?: SupportedLocale }) {
   return (
     <ThemeProvider>
       <QueryProvider>
         <SupabaseProvider>
           <SessionProvider>
             <ToastProvider>
-              <ModalProvider>{children}</ModalProvider>
+              <ModalProvider locale={locale}>{children}</ModalProvider>
             </ToastProvider>
           </SessionProvider>
         </SupabaseProvider>

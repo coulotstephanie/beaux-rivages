@@ -12,6 +12,7 @@ type PageMetadataInput = Pick<PageSeoConfig, "title" | "description" | "path"> &
   description: string;
   image?: string;
   openGraphTitle?: string;
+  locale?: SupportedLocale;
 };
 
 export function absoluteUrl(path: string) {
@@ -37,8 +38,9 @@ export function createPageMetadata({
   path,
   image,
   openGraphTitle,
+  locale = "fr",
 }: PageMetadataInput): Metadata {
-  const canonical = absoluteUrl(path);
+  const canonical = localizedUrl(path, locale);
   const socialImage = absoluteUrl(image ?? DEFAULT_SOCIAL_IMAGE);
 
   return {
@@ -50,7 +52,7 @@ export function createPageMetadata({
       description,
       url: canonical,
       siteName: "Beaux Rivages",
-      locale: "fr_FR",
+      locale: { fr: "fr_FR", en: "en_GB", de: "de_DE", es: "es_ES", nl: "nl_NL" }[locale],
       type: "website",
       images: [{ url: socialImage, alt: openGraphTitle ?? title }],
     },

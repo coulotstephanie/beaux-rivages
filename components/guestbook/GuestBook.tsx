@@ -3,6 +3,8 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { calculateGuestBookStats, type GuestBookEntry } from "@/features/guestbook";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
 const houseLabels = {
   "chai-des-tortues": "Le Chai des Tortues",
@@ -32,9 +34,11 @@ function formatGuestBookDate(value: string, language: string) {
 export function GuestBook({
   entries,
   compact = false,
+  locale = "fr",
 }: {
   entries: GuestBookEntry[];
   compact?: boolean;
+  locale?: SupportedLocale;
 }) {
   const reducedMotion = useReducedMotion();
   const [search, setSearch] = useState("");
@@ -78,7 +82,7 @@ export function GuestBook({
   return (
     <section
       className={`guestbook ${compact ? "guestbook--compact" : ""}`}
-      aria-label="Livre d’Or Beaux Rivages"
+      aria-label={tr(locale, "Livre d’Or Beaux Rivages")}
     >
       {!compact && (
         <div

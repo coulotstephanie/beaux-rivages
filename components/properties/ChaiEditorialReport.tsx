@@ -28,7 +28,7 @@ const chapters: Chapter[] = [
     title: "La pierre rétaise ouvre la porte.",
     text: "Au cœur de Rivedoux-Plage, la façade discrète laisse deviner une maison singulière. On pose les vélos, on pousse la porte et les volumes de l’ancien chai se révèlent peu à peu.",
     galleryLabel: "Explorer la galerie de l’arrivée",
-    images: [media.arrival[0], media.exterior[4], media.exterior[2]],
+    images: [media.arrival[0], media.exterior[3], media.exterior[2]],
   },
   {
     number: "02",
@@ -36,7 +36,7 @@ const chapters: Chapter[] = [
     title: "Une cuisine imaginée pour vraiment recevoir.",
     text: "Ici, cuisiner fait partie des vacances. Le bois, les grands plans de travail et les équipements généreux accompagnent aussi bien un dîner improvisé qu’un repas de fête.",
     galleryLabel: "Explorer la galerie de la cuisine",
-    images: [media.kitchen[10], media.kitchen[9], media.kitchen[1]],
+    images: [media.kitchen[8], media.kitchen[7], media.kitchen[1]],
   },
   {
     number: "03",
@@ -52,7 +52,7 @@ const chapters: Chapter[] = [
     title: "Un même volume pour vivre ensemble.",
     text: "Salon, salle à manger et cuisine dialoguent sous les poutres. La pierre ancienne adoucit la lumière et donne à chaque moment, du café au dernier verre, une atmosphère particulière.",
     galleryLabel: "Explorer la galerie de la pièce de vie",
-    images: [media.livingRoom[10], media.livingRoom[11], media.livingRoom[8]],
+    images: [media.livingRoom[5], media.livingRoom[6], media.livingRoom[7]],
   },
   {
     number: "05",
@@ -60,7 +60,7 @@ const chapters: Chapter[] = [
     title: "Le calme gagne l’étage.",
     text: "Trois chambres accueillent les nuits dans une palette de bois clair, de linge naturel et de pierre préservée. Chacune conserve son caractère et la douceur d’une vraie maison.",
     galleryLabel: "Explorer la galerie des chambres",
-    images: [media.bedrooms[13], media.bedrooms[12], media.bedrooms[10]],
+    images: [media.bedrooms[9], media.bedrooms[8], media.bedrooms[7]],
   },
   {
     number: "06",
@@ -68,7 +68,7 @@ const chapters: Chapter[] = [
     title: "Des matières franches, un confort contemporain.",
     text: "La pierre minérale, le bois brut et la robinetterie composent des espaces sobres et chaleureux, pensés pour que chacun trouve son rythme.",
     galleryLabel: "Explorer la galerie des salles d’eau",
-    images: [media.bathrooms[9], media.bathrooms[10], media.bathrooms[0]],
+    images: [media.bathrooms[9], media.bathrooms[8], media.bathrooms[0]],
   },
   {
     number: "07",
@@ -121,10 +121,15 @@ export function ChaiEditorialReport({
         galleryLabel: tr(locale, chapter.galleryLabel),
         images: (() => {
           const group = `editorial.${chapterIndex}`;
-          const baseItems = chapter.images.map((image, imageIndex) => ({
-            ...(mediaOverrides[`${group}.${imageIndex}`] ?? image),
-            editorField: `${group}.${imageIndex}`,
-          }));
+          const baseItems = chapter.images.map((image, imageIndex) => {
+            const selected = mediaOverrides[`${group}.${imageIndex}`] ?? image;
+            return {
+              ...selected,
+              alt: tr(locale, selected.alt),
+              caption: selected.caption ? tr(locale, selected.caption) : selected.caption,
+              editorField: `${group}.${imageIndex}`,
+            };
+          });
           const order = mediaOrder[group];
           const addedItems = (order ?? [])
             .filter((field) => !baseItems.some((item) => item.editorField === field))
@@ -141,8 +146,14 @@ export function ChaiEditorialReport({
   );
   const allImages = useMemo(
     () =>
-      uniqueImages([...renderedChapters.flatMap((chapter) => chapter.images), ...media.gallery]),
-    [renderedChapters],
+      uniqueImages(
+        [...renderedChapters.flatMap((chapter) => chapter.images), ...media.gallery].map((image) => ({
+          ...image,
+          alt: tr(locale, image.alt),
+          caption: image.caption ? tr(locale, image.caption) : image.caption,
+        })),
+      ),
+    [renderedChapters, locale],
   );
   const [activeImages, setActiveImages] = useState<GalleryImage[]>(allImages);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -156,17 +167,14 @@ export function ChaiEditorialReport({
   return (
     <section className="chai-report" aria-labelledby="chai-report-title">
       <Container className="chai-report__intro">
-        <p className="eyebrow">Le Chai des Tortues · Reportage</p>
+        <p className="eyebrow">{tr(locale, "Le Chai des Tortues · Reportage")}</p>
         <h2 id="chai-report-title" data-editor-text-field="report.title">
           {textOverrides["report.title"] ??
-            "Une maison qui se découvre comme on feuillette un carnet."}
+            tr(locale, "Une maison qui se découvre comme on feuillette un carnet.")}
         </h2>
         <p data-editor-text-field="report.introduction">
           {textOverrides["report.introduction"] ?? (
-            <>
-              De la première lumière sur les pierres aux longues soirées autour de la table, entrez
-              dans le rythme d’une maison de famille au cœur de Rivedoux-Plage.
-            </>
+            tr(locale, "De la première lumière sur les pierres aux longues soirées autour de la table, entrez dans le rythme d’une maison de famille au cœur de Rivedoux-Plage.")
           )}
         </p>
       </Container>
@@ -215,17 +223,17 @@ export function ChaiEditorialReport({
                   />
                   <span className="chai-report__image-shade" />
                   <span className="chai-report__caption">{image.caption}</span>
-                  <span className="visual-edit-media">Modifier la photo</span>
+                  <span className="visual-edit-media">{tr(locale, "Modifier la photo")}</span>
                   <span className="visual-reorder">
-                    <span data-editor-reorder="previous" aria-label="Déplacer à gauche">
+                    <span data-editor-reorder="previous" aria-label={tr(locale, "Déplacer à gauche")}>
                       ←
                     </span>
-                    <span data-editor-reorder="next" aria-label="Déplacer à droite">
+                    <span data-editor-reorder="next" aria-label={tr(locale, "Déplacer à droite")}>
                       →
                     </span>
                   </span>
                   <span className="visual-remove" data-editor-remove-media={image.editorField}>
-                    Retirer
+                    {tr(locale, "Retirer")}
                   </span>
                 </button>
               ))}
@@ -234,7 +242,7 @@ export function ChaiEditorialReport({
                 className="visual-add-media"
                 data-editor-add-media={`editorial.${chapterIndex}`}
               >
-                + Ajouter une photo
+                {tr(locale, "+ Ajouter une photo")}
               </button>
             </Container>
 
@@ -248,10 +256,10 @@ export function ChaiEditorialReport({
       </div>
 
       <Container className="chai-report__all">
-        <p className="eyebrow">La maison en images</p>
-        <h3>Continuer la visite, en plein écran.</h3>
+        <p className="eyebrow">{tr(locale, "La maison en images")}</p>
+        <h3>{tr(locale, "Continuer la visite, en plein écran.")}</h3>
         <button type="button" onClick={() => openGallery(allImages)}>
-          Explorer toute la maison ({allImages.length} photos) <span aria-hidden="true">→</span>
+          {tr(locale, "Explorer toute la maison (")}{allImages.length} {tr(locale, "photos)")} <span aria-hidden="true">→</span>
         </button>
       </Container>
 

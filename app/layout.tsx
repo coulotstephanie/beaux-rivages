@@ -82,12 +82,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <a className="skip-link" href="#main-content">
           {localize(locale, "Aller au contenu principal")}
         </a>
-        <AppProviders>
+        <AppProviders locale={locale}>
           <div id="main-content" tabIndex={-1}>
             {children}
           </div>
           <PremiumUX />
-          <AmbientWaves />
+          <AmbientWaves locale={locale} />
           <Analytics />
         </AppProviders>
       </body>

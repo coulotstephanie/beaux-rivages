@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId, useMemo, useState } from "react";
 import { publicSearchIndex } from "@/lib/publicSearchIndex";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr, localizedHref } from "@/i18n/lot1-client";
 
 function normalize(value: string) {
   return value
@@ -13,7 +15,7 @@ function normalize(value: string) {
     .trim();
 }
 
-export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
+export function PublicSiteSearch({ onNavigate, locale = "fr" }: { onNavigate?: () => void; locale?: SupportedLocale }) {
   const router = useRouter();
   const searchId = useId();
   const [query, setQuery] = useState("");
@@ -33,7 +35,7 @@ export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
     const firstResult = results[0];
     if (!firstResult) return;
     onNavigate?.();
-    router.push(firstResult.href);
+    router.push(localizedHref(locale, firstResult.href));
   };
 
   return (
@@ -45,7 +47,7 @@ export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
         openFirstResult();
       }}
     >
-      <label htmlFor={searchId}>Rechercher dans Beaux Rivages</label>
+      <label htmlFor={searchId}>{tr(locale, "Rechercher dans Beaux Rivages")}</label>
       <div className="public-site-search__field">
         <span aria-hidden="true">⌕</span>
         <input
@@ -53,25 +55,25 @@ export function PublicSiteSearch({ onNavigate }: { onNavigate?: () => void }) {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Maison, monument, village, plage…"
+          placeholder={tr(locale, "Maison, monument, village, plage…")}
           autoComplete="off"
         />
-        <button type="submit" disabled={!results.length} aria-label="Ouvrir le premier résultat">
-          Rechercher
+        <button type="submit" disabled={!results.length} aria-label={tr(locale, "Ouvrir le premier résultat")}>
+          {tr(locale, "Rechercher")}
         </button>
       </div>
       {query.trim().length >= 2 && (
         <div className="public-site-search__results" aria-live="polite">
           {results.length ? (
             results.map((item) => (
-              <Link href={item.href} key={`${item.type}-${item.href}`} onClick={onNavigate}>
-                <span>{item.type}</span>
-                <strong>{item.title}</strong>
-                <small>{item.description}</small>
+              <Link href={localizedHref(locale, item.href)} key={`${item.type}-${item.href}`} onClick={onNavigate}>
+                <span>{tr(locale, item.type)}</span>
+                <strong>{tr(locale, item.title)}</strong>
+                <small>{tr(locale, item.description)}</small>
               </Link>
             ))
           ) : (
-            <p>Aucun résultat. Essayez un lieu, une maison ou une expérience.</p>
+            <p>{tr(locale, "Aucun résultat. Essayez un lieu, une maison ou une expérience.")}</p>
           )}
         </div>
       )}
