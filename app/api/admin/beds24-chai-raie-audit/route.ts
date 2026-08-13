@@ -105,16 +105,27 @@ export async function GET(request: NextRequest) {
   try {
     const client = new Beds24Client(fetch, "audit");
     const reports = [];
+    const read = async <T>(label: string, operation: () => Promise<T>) => {
+      try {
+        return { ok: true as const, data: await operation(), error: null };
+      } catch (error) {
+        return {
+          ok: false as const,
+          data: null,
+          error: `${label}:${error instanceof Error ? error.message : "UNKNOWN"}`,
+        };
+      }
+    };
     for (const house of HOUSES) {
       const source = await sourceRows(house.csv, house.cleaningFee, house.slug);
-      const [calendar, properties, airbnb, booking, bookings] = await Promise.all([
-        client.readOnlyCalendar({ propertyId: house.propertyId, roomId: house.roomId, start: START, end: END }),
-        client.readOnlyEndpoint("/properties", { id: String(house.propertyId), includeAllRooms: "true", includePriceRules: "true", includeUnitDetails: "true" }),
-        client.readOnlyEndpoint("/channels/settings", { propertyId: String(house.propertyId), roomId: String(house.roomId), channel: "airbnb" }),
-        client.readOnlyEndpoint("/channels/settings", { propertyId: String(house.propertyId), roomId: String(house.roomId), channel: "booking" }),
-        client.readOnlyEndpoint("/bookings", { propertyId: String(house.propertyId), roomId: String(house.roomId), includeGuests: "false", includeInvoiceItems: "false", includeInfoItems: "false" }),
+      const [calendarResult, properties, airbnb, booking, bookings] = await Promise.all([
+        read("calendar", () => client.readOnlyCalendar({ propertyId: house.propertyId, roomId: house.roomId, start: START, end: END })),
+        read("properties", () => client.readOnlyEndpoint("/properties", { id: String(house.propertyId), includeAllRooms: "true", includePriceRules: "true", includeUnitDetails: "true" })),
+        read("airbnb-settings", () => client.readOnlyEndpoint("/channels/settings", { propertyId: String(house.propertyId), roomId: String(house.roomId), channel: "airbnb" })),
+        read("booking-settings", () => client.readOnlyEndpoint("/channels/settings", { propertyId: String(house.propertyId), roomId: String(house.roomId), channel: "booking" })),
+        read("bookings", () => client.readOnlyEndpoint("/bookings", { propertyId: String(house.propertyId), roomId: String(house.roomId), includeGuests: "false", includeInvoiceItems: "false", includeInfoItems: "false" })),
       ]);
-      const actual = calendarDays(calendar);
+      const actual = calendarDays(calendarResult.data ?? []);
       const rows = source.map((expected) => {
         const current = actual.get(expected.date) ?? {};
         return {
@@ -129,7 +140,7 @@ export async function GET(request: NextRequest) {
           expectedMinStay: expected.minStay,
         };
       });
-      const bookingAudit = bookingsAudit(bookings.data ?? []);
+      const bookingAudit = bookingsAudit(bookings.data?.data ?? []);
       const reservationDates = new Set<string>();
       for (const bookingRow of bookingAudit.rows) {
         if (typeof bookingRow.arrival === "string" && typeof bookingRow.departure === "string")
@@ -150,7 +161,8 @@ export async function GET(request: NextRequest) {
           price2Different: rows.filter((row) => row.price2 !== row.expectedPrice2).length,
           minStayDifferent: rows.filter((row) => row.minStay !== row.expectedMinStay).length,
         },
-        settings: { properties: properties.data ?? [], airbnb: airbnb.data ?? [], booking: booking.data ?? [] },
+        readErrors: [calendarResult, properties, airbnb, booking, bookings].flatMap((result) => result.error ? [result.error] : []),
+        settings: { properties: properties.data?.data ?? [], airbnb: airbnb.data?.data ?? [], booking: booking.data?.data ?? [] },
         bookings: bookingAudit,
         rows,
       });
