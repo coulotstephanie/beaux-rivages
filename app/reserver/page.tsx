@@ -9,6 +9,7 @@ import { staticPageSeo } from "@/content/fr/seo";
 import { siteMedia } from "@/media/site";
 import type { StayOptionId } from "@/booking";
 import { getExperience } from "@/experiences";
+import { headers } from "next/headers";
 
 const pageSeo = staticPageSeo["/reserver"];
 export const metadata = createPageMetadata({
@@ -45,7 +46,19 @@ export default async function BookingPage({
   }>;
 }) {
   const { maison, option, options, experience, experiences, demo } = await searchParams;
-  const calendarDemo = process.env.VERCEL_ENV === "preview" && demo === "calendrier";
+  const requestHeaders = await headers();
+  const requestHost = (
+    requestHeaders.get("x-forwarded-host") ??
+    requestHeaders.get("host") ??
+    ""
+  ).toLowerCase();
+  const isCalendarPreview =
+    process.env.VERCEL_ENV === "preview" ||
+    process.env.VERCEL_TARGET_ENV === "preview" ||
+    requestHost.includes("git-agent-calend") ||
+    requestHost.startsWith("127.0.0.1:") ||
+    requestHost.startsWith("localhost:");
+  const calendarDemo = isCalendarPreview && demo === "calendrier";
   const initialOptions = [...new Set([option, ...(options?.split(",") ?? [])])].filter(
     (id): id is StayOptionId => optionIds.includes(id as StayOptionId),
   );

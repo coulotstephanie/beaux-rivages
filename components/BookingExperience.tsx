@@ -346,6 +346,7 @@ export function BookingExperience({
           selection={selection}
           property={selectedProperty}
           onQuoteChange={setVerifiedQuote}
+          demoMode={calendarDemo}
         />
       </Container>
       {preview && selectedProperty && (
