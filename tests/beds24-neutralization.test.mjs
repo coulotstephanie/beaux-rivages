@@ -13,20 +13,26 @@ const retiredRoutes = [
 const activeRoots = [
   "app",
   "components",
+  "data",
   "features",
   "hooks",
   "lib",
   "platform",
   "services",
   "scripts",
+  "supabase",
 ];
-const sourceExtension = /\.(?:js|jsx|mjs|cjs|ts|tsx)$/;
+const activeFileExtension = /\.(?:csv|js|jsx|mjs|cjs|sql|ts|tsx)$/;
 
 function files(directory) {
   if (!existsSync(directory)) return [];
   return readdirSync(directory).flatMap((entry) => {
     const path = join(directory, entry);
-    return statSync(path).isDirectory() ? files(path) : sourceExtension.test(path) ? [path] : [];
+    return statSync(path).isDirectory()
+      ? files(path)
+      : activeFileExtension.test(path)
+        ? [path]
+        : [];
   });
 }
 
@@ -38,7 +44,9 @@ test("active application code cannot call or expose Beds24", () => {
   const forbidden = /Beds24|BEDS24_|beds24_rate_sync_queue|beds24\.com|inventory\/rooms\/calendar/i;
   const matches = activeRoots.flatMap((directory) =>
     files(join(root, directory)).flatMap((file) =>
-      forbidden.test(readFileSync(file, "utf8")) ? [relative(root, file)] : [],
+      forbidden.test(relative(root, file)) || forbidden.test(readFileSync(file, "utf8"))
+        ? [relative(root, file)]
+        : [],
     ),
   );
   assert.deepEqual(matches, []);
