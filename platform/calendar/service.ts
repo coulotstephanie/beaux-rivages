@@ -2,6 +2,7 @@ import type { CalendarBlock, CalendarSyncResult } from "./contracts";
 import { ICalendarConnector } from "./connector";
 import { getCalendarSources, getCalendarConfigurationStatus, type PropertySlug } from "./config";
 import { mergeCalendarBlocks } from "./ical";
+import { filterLiveCalendarBlocks, isExcludedCalendarInterval } from "./corrections";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseCalendarRepository } from "@/platform/database/calendar";
 export { isDateRangeAvailable as isRangeAvailable } from "@/lib/date-ranges";
@@ -22,7 +23,8 @@ export async function synchronizePropertyCalendars(propertySlug: PropertySlug, f
     sources.map(async (source) => {
       const syncedAt = new Date().toISOString();
       try {
-        const blocks = await connector.fetch(source);
+        const fetchedBlocks = await connector.fetch(source);
+        const blocks = filterLiveCalendarBlocks(propertySlug, source.provider, fetchedBlocks);
         return {
           blocks,
           result: {
@@ -57,38 +59,41 @@ export async function synchronizePropertyCalendars(propertySlug: PropertySlug, f
       }
     }),
   );
-  const persisted = isDatabaseConfigured()
-    ? await Promise.all(
-        settled.map(async (item) => {
-          const repository = new SupabaseCalendarRepository();
-          try {
-            if (item.result.status === "success") {
-              await repository.replaceEvents(
-                propertySlug,
-                item.result.provider,
-                item.blocks,
-                item.result.syncedAt,
+  // Preview verification must never mutate the configured database.
+  const persisted =
+    isDatabaseConfigured() && process.env.VERCEL_ENV !== "preview"
+      ? await Promise.all(
+          settled.map(async (item) => {
+            const repository = new SupabaseCalendarRepository();
+            try {
+              if (item.result.status === "success") {
+                await repository.replaceEvents(
+                  propertySlug,
+                  item.result.provider,
+                  item.blocks,
+                  item.result.syncedAt,
+                );
+              }
+              await repository.recordSync(item.result);
+              return item;
+            } catch (error) {
+              const message =
+                error instanceof Error ? error.message : "Calendar persistence failed.";
+              console.error(
+                JSON.stringify({
+                  event: "calendar.persistence.error",
+                  sourceId: item.result.sourceId,
+                  message,
+                }),
               );
+              return {
+                blocks: item.blocks,
+                result: { ...item.result, status: "error" as const, error: message },
+              };
             }
-            await repository.recordSync(item.result);
-            return item;
-          } catch (error) {
-            const message = error instanceof Error ? error.message : "Calendar persistence failed.";
-            console.error(
-              JSON.stringify({
-                event: "calendar.persistence.error",
-                sourceId: item.result.sourceId,
-                message,
-              }),
-            );
-            return {
-              blocks: item.blocks,
-              result: { ...item.result, status: "error" as const, error: message },
-            };
-          }
-        }),
-      )
-    : settled;
+          }),
+        )
+      : settled;
   const value = {
     blocks: mergeCalendarBlocks(persisted.flatMap((item) => item.blocks)),
     results: persisted.map((item) => item.result),
@@ -146,10 +151,20 @@ export async function getPropertyAvailability(propertySlug: PropertySlug, force 
         status: "confirmed" as const,
         source: block.source,
       })),
-      ...lastKnown.blocks.map((block) => ({
-        ...block,
-        status: block.status as "confirmed" | "tentative",
-      })),
+      ...lastKnown.blocks
+        .filter(
+          (block) =>
+            !isExcludedCalendarInterval({
+              propertySlug,
+              provider: block.source as (typeof requiredProviders)[number],
+              startsOn: block.startsOn,
+              endsOn: block.endsOn,
+            }),
+        )
+        .map((block) => ({
+          ...block,
+          status: block.status as "confirmed" | "tentative",
+        })),
     ],
     sources: calendar.results,
     reliable,
