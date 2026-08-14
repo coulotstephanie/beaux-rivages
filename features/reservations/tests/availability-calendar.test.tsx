@@ -67,4 +67,23 @@ describe("AvailabilityCalendar", () => {
 
     expect(screen.getByRole("button", { name: /samedi 8 août.*occupé/i })).toBeDisabled();
   });
+
+  it("renders the isolated preview demonstration without enabling the live calendar", () => {
+    render(
+      <AvailabilityCalendar
+        arrival={null}
+        departure={null}
+        propertySlug="chai-des-tortues"
+        demoMode
+        onChange={vi.fn()}
+      />,
+    );
+
+    expect(useAvailabilityCalendar).toHaveBeenCalledWith("chai-des-tortues", false);
+    expect(screen.getByText(/données de démonstration/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /vendredi 28 août.*euros par nuit/i }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: /samedi 22 août.*occupé/i })).toBeDisabled();
+  });
 });

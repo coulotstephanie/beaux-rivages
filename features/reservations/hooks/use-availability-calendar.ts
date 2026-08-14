@@ -8,13 +8,17 @@ type CalendarState = {
   status: "loading" | "ready" | "error";
 };
 
-export function useAvailabilityCalendar(propertySlug: string): CalendarState {
+export function useAvailabilityCalendar(propertySlug: string, enabled = true): CalendarState {
   const [state, setState] = useState<CalendarState>({
     blocks: [],
     status: "loading",
   });
 
   useEffect(() => {
+    if (!enabled) {
+      setState({ blocks: [], status: "ready" });
+      return;
+    }
     if (!propertySlug) {
       setState({ blocks: [], status: "error" });
       return;
@@ -36,7 +40,7 @@ export function useAvailabilityCalendar(propertySlug: string): CalendarState {
       });
 
     return () => controller.abort();
-  }, [propertySlug]);
+  }, [enabled, propertySlug]);
 
   return state;
 }

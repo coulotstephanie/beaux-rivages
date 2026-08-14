@@ -41,9 +41,11 @@ export default async function BookingPage({
     options?: string;
     experience?: string;
     experiences?: string;
+    demo?: string;
   }>;
 }) {
-  const { maison, option, options, experience, experiences } = await searchParams;
+  const { maison, option, options, experience, experiences, demo } = await searchParams;
+  const calendarDemo = process.env.VERCEL_ENV === "preview" && demo === "calendrier";
   const initialOptions = [...new Set([option, ...(options?.split(",") ?? [])])].filter(
     (id): id is StayOptionId => optionIds.includes(id as StayOptionId),
   );
@@ -60,6 +62,7 @@ export default async function BookingPage({
         initialProperty={maison}
         initialOptions={initialOptions}
         initialExperiences={requestedExperiences}
+        calendarDemo={calendarDemo}
       />
       <Footer />
     </main>
