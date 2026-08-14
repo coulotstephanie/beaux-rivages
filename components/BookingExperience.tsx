@@ -46,12 +46,10 @@ export function BookingExperience({
   initialProperty,
   initialOptions = [],
   initialExperiences = [],
-  calendarDemo = false,
 }: {
   initialProperty?: string;
   initialOptions?: StayOptionId[];
   initialExperiences?: string[];
-  calendarDemo?: boolean;
 }) {
   const hasInitialProperty = properties.some((property) => property.slug === initialProperty);
   const queriedExperiences = initialExperiences
@@ -266,7 +264,6 @@ export function BookingExperience({
                 arrival={selection.arrival}
                 departure={selection.departure}
                 propertySlug={selection.propertySlug ?? ""}
-                demoMode={calendarDemo}
                 onChange={(arrival, departure) =>
                   setSelection((current) => ({ ...current, arrival, departure }))
                 }
@@ -346,7 +343,6 @@ export function BookingExperience({
           selection={selection}
           property={selectedProperty}
           onQuoteChange={setVerifiedQuote}
-          demoMode={calendarDemo}
         />
       </Container>
       {preview && selectedProperty && (

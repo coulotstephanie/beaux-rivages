@@ -4,13 +4,11 @@ import { useMemo, useState } from "react";
 import { isDateOccupied, isDateRangeAvailable } from "@/lib/date-ranges";
 import { trackEvent } from "@/platform/analytics/events";
 import { useAvailabilityCalendar } from "../hooks";
-import type { AvailabilityBlock } from "../types";
 
 type AvailabilityCalendarProps = {
   arrival: string | null;
   departure: string | null;
   propertySlug: string;
-  demoMode?: boolean;
   onChange: (arrival: string | null, departure: string | null) => void;
 };
 
@@ -28,10 +26,6 @@ const monthNames = [
   "octobre",
   "novembre",
   "décembre",
-];
-const demoBlocks: AvailabilityBlock[] = [
-  { startsOn: "2026-08-22", endsOn: "2026-08-28", status: "confirmed" },
-  { startsOn: "2026-09-10", endsOn: "2026-09-14", status: "confirmed" },
 ];
 
 function toISO(date: Date) {
@@ -57,20 +51,13 @@ function monthDays(view: Date) {
   ] as Array<Date | null>;
 }
 
-function demoPrice(date: Date) {
-  const weekend = date.getDay() === 5 || date.getDay() === 6;
-  return 165 + (date.getMonth() % 3) * 15 + (weekend ? 25 : 0);
-}
-
 export function AvailabilityCalendar({
   arrival,
   departure,
   propertySlug,
-  demoMode = false,
   onChange,
 }: AvailabilityCalendarProps) {
   const [view, setView] = useState(() => {
-    if (demoMode) return new Date(2026, 7, 1);
     const base = new Date();
     return new Date(base.getFullYear(), base.getMonth(), 1);
   });
@@ -79,11 +66,7 @@ export function AvailabilityCalendar({
     date.setHours(0, 0, 0, 0);
     return date;
   }, []);
-  const liveCalendar = useAvailabilityCalendar(propertySlug, !demoMode);
-  const blocks = demoMode ? demoBlocks : liveCalendar.blocks;
-  const calendarStatus = demoMode ? "ready" : liveCalendar.status;
-  const displayArrival = arrival ?? (demoMode ? "2026-08-28" : null);
-  const displayDeparture = departure ?? (demoMode ? "2026-09-02" : null);
+  const { blocks, status: calendarStatus } = useAvailabilityCalendar(propertySlug);
   const months = useMemo(
     () => [view, new Date(view.getFullYear(), view.getMonth() + 1, 1)],
     [view],
@@ -97,25 +80,26 @@ export function AvailabilityCalendar({
     );
     if (occupied && !validDeparture) return;
     if (!arrival || departure || value < arrival) onChange(value, null);
-    else if (value > arrival && isDateRangeAvailable(blocks, arrival, value)) {
-      onChange(arrival, value);
-      trackEvent("search_availability", { property_slug: propertySlug, arrival, departure: value });
+    else if (value > arrival) {
+      if (isDateRangeAvailable(blocks, arrival, value)) {
+        onChange(arrival, value);
+        trackEvent("search_availability", {
+          property_slug: propertySlug,
+          arrival,
+          departure: value,
+        });
+      }
     }
   };
 
   return (
-    <div className="availability-calendar" data-demo={demoMode || undefined}>
-      {demoMode && (
-        <p className="availability-calendar__demo-note">
-          Aperçu visuel — données de démonstration, sans lien avec les disponibilités réelles
-        </p>
-      )}
+    <div className="availability-calendar">
       <div className="availability-calendar__summary" aria-live="polite">
         <div>
           <span>Arrivée</span>
           <strong>
-            {displayArrival
-              ? fromISO(displayArrival).toLocaleDateString("fr-FR", {
+            {arrival
+              ? fromISO(arrival).toLocaleDateString("fr-FR", {
                   day: "numeric",
                   month: "long",
                 })
@@ -126,8 +110,8 @@ export function AvailabilityCalendar({
         <div>
           <span>Départ</span>
           <strong>
-            {displayDeparture
-              ? fromISO(displayDeparture).toLocaleDateString("fr-FR", {
+            {departure
+              ? fromISO(departure).toLocaleDateString("fr-FR", {
                   day: "numeric",
                   month: "long",
                 })
@@ -163,7 +147,7 @@ export function AvailabilityCalendar({
         <button
           type="button"
           onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))}
-          disabled={!demoMode && view <= new Date(today.getFullYear(), today.getMonth(), 1)}
+          disabled={view <= new Date(today.getFullYear(), today.getMonth(), 1)}
           aria-label="Mois précédent"
         >
           ←
@@ -203,7 +187,7 @@ export function AvailabilityCalendar({
               {monthDays(month).map((date, index) => {
                 if (!date) return <span key={`empty-${index}`} className="is-empty" />;
                 const value = toISO(date);
-                const disabled = !demoMode && date < today;
+                const disabled = date < today;
                 const occupied = isDateOccupied(blocks, value);
                 const validDeparture = Boolean(
                   arrival &&
@@ -213,12 +197,9 @@ export function AvailabilityCalendar({
                 );
                 const arrivalDay = blocks.some((block) => value === block.startsOn);
                 const departureDay = blocks.some((block) => value === block.endsOn);
-                const selected = value === displayArrival || value === displayDeparture;
+                const selected = value === arrival || value === departure;
                 const inRange = Boolean(
-                  displayArrival &&
-                  displayDeparture &&
-                  value > displayArrival &&
-                  value < displayDeparture,
+                  arrival && departure && value > arrival && value < departure,
                 );
                 const status = occupied ? "Occupé" : "Disponible";
                 return (
@@ -230,11 +211,10 @@ export function AvailabilityCalendar({
                     }
                     className={`${selected ? "is-selected" : ""}${inRange ? " is-in-range" : ""}${occupied ? " is-occupied" : " is-free"}${arrivalDay ? " is-arrival" : ""}${departureDay ? " is-departure" : ""}`}
                     onClick={() => selectDate(date)}
-                    aria-label={`${date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}${demoMode && !occupied ? `, ${demoPrice(date)} euros par nuit` : ""}${validDeparture ? ", départ possible" : occupied ? ", occupé" : arrivalDay ? ", arrivée" : departureDay ? ", départ et nouvelle arrivée possibles" : ", disponible"}`}
+                    aria-label={`${date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}${validDeparture ? ", départ possible" : occupied ? ", occupé" : arrivalDay ? ", arrivée" : departureDay ? ", départ et nouvelle arrivée possibles" : ", disponible"}`}
                     aria-pressed={selected}
                   >
                     <span className="availability-calendar__date">{date.getDate()}</span>
-                    {demoMode && !occupied && <small>{demoPrice(date)} €</small>}
                     <em>{status}</em>
                   </button>
                 );
@@ -244,13 +224,11 @@ export function AvailabilityCalendar({
         ))}
       </div>
       <p className="booking-disclaimer" role="status">
-        {demoMode
-          ? "Cette présentation utilise exclusivement des exemples visuels."
-          : calendarStatus === "loading"
-            ? "Synchronisation des calendriers…"
-            : calendarStatus === "error"
-              ? "Le calendrier ne peut pas être vérifié pour le moment. Contactez Stéphanie avant toute demande."
-              : "Disponibilités synchronisées avec les calendriers des plateformes. Une ultime vérification est effectuée lors de la demande."}
+        {calendarStatus === "loading"
+          ? "Synchronisation des calendriers…"
+          : calendarStatus === "error"
+            ? "Le calendrier ne peut pas être vérifié pour le moment. Contactez Stéphanie avant toute demande."
+            : "Disponibilités synchronisées avec les calendriers des plateformes. Une ultime vérification est effectuée lors de la demande."}
       </p>
     </div>
   );
