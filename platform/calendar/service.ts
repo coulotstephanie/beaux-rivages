@@ -14,7 +14,16 @@ const cache = globalCalendar.__beauxRivagesCalendar ?? new Map<string, CachedCal
 globalCalendar.__beauxRivagesCalendar = cache;
 const connector = new ICalendarConnector();
 
-export async function synchronizePropertyCalendars(propertySlug: PropertySlug, force = false) {
+type CalendarReadOptions = {
+  force?: boolean;
+  persist?: boolean;
+};
+
+export async function synchronizePropertyCalendars(
+  propertySlug: PropertySlug,
+  force = false,
+  persist = false,
+) {
   const current = cache.get(propertySlug);
   if (!force && current && current.expiresAt > Date.now()) return current;
   const sources = getCalendarSources(propertySlug);
@@ -57,38 +66,40 @@ export async function synchronizePropertyCalendars(propertySlug: PropertySlug, f
       }
     }),
   );
-  const persisted = isDatabaseConfigured()
-    ? await Promise.all(
-        settled.map(async (item) => {
-          const repository = new SupabaseCalendarRepository();
-          try {
-            if (item.result.status === "success") {
-              await repository.replaceEvents(
-                propertySlug,
-                item.result.provider,
-                item.blocks,
-                item.result.syncedAt,
+  const persisted =
+    persist && isDatabaseConfigured()
+      ? await Promise.all(
+          settled.map(async (item) => {
+            const repository = new SupabaseCalendarRepository();
+            try {
+              if (item.result.status === "success") {
+                await repository.replaceEvents(
+                  propertySlug,
+                  item.result.provider,
+                  item.blocks,
+                  item.result.syncedAt,
+                );
+              }
+              await repository.recordSync(item.result);
+              return item;
+            } catch (error) {
+              const message =
+                error instanceof Error ? error.message : "Calendar persistence failed.";
+              console.error(
+                JSON.stringify({
+                  event: "calendar.persistence.error",
+                  sourceId: item.result.sourceId,
+                  message,
+                }),
               );
+              return {
+                blocks: item.blocks,
+                result: { ...item.result, status: "error" as const, error: message },
+              };
             }
-            await repository.recordSync(item.result);
-            return item;
-          } catch (error) {
-            const message = error instanceof Error ? error.message : "Calendar persistence failed.";
-            console.error(
-              JSON.stringify({
-                event: "calendar.persistence.error",
-                sourceId: item.result.sourceId,
-                message,
-              }),
-            );
-            return {
-              blocks: item.blocks,
-              result: { ...item.result, status: "error" as const, error: message },
-            };
-          }
-        }),
-      )
-    : settled;
+          }),
+        )
+      : settled;
   const value = {
     blocks: mergeCalendarBlocks(persisted.flatMap((item) => item.blocks)),
     results: persisted.map((item) => item.result),
@@ -102,8 +113,16 @@ function dateOnly(value: string) {
   return value.slice(0, 10);
 }
 
-export async function getPropertyAvailability(propertySlug: PropertySlug, force = false) {
-  const calendar = await synchronizePropertyCalendars(propertySlug, force);
+export async function getPropertyAvailability(
+  propertySlug: PropertySlug,
+  options: CalendarReadOptions | boolean = {},
+) {
+  const normalized = typeof options === "boolean" ? { force: options, persist: options } : options;
+  const calendar = await synchronizePropertyCalendars(
+    propertySlug,
+    normalized.force ?? false,
+    normalized.persist ?? false,
+  );
   const repository = new SupabaseCalendarRepository();
   const [internalBlocks, lastKnown] = isDatabaseConfigured()
     ? await Promise.all([
