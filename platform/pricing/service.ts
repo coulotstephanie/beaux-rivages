@@ -6,6 +6,7 @@ import { frenchStayReferenceCalendar } from "@/platform/calendar/french-referenc
 import { minimumNightsForDate } from "./channels";
 import { nidDEte2027NightlyRate } from "./nid-d-ete-2027";
 import { villaRaieMantaAuthoritativeNightlyRate } from "./villa-raie-manta-authoritative";
+import { chaiDesTortuesAuthoritativeNightlyRate } from "./chai-des-tortues-authoritative";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -18,6 +19,17 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
+  const authoritativeChaiRate =
+    plan.propertySlug === "chai-des-tortues"
+      ? chaiDesTortuesAuthoritativeNightlyRate(date)
+      : undefined;
+  if (authoritativeChaiRate !== undefined) {
+    return {
+      rate: authoritativeChaiRate,
+      season: "Grille Chai des Tortues validée",
+      minimumNights: plan.minimumNights,
+    };
+  }
   const authoritativeVillaRate =
     plan.propertySlug === "villa-raie-manta"
       ? villaRaieMantaAuthoritativeNightlyRate(date)
@@ -116,7 +128,9 @@ export async function calculateQuote(input: QuoteRequest) {
   const accommodationBeforeDiscount = nightlyLines.reduce((sum, line) => sum + line.rate, 0);
   // Les grilles d’hébergement validées ne reçoivent aucune remise automatique.
   const applicablePromotions =
-    input.propertySlug === "nid-d-ete" || input.propertySlug === "villa-raie-manta"
+    input.propertySlug === "nid-d-ete" ||
+    input.propertySlug === "villa-raie-manta" ||
+    input.propertySlug === "chai-des-tortues"
       ? []
       : plan.promotions.filter((promotion) => promotionApplies(promotion, input, nights));
   const promotionValue = (promotion: Promotion) =>

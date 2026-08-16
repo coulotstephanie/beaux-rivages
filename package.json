@@ -16,6 +16,7 @@
     "test:pricing-2027": "tsx --test tests/nid-d-ete-pricing-2027.test.ts tests/nid-d-ete-booking-window.test.ts",
     "test:security-deposit": "tsx --test tests/no-security-deposit.test.ts",
     "test:villa-pricing": "tsx --test tests/villa-raie-manta-pricing.test.ts",
+    "test:chai-pricing": "tsx --test tests/chai-des-tortues-pricing.test.ts",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:list": "playwright test --list",

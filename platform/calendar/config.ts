@@ -16,16 +16,6 @@ const sourceDefinitions: { propertySlug: PropertySlug; provider: CalendarProvide
       env: "ICAL_CHAI_DES_TORTUES_BOOKING_URL",
     },
     {
-      propertySlug: "chai-des-tortues",
-      provider: "abritel",
-      env: "ICAL_CHAI_DES_TORTUES_ABRITEL_URL",
-    },
-    {
-      propertySlug: "chai-des-tortues",
-      provider: "google",
-      env: "ICAL_CHAI_DES_TORTUES_GOOGLE_URL",
-    },
-    {
       propertySlug: "villa-raie-manta",
       provider: "airbnb",
       env: "ICAL_VILLA_RAIE_MANTA_AIRBNB_URL",
