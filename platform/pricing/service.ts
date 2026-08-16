@@ -4,6 +4,7 @@ import { ratePlanRepository } from "./repository";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 import { frenchStayReferenceCalendar } from "@/platform/calendar/french-reference-calendar";
 import { minimumNightsForDate } from "./channels";
+import { nidDEte2027NightlyRate } from "./nid-d-ete-2027";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -16,6 +17,15 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
+  const airbnb2027Rate =
+    plan.propertySlug === "nid-d-ete" ? nidDEte2027NightlyRate(date) : undefined;
+  if (airbnb2027Rate !== undefined) {
+    return {
+      rate: airbnb2027Rate,
+      season: "Tarif Airbnb 2027",
+      minimumNights: plan.minimumNights,
+    };
+  }
   const priority = {
     manual: 7,
     event: 6,
@@ -92,9 +102,12 @@ export async function calculateQuote(input: QuoteRequest) {
     !plan.allowedArrivalWeekdays?.length || plan.allowedArrivalWeekdays.includes(arrivalIsoWeekday);
   const stayIsValid = arrivalIsAllowed && nights >= requiredMinimum && nights <= plan.maximumNights;
   const accommodationBeforeDiscount = nightlyLines.reduce((sum, line) => sum + line.rate, 0);
-  const applicablePromotions = plan.promotions.filter((promotion) =>
-    promotionApplies(promotion, input, nights),
-  );
+  // Direct booking savings for Le Nid d’Été come only from avoiding platform
+  // commissions: its accommodation price must never receive another discount.
+  const applicablePromotions =
+    input.propertySlug === "nid-d-ete"
+      ? []
+      : plan.promotions.filter((promotion) => promotionApplies(promotion, input, nights));
   const promotionValue = (promotion: Promotion) =>
     promotion.fixedAmount ?? (accommodationBeforeDiscount * promotion.percentage) / 100;
   const bestPromotion = applicablePromotions.sort(
