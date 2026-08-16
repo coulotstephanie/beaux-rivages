@@ -15,7 +15,7 @@ const plan: PropertyRatePlan = {
   minimumNights: 2,
   maximumNights: 28,
   cleaningFee: 90,
-  securityDeposit: 800,
+  securityDeposit: 0,
   touristTax: { enabled: false, mode: "percentage", value: 0 },
   optionPrices: {},
   seasons: [

@@ -205,16 +205,7 @@ export class SupabasePricingPlanReader {
             } | null)
         )?.optimize_calendar_gaps ?? true,
       cleaningFee: baseRate.cleaning_fee_cents / 100,
-      securityDeposit:
-        financialSettingsResult.error || !financialSettingsResult.data
-          ? baseRate.security_deposit_cents / 100
-          : Number(
-              (
-                financialSettingsResult.data as unknown as {
-                  security_deposit_cents: number;
-                }
-              ).security_deposit_cents,
-            ) / 100,
+      securityDeposit: 0,
       financialPolicy: financialSettingsResult.error
         ? undefined
         : {

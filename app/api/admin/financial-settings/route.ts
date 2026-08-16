@@ -8,7 +8,7 @@ const financialSettingsSchema = z.object({
   depositPercentage: z.number().int().min(0).max(100),
   fullPaymentThresholdDays: z.number().int().min(0).max(365),
   balanceDueDays: z.number().int().min(0).max(365),
-  securityDepositCents: z.number().int().min(0).max(10_000_000),
+  securityDepositCents: z.literal(0),
 });
 
 async function readSettings() {
@@ -30,7 +30,7 @@ async function readSettings() {
     depositPercentage: row.deposit_percentage,
     fullPaymentThresholdDays: row.full_payment_threshold_days,
     balanceDueDays: row.balance_due_days,
-    securityDepositCents: row.security_deposit_cents,
+    securityDepositCents: 0,
   };
 }
 
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest) {
       deposit_percentage: value.depositPercentage,
       full_payment_threshold_days: value.fullPaymentThresholdDays,
       balance_due_days: value.balanceDueDays,
-      security_deposit_cents: value.securityDepositCents,
+      security_deposit_cents: 0,
       updated_by: actor.userId,
     } as never)
     .filter("id" as "slug", "eq", "true");

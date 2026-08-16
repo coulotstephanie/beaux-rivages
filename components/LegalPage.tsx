@@ -5,6 +5,21 @@ import { unstable_noStore as noStore } from "next/cache";
 import { legalUpdatedAt, legalVersion } from "@/content/legal";
 import { getPublishedLegalDocument } from "@/platform/legal/documents";
 import type { LegalDocument } from "@/platform/legal/documents";
+import { getServerLocale, localize } from "@/i18n/server";
+
+const securityDepositLegalCopy = new Set([
+  "6. Caution",
+  "Comment fonctionne la caution ?",
+  "Aucun dépôt de garantie n’est demandé.",
+  "Aucun dépôt de garantie n’est demandé au locataire. Le locataire demeure néanmoins responsable des dommages, dégradations ou pertes qui lui sont imputables et qui seraient constatés pendant ou à l’issue du séjour, sur présentation des éléments justificatifs correspondants.",
+]);
+
+function localizeSecurityDepositCopy(
+  locale: Awaited<ReturnType<typeof getServerLocale>>,
+  copy: string,
+) {
+  return securityDepositLegalCopy.has(copy) ? localize(locale, copy) : copy;
+}
 
 export async function LegalPage({
   document: fallback,
@@ -16,6 +31,7 @@ export async function LegalPage({
   accordion?: boolean;
 }) {
   noStore();
+  const locale = await getServerLocale();
   const published = await getPublishedLegalDocument(path, fallback);
   const document = published.document;
   const displayedVersion = published.version ?? legalVersion;
@@ -46,19 +62,21 @@ export async function LegalPage({
             Version {displayedVersion} · mise à jour le {displayedDate}
           </small>
         </header>
-        {document.sections.map(([title, body]) =>
-          accordion ? (
+        {document.sections.map(([title, body]) => {
+          const displayedTitle = localizeSecurityDepositCopy(locale, title);
+          const displayedBody = localizeSecurityDepositCopy(locale, body);
+          return accordion ? (
             <details key={title}>
-              <summary>{title}</summary>
-              <p>{body}</p>
+              <summary>{displayedTitle}</summary>
+              <p>{displayedBody}</p>
             </details>
           ) : (
             <section key={title}>
-              <h2>{title}</h2>
-              <p>{body}</p>
+              <h2>{displayedTitle}</h2>
+              <p>{displayedBody}</p>
             </section>
-          ),
-        )}
+          );
+        })}
       </article>
       <Footer />
     </main>

@@ -35,7 +35,7 @@ test("a traveler sees the real total and receives a clear request reference", as
     accommodation: 660,
     cleaningFee: 95,
     touristTax: 0,
-    securityDeposit: { amount: 800, includedInTotal: false },
+    securityDeposit: { amount: 0, includedInTotal: false },
     paymentSchedule: {
       depositPercentage: 30,
       depositDue: 226.5,

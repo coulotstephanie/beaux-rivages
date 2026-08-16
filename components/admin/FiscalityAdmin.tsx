@@ -159,21 +159,7 @@ export function FiscalityAdmin({
               }
             />
           </label>
-          <label>
-            Dépôt de garantie (€)
-            <input
-              type="number"
-              min="0"
-              step="1"
-              value={financial.securityDepositCents / 100}
-              onChange={(event) =>
-                setFinancial({
-                  ...financial,
-                  securityDepositCents: Math.round(Number(event.target.value) * 100),
-                })
-              }
-            />
-          </label>
+          <p className="admin-form-note">Aucun dépôt de garantie n’est demandé.</p>
           <button disabled={busy} type="submit">
             Enregistrer les règles financières
           </button>

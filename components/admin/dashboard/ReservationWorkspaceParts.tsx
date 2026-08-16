@@ -255,12 +255,10 @@ export function ReservationActions({
 export function ReservationDetail({
   reservation,
   payments,
-  deposits,
   onClose,
 }: {
   reservation: BackOfficeReservation;
   payments: BackOfficeSnapshot["pilotage"]["recentPayments"];
-  deposits: BackOfficeSnapshot["operations"]["deposits"];
   onClose: () => void;
 }) {
   const paid = payments
@@ -373,12 +371,8 @@ export function ReservationDetail({
               </dd>
             </div>
             <div>
-              <dt>Caution</dt>
-              <dd>
-                {deposits.length
-                  ? deposits.map((item) => `${money(item.amountCents)} · ${item.status}`).join(", ")
-                  : "Non enregistrée"}
-              </dd>
+              <dt>Dépôt de garantie</dt>
+              <dd>Aucun dépôt de garantie n’est demandé.</dd>
             </div>
           </dl>
         </article>

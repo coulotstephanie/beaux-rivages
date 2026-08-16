@@ -170,7 +170,7 @@ export function PriceSummary({
             </div>
           ) : null}
           <small>
-            Caution non encaissée : {quote.securityDeposit.amount.toLocaleString("fr-FR")} €.{" "}
+            Aucun dépôt de garantie n’est demandé.{" "}
             {quote.stayRules.valid
               ? "Durée conforme aux règles du séjour."
               : `Séjour de ${quote.stayRules.requiredMinimum} à ${quote.stayRules.maximumNights} nuits requis.`}

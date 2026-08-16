@@ -28,7 +28,7 @@ export const legalDocuments = {
       ],
       [
         "6. Caution",
-        "Une caution peut être demandée selon le logement. Son montant, ses modalités et ses conditions de restitution sont indiqués dans le contrat. Elle ne constitue pas un paiement du séjour.",
+        "Aucun dépôt de garantie n’est demandé au locataire. Le locataire demeure néanmoins responsable des dommages, dégradations ou pertes qui lui sont imputables et qui seraient constatés pendant ou à l’issue du séjour, sur présentation des éléments justificatifs correspondants.",
       ],
       [
         "7. Arrivée et départ",
@@ -373,10 +373,7 @@ export const legalDocuments = {
         "Quand vais-je recevoir mon contrat ?",
         "Après vérification de la demande et avant la confirmation définitive engageant les parties.",
       ],
-      [
-        "Comment fonctionne la caution ?",
-        "Son montant et ses modalités figurent dans le contrat du logement. Elle est distincte du prix du séjour.",
-      ],
+      ["Comment fonctionne la caution ?", "Aucun dépôt de garantie n’est demandé."],
       [
         "Les expériences sont-elles remboursables ?",
         "Cela dépend de leur nature, de leur préparation et, pour un partenaire, de ses propres conditions.",

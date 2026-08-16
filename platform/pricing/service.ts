@@ -212,7 +212,7 @@ export async function calculateQuote(input: QuoteRequest) {
       : null,
     accommodation,
     cleaningFee: plan.cleaningFee,
-    securityDeposit: { amount: plan.securityDeposit, includedInTotal: false },
+    securityDeposit: { amount: 0, includedInTotal: false },
     touristTax,
     touristTaxDetails,
     optionLines,

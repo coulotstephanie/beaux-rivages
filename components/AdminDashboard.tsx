@@ -572,9 +572,6 @@ export function AdminDashboard() {
                   payments={data.pilotage.recentPayments.filter(
                     (item) => item.reservationReference === selectedReservation.reference,
                   )}
-                  deposits={data.operations.deposits.filter(
-                    (item) => item.reservationReference === selectedReservation.reference,
-                  )}
                   onClose={() => setSelectedReservationId(null)}
                 />
               )}
