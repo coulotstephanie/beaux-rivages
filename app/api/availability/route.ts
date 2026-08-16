@@ -40,7 +40,10 @@ export async function GET(request: NextRequest) {
       return {
         propertySlug: slug,
         property: property.title,
-        available: capacityFits && isRangeAvailable(calendar.blocks, arrival, departure),
+        available:
+          calendar.reliable &&
+          capacityFits &&
+          isRangeAvailable(calendar.blocks, arrival, departure),
         capacityFits,
         sourcesHealthy: calendar.reliable,
         usingLastKnownState: calendar.usingLastKnownState,

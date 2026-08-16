@@ -5,6 +5,7 @@ import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 import { frenchStayReferenceCalendar } from "@/platform/calendar/french-reference-calendar";
 import { minimumNightsForDate } from "./channels";
 import { nidDEte2027NightlyRate } from "./nid-d-ete-2027";
+import { villaRaieMantaAuthoritativeNightlyRate } from "./villa-raie-manta-authoritative";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -17,6 +18,17 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
+  const authoritativeVillaRate =
+    plan.propertySlug === "villa-raie-manta"
+      ? villaRaieMantaAuthoritativeNightlyRate(date)
+      : undefined;
+  if (authoritativeVillaRate !== undefined) {
+    return {
+      rate: authoritativeVillaRate,
+      season: "Grille Villa Raie Manta validée",
+      minimumNights: plan.minimumNights,
+    };
+  }
   const authoritative2027Rate =
     plan.propertySlug === "nid-d-ete" ? nidDEte2027NightlyRate(date) : undefined;
   if (authoritative2027Rate !== undefined) {
@@ -102,9 +114,9 @@ export async function calculateQuote(input: QuoteRequest) {
     !plan.allowedArrivalWeekdays?.length || plan.allowedArrivalWeekdays.includes(arrivalIsoWeekday);
   const stayIsValid = arrivalIsAllowed && nights >= requiredMinimum && nights <= plan.maximumNights;
   const accommodationBeforeDiscount = nightlyLines.reduce((sum, line) => sum + line.rate, 0);
-  // Le tarif d’hébergement validé du Nid d’Été ne reçoit aucune remise automatique.
+  // Les grilles d’hébergement validées ne reçoivent aucune remise automatique.
   const applicablePromotions =
-    input.propertySlug === "nid-d-ete"
+    input.propertySlug === "nid-d-ete" || input.propertySlug === "villa-raie-manta"
       ? []
       : plan.promotions.filter((promotion) => promotionApplies(promotion, input, nights));
   const promotionValue = (promotion: Promotion) =>
