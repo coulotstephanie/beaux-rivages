@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { isDateOccupied, isDateRangeAvailable } from "@/lib/date-ranges";
 import { trackEvent } from "@/platform/analytics/events";
 import { useAvailabilityCalendar } from "../hooks";
+import { addUtcMonths } from "@/platform/reservations/booking-window";
 
 type AvailabilityCalendarProps = {
   arrival: string | null;
@@ -54,6 +55,12 @@ export function AvailabilityCalendar({
     date.setHours(0, 0, 0, 0);
     return date;
   }, []);
+  const bookingWindowEnd = useMemo(() => fromISO(addUtcMonths(toISO(today), 12)), [today]);
+  const lastBookableMonth = useMemo(() => {
+    const lastBookableDay = new Date(bookingWindowEnd);
+    lastBookableDay.setDate(lastBookableDay.getDate() - 1);
+    return new Date(lastBookableDay.getFullYear(), lastBookableDay.getMonth(), 1);
+  }, [bookingWindowEnd]);
   const { blocks, status: calendarStatus } = useAvailabilityCalendar(propertySlug);
   const days = useMemo(() => {
     const firstDay = (view.getDay() + 6) % 7;
@@ -124,6 +131,7 @@ export function AvailabilityCalendar({
           <button
             type="button"
             onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))}
+            disabled={view >= lastBookableMonth}
             aria-label="Mois suivant"
           >
             →
@@ -138,7 +146,7 @@ export function AvailabilityCalendar({
           {days.map((date, index) => {
             if (!date) return <span key={`empty-${index}`} />;
             const value = toISO(date);
-            const disabled = date < today;
+            const disabled = date < today || date >= bookingWindowEnd;
             const occupied = isDateOccupied(blocks, value);
             const validDeparture = Boolean(
               arrival &&

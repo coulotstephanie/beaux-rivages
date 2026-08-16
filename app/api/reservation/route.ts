@@ -22,6 +22,7 @@ import { legalVersion } from "@/content/legal";
 import { reservationSpecialRequestsSchema } from "@/platform/database/schemas";
 import { reservationServiceItems } from "@/platform/reservations/context";
 import { assertPaymentMethodEnabled } from "@/platform/payments/methods";
+import { isStayInsidePublicBookingWindow } from "@/platform/reservations/booking-window";
 
 const reservationRequestSchema = z
   .object({
@@ -109,6 +110,15 @@ export async function POST(request: NextRequest) {
     return noStoreJson({ error: "Demande de réservation invalide." }, { status: 400 });
   }
   const input = parsed.data;
+  if (!isStayInsidePublicBookingWindow(input.arrival, input.departure)) {
+    return noStoreJson(
+      {
+        error: "Les réservations sont ouvertes sur les 12 prochains mois uniquement.",
+        code: "OUTSIDE_BOOKING_WINDOW",
+      },
+      { status: 422 },
+    );
+  }
   try {
     await assertPaymentMethodEnabled(input.paymentMethod);
   } catch {
@@ -139,7 +149,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const calendar = await getPropertyAvailability(propertySlug, true);
+  const calendar = await getPropertyAvailability(propertySlug, { force: true, persist: true });
   if (!calendar.reliable) {
     return noStoreJson(
       {

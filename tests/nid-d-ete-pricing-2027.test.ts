@@ -67,6 +67,44 @@ test("each of the 365 dates in 2027 maps to exactly one Airbnb period and exact 
   }
 });
 
+test("legacy imports, fallback seasons and old summer values never override the authoritative grid", () => {
+  const legacyPlan: PropertyRatePlan = {
+    ...plan,
+    seasons: [
+      ...plan.seasons,
+      ...[285, 330, 375, 420, 445].map((nightlyRate, index) => ({
+        id: `import-csv-v2-${nightlyRate}`,
+        label: "Import CSV V2",
+        kind: "manual" as const,
+        startsOn: `2027-0${index + 4}-01`,
+        endsOn: "2027-09-01",
+        nightlyRate,
+      })),
+    ],
+    promotions: [
+      {
+        id: "legacy-long-stay",
+        label: "Ancienne promotion",
+        kind: "long-stay",
+        enabled: true,
+        percentage: 8,
+        minimumNights: 2,
+      },
+    ],
+  };
+  const checks = [
+    ["2027-05-14", 285],
+    ["2027-06-28", 208],
+    ["2027-07-01", 208],
+    ["2027-07-10", 220],
+    ["2027-07-24", 235],
+    ["2027-08-01", 250],
+  ] as const;
+  for (const [date, expected] of checks) {
+    assert.equal(rateForDate(legacyPlan, date).rate, expected, date);
+  }
+});
+
 test("all period boundaries are contiguous and use inclusive/exclusive dates", () => {
   assert.equal(NID_D_ETE_2027_RATE_PERIODS[0].startsOn, "2027-01-01");
   assert.equal(NID_D_ETE_2027_RATE_PERIODS.at(-1)?.endsOn, "2028-01-01");
@@ -123,4 +161,70 @@ test("public quote keeps 90 euro cleaning separate and applies no accommodation 
   assert.equal(quote.promotion, null);
   assert.equal(quote.accommodation, 1_750);
   assert.equal(quote.cleaningFee, 90);
+  assert.equal(quote.optionsTotal, 0);
+  assert.equal(quote.optionLines.length, 0);
+});
+
+test("priority stays keep exact accommodation for two and six adults", async () => {
+  const stays = [
+    ["2027-01-01", "2027-01-03", 429],
+    ["2027-03-08", "2027-03-10", 246],
+    ["2027-05-05", "2027-05-09", 1_288],
+    ["2027-05-14", "2027-05-17", 855],
+    ["2027-06-04", "2027-06-07", 666],
+    ["2027-07-05", "2027-07-12", 1_540],
+    ["2027-07-19", "2027-07-26", 1_645],
+    ["2027-08-01", "2027-08-08", 1_750],
+  ] as const;
+  for (const [arrival, departure, expected] of stays) {
+    for (const adults of [2, 6]) {
+      const quote = await calculateQuote({
+        propertySlug: "nid-d-ete",
+        arrival,
+        departure,
+        adults,
+        children: 0,
+        babies: 0,
+        pets: 0,
+        options: [],
+        experiences: [],
+      });
+      assert.equal(quote.accommodation, expected, `${arrival}, ${adults} adultes`);
+      assert.equal(quote.cleaningFee, 90);
+      assert.equal(quote.promotion, null);
+      assert.equal(quote.optionsTotal, 0);
+      assert.equal(
+        quote.total,
+        quote.accommodation + quote.cleaningFee + quote.touristTax,
+        `${arrival}: ménage et taxe comptés une seule fois`,
+      );
+    }
+  }
+});
+
+test("pet and linen remain optional and use the validated units", async () => {
+  const quote = await calculateQuote({
+    propertySlug: "nid-d-ete",
+    arrival: "2027-08-01",
+    departure: "2027-08-08",
+    adults: 2,
+    children: 1,
+    babies: 0,
+    pets: 2,
+    options: ["pet", "linen"],
+    experiences: [],
+  });
+  assert.deepEqual(
+    quote.optionLines.map(({ id, quantity, unitPrice, total }) => ({
+      id,
+      quantity,
+      unitPrice,
+      total,
+    })),
+    [
+      { id: "pet", quantity: 2, unitPrice: 25, total: 50 },
+      { id: "linen", quantity: 3, unitPrice: 20, total: 60 },
+    ],
+  );
+  assert.equal(quote.optionsTotal, 110);
 });

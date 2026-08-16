@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { reservationSearchSchema } from "@/features/reservations/schemas";
 import { reservationEngine } from "@/features/reservations/services";
 import { noStoreJson, rateLimit } from "@/platform/http/security";
+import { isStayInsidePublicBookingWindow } from "@/platform/reservations/booking-window";
 
 export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 25);
@@ -15,6 +16,15 @@ export async function POST(request: NextRequest) {
         fields: parsed.error.flatten().fieldErrors,
       },
       { status: 400 },
+    );
+  }
+  if (!isStayInsidePublicBookingWindow(parsed.data.arrival, parsed.data.departure)) {
+    return noStoreJson(
+      {
+        error: "Les réservations sont ouvertes sur les 12 prochains mois uniquement.",
+        code: "OUTSIDE_BOOKING_WINDOW",
+      },
+      { status: 422 },
     );
   }
 
