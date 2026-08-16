@@ -17,12 +17,12 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
-  const airbnb2027Rate =
+  const authoritative2027Rate =
     plan.propertySlug === "nid-d-ete" ? nidDEte2027NightlyRate(date) : undefined;
-  if (airbnb2027Rate !== undefined) {
+  if (authoritative2027Rate !== undefined) {
     return {
-      rate: airbnb2027Rate,
-      season: "Tarif Airbnb 2027",
+      rate: authoritative2027Rate,
+      season: "Grille validée 2027",
       minimumNights: plan.minimumNights,
     };
   }
@@ -102,8 +102,7 @@ export async function calculateQuote(input: QuoteRequest) {
     !plan.allowedArrivalWeekdays?.length || plan.allowedArrivalWeekdays.includes(arrivalIsoWeekday);
   const stayIsValid = arrivalIsAllowed && nights >= requiredMinimum && nights <= plan.maximumNights;
   const accommodationBeforeDiscount = nightlyLines.reduce((sum, line) => sum + line.rate, 0);
-  // Direct booking savings for Le Nid d’Été come only from avoiding platform
-  // commissions: its accommodation price must never receive another discount.
+  // Le tarif d’hébergement validé du Nid d’Été ne reçoit aucune remise automatique.
   const applicablePromotions =
     input.propertySlug === "nid-d-ete"
       ? []
