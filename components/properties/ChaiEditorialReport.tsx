@@ -121,10 +121,12 @@ export function ChaiEditorialReport({
         galleryLabel: tr(locale, chapter.galleryLabel),
         images: (() => {
           const group = `editorial.${chapterIndex}`;
-          const baseItems = chapter.images.map((image, imageIndex) => ({
-            ...(mediaOverrides[`${group}.${imageIndex}`] ?? image),
-            editorField: `${group}.${imageIndex}`,
-          }));
+          const baseItems = chapter.images
+            .filter((image): image is GalleryImage => Boolean(image))
+            .map((image, imageIndex) => ({
+              ...(mediaOverrides[`${group}.${imageIndex}`] ?? image),
+              editorField: `${group}.${imageIndex}`,
+            }));
           const order = mediaOrder[group];
           const addedItems = (order ?? [])
             .filter((field) => !baseItems.some((item) => item.editorField === field))

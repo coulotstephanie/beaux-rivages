@@ -166,7 +166,7 @@ export function Header({
             links={carnetLinks}
             locale={locale}
           />
-          <Link href={localizedHref(locale, "/sejours-professionnels")}>
+          <Link href={localizedHref(locale, "/contact")}>
             {tr(locale, "Séjours professionnels")}
           </Link>
           <Link href={localizedHref(locale, "/reserver")}>{tr(locale, "Réserver")}</Link>
@@ -214,7 +214,7 @@ export function Header({
             close={closeMenu}
             locale={locale}
           />
-          <Link href={localizedHref(locale, "/sejours-professionnels")} onClick={closeMenu}>
+          <Link href={localizedHref(locale, "/contact")} onClick={closeMenu}>
             {tr(locale, "Séjours professionnels")}
           </Link>
           <Link href={localizedHref(locale, "/reserver")} onClick={closeMenu}>

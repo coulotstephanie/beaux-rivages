@@ -1,46 +1,67 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { AmbientWaves } from "@/components/AmbientWaves";
 import { PremiumUX } from "@/components/PremiumUX";
 import { Analytics } from "@/components/Analytics";
 import { AppProviders } from "@/components/providers";
 import { StructuredData } from "@/components/StructuredData";
-import { SITE_URL, languageAlternates } from "@/seo";
+import { SITE_URL, languageAlternates, localizedUrl } from "@/seo";
+import { isSupportedLocale } from "@/i18n/config";
 import { getServerLocale, localize } from "@/i18n/server";
 import "./globals.css";
 import "./foundations.css";
 import "leaflet/dist/leaflet.css";
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://www.beaux-rivages.com"),
-  title: "Beaux Rivages — L’hospitalité des îles",
-  description:
+export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers();
+  const localeHeader = requestHeaders.get("x-beaux-rivages-locale") ?? "fr";
+  const locale = isSupportedLocale(localeHeader) ? localeHeader : "fr";
+  const requestedPath = requestHeaders.get("x-beaux-rivages-pathname") ?? "/";
+  const path = requestedPath.replace(/^\/(en|de)(?=\/|$)/, "") || "/";
+  const title = localize(locale, "Beaux Rivages — L’hospitalité des îles");
+  const description = localize(
+    locale,
     "Trois maisons de caractère sur les îles de Ré et d’Oléron, préparées avec soin par Stéphanie et Bruno.",
-  applicationName: "Beaux Rivages",
-  keywords: [
-    "Île de Ré",
-    "Île d’Oléron",
-    "maison de vacances",
-    "location saisonnière",
-    "Beaux Rivages",
-  ],
-  robots: { index: true, follow: true },
-  alternates: { canonical: SITE_URL, languages: languageAlternates("/") },
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
-      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
-      : undefined,
-  },
-  manifest: "/manifest.webmanifest",
-  openGraph: { images: ["/opengraph.png"] },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+  );
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title,
+    description,
+    applicationName: "Beaux Rivages",
+    keywords: [
+      "Île de Ré",
+      "Île d’Oléron",
+      "maison de vacances",
+      "location saisonnière",
+      "Beaux Rivages",
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-  },
-};
+    robots: { index: true, follow: true },
+    alternates: { canonical: localizedUrl(path, locale), languages: languageAlternates(path) },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+      other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+        ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+        : undefined,
+    },
+    manifest: "/manifest.webmanifest",
+    openGraph: {
+      title,
+      description,
+      url: localizedUrl(path, locale),
+      locale: locale === "de" ? "de_DE" : locale === "en" ? "en_GB" : "fr_FR",
+      images: ["/opengraph.png"],
+    },
+    twitter: { card: "summary_large_image", title, description, images: ["/opengraph.png"] },
+    icons: {
+      icon: [
+        { url: "/icon.svg", type: "image/svg+xml" },
+        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#16354A",
@@ -66,7 +87,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               email: "coulotstephanie@gmail.com",
               telephone: "+33617260094",
               areaServed: ["Île de Ré", "Île d’Oléron", "La Rochelle"],
-              availableLanguage: ["fr", "en", "de", "es", "nl"],
+              availableLanguage: ["fr", "en", "de"],
             },
             {
               "@context": "https://schema.org",
@@ -74,7 +95,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               "@id": `${SITE_URL}#website`,
               name: "Beaux Rivages",
               url: SITE_URL,
-              inLanguage: ["fr-FR", "en-GB", "de-DE", "es-ES", "nl-NL"],
+              inLanguage: ["fr-FR", "en-GB", "de-DE"],
               publisher: { "@id": `${SITE_URL}#organization` },
             },
           ]}

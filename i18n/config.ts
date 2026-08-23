@@ -1,6 +1,6 @@
 export const supportedLocales = ["fr", "en", "de", "es", "nl"] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
-export const productionLocales: SupportedLocale[] = ["fr", "en", "de", "es", "nl"];
+export const productionLocales: SupportedLocale[] = ["fr", "en", "de"];
 export const defaultLocale: SupportedLocale = "fr";
 export const localeLabels: Record<SupportedLocale, string> = {
   fr: "Français",

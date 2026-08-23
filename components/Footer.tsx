@@ -50,7 +50,7 @@ export function Footer({ locale: _locale = "fr" }: { locale?: SupportedLocale } 
             <Link href="/destinations">Destinations</Link>
             <Link href="/patrimoine">Patrimoine</Link>
             <Link href="/experiences">Expériences</Link>
-            <Link href="/sejours-professionnels">Séjours professionnels</Link>
+            <Link href="/contact">Séjours professionnels</Link>
             <Link href="/carnet">Le Carnet</Link>
             <Link href="/phototheque">Photothèque</Link>
           </div>

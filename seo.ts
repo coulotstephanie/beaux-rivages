@@ -7,7 +7,7 @@ import { productionLocales, type SupportedLocale } from "@/i18n/config";
 export const SITE_URL = "https://www.beaux-rivages.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/destination/marais-coucher-soleil.jpeg";
 
-type PageMetadataInput = Pick<PageSeoConfig, "title" | "description" | "path"> & {
+export type PageMetadataInput = Pick<PageSeoConfig, "title" | "description" | "path"> & {
   title: string;
   description: string;
   image?: string;
@@ -34,21 +34,17 @@ export function languageAlternates(path: string) {
 export function createPageMetadata({
   title,
   description,
-  path,
   image,
   openGraphTitle,
 }: PageMetadataInput): Metadata {
-  const canonical = absoluteUrl(path);
   const socialImage = absoluteUrl(image ?? DEFAULT_SOCIAL_IMAGE);
 
   return {
     title,
     description,
-    alternates: { canonical, languages: languageAlternates(path) },
     openGraph: {
       title: openGraphTitle ?? title,
       description,
-      url: canonical,
       siteName: "Beaux Rivages",
       locale: "fr_FR",
       type: "website",

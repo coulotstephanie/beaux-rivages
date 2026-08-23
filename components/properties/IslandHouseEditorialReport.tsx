@@ -298,27 +298,29 @@ export function IslandHouseEditorialReport({
             (house === "villa-raie-manta" &&
               (chapterIndex === 0 || chapterIndex === 5 || chapterIndex === 6)) ||
             (house === "nid-d-ete" && chapterIndex === 5);
-          const baseItems = chapter.images.map((image, imageIndex) => {
-            const override = mediaOverrides[`${group}.${imageIndex}`];
-            const isMisplacedVillaBlueBedroom =
-              house === "villa-raie-manta" &&
-              chapterIndex === 0 &&
-              Boolean(
-                override?.src.includes("chambre-bleue") || override?.src.includes("harry-potter"),
-              );
-            const isRetiredNidArrivalLounger =
-              house === "nid-d-ete" &&
-              chapterIndex === 0 &&
-              override?.src.endsWith("/authentique/transats-jardin.jpeg");
-            return {
-              ...(isRetiredNidArrivalLounger ||
-              isMisplacedVillaBlueBedroom ||
-              isProtectedMediaSelection
-                ? image
-                : (override ?? image)),
-              editorField: `${group}.${imageIndex}`,
-            };
-          });
+          const baseItems = chapter.images
+            .filter((image): image is MediaAsset => Boolean(image))
+            .map((image, imageIndex) => {
+              const override = mediaOverrides[`${group}.${imageIndex}`];
+              const isMisplacedVillaBlueBedroom =
+                house === "villa-raie-manta" &&
+                chapterIndex === 0 &&
+                Boolean(
+                  override?.src.includes("chambre-bleue") || override?.src.includes("harry-potter"),
+                );
+              const isRetiredNidArrivalLounger =
+                house === "nid-d-ete" &&
+                chapterIndex === 0 &&
+                override?.src.endsWith("/authentique/transats-jardin.jpeg");
+              return {
+                ...(isRetiredNidArrivalLounger ||
+                isMisplacedVillaBlueBedroom ||
+                isProtectedMediaSelection
+                  ? image
+                  : (override ?? image)),
+                editorField: `${group}.${imageIndex}`,
+              };
+            });
           const order = mediaOrder[group];
           const addedItems = (order ?? [])
             .filter((field) => !baseItems.some((item) => item.editorField === field))

@@ -5,7 +5,6 @@ const service = getHospitalityService("animaux")!;
 export const metadata: Metadata = {
   title: `${service.title} | Beaux Rivages`,
   description: service.intro,
-  alternates: { canonical: "/animaux" },
   openGraph: { images: [service.image] },
 };
 export default function Page() {

@@ -103,7 +103,11 @@ export function HeritageDetail({
       <HeritageGallery title={site.title} images={images} />
 
       {editorial?.premiumPage && (
-        <section className="heritage-nearby shell" aria-labelledby="heritage-nearby-title">
+        <section
+          className="heritage-nearby shell"
+          id={site.slug === "phare-des-baleines" ? "vieille-tour" : undefined}
+          aria-labelledby="heritage-nearby-title"
+        >
           <p className="eyebrow">Autour de ce lieu</p>
           <h2 id="heritage-nearby-title">
             {editorial.premiumPage.labels?.nearby ?? `Prolonger la découverte sur ${site.island}`}

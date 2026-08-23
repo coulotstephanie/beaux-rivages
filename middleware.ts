@@ -2,8 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { isSupportedLocale, type SupportedLocale } from "@/i18n/config";
 
 const localePrefix = /^\/(en|de|es|nl)(?=\/|$)/;
+const legacyLocalePrefix = /^\/(es|nl)(?=\/|$)/;
 
 export function middleware(request: NextRequest) {
+  if (legacyLocalePrefix.test(request.nextUrl.pathname)) {
+    const target = request.nextUrl.clone();
+    target.pathname = request.nextUrl.pathname.replace(legacyLocalePrefix, "") || "/";
+    return NextResponse.redirect(target, 308);
+  }
+
   const match = request.nextUrl.pathname.match(localePrefix);
   const locale: SupportedLocale = match && isSupportedLocale(match[1]) ? match[1] : "fr";
   const requestHeaders = new Headers(request.headers);
