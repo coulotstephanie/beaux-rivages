@@ -160,6 +160,52 @@ export function createPropertyStructuredData(property: Property): Record<string,
         if (/\bdeux\b/i.test(space.title)) return total + 2;
         return total + 1;
       }, 0);
+  const propertyTypes: Record<string, "Gite" | "Villa" | "Apartment"> = {
+    "chai-des-tortues": "Gite",
+    "villa-raie-manta": "Villa",
+    "nid-d-ete": "Apartment",
+  };
+  const amenityNames = property.amenityGroups
+    .flatMap((group) => group.items)
+    .join(" ")
+    .toLocaleLowerCase("fr");
+  const practicalDetails = property.practicalInformation
+    .map((information) => `${information.label} ${information.value}`)
+    .join(" ")
+    .toLocaleLowerCase("fr");
+  const petsAllowed = practicalDetails.includes("animaux") && practicalDetails.includes("acceptés");
+  const booleanAmenities = {
+    beachAccess: true,
+    childFriendly: true,
+    crib: amenityNames.includes("lit parapluie"),
+    heating: true,
+    kitchen: true,
+    microwave: amenityNames.includes("micro-ondes"),
+    ovenStove: amenityNames.includes("four"),
+    petsAllowed,
+    selfCheckinCheckout: practicalDetails.includes("autonomie"),
+    tv: amenityNames.includes("télé") || amenityNames.includes("tv"),
+    wifi: amenityNames.includes("wifi") || amenityNames.includes("fibre"),
+  };
+  const amenityFeature = [
+    ...Object.entries(booleanAmenities).map(([name, value]) => ({
+      "@type": "LocationFeatureSpecification",
+      name,
+      value,
+    })),
+    {
+      "@type": "LocationFeatureSpecification",
+      name: "internetType",
+      value: "Free",
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      name: "parkingType",
+      value: "Free",
+    },
+  ];
+  const images = [...new Set([property.hero, ...property.gallery.map((image) => image.src)])]
+    .map(absoluteUrl);
   const pageSchemas = createPageStructuredData(config).map((schema) =>
     schema["@type"] === "WebPage" ? { ...schema, mainEntity: { "@id": lodgingId } } : schema,
   );
@@ -169,18 +215,26 @@ export function createPropertyStructuredData(property: Property): Record<string,
       "@context": "https://schema.org",
       "@type": "VacationRental",
       "@id": lodgingId,
+      additionalType: propertyTypes[property.slug] ?? "VacationRental",
+      identifier: `beaux-rivages:${property.slug}`,
+      brand: {
+        "@type": "Brand",
+        name: "Beaux Rivages",
+      },
       name: property.title,
       description: property.seoDescription,
-      occupancy: {
-        "@type": "QuantitativeValue",
-        maxValue: capacity,
-        unitText: "voyageurs",
+      containsPlace: {
+        "@type": "Accommodation",
+        additionalType: "EntirePlace",
+        occupancy: {
+          "@type": "QuantitativeValue",
+          value: capacity,
+        },
+        numberOfBedrooms: bedrooms,
+        numberOfBathroomsTotal: bathrooms,
+        petsAllowed,
+        amenityFeature,
       },
-      numberOfBedrooms: bedrooms,
-      numberOfBathroomsTotal: bathrooms,
-      petsAllowed: property.amenityGroups.some((group) =>
-        group.items.some((item) => item.toLocaleLowerCase("fr").includes("animaux")),
-      ),
       address: {
         "@type": "PostalAddress",
         addressLocality: property.location.split(" · ")[0],
@@ -194,14 +248,9 @@ export function createPropertyStructuredData(property: Property): Record<string,
           property.slug === "nid-d-ete" ? "/destinations/ile-d-oleron" : "/destinations/ile-de-re",
         ),
       },
-      image: property.gallery.map((image) => absoluteUrl(image.src)),
-      amenityFeature: property.amenityGroups.flatMap((group) =>
-        group.items.map((item) => ({
-          "@type": "LocationFeatureSpecification",
-          name: item,
-          value: true,
-        })),
-      ),
+      image: images,
+      checkinTime: "16:00:00",
+      checkoutTime: "10:00:00",
       potentialAction: {
         "@type": "ReserveAction",
         target: absoluteUrl(`/reserver?maison=${property.slug}`),
