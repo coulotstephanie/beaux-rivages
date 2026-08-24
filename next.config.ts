@@ -22,11 +22,27 @@ const nextConfig: NextConfig = {
       { key: "X-DNS-Prefetch-Control", value: "on" },
       { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
     ];
+    const publicHtmlCacheHeaders = [
+      { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+      {
+        key: "CDN-Cache-Control",
+        value: "public, s-maxage=300, stale-while-revalidate=86400",
+      },
+      {
+        key: "Vercel-CDN-Cache-Control",
+        value: "public, s-maxage=300, stale-while-revalidate=86400",
+      },
+    ];
 
     return [
       {
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      {
+        source:
+          "/:path((?!api(?:/|$)|_next(?:/|$)|administration(?:/|$)|reserver(?:/|$)|carnet-voyageur(?:/|$)|images(?:/|$)|videos(?:/|$)|icon(?:/|\\.|$)|apple-touch-icon(?:/|\\.|$)|manifest(?:/|\\.|$)|robots(?:/|\\.|$)|sitemap(?:/|\\.|$)).*)",
+        headers: publicHtmlCacheHeaders,
       },
       {
         source: "/images/:path*",
