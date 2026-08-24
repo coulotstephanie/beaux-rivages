@@ -108,7 +108,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {children}
           </div>
           <PremiumUX />
-          <AmbientWaves />
+          <AmbientWaves locale={locale} />
           <Analytics />
         </AppProviders>
       </body>
