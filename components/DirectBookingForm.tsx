@@ -61,15 +61,15 @@ export function DirectBookingForm({
         specialRequests: {
           occasion: selection.attention,
           message: selection.attentionMessage || null,
-          allergies: null,
-          lateArrival: null,
+          allergies: String(data.get("allergies") ?? "").trim() || null,
+          lateArrival: String(data.get("lateArrival") ?? "").trim() || null,
         },
         guest: {
           firstName: String(data.get("firstName") ?? ""),
           lastName: String(data.get("lastName") ?? ""),
           email: String(data.get("email") ?? ""),
           phone: String(data.get("phone") ?? "") || undefined,
-          countryCode: "FR",
+          countryCode: String(data.get("countryCode") ?? "FR"),
         },
         idempotencyKey: crypto.randomUUID(),
         paymentMethod: String(data.get("paymentMethod")),
@@ -166,6 +166,37 @@ export function DirectBookingForm({
         <label>
           Téléphone
           <input name="phone" type="tel" autoComplete="tel" minLength={6} maxLength={30} />
+        </label>
+        <label>
+          Pays de résidence
+          <select name="countryCode" autoComplete="country" defaultValue="FR" required>
+            <option value="FR">France</option>
+            <option value="BE">Belgique</option>
+            <option value="CH">Suisse</option>
+            <option value="DE">Allemagne</option>
+            <option value="GB">Royaume-Uni</option>
+            <option value="NL">Pays-Bas</option>
+            <option value="ES">Espagne</option>
+            <option value="IT">Italie</option>
+          </select>
+        </label>
+        <label>
+          Allergies, intolérances ou besoins alimentaires
+          <textarea
+            name="allergies"
+            maxLength={1000}
+            rows={3}
+            placeholder="Facultatif — utile pour préparer les paniers et attentions"
+          />
+        </label>
+        <label>
+          Informations utiles pour votre arrivée
+          <textarea
+            name="lateArrival"
+            maxLength={500}
+            rows={3}
+            placeholder="Facultatif — heure tardive, accessibilité ou autre besoin"
+          />
         </label>
       </div>
       <label className="direct-booking-form__consent">
