@@ -1,9 +1,20 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { localeLabels, supportedLocales, type SupportedLocale } from "@/i18n/config";
+import {
+  localeLabels,
+  productionLocales,
+  supportedLocales,
+  type SupportedLocale,
+} from "@/i18n/config";
 
-const flags: Record<SupportedLocale, string> = { fr: "🇫🇷", en: "🇬🇧", de: "🇩🇪", es: "🇪🇸", nl: "🇳🇱" };
+const flags: Record<SupportedLocale, string> = {
+  fr: "🇫🇷",
+  en: "🇬🇧",
+  de: "🇩🇪",
+  es: "🇪🇸",
+  nl: "🇳🇱",
+};
 const prefixPattern = new RegExp(
   `^/(${supportedLocales.filter((locale) => locale !== "fr").join("|")})(?=/|$)`,
 );
@@ -29,7 +40,7 @@ export function LanguageSelector() {
         <span>{localeLabels[active]}</span>
       </button>
       <div className="language-selector__menu" role="menu" aria-label="Choisir la langue">
-        {supportedLocales.map((locale) => (
+        {productionLocales.map((locale) => (
           <button
             type="button"
             role="menuitemradio"
