@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 import { authorizeStaff, staffAccessToken } from "@/platform/auth/server";
 import { CmsRepository } from "@/platform/cms/repository";
+import { PUBLISHED_CMS_CACHE_TAG } from "@/platform/cms/public";
 import { cmsPageSchema, cmsRestoreSchema } from "@/platform/cms/schemas";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 
@@ -47,10 +49,9 @@ export async function POST(request: NextRequest) {
     );
   const { reason, ...page } = parsed.data;
   try {
-    return noStoreJson(
-      { id: await new CmsRepository(token).savePage(page, reason) },
-      { status: page.id ? 200 : 201 },
-    );
+    const id = await new CmsRepository(token).savePage(page, reason);
+    if (page.status === "published") revalidateTag(PUBLISHED_CMS_CACHE_TAG);
+    return noStoreJson({ id }, { status: page.id ? 200 : 201 });
   } catch (error) {
     return noStoreJson(
       {
@@ -74,9 +75,9 @@ export async function PATCH(request: NextRequest) {
   const parsed = cmsRestoreSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return noStoreJson({ error: "Version invalide." }, { status: 400 });
   try {
-    return noStoreJson({
-      id: await new CmsRepository(token).restore(parsed.data.id, parsed.data.version),
-    });
+    const id = await new CmsRepository(token).restore(parsed.data.id, parsed.data.version);
+    revalidateTag(PUBLISHED_CMS_CACHE_TAG);
+    return noStoreJson({ id });
   } catch (error) {
     return noStoreJson(
       {
