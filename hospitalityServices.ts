@@ -38,7 +38,7 @@ export const hospitalityServices: HospitalityService[] = [
     action: "booking",
     intro:
       "Commencez votre séjour autour des saveurs de l’Île de Ré. Nous préparons votre panier avant votre arrivée pour un moment convivial en famille ou entre amis.",
-    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.webp",
     imageAlt: "Panier Apéritif Beaux Rivages composé de produits artisanaux locaux",
     sections: [
       {
@@ -178,7 +178,7 @@ export const hospitalityServices: HospitalityService[] = [
     action: "included",
     intro:
       "Parce que voyager avec un tout-petit demande beaucoup d’organisation, nous mettons gratuitement à votre disposition une sélection d’équipements afin de vous permettre de voyager plus léger.",
-    image: "/images/properties/nid-d-ete/editorial/lecture-bebe-et-chat.png",
+    image: "/images/properties/nid-d-ete/editorial/lecture-bebe-et-chat.webp",
     imageAlt: "Moment calme avec un bébé dans une maison Beaux Rivages",
     sections: [
       {
@@ -392,7 +392,7 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+        src: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.webp",
         alt: "Panier apéritif présenté sur l’îlot",
       },
       {
@@ -410,7 +410,7 @@ export const hospitalityServices: HospitalityService[] = [
     action: "booking",
     intro:
       "Une lumière douce, une attention personnelle et un moment gourmand à partager à deux. Cette préparation est étudiée après échange avec Stéphanie & Bruno, selon les disponibilités de votre séjour.",
-    image: "/images/properties/villa-raie-manta/editorial/diner-romantique-ocean.png",
+    image: "/images/properties/villa-raie-manta/editorial/diner-romantique-ocean.webp",
     imageAlt: "Dîner romantique face à l’océan",
     sections: [
       {
@@ -465,11 +465,11 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: "/images/properties/villa-raie-manta/editorial/chambre-romance.png",
+        src: "/images/properties/villa-raie-manta/editorial/chambre-romance.webp",
         alt: "Chambre préparée pour une escapade romantique",
       },
       {
-        src: "/images/properties/chai-des-tortues/editorial/diner-romantique-aux-chandelles.png",
+        src: "/images/properties/chai-des-tortues/editorial/diner-romantique-aux-chandelles.webp",
         alt: "Dîner romantique aux chandelles",
       },
       {
@@ -506,7 +506,7 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: "/images/properties/villa-raie-manta/editorial/diner-romantique-ocean.png",
+        src: "/images/properties/villa-raie-manta/editorial/diner-romantique-ocean.webp",
         alt: "Décoration romantique face à l’océan",
       },
     ],
@@ -520,7 +520,7 @@ export const hospitalityServices: HospitalityService[] = [
     action: "quote",
     intro:
       "Racontez-nous la personne, l’âge et l’atmosphère souhaitée. Selon les disponibilités et après échange avec Stéphanie & Bruno, nous préparons une célébration personnelle adaptée à la maison et à votre histoire.",
-    image: "/images/properties/villa-raie-manta/editorial/table-anniversaire.png",
+    image: "/images/properties/villa-raie-manta/editorial/table-anniversaire.webp",
     imageAlt: "Table dressée pour un anniversaire",
     sections: [
       {
@@ -540,7 +540,7 @@ export const hospitalityServices: HospitalityService[] = [
     ],
     gallery: [
       {
-        src: "/images/properties/villa-raie-manta/editorial/anniversaire-multigenerationnel.png",
+        src: "/images/properties/villa-raie-manta/editorial/anniversaire-multigenerationnel.webp",
         alt: "Anniversaire multigénérationnel",
       },
       {

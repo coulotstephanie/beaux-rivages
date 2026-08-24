@@ -185,7 +185,7 @@ export const bookingExperiences: BookingExperienceOption[] = [
     label: "Expérience Romance Signature",
     description:
       "Ambiance romantique, boisson au choix, gourmandises, peignoirs et attention personnalisée.",
-    image: "/images/properties/villa-raie-manta/editorial/chambre-romance.png",
+    image: "/images/properties/villa-raie-manta/editorial/chambre-romance.webp",
     imageAlt: "Chambre préparée avec des pétales pour l’Expérience Romance Signature",
     price: 149,
     duration: "À l’arrivée",

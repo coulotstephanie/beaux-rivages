@@ -799,7 +799,7 @@ export const idealDays: IdealDay[] = [
     title: "La journée gastronomie",
     eyebrow: "Du marché à la grande table",
     description: "Des artisans, un panier, puis le plaisir de rapporter l’Atlantique à la maison.",
-    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.webp",
     imageAlt: "Produits locaux préparés pour un moment gourmand",
     stops: [
       {

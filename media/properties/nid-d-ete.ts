@@ -61,13 +61,13 @@ const originalLivingRoom = propertyAsset(
 );
 const airbnbLivingRoom = [
   propertyAsset(
-    "salon-retouche-premium.png",
+    "salon-retouche-premium.webp",
     "Salon lumineux du Nid d’Été avec canapé convertible",
     "Le séjour, pensé pour se retrouver",
   ),
 ];
 const editorialLivingRoom = propertyAsset(
-  "editorial/salon-aperitif.png",
+  "editorial/salon-aperitif.webp",
   "Salon du Nid d’Été préparé pour un apéritif après la plage",
   "Le retour de la plage",
 );
@@ -77,12 +77,12 @@ const editorialTerraceLunch = propertyAsset(
   "Un déjeuner simple sous la voile",
 );
 const editorialBreakfast = propertyAsset(
-  "editorial/petit-dejeuner-cuisine.png",
+  "editorial/petit-dejeuner-cuisine.webp",
   "Petit-déjeuner préparé dans la cuisine du Nid d’Été",
   "Les matins gourmands au Nid",
 );
 const editorialBedroom = propertyAsset(
-  "editorial/chambre-attention.png",
+  "editorial/chambre-attention.webp",
   "Chambre du Nid d’Été préparée avec livre, eau et linge",
   "Une attention pour votre arrivée",
 );
@@ -92,17 +92,17 @@ const editorialChildrenBirthday = propertyAsset(
   "L’anniversaire des petits explorateurs",
 );
 const editorialFamilyGames = propertyAsset(
-  "editorial/table-jeux-famille.png",
+  "editorial/table-jeux-famille.webp",
   "Jeu de société en famille sur la grande table du Nid d’Été",
   "Les parties qui prolongent les vacances",
 );
 const editorialBeachReturn = propertyAsset(
-  "editorial/retour-plage-en-famille.png",
+  "editorial/retour-plage-en-famille.webp",
   "Une famille préparant un goûter après la plage dans le salon du Nid d’Été",
   "Le goûter au retour de la plage",
 );
 const editorialFamilyCat = propertyAsset(
-  "editorial/lecture-bebe-et-chat.png",
+  "editorial/lecture-bebe-et-chat.webp",
   "Parents, enfants, bébé et chat réunis pour lire dans le salon du Nid d’Été",
   "Une histoire tous ensemble",
 );
