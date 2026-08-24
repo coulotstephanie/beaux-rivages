@@ -1,4 +1,5 @@
 import { propertyMedia } from "@/media/properties";
+import { nidDEteAuthenticMedia } from "@/media/properties/nid-d-ete";
 import { destinationMedia } from "@/media/destinations";
 
 export type PropertyPresentation = {
@@ -36,7 +37,7 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
   "chai-des-tortues": {
     storyEyebrow: "Pierres d’origine · Ancien chai",
     storyTitle: "Les pierres d’un ancien chai, la chaleur d’une maison de famille.",
-    storyImage: propertyMedia["chai-des-tortues"].hero.src,
+    storyImage: propertyMedia["chai-des-tortues"].livingRoom[4].src,
     timeline: [
       {
         time: "08:30",
@@ -150,8 +151,8 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "Plage",
         copy: "Marcher 250 mètres et retrouver le rivage, sans reprendre la voiture.",
-        image: propertyMedia["chai-des-tortues"].editorial.beach.src,
-        alt: propertyMedia["chai-des-tortues"].editorial.beach.alt,
+        image: destinationMedia.sea.src,
+        alt: destinationMedia.sea.alt,
       },
       {
         title: "Vélo",
@@ -162,15 +163,15 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "Cuisine",
         copy: "Transformer les produits du marché en un repas qui rassemble toute la maison.",
-        image: propertyMedia["chai-des-tortues"].editorial.kitchen.src,
-        alt: propertyMedia["chai-des-tortues"].editorial.kitchen.alt,
+        image: propertyMedia["chai-des-tortues"].kitchen[3].src,
+        alt: propertyMedia["chai-des-tortues"].kitchen[3].alt,
       },
     ],
   },
   "villa-raie-manta": {
     storyEyebrow: "Vue mer · Salon à l’étage",
     storyTitle: "La lumière pour matière, l’océan comme horizon.",
-    storyImage: propertyMedia["villa-raie-manta"].livingRoom[1].src,
+    storyImage: propertyMedia["villa-raie-manta"].livingRoom[6].src,
     timeline: [
       {
         time: "08:00",
@@ -254,14 +255,14 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "Petit-déjeuner face à la mer",
         copy: "Monter au salon encore silencieux et regarder le pont apparaître dans la lumière du matin.",
-        image: propertyMedia["villa-raie-manta"].livingRoom[4].src,
-        alt: propertyMedia["villa-raie-manta"].livingRoom[4].alt,
+        image: destinationMedia.oceanBreakfast.src,
+        alt: destinationMedia.oceanBreakfast.alt,
       },
       {
         title: "Cuisine ouverte",
         copy: "Préparer ensemble les produits rapportés des Halles dans une cuisine reliée à la grande table.",
-        image: propertyMedia["villa-raie-manta"].kitchen[0].src,
-        alt: propertyMedia["villa-raie-manta"].kitchen[0].alt,
+        image: propertyMedia["villa-raie-manta"].kitchen[2].src,
+        alt: propertyMedia["villa-raie-manta"].kitchen[2].alt,
       },
       {
         title: "Fruits de mer en terrasse",
@@ -278,21 +279,21 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "L’océan à pied",
         copy: "Quitter la maison sans voiture et rejoindre le rivage pour une promenade ou une baignade improvisée.",
-        image: propertyMedia["villa-raie-manta"].arrival[0].src,
-        alt: propertyMedia["villa-raie-manta"].arrival[0].alt,
+        image: destinationMedia.beach.src,
+        alt: destinationMedia.beach.alt,
       },
       {
         title: "Le pont à l’heure bleue",
         copy: "Retrouver le salon panoramique lorsque le pont s’allume et que l’horizon devient le décor de la soirée.",
-        image: propertyMedia["villa-raie-manta"].livingRoom[6].src,
-        alt: propertyMedia["villa-raie-manta"].livingRoom[6].alt,
+        image: destinationMedia.bridge.src,
+        alt: destinationMedia.bridge.alt,
       },
     ],
   },
   "nid-d-ete": {
     storyEyebrow: "Monument Historique · Maison Heureuse",
     storyTitle: "Un refuge dans une résidence historique, entre peupliers et océan.",
-    storyImage: propertyMedia["nid-d-ete"].lifestyle[15].src,
+    storyImage: nidDEteAuthenticMedia.residenceAerial.src,
     timeline: [
       {
         time: "08:30",
@@ -328,7 +329,7 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
         phase: "Le matin",
         title: "Le portail s’ouvre sur le sable.",
         copy: "Quelques mètres suffisent pour quitter la maison et rejoindre la plage des Saumonards, sans route et sans voiture.",
-        image: propertyMedia["nid-d-ete"].lifestyle[6].src,
+        image: nidDEteAuthenticMedia.residenceGate.src,
         quote: "La plage devient le prolongement naturel de la maison.",
         align: "right",
       },
@@ -344,16 +345,16 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
         phase: "Le coucher du soleil",
         title: "Fort Boyard reste à l’horizon.",
         copy: "La lumière descend sur la plage et dessine au loin la silhouette familière du fort.",
-        image: propertyMedia["nid-d-ete"].lifestyle[14].src,
+        image: nidDEteAuthenticMedia.fortFromBeach.src,
         quote: "Chaque soir offre une autre couleur.",
         align: "right",
       },
       {
         phase: "La soirée",
-        title: "Le silence revient sous les arbres.",
-        copy: "Dans le jardin clos, la résidence retrouve son calme. La maison devient un refuge après une journée dehors.",
+        title: "La soirée se prolonge à la maison.",
+        copy: "Autour de la table, la lumière des bougies prolonge doucement une journée passée entre la forêt et l’océan.",
         image: propertyMedia["nid-d-ete"].lifestyle[2].src,
-        quote: "Le luxe discret d’une soirée paisible.",
+        quote: "Le luxe discret d’une soirée partagée.",
         align: "left",
       },
     ],
@@ -376,8 +377,8 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "Le premier passage vers la plage",
         copy: "Ouvrir le portail privé et rejoindre les Saumonards avant que la journée ne commence vraiment.",
-        image: propertyMedia["nid-d-ete"].lifestyle[7].src,
-        alt: propertyMedia["nid-d-ete"].lifestyle[7].alt,
+        image: nidDEteAuthenticMedia.residenceGate.src,
+        alt: nidDEteAuthenticMedia.residenceGate.alt,
       },
       {
         title: "Jeux sur le sable",
@@ -388,20 +389,20 @@ export const propertyPresentations: Record<string, PropertyPresentation> = {
       {
         title: "Déjeuner sous la voile",
         copy: "Retrouver la fraîcheur de la terrasse et partager le déjeuner à l’ombre après une matinée face à l’océan.",
-        image: propertyMedia["nid-d-ete"].terrace[1].src,
-        alt: propertyMedia["nid-d-ete"].terrace[1].alt,
+        image: propertyMedia["nid-d-ete"].terrace[0].src,
+        alt: propertyMedia["nid-d-ete"].terrace[0].alt,
       },
       {
         title: "Entre forêt et océan",
         copy: "Retrouver la Maison Heureuse dans son écrin d’arbres, à quelques mètres seulement du sable.",
-        image: propertyMedia["nid-d-ete"].lifestyle[16].src,
-        alt: propertyMedia["nid-d-ete"].lifestyle[16].alt,
+        image: nidDEteAuthenticMedia.residenceAerial.src,
+        alt: nidDEteAuthenticMedia.residenceAerial.alt,
       },
       {
         title: "Fort Boyard vu du ciel",
         copy: "Découvrir la forme singulière du fort posé au milieu du pertuis, face aux plages d’Oléron.",
-        image: destinationMedia.fortBoyardAerial.src,
-        alt: destinationMedia.fortBoyardAerial.alt,
+        image: "/images/destination/patrimoine/fort-boyard-aerien-stephanie.jpeg",
+        alt: "Fort Boyard vu du ciel au milieu du pertuis d’Antioche",
       },
       {
         title: "Le soleil descend sur l’océan",

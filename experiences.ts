@@ -104,7 +104,7 @@ export const experiences: Experience[] = [
     title: "Lune de miel (sur demande)",
     eyebrow: "Un voyage à deux",
     text: "Une maison préparée avec délicatesse, une lumière douce et quelques attentions choisies ensemble. Cette parenthèse est imaginée après échange avec Stéphanie & Bruno et proposée selon les disponibilités.",
-    image: "/images/properties/villa-raie-manta/editorial/chambre-romance.png",
+    image: "/images/properties/villa-raie-manta/editorial/chambre-romance.webp",
     imageAlt: "Chambre préparée avec des pétales pour une lune de miel Beaux Rivages",
     duration: "Selon votre séjour",
     idealPeriod: "Toute l’année, sur demande",

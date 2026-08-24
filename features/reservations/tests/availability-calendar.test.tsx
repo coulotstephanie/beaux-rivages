@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AvailabilityCalendar } from "../components/AvailabilityCalendar";
 
 const useAvailabilityCalendar = vi.fn();
@@ -13,6 +13,8 @@ vi.mock("@/platform/analytics/events", () => ({
 }));
 
 describe("AvailabilityCalendar", () => {
+  afterEach(() => vi.useRealTimers());
+
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-08-01T12:00:00+02:00"));
@@ -66,5 +68,21 @@ describe("AvailabilityCalendar", () => {
     );
 
     expect(screen.getByRole("button", { name: /samedi 8 août.*occupé/i })).toBeDisabled();
+  });
+
+  it("stops navigation at the last month containing a bookable night", () => {
+    render(
+      <AvailabilityCalendar
+        arrival={null}
+        departure={null}
+        propertySlug="nid-d-ete"
+        onChange={vi.fn()}
+      />,
+    );
+
+    const next = screen.getByRole("button", { name: "Mois suivant" });
+    for (let month = 0; month < 11; month += 1) fireEvent.click(next);
+    expect(screen.getByRole("heading", { name: "juillet 2027" })).toBeInTheDocument();
+    expect(next).toBeDisabled();
   });
 });

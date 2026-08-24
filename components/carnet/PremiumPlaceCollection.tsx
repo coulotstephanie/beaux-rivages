@@ -11,9 +11,11 @@ import {
 import { Heading, Section } from "@/components/ui";
 
 const destinationCopy = {
-  "Île de Ré": "Artisans, villages, marchés et pistes : nos repères depuis Rivedoux.",
-  "Île d’Oléron": "Fort Boyard, ports, forêt et plages : Oléron au rythme des marées.",
-  "La Rochelle": "Vieux-Port, aquarium, tours, musées, shopping et solutions pratiques.",
+  "Île de Ré":
+    "Les tables, les marchés et les chemins que nous aimons retrouver depuis Rivedoux-Plage.",
+  "Île d’Oléron": "Des Saumonards à Boyardville, nos horizons préférés au rythme des marées.",
+  "La Rochelle":
+    "Une échappée que nous partageons volontiers, entre le Vieux-Port, les halles et les rencontres.",
 } as const;
 
 export function PremiumPlaceCollection() {
@@ -81,6 +83,13 @@ export function PremiumPlaceCollection() {
       <span id="marches" className="legacy-carnet-anchor" aria-hidden="true" />
       <span id="plages" className="legacy-carnet-anchor" aria-hidden="true" />
       <span id="producteurs" className="legacy-carnet-anchor" aria-hidden="true" />
+      <div className="shell premium-place-collection__heading">
+        <Heading
+          eyebrow="Le carnet personnel de Stéphanie & Bruno"
+          title="Nos adresses coup de cœur"
+          description="Restaurants, artisans, producteurs, marchés et lieux de confiance : retrouvez toutes les adresses que nous avons personnellement choisies pour accompagner votre séjour."
+        />
+      </div>
       <div className="shell carnet-search">
         <label htmlFor="carnet-search">Rechercher dans le Carnet</label>
         <input
@@ -142,19 +151,30 @@ export function PremiumPlaceCollection() {
               className="premium-place-destination"
             >
               <Heading
-                eyebrow="Guide premium"
+                eyebrow="Les lieux où nous aimons revenir"
                 title={destination}
                 description={destinationCopy[destination]}
               />
               <div className="premium-place-grid">
-                {places.map((place) => (
-                  <article key={place.slug} className="premium-place-card">
+                {places.map((place, placeIndex) => (
+                  <article
+                    key={place.slug}
+                    className={`premium-place-card premium-place-card--editorial${
+                      placeIndex % 5 === 0 ? " is-featured" : ""
+                    }${placeIndex % 2 === 1 ? " is-reversed" : ""}${
+                      placeIndex % 5 === 2 ? " is-portrait" : ""
+                    }`}
+                  >
                     <div className="premium-place-card__media">
                       <Image
                         src={place.image}
                         alt={place.imageAlt}
                         fill
-                        sizes="(max-width: 800px) 100vw, 31vw"
+                        sizes={
+                          placeIndex % 5 === 0
+                            ? "(max-width: 800px) 100vw, 92vw"
+                            : "(max-width: 800px) 100vw, 58vw"
+                        }
                         loading="lazy"
                         quality={85}
                       />
@@ -178,6 +198,11 @@ export function PremiumPlaceCollection() {
                         </button>
                       </div>
                       <p>{place.description}</p>
+                      {place.hostTip ? (
+                        <blockquote>
+                          <span>Le conseil de Stéphanie &amp; Bruno</span>« {place.hostTip} »
+                        </blockquote>
+                      ) : null}
                       <dl>
                         <div>
                           <dt>Distance</dt>
@@ -192,11 +217,6 @@ export function PremiumPlaceCollection() {
                           <dd>{place.walkTime}</dd>
                         </div>
                       </dl>
-                      {place.hostTip ? (
-                        <blockquote>
-                          <span>Notre conseil</span>« {place.hostTip} »
-                        </blockquote>
-                      ) : null}
                       <div className="premium-place-card__actions">
                         <a href={place.officialUrl} target="_blank" rel="noreferrer">
                           Site officiel <span aria-hidden="true">↗</span>

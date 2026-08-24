@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import type { PageSeoConfig } from "@/content/fr/seo";
 import type { Property } from "@/data";
 import type { DestinationGuide } from "@/destinationGuides";
+import { productionLocales, type SupportedLocale } from "@/i18n/config";
 
 export const SITE_URL = "https://www.beaux-rivages.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/destination/marais-coucher-soleil.jpeg";
 
-type PageMetadataInput = Pick<PageSeoConfig, "title" | "description" | "path"> & {
+export type PageMetadataInput = Pick<PageSeoConfig, "title" | "description" | "path"> & {
   title: string;
   description: string;
   image?: string;
@@ -18,18 +19,32 @@ export function absoluteUrl(path: string) {
   return `${SITE_URL}${path === "/" ? "" : path}`;
 }
 
-export function createPageMetadata({ title, description, path, image, openGraphTitle }: PageMetadataInput): Metadata {
-  const canonical = absoluteUrl(path);
+export function localizedUrl(path: string, locale: SupportedLocale) {
+  const normalized = path === "/" ? "" : path;
+  return `${SITE_URL}${locale === "fr" ? "" : `/${locale}`}${normalized}`;
+}
+
+export function languageAlternates(path: string) {
+  return {
+    ...Object.fromEntries(productionLocales.map((locale) => [locale, localizedUrl(path, locale)])),
+    "x-default": absoluteUrl(path),
+  };
+}
+
+export function createPageMetadata({
+  title,
+  description,
+  image,
+  openGraphTitle,
+}: PageMetadataInput): Metadata {
   const socialImage = absoluteUrl(image ?? DEFAULT_SOCIAL_IMAGE);
 
   return {
     title,
     description,
-    alternates: { canonical },
     openGraph: {
       title: openGraphTitle ?? title,
       description,
-      url: canonical,
       siteName: "Beaux Rivages",
       locale: "fr_FR",
       type: "website",
@@ -132,19 +147,100 @@ export function createPropertyStructuredData(property: Property): Record<string,
   const lodgingId = `${url}#lodging`;
   const capacity = Number(property.capacity.match(/\d+/)?.[0] ?? 0);
   const bedrooms = Number(property.stats.find((stat) => stat.label === "chambres")?.value ?? 0);
-  const bathroomsFromStats = Number(property.stats.find((stat) => stat.label.includes("salle"))?.value ?? 0);
-  const bathrooms = bathroomsFromStats || property.spaces.filter((space) =>
-    /salle(?:s)? (?:de bain|d’eau)/i.test(space.title),
-  ).reduce((total, space) => {
-    const statedCount = Number(space.title.match(/\d+/)?.[0] ?? 0);
-    if (statedCount) return total + statedCount;
-    if (/\bdeux\b/i.test(space.title)) return total + 2;
-    return total + 1;
-  }, 0);
+  const bathroomsFromStats = Number(
+    property.stats.find((stat) => stat.label.includes("salle"))?.value ?? 0,
+  );
+  const bathrooms =
+    bathroomsFromStats ||
+    property.spaces
+      .filter((space) => /salle(?:s)? (?:de bain|d’eau)/i.test(space.title))
+      .reduce((total, space) => {
+        const statedCount = Number(space.title.match(/\d+/)?.[0] ?? 0);
+        if (statedCount) return total + statedCount;
+        if (/\bdeux\b/i.test(space.title)) return total + 2;
+        return total + 1;
+      }, 0);
+  const propertyTypes: Record<string, "Gite" | "Villa" | "Apartment"> = {
+    "chai-des-tortues": "Gite",
+    "villa-raie-manta": "Villa",
+    "nid-d-ete": "Apartment",
+  };
+  const propertyLocations: Record<
+    string,
+    {
+      streetAddress: string;
+      postalCode: string;
+      addressLocality: string;
+      latitude: number;
+      longitude: number;
+    }
+  > = {
+    "chai-des-tortues": {
+      streetAddress: "165 Rue de la Fontaine",
+      postalCode: "17940",
+      addressLocality: "Rivedoux-Plage",
+      latitude: 46.157711,
+      longitude: -1.2745245,
+    },
+    "villa-raie-manta": {
+      streetAddress: "113 bis Avenue Albert Sarraut",
+      postalCode: "17940",
+      addressLocality: "Rivedoux-Plage",
+      latitude: 46.1610812,
+      longitude: -1.2769847,
+    },
+    "nid-d-ete": {
+      streetAddress: "Appartement D12, 355 Route des Saumonards",
+      postalCode: "17190",
+      addressLocality: "Saint-Georges-d’Oléron",
+      latitude: 45.9700386,
+      longitude: -1.2367726,
+    },
+  };
+  const propertyLocation = propertyLocations[property.slug];
+  const amenityNames = property.amenityGroups
+    .flatMap((group) => group.items)
+    .join(" ")
+    .toLocaleLowerCase("fr");
+  const practicalDetails = property.practicalInformation
+    .map((information) => `${information.label} ${information.value}`)
+    .join(" ")
+    .toLocaleLowerCase("fr");
+  const petsAllowed = practicalDetails.includes("animaux") && practicalDetails.includes("acceptés");
+  const booleanAmenities = {
+    beachAccess: true,
+    childFriendly: true,
+    crib: amenityNames.includes("lit parapluie"),
+    heating: true,
+    kitchen: true,
+    microwave: amenityNames.includes("micro-ondes"),
+    ovenStove: amenityNames.includes("four"),
+    petsAllowed,
+    selfCheckinCheckout: practicalDetails.includes("autonomie"),
+    tv: amenityNames.includes("télé") || amenityNames.includes("tv"),
+    wifi: amenityNames.includes("wifi") || amenityNames.includes("fibre"),
+  };
+  const amenityFeature = [
+    ...Object.entries(booleanAmenities).map(([name, value]) => ({
+      "@type": "LocationFeatureSpecification",
+      name,
+      value,
+    })),
+    {
+      "@type": "LocationFeatureSpecification",
+      name: "internetType",
+      value: "Free",
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      name: "parkingType",
+      value: "Free",
+    },
+  ];
+  const images = [...new Set([property.hero, ...property.gallery.map((image) => image.src)])]
+    .map(absoluteUrl);
   const pageSchemas = createPageStructuredData(config).map((schema) =>
-    schema["@type"] === "WebPage"
-      ? { ...schema, mainEntity: { "@id": lodgingId } }
-      : schema,
+    schema["@type"] === "WebPage" ? { ...schema, mainEntity: { "@id": lodgingId } } : schema,
   );
 
   return [
@@ -152,37 +248,51 @@ export function createPropertyStructuredData(property: Property): Record<string,
       "@context": "https://schema.org",
       "@type": "VacationRental",
       "@id": lodgingId,
+      additionalType: propertyTypes[property.slug] ?? "VacationRental",
+      identifier: `beaux-rivages:${property.slug}`,
+      brand: {
+        "@type": "Brand",
+        name: "Beaux Rivages",
+      },
       name: property.title,
       description: property.seoDescription,
-      occupancy: {
-        "@type": "QuantitativeValue",
-        maxValue: capacity,
-        unitText: "voyageurs",
+      containsPlace: {
+        "@type": "Accommodation",
+        additionalType: "EntirePlace",
+        occupancy: {
+          "@type": "QuantitativeValue",
+          value: capacity,
+        },
+        numberOfBedrooms: bedrooms,
+        numberOfBathroomsTotal: bathrooms,
+        petsAllowed,
+        amenityFeature,
       },
-      numberOfBedrooms: bedrooms,
-      numberOfBathroomsTotal: bathrooms,
-      petsAllowed: property.amenityGroups.some((group) =>
-        group.items.some((item) => item.toLocaleLowerCase("fr").includes("animaux")),
-      ),
       address: {
         "@type": "PostalAddress",
-        addressLocality: property.location.split(" · ")[0],
+        streetAddress: propertyLocation?.streetAddress,
+        postalCode: propertyLocation?.postalCode,
+        addressLocality:
+          propertyLocation?.addressLocality ?? property.location.split(" · ")[0],
         addressRegion: property.location.split(" · ")[1],
         addressCountry: "FR",
       },
+      ...(propertyLocation
+        ? {
+            latitude: propertyLocation.latitude,
+            longitude: propertyLocation.longitude,
+          }
+        : {}),
       containedInPlace: {
         "@type": "TouristDestination",
         name: property.location.split(" · ")[1],
-        url: absoluteUrl(property.slug === "nid-d-ete" ? "/destinations/ile-d-oleron" : "/destinations/ile-de-re"),
+        url: absoluteUrl(
+          property.slug === "nid-d-ete" ? "/destinations/ile-d-oleron" : "/destinations/ile-de-re",
+        ),
       },
-      image: property.gallery.map((image) => absoluteUrl(image.src)),
-      amenityFeature: property.amenityGroups.flatMap((group) =>
-        group.items.map((item) => ({
-          "@type": "LocationFeatureSpecification",
-          name: item,
-          value: true,
-        })),
-      ),
+      image: images,
+      checkinTime: "16:00:00",
+      checkoutTime: "10:00:00",
       potentialAction: {
         "@type": "ReserveAction",
         target: absoluteUrl(`/reserver?maison=${property.slug}`),
@@ -191,15 +301,17 @@ export function createPropertyStructuredData(property: Property): Record<string,
       mainEntityOfPage: url,
     },
     ...(property.faq.length
-      ? [{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: property.faq.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: { "@type": "Answer", text: item.answer },
-          })),
-        }]
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: property.faq.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: { "@type": "Answer", text: item.answer },
+            })),
+          },
+        ]
       : []),
     ...pageSchemas,
   ];

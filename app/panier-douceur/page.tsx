@@ -6,7 +6,6 @@ const service = getHospitalityService("panier-douceur")!;
 export const metadata: Metadata = {
   title: `${service.title} | Beaux Rivages`,
   description: service.intro,
-  alternates: { canonical: "/panier-douceur" },
   openGraph: { title: service.title, description: service.intro, images: [service.image] },
 };
 export default function Page() {

@@ -93,7 +93,7 @@ export function BookingExperiences({
         </article>
         <article>
           <Image
-            src="/images/properties/villa-raie-manta/editorial/table-anniversaire.png"
+            src="/images/properties/villa-raie-manta/editorial/table-anniversaire.webp"
             alt="Table dressée pour un anniversaire sur mesure"
             width={1536}
             height={2048}

@@ -33,6 +33,9 @@ export type Property = {
   signatureText: string;
   recommendationSlugs: string[];
   seoDescription: string;
+  visualMediaOverrides?: Record<string, GalleryImage>;
+  visualMediaOrder?: Record<string, string[]>;
+  visualTextOverrides?: Record<string, string>;
 };
 
 export const properties: Property[] = [

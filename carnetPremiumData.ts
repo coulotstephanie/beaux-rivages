@@ -799,7 +799,7 @@ export const idealDays: IdealDay[] = [
     title: "La journée gastronomie",
     eyebrow: "Du marché à la grande table",
     description: "Des artisans, un panier, puis le plaisir de rapporter l’Atlantique à la maison.",
-    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.webp",
     imageAlt: "Produits locaux préparés pour un moment gourmand",
     stops: [
       {
@@ -833,8 +833,8 @@ export const idealDays: IdealDay[] = [
     eyebrow: "Ré au rythme du vent",
     description:
       "Un parcours modulable depuis Rivedoux, avec des haltes qui comptent autant que la destination.",
-    image: "/images/properties/chai-des-tortues/village-velo.jpeg",
-    imageAlt: "Vélos dans une ruelle de village de l’Île de Ré",
+    image: "/images/destination/re-authentique/pont-coucher-soleil-velo.jpg",
+    imageAlt: "Cycliste devant le pont de l’Île de Ré au coucher du soleil",
     stops: [
       {
         time: "08:30",
@@ -897,8 +897,8 @@ export const idealDays: IdealDay[] = [
     eyebrow: "La Rochelle à couvert",
     description:
       "L’océan, l’histoire maritime et les halles : la pluie devient une autre manière d’entrer dans le territoire.",
-    image: "/images/destination/guides/aquarium-la-rochelle.jpg",
-    imageAlt: "Aquarium de La Rochelle pour une journée de pluie à couvert",
+    image: "/images/destination/guides/vieux-port-la-rochelle-ciel-couvert.jpg",
+    imageAlt: "Les tours du Vieux-Port de La Rochelle sous un ciel couvert",
     stops: [
       {
         time: "09:00",

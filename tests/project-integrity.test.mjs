@@ -66,7 +66,10 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   assert.doesNotMatch(manifest, /airbnb-buanderie-2-1\.jpeg/);
   assert.doesNotMatch(manifest, /airbnb-arriere-cour-5\.jpeg/);
   assert.match(manifest, /airbnb-toilettes\.jpeg/);
-  assert.match(manifest, /arrival: \[arrivalEntrance, arrivalPlan\]/);
+  assert.match(
+    manifest,
+    /arrival: \[nidDEteAuthenticMedia\.residenceGate, arrivalEntrance, arrivalPlan\]/,
+  );
   assert.doesNotMatch(manifest, /"Les repères de l’arrivée autonome"/);
   assert.match(manifest, /\.\.\.airbnbBedrooms,[\s\S]*\.\.\.airbnbBathroom/);
   assert.match(propertiesPage, /image=\{property\.hero\}/);
@@ -111,24 +114,25 @@ test("all property galleries expose practical spaces in a logical sequence", () 
   assert.match(nid, /\/\/ Salle d’eau et toilettes[\s\S]*\.\.\.airbnbBathroom/);
 });
 
-test("the ambient player uses the credited public-domain Vivaldi recording", () => {
-  const component = read("components/AmbientSound.tsx");
-  const credits = read("public/audio/README.md");
-  assert.match(component, /vivaldi-spring-largo\.m4a/);
-  assert.match(component, /vivaldi-spring-largo\.ogg/);
-  assert.match(component, /Vivaldi · Le Printemps/);
-  assert.match(component, /preload="metadata"/);
-  assert.match(component, /Musique classique/);
-  assert.match(credits, /domaine public/i);
-  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.m4a")));
-  assert.ok(existsSync(join(root, "public/audio/vivaldi-spring-largo.ogg")));
+test("the public layout offers optional ocean waves without restoring classical music", () => {
+  const layout = read("app/layout.tsx");
+  const waves = read("components/AmbientWaves.tsx");
+  assert.match(layout, /AmbientWaves/);
+  assert.match(waves, /Écouter les vagues/);
+  assert.doesNotMatch(waves, /vivaldi|Musique classique/i);
 });
 
 test("the homepage uses a reliable premium hero image", () => {
   const page = read("app/page.tsx");
+  const overlay = read("components/media/VideoOverlay.tsx");
   assert.doesNotMatch(page, /<HeroVideo/);
-  assert.match(page, /src=\{siteMedia\.destination\.sea\}/);
+  assert.match(page, /saumonards-plage\.jpg/);
   assert.match(page, /priority/);
+  assert.match(page, /fetchPriority="high"/);
+  assert.equal((overlay.match(/accent:/g) ?? []).length, 7);
+  assert.match(overlay, /setTimeout\(\(\) => setMessageVisible\(false\), 8000\)/);
+  assert.match(overlay, /8600/);
+  assert.match(overlay, /if \(reduceMotion\) return/);
 });
 
 test("mobile navigation uses native iOS-compatible disclosures and exposes contact", () => {
@@ -243,6 +247,33 @@ test("the Carnet exposes premium guides, interactive maps and ideal days", () =>
   assert.match(page, /<PremiumInteractiveMap \/>/);
   assert.match(page, /<IdealDays \/>/);
   assert.match(data, /export const idealDays/);
+});
+
+test("the Carnet preserves its content while using an editorial magazine rhythm", () => {
+  const collection = read("components/carnet/PremiumPlaceCollection.tsx");
+  const styles = read("app/globals.css");
+  const editorialMarkup = collection.slice(collection.indexOf("premium-place-card--editorial"));
+
+  for (const content of [
+    "place.description",
+    "place.hostTip",
+    "place.officialUrl",
+    "place.mapUrl",
+    "place.imageCredit",
+  ]) {
+    assert.match(collection, new RegExp(content.replace(".", "\\.")));
+  }
+
+  assert.ok(
+    editorialMarkup.indexOf("place.hostTip") < editorialMarkup.indexOf("<dl>"),
+    "The personal advice must precede the practical information",
+  );
+  assert.match(collection, /is-featured/);
+  assert.match(collection, /is-reversed/);
+  assert.match(collection, /is-portrait/);
+  assert.match(styles, /premium-place-card--editorial\.is-featured/);
+  assert.match(styles, /premium-place-card--editorial\.is-portrait/);
+  assert.match(styles, /carnet-experiences__grid article/);
 });
 
 test("the premium experience collection includes all requested experiences", () => {
@@ -511,10 +542,10 @@ test("property stories lead with emotion while preserving films and lived-in med
   const page = read("components/PropertyPage.tsx");
   const history = read("components/PropertyHistoryStory.tsx");
   const details = read("components/PropertySignatureDetails.tsx");
-  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<PropertyDayStory"));
-  assert.ok(page.indexOf("<PropertyDayStory") < page.indexOf("<PropertyFilms"));
-  assert.ok(page.indexOf("<PropertyFilms") < page.indexOf("<FullscreenGallery"));
-  assert.ok(page.indexOf("<FullscreenGallery") < page.indexOf("Pourquoi nos voyageurs reviennent"));
+  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<ChaiEditorialReport"));
+  assert.ok(page.indexOf("<PropertyHistoryStory") < page.indexOf("<IslandHouseEditorialReport"));
+  assert.ok(page.indexOf("<IslandHouseEditorialReport") < page.indexOf("<PropertyFilms"));
+  assert.ok(page.indexOf("<PropertyFilms") < page.indexOf("Pourquoi nos voyageurs reviennent"));
   assert.ok(
     page.indexOf("Pourquoi nos voyageurs reviennent") < page.indexOf("<PropertySignatureDetails"),
   );
@@ -738,4 +769,31 @@ test("welcome basket choice stays exclusive, priced and visible throughout the d
   assert.match(read("platform/email/reservation-request.ts"), /Accueil gourmand/);
   assert.match(read("platform/contracts/html.ts"), /Accueil gourmand/);
   assert.match(read("supabase/migrations/20260801113000_welcome_baskets.sql"), /4500/);
+});
+
+test("the Chai editorial report keeps chapter galleries isolated", () => {
+  const report = read("components/properties/ChaiEditorialReport.tsx");
+
+  assert.match(report, /openGallery\(chapter\.images, imageIndex\)/);
+  assert.match(report, /openGallery\(chapter\.images\)/);
+  assert.match(report, /images=\{activeImages\}/);
+  assert.match(report, /Explorer toute la maison/);
+});
+
+test("Villa Raie Manta and Le Nid d’Été share the Chai editorial signature", () => {
+  const page = read("components/PropertyPage.tsx");
+  const report = read("components/properties/IslandHouseEditorialReport.tsx");
+  const saumonards = read("components/properties/NidSaumonardsStory.tsx");
+
+  assert.match(page, /<IslandHouseEditorialReport house=\{property\.slug\}/);
+  assert.match(report, /"villa-raie-manta"/);
+  assert.match(report, /"nid-d-ete"/);
+  assert.match(report, /openGallery\(chapter\.images, imageIndex\)/);
+  assert.match(report, /openGallery\(chapter\.images\)/);
+  assert.match(report, /Explorer toute la maison/);
+  assert.match(saumonards, /destinationMedia\.kiteFamily/);
+  assert.match(page, /<NidSaumonardsStory \/>/);
+  assert.match(page, /<PropertyFilms films=\{manifest\.videos\}/);
+  assert.match(page, /<NearbyMap map=\{presentation\.map\}/);
+  assert.match(page, /<PropertyAmenitiesGrid property=\{property\}/);
 });

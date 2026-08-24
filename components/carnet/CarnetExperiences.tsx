@@ -44,9 +44,9 @@ export function CarnetExperiences() {
   return (
     <Section tone="dark" className="carnet-experiences">
       <Heading
-        eyebrow="À composer avec nous"
-        title="Vivez l’île autrement."
-        description="Des attentions et des expériences à sélectionner selon la saison, vos envies et la maison choisie."
+        eyebrow="Les instants qui prolongent le souvenir"
+        title="Vivre les îles autrement, simplement."
+        description="Des attentions et des expériences à choisir selon la saison, vos envies et la maison qui vous accueille."
         light
       />
       <div className="carnet-experiences__grid">

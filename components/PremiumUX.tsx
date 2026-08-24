@@ -12,20 +12,30 @@ export function PremiumUX() {
   }, [pathname]);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const revealTargets = [...document.querySelectorAll<HTMLElement>(
-      "main > section:not(.page-hero):not(.premium-hero):not(.premium-property-hero):not(.premium-experience-collection), .ui-heading, .property-connections a, .destination-guide__addresses article",
-    )];
+    const revealTargets = [
+      ...document.querySelectorAll<HTMLElement>(
+        "main > section:not(.page-hero):not(.premium-hero):not(.premium-property-hero):not(.premium-experience-collection), .ui-heading, .property-connections a, .destination-guide__addresses article",
+      ),
+    ];
     revealTargets.forEach((element) => element.classList.add("ux-reveal"));
     document.body.classList.add("ux-enhanced");
 
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        revealObserver.unobserve(entry.target);
-      });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: reducedMotion ? 0 : 0.08 });
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      {
+        rootMargin: "0px 0px -8% 0px",
+        // A percentage threshold prevents very tall editorial sections from
+        // ever becoming visible: the viewport can be smaller than 8% of the
+        // section. Reveal as soon as any part enters the viewport instead.
+        threshold: 0,
+      },
+    );
     revealTargets.forEach((element) => revealObserver.observe(element));
 
     const prepareImage = (image: HTMLImageElement) => {
@@ -38,11 +48,13 @@ export function PremiumUX() {
     };
     document.querySelectorAll<HTMLImageElement>("main img").forEach(prepareImage);
     const imageObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
-        if (!(node instanceof HTMLElement)) return;
-        if (node instanceof HTMLImageElement) prepareImage(node);
-        node.querySelectorAll<HTMLImageElement>("img").forEach(prepareImage);
-      }));
+      mutations.forEach((mutation) =>
+        mutation.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement)) return;
+          if (node instanceof HTMLImageElement) prepareImage(node);
+          node.querySelectorAll<HTMLImageElement>("img").forEach(prepareImage);
+        }),
+      );
     });
     const main = document.querySelector("main");
     if (main) imageObserver.observe(main, { childList: true, subtree: true });
@@ -65,9 +77,15 @@ export function PremiumUX() {
     const onLinkClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
       const link = event.target.closest<HTMLAnchorElement>("a[href]");
-      if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+      if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey)
+        return;
       const target = new URL(link.href, window.location.href);
-      if (target.origin !== window.location.origin || target.pathname === window.location.pathname || link.target === "_blank") return;
+      if (
+        target.origin !== window.location.origin ||
+        target.pathname === window.location.pathname ||
+        link.target === "_blank"
+      )
+        return;
       document.body.classList.add("is-navigating");
       window.setTimeout(() => document.body.classList.remove("is-navigating"), 900);
     };
@@ -82,5 +100,9 @@ export function PremiumUX() {
     };
   }, [pathname]);
 
-  return <div className="reading-progress" aria-hidden="true"><span ref={progressRef} /></div>;
+  return (
+    <div className="reading-progress" aria-hidden="true">
+      <span ref={progressRef} />
+    </div>
+  );
 }

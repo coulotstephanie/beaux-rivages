@@ -7,6 +7,8 @@ import { siteMedia } from "@/media/site";
 import { PageStructuredData } from "@/components/PageStructuredData";
 import { createPageMetadata } from "@/seo";
 import type { PageSeoConfig } from "@/content/fr/seo";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 
 const pageSeo = {
   title: "Contact | Beaux Rivages",
@@ -21,7 +23,9 @@ const pageSeo = {
 } satisfies PageSeoConfig;
 export const metadata = createPageMetadata(pageSeo);
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const managedPage = await getPublishedCmsPage("contact");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   return (
     <main className="contact-page">
       <PageStructuredData {...pageSeo} />

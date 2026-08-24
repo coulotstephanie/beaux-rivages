@@ -3,6 +3,7 @@ import { properties } from "@/data";
 import { propertySlugs, isPropertySlug } from "@/platform/calendar/config";
 import { getPropertyAvailability, isRangeAvailable } from "@/platform/calendar/service";
 import { isIsoDate, noStoreJson, rateLimit } from "@/platform/http/security";
+import { isStayInsidePublicBookingWindow } from "@/platform/reservations/booking-window";
 
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request);
@@ -14,6 +15,15 @@ export async function GET(request: NextRequest) {
   const guests = Math.max(1, Number(params.get("guests") ?? 1));
   if (!isIsoDate(arrival) || !isIsoDate(departure) || departure <= arrival || guests > 8) {
     return noStoreJson({ error: "Dates ou nombre de voyageurs invalides." }, { status: 400 });
+  }
+  if (!isStayInsidePublicBookingWindow(arrival, departure)) {
+    return noStoreJson(
+      {
+        error: "Les réservations sont ouvertes sur les 12 prochains mois uniquement.",
+        code: "OUTSIDE_BOOKING_WINDOW",
+      },
+      { status: 422 },
+    );
   }
   if (requestedProperty && !isPropertySlug(requestedProperty))
     return noStoreJson({ error: "Logement inconnu." }, { status: 400 });

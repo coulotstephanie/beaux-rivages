@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { BLUR_DATA_URL } from "@/media";
 import { propertyMedia, type PropertySlug } from "@/media/properties";
+import type { MediaAsset } from "@/media/types";
 import { Container } from "./ui";
 
 const copy: Record<
@@ -78,12 +79,28 @@ const copy: Record<
 export function PropertySignatureDetails({ propertySlug }: { propertySlug: PropertySlug }) {
   const content = copy[propertySlug];
   const media = propertyMedia[propertySlug];
-  const images = [
-    media.kitchen[0],
-    media.lifestyle[0] ?? media.details[0],
-    media.bedrooms[0],
-    media.details[0],
-  ];
+  const livedInMedia = media.lifestyle;
+  const imagesByProperty: Record<PropertySlug, readonly MediaAsset[]> = {
+    "chai-des-tortues": [
+      media.kitchen[4] ?? livedInMedia[0],
+      media.bedrooms[4],
+      media.bathrooms[2],
+      media.exterior[1],
+    ],
+    "villa-raie-manta": [
+      media.kitchen[1] ?? livedInMedia[0],
+      media.bedrooms[5],
+      media.bathrooms[3],
+      media.kitchen[3],
+    ],
+    "nid-d-ete": [
+      media.kitchen[4] ?? livedInMedia[0],
+      media.kitchen[5],
+      media.bathrooms[3],
+      media.arrival[1],
+    ],
+  };
+  const images = imagesByProperty[propertySlug];
 
   return (
     <section

@@ -22,27 +22,27 @@ const originalHero = propertyAsset(
   "Le Chai des Tortues",
 );
 const hero = propertyAsset(
-  "editorial/espace-de-vie-retour-marche.png",
+  "editorial/espace-de-vie-retour-marche.webp",
   "Pièce de vie du Chai des Tortues préparée pour un retour du marché",
   "Du marché à la maison",
 );
 const editorialAperitif = propertyAsset(
-  "editorial/salon-aperitif.png",
+  "editorial/salon-aperitif.webp",
   "Apéritif aux huîtres sur la table basse du salon",
   "L’apéritif après la plage",
 );
 const editorialIsland = propertyAsset(
-  "editorial/ilot-retour-marche.png",
+  "editorial/ilot-retour-marche.webp",
   "Îlot du Chai animé par les produits rapportés du marché",
   "Le retour du marché sur l’îlot",
 );
 const editorialCelebration = propertyAsset(
-  "editorial/table-de-fete.png",
+  "editorial/table-de-fete.webp",
   "Table de fête dressée pour six dans la salle à manger du Chai",
   "Une table pour célébrer",
 );
 const editorialChristmas = propertyAsset(
-  "editorial/table-noel.png",
+  "editorial/table-noel.webp",
   "Table de Noël dressée pour six avec verrerie rouge et champagne au Chai des Tortues",
   "Noël autour de la grande table",
 );
@@ -57,37 +57,37 @@ const editorialMorningCoffee = propertyAsset(
   "Le premier café dans la cour",
 );
 const editorialBicycleArrival = propertyAsset(
-  "editorial/velo-devant-porte.png",
+  "editorial/velo-devant-porte.webp",
   "Vélo rétais devant la porte du Chai des Tortues",
   "L’île commence devant la porte",
 );
 const editorialFamilyGames = propertyAsset(
-  "editorial/table-jeux-famille.png",
+  "editorial/table-jeux-famille.webp",
   "Jeu de société en famille autour de la table ronde du Chai",
   "Une partie sous les pierres",
 );
 const editorialMarketCouple = propertyAsset(
-  "editorial/retour-marche-en-couple.png",
+  "editorial/retour-marche-en-couple.webp",
   "Un couple préparant le dîner avec les produits du marché dans la grande pièce du Chai",
   "Le dîner se prépare à deux",
 );
 const editorialFamilyCat = propertyAsset(
-  "editorial/matin-en-famille-chat.png",
+  "editorial/matin-en-famille-chat.webp",
   "Parents, enfants, bébé et chat réunis dans la pièce de vie du Chai",
   "Un matin pour toute la famille",
 );
 const editorialCandlelightDinner = propertyAsset(
-  "editorial/diner-romantique-aux-chandelles.png",
+  "editorial/diner-romantique-aux-chandelles.webp",
   "Dîner romantique aux chandelles dans la grande pièce du Chai",
   "Un dîner à deux sous les poutres",
 );
 const editorialMultigenerationalChristmas = propertyAsset(
-  "editorial/noel-multigenerationnel.png",
+  "editorial/noel-multigenerationnel.webp",
   "Plusieurs générations réunies autour de la table de Noël du Chai avec un bébé et un chat",
   "Noël réunit toutes les générations",
 );
 const editorialFamilyTable = propertyAsset(
-  "editorial/grande-table-en-famille.png",
+  "editorial/grande-table-en-famille.webp",
   "Grands-parents, parents, enfants et bébé partageant un grand repas dans le Chai",
   "Le grand déjeuner sous les poutres",
 );

@@ -11,6 +11,8 @@ import { staticPageSeo } from "@/content/fr/seo";
 import { createPageMetadata } from "@/seo";
 import { VideoOverlay } from "@/components/media";
 import { totalPublicPlatformReviews, weightedAirbnbRating } from "@/reviews";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 
 const pageSeo = staticPageSeo["/"];
 
@@ -69,7 +71,9 @@ const moments = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const managedPage = await getPublishedCmsPage("accueil");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   return (
     <main>
       <PageStructuredData {...pageSeo} />
@@ -78,10 +82,12 @@ export default function HomePage() {
       <section className="premium-hero" aria-labelledby="home-title">
         <div className="premium-hero__media">
           <Image
-            src={siteMedia.destination.sea}
-            alt="L’océan Atlantique, horizon des maisons Beaux Rivages"
+            src="/images/destination/patrimoine/saumonards-plage.jpg"
+            alt="Plage de sable et océan dans la lumière des îles"
             fill
             priority
+            fetchPriority="high"
+            quality={90}
             sizes="100vw"
           />
         </div>
@@ -89,9 +95,9 @@ export default function HomePage() {
         <div id="home-title">
           <VideoOverlay />
         </div>
-        <a className="scroll-indicator" href="#pourquoi" aria-label="Faire défiler vers la suite">
+        <a className="scroll-indicator" href="#maisons" aria-label="Découvrir Beaux Rivages">
           <span />
-          Découvrir
+          Découvrir Beaux Rivages
         </a>
       </section>
 

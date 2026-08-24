@@ -12,7 +12,7 @@ export const welcomeBaskets = [
     title: "Panier Apéritif Beaux Rivages",
     intro:
       "Commencez votre séjour autour de saveurs locales soigneusement sélectionnées pour partager un moment convivial dès votre arrivée.",
-    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.webp",
     imageAlt: "Panier apéritif Beaux Rivages composé de produits artisanaux locaux",
     items: [
       "Une bouteille de vin Pelletier de l’Île de Ré — rouge, blanc ou rosé, au choix lors de la réservation",

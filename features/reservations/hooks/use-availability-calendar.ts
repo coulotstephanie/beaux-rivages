@@ -27,9 +27,15 @@ export function useAvailabilityCalendar(propertySlug: string): CalendarState {
     })
       .then((response) => {
         if (!response.ok) throw new Error("CALENDAR_UNAVAILABLE");
-        return response.json() as Promise<{ blocks: AvailabilityBlock[] }>;
+        return response.json() as Promise<{
+          blocks: AvailabilityBlock[];
+          reliable: boolean;
+        }>;
       })
-      .then(({ blocks }) => setState({ blocks, status: "ready" }))
+      .then(({ blocks, reliable }) => {
+        if (!reliable) throw new Error("CALENDAR_UNRELIABLE");
+        setState({ blocks, status: "ready" });
+      })
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError") return;
         setState({ blocks: [], status: "error" });

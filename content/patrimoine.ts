@@ -155,8 +155,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Fort La Prée, La Flotte",
     images: [
       {
-        src: "/images/destination/patrimoine/fort-la-pree-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie du Fort La Prée fournie par Stéphanie",
+        src: "/images/destination/patrimoine/fort-la-pree-vue-aerienne-stephanie.jpg",
+        alt: "Vue aérienne du Fort La Prée entre les terres et le littoral de l’Île de Ré",
       },
     ],
     source: {
@@ -274,8 +274,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Maison du Fier, Les Portes-en-Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/lilleau-des-niges-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie de Lilleau des Niges fournie par Stéphanie",
+        src: "/images/destination/patrimoine/lilleau-des-niges-vue-aerienne.jpg",
+        alt: "Vue aérienne des chenaux, vasières et anciens marais salants de Lilleau des Niges",
       },
     ],
     source: {
@@ -308,8 +308,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Fier d'Ars, Ars-en-Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/fier-d-ars-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie du Fier d’Ars fournie par Stéphanie",
+        src: "/images/destination/patrimoine/fier-d-ars-vue-aerienne.jpg",
+        alt: "Vue aérienne du Fier d’Ars et de ses marais façonnés par les chenaux",
       },
     ],
     source: {
@@ -343,8 +343,8 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Plage de Montamer, Sainte-Marie-de-Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/ecluses-poissons-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie des écluses à poissons fournie par Stéphanie",
+        src: "/images/destination/patrimoine/ecluse-a-poissons-ile-de-re.jpg",
+        alt: "Écluse à poissons en pierre découverte par la marée sur l’Île de Ré",
       },
     ],
     source: {
@@ -377,8 +377,16 @@ export const heritageSites: HeritageSite[] = [
     mapQuery: "Pont de l'Île de Ré",
     images: [
       {
-        src: "/images/destination/patrimoine/pont-ile-de-re-photo-a-venir.svg",
-        alt: "Emplacement réservé à une photographie du Pont de l’Île de Ré fournie par Stéphanie",
+        src: "/images/destination/patrimoine/pont-ile-de-re-stephanie.jpeg",
+        alt: "Pont de l’Île de Ré vu depuis le littoral avec des voiliers et des bateaux au premier plan",
+      },
+      {
+        src: "/images/destination/re-authentique/pont-coucher-soleil-velo.jpg",
+        alt: "Cycliste devant le pont de l’Île de Ré au coucher du soleil",
+      },
+      {
+        src: "/images/destination/re-authentique/pont-ile-de-re-vue-aerienne.jpg",
+        alt: "Pont de l’Île de Ré reliant La Rochelle à Rivedoux-Plage vu du ciel",
       },
     ],
     source: {

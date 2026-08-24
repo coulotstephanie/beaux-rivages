@@ -6,6 +6,8 @@ import { Heading, Section } from "@/components/ui";
 import { properties } from "@/data";
 import { siteMedia } from "@/media/site";
 import { createPageMetadata } from "@/seo";
+import { DynamicCmsPage } from "@/components/cms/DynamicCmsPage";
+import { getPublishedCmsPage } from "@/platform/cms/public";
 import { PageStructuredData } from "@/components/PageStructuredData";
 import { staticPageSeo } from "@/content/fr/seo";
 
@@ -15,7 +17,9 @@ export const metadata = createPageMetadata({
   image: siteMedia.properties["villa-raie-manta"].hero.src,
 });
 
-export default function PropertiesPage() {
+export default async function PropertiesPage() {
+  const managedPage = await getPublishedCmsPage("maisons");
+  if (managedPage) return <DynamicCmsPage page={managedPage} />;
   return (
     <main>
       <PageStructuredData {...pageSeo} />
@@ -25,7 +29,10 @@ export default function PropertiesPage() {
         <div className="page-hero-content">
           <p className="eyebrow light">Les maisons Beaux Rivages</p>
           <h1>Trois maisons, trois façons de vivre les îles.</h1>
-          <p>Pierres anciennes, lumière sur l’océan ou plage au bout du chemin : choisissez la maison qui donnera son rythme à votre séjour.</p>
+          <p>
+            Pierres anciennes, lumière sur l’océan ou plage au bout du chemin : choisissez la maison
+            qui donnera son rythme à votre séjour.
+          </p>
         </div>
       </section>
       <Section className="properties-index">

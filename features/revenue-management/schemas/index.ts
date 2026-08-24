@@ -23,6 +23,7 @@ export const rateOverrideBatchSchema = z
     propertySlug: z.enum(["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]),
     name: z.string().trim().min(2).max(160),
     kind: z.enum(["manual", "weekend", "school_holiday", "public_holiday", "event"]),
+    importMode: z.literal("csv").optional(),
     entries: z
       .array(
         z.object({

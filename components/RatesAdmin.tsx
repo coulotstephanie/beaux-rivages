@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StaffAccess } from "@/components/admin/StaffAccess";
+import { isInsideRollingWindow } from "@/platform/pricing/channels";
 
 const houses = [
   { slug: "chai-des-tortues", label: "Le Chai des Tortues" },
@@ -13,7 +14,8 @@ type ReferenceDay = {
   date: string;
   kind: "school_holiday" | "public_holiday" | "bridge";
   label: string;
-  zone?: "A" | "B" | "C";
+  zone?: "A" | "B" | "C" | "DE" | "BE";
+  country?: "FR" | "DE" | "BE";
 };
 type RevenueKpi = {
   propertySlug: string;
@@ -41,6 +43,7 @@ type PricingCenterSnapshot = {
     percentage: number;
     fixed_discount_cents?: number | null;
     enabled: boolean;
+    valid_range?: string | null;
   }>;
   options: Array<{
     price_cents: number;
@@ -61,6 +64,7 @@ type PricingCenterSnapshot = {
     last_synchronization_at: string | null;
     automatic_push_enabled: false;
   }>;
+  overrides: Array<{ id: string; begins_on: string; ends_on: string; name: string }>;
 };
 const weekdayLabels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const monthNames = [
@@ -113,6 +117,10 @@ export function RatesAdmin() {
     startsOn: `${new Date().getFullYear()}-01-01`,
     endsOn: `${new Date().getFullYear()}-12-31`,
   });
+  const [editingSeasonId, setEditingSeasonId] = useState<string | null>(null);
+  const [editingPromotionId, setEditingPromotionId] = useState<string | null>(null);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [csvImporting, setCsvImporting] = useState(false);
   const [message, setMessage] = useState(
     "Sélectionnez une plage pour préparer une modification groupée.",
   );
@@ -130,10 +138,13 @@ export function RatesAdmin() {
     if (!authenticated) return;
     const controller = new AbortController();
     Promise.all(
-      (["A", "B", "C"] as const).map((zone) =>
-        fetch(`/api/admin/reference-calendar?year=${year}&zone=${zone}`, {
-          signal: controller.signal,
-        }).then(
+      (["A", "B", "C", "DE", "BE"] as const).map((zone) =>
+        fetch(
+          `/api/admin/reference-calendar?year=${year}&zone=${zone}&country=${["DE", "BE"].includes(zone) ? zone : "FR"}`,
+          {
+            signal: controller.signal,
+          },
+        ).then(
           (response) => response.json() as Promise<{ days?: ReferenceDay[]; warning?: string }>,
         ),
       ),
@@ -172,6 +183,21 @@ export function RatesAdmin() {
     setCenter(payload);
   }, [property]);
 
+  const loadRates = useCallback(async () => {
+    const response = await fetch(`/api/rates?property=${property}&year=${year}`);
+    const payload = (await response.json()) as { days?: RateDay[]; error?: string };
+    if (!response.ok || payload.error) throw new Error(payload.error ?? "Calendrier indisponible");
+    setDays(payload.days ?? []);
+  }, [property, year]);
+
+  const loadKpis = useCallback(async () => {
+    const response = await fetch(`/api/admin/revenue-management?year=${year}`);
+    const payload = (await response.json()) as { properties?: RevenueKpi[]; error?: string };
+    if (!response.ok || payload.error)
+      throw new Error(payload.error ?? "Statistiques indisponibles");
+    setKpis(payload.properties ?? []);
+  }, [year]);
+
   useEffect(() => {
     if (!authenticated) return;
     void loadCenter().catch(() =>
@@ -179,7 +205,11 @@ export function RatesAdmin() {
     );
   }, [authenticated, loadCenter]);
 
-  const mutateCenter = async (body: Record<string, unknown>, success: string) => {
+  const mutateCenter = async (
+    body: Record<string, unknown>,
+    success: string,
+    refreshCalendar = false,
+  ) => {
     const response = await fetch("/api/admin/pricing-center", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -188,8 +218,59 @@ export function RatesAdmin() {
     const payload = (await response.json()) as { error?: string };
     if (!response.ok || payload.error)
       return setMessage(payload.error ?? "Enregistrement impossible.");
-    await loadCenter();
+    await Promise.all([loadCenter(), ...(refreshCalendar ? [loadRates(), loadKpis()] : [])]);
     setMessage(success);
+  };
+
+  const parseRange = (value?: string | null) => {
+    if (!value) return { startsOn: "", endsOn: "" };
+    const [startsOn = "", endsOn = ""] = value.slice(1, -1).split(",");
+    return { startsOn, endsOn };
+  };
+
+  const seasonHasOverrides = (startsOn: string, endsOn: string) =>
+    center?.overrides.some(
+      (override) => override.begins_on <= endsOn && override.ends_on >= startsOn,
+    ) ?? false;
+
+  const saveSeason = async () => {
+    let replaceOverrides = false;
+    if (seasonHasOverrides(seasonDraft.startsOn, seasonDraft.endsOn)) {
+      replaceOverrides = window.confirm(
+        "Des prix personnalisés existent sur cette période.\n\nOK : remplacer tous les prix personnalisés.\nAnnuler : conserver les exceptions.",
+      );
+    }
+    await mutateCenter(
+      {
+        action: editingSeasonId ? "season-update" : "season",
+        ...(editingSeasonId ? { id: editingSeasonId } : {}),
+        ...seasonDraft,
+        nightlyRate: Number(seasonDraft.nightlyRate),
+        minimumNights: Number(seasonDraft.minimumNights),
+        replaceOverrides,
+      },
+      editingSeasonId
+        ? "Saison modifiée et calendrier recalculé."
+        : "Saison créée et calendrier recalculé.",
+      true,
+    );
+    setEditingSeasonId(null);
+  };
+
+  const savePromotion = async () => {
+    await mutateCenter(
+      {
+        action: editingPromotionId ? "promotion-update" : "promotion",
+        ...(editingPromotionId ? { id: editingPromotionId } : { kind: "seasonal" }),
+        name: promotionDraft.name,
+        startsOn: promotionDraft.startsOn,
+        endsOn: promotionDraft.endsOn,
+        percentage: promotionDraft.mode === "percentage" ? Number(promotionDraft.value) : 0,
+        fixedAmount: promotionDraft.mode === "fixed" ? Number(promotionDraft.value) : undefined,
+      },
+      editingPromotionId ? "Promotion modifiée." : "Promotion créée et historisée.",
+    );
+    setEditingPromotionId(null);
   };
 
   const exportCsv = () => {
@@ -205,30 +286,78 @@ export function RatesAdmin() {
   };
 
   const importCsv = async (file: File) => {
-    const rows = (await file.text()).split(/\r?\n/).slice(1).filter(Boolean);
-    let imported = 0;
-    for (const row of rows) {
-      const [date, rate, , minimum] = row.split(";");
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number(rate)) continue;
-      const response = await fetch("/api/rates", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          propertySlug: property,
-          name: "Import CSV",
-          kind: "manual",
-          start: date,
-          end: date,
-          nightlyRate: Number(rate),
-          minimumNights: Number(minimum) || undefined,
-        }),
+    setCsvImporting(true);
+    try {
+      const lines = (await file.text())
+        .replace(/^\uFEFF/, "")
+        .split(/\r?\n/)
+        .filter(Boolean);
+      const delimiter = lines[0]?.includes(";") ? ";" : ",";
+      const entries = lines.slice(1).flatMap((row) => {
+        const [rawDate = "", rawRate = "", , rawMinimum = ""] = row.split(delimiter);
+        const date = rawDate.trim();
+        const nightlyRate = Number(rawRate.trim().replace(",", "."));
+        const minimumNights = Number(rawMinimum.trim());
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || nightlyRate <= 0) return [];
+        return [
+          {
+            date,
+            nightlyRate,
+            ...(Number.isInteger(minimumNights) && minimumNights > 0 ? { minimumNights } : {}),
+          },
+        ];
       });
-      if (response.ok) imported += 1;
+      if (!entries.length) {
+        setMessage("Aucune ligne valide. Format attendu : date;prix_eur;saison;minimum_nuits.");
+        return;
+      }
+      const today = new Date().toISOString().slice(0, 10);
+      const eligibleEntries = entries.filter((entry) => isInsideRollingWindow(entry.date, today));
+      const excluded = entries.length - eligibleEntries.length;
+      if (!eligibleEntries.length) {
+        setMessage("Aucun tarif du fichier ne se trouve dans les 12 mois glissants autorisés.");
+        return;
+      }
+      let imported = 0;
+      let guardrailApplied = 0;
+      for (let offset = 0; offset < eligibleEntries.length; offset += 366) {
+        const batch = eligibleEntries.slice(offset, offset + 366);
+        const response = await fetch("/api/rates", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            propertySlug: property,
+            name: "Import CSV",
+            kind: "manual",
+            importMode: "csv",
+            entries: batch,
+          }),
+        });
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+          result?: { guardrailApplied?: number };
+        } | null;
+        if (!response.ok) {
+          setMessage(
+            imported
+              ? `${imported} tarif(s) importé(s), puis l’import s’est arrêté : ${payload?.error ?? "erreur serveur"}.`
+              : (payload?.error ?? "L’import CSV a échoué. Vérifiez le fichier et réessayez."),
+          );
+          return;
+        }
+        imported += batch.length;
+        guardrailApplied += payload?.result?.guardrailApplied ?? 0;
+      }
+      await Promise.all([loadRates(), loadCenter(), loadKpis()]);
+      setCsvFile(null);
+      setMessage(
+        `${imported} tarif(s) importé(s) et historisé(s) pour ${file.name}.${guardrailApplied ? ` Garde-fou appliqué à ${guardrailApplied} date(s) ; le prix CSV d’origine est conservé dans l’historique.` : ""}${excluded ? ` ${excluded} ligne(s) hors fenêtre ignorée(s).` : ""}`,
+      );
+    } catch {
+      setMessage("La connexion a été interrompue pendant l’import. Aucun tarif n’a été confirmé.");
+    } finally {
+      setCsvImporting(false);
     }
-    setMessage(`${imported} tarif(s) importé(s) et historisé(s).`);
-    const refreshed = await fetch(`/api/rates?property=${property}&year=${year}`);
-    setDays(((await refreshed.json()) as { days: RateDay[] }).days);
-    await loadCenter();
   };
 
   const months = useMemo(() => {
@@ -323,25 +452,25 @@ export function RatesAdmin() {
     if (!entries.length) return setMessage("Sélectionnez au moins une date modifiable.");
     const detail = `${entries.length} jour(s) · ${name}`;
     if (!window.confirm(`Vous allez modifier ${detail}.\n\nConfirmer ?`)) return;
-    const response = await fetch("/api/rates", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        propertySlug: property,
-        name,
-        kind,
-        entries,
-      }),
-    });
-    const payload = (await response.json()) as { error?: string };
-    if (payload.error) return setMessage(payload.error);
-    setMessage(
-      `${entries.length} tarif(s) enregistré(s). La modification peut être annulée dans l’historique.`,
-    );
-    setSelection([]);
-    const refreshed = await fetch(`/api/rates?property=${property}&year=${year}`);
-    setDays(((await refreshed.json()) as { days: RateDay[] }).days);
-    await loadCenter();
+    try {
+      const response = await fetch("/api/rates", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ propertySlug: property, name, kind, entries }),
+      });
+      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+      if (!response.ok) {
+        setMessage(payload?.error ?? "Le tarif n'a pas pu être enregistré. Réessayez.");
+        return;
+      }
+      await Promise.all([loadRates(), loadCenter()]);
+      setSelection([]);
+      setMessage(
+        `${entries.length} tarif(s) enregistré(s). La modification peut être annulée dans l’historique.`,
+      );
+    } catch {
+      setMessage("La connexion a été interrompue. Vos dates restent sélectionnées : réessayez.");
+    }
   };
   const save = async () => {
     const entries = selection.map((date) => {
@@ -511,9 +640,16 @@ export function RatesAdmin() {
           <input
             type="file"
             accept=".csv,text/csv"
-            onChange={(event) => event.target.files?.[0] && void importCsv(event.target.files[0])}
+            onChange={(event) => setCsvFile(event.target.files?.[0] ?? null)}
           />
         </label>
+        <button
+          type="button"
+          disabled={!csvFile || csvImporting}
+          onClick={() => csvFile && void importCsv(csvFile)}
+        >
+          {csvImporting ? "Import en cours…" : "Valider l’import CSV"}
+        </button>
         <button
           type="button"
           onClick={() =>
@@ -593,6 +729,8 @@ export function RatesAdmin() {
         <span className="is-school-holiday-a">Vacances · Zone A</span>
         <span className="is-school-holiday-b">Vacances · Zone B</span>
         <span className="is-school-holiday-c">Vacances · Zone C</span>
+        <span className="is-school-holiday-de">Vacances · Allemagne</span>
+        <span className="is-school-holiday-be">Vacances · Belgique</span>
         <span className="is-public-holiday">Jour férié</span>
         <span className="is-bridge">Pont possible</span>
       </div>
@@ -697,6 +835,61 @@ export function RatesAdmin() {
                       · {season.minimum_nights ?? 1} nuit(s)
                     </small>
                   </div>
+                  <div className="rates-center-actions">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const rate = season.rates?.[0]?.nightly_rate_cents ?? 0;
+                        setEditingSeasonId(season.id);
+                        setSeasonDraft({
+                          name: season.name,
+                          kind: season.kind,
+                          startsOn: season.begins_on,
+                          endsOn: season.ends_on,
+                          nightlyRate: String(rate / 100),
+                          minimumNights: String(season.minimum_nights ?? 1),
+                        });
+                      }}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const rate = season.rates?.[0]?.nightly_rate_cents ?? 0;
+                        setEditingSeasonId(null);
+                        setSeasonDraft({
+                          name: `${season.name} (copie)`,
+                          kind: season.kind,
+                          startsOn: season.begins_on,
+                          endsOn: season.ends_on,
+                          nightlyRate: String(rate / 100),
+                          minimumNights: String(season.minimum_nights ?? 1),
+                        });
+                      }}
+                    >
+                      Dupliquer
+                    </button>
+                    <button
+                      type="button"
+                      className="is-danger"
+                      onClick={() => {
+                        if (
+                          !window.confirm(
+                            `Supprimer définitivement « ${season.name} » ?\n\nLes dates retrouveront le tarif standard ou la saison précédente.`,
+                          )
+                        )
+                          return;
+                        void mutateCenter(
+                          { action: "season-delete", id: season.id },
+                          "Saison supprimée et calendrier recalculé.",
+                          true,
+                        );
+                      }}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
@@ -745,20 +938,15 @@ export function RatesAdmin() {
               <button
                 type="button"
                 disabled={!seasonDraft.nightlyRate}
-                onClick={() =>
-                  void mutateCenter(
-                    {
-                      action: "season",
-                      ...seasonDraft,
-                      nightlyRate: Number(seasonDraft.nightlyRate),
-                      minimumNights: Number(seasonDraft.minimumNights),
-                    },
-                    "Saison créée et historisée.",
-                  )
-                }
+                onClick={() => void saveSeason()}
               >
-                Créer la saison
+                {editingSeasonId ? "Enregistrer la saison" : "Créer la saison"}
               </button>
+              {editingSeasonId && (
+                <button type="button" onClick={() => setEditingSeasonId(null)}>
+                  Annuler la modification
+                </button>
+              )}
             </div>
           </section>
           <section>
@@ -838,6 +1026,9 @@ export function RatesAdmin() {
           <section>
             <h2>Promotions</h2>
             <div className="rates-center-list">
+              {center.promotions.length === 0 && (
+                <p className="rates-center-note">Aucune promotion.</p>
+              )}
               {center.promotions.map((promotion) => (
                 <article key={promotion.id}>
                   <div>
@@ -848,6 +1039,83 @@ export function RatesAdmin() {
                         : `${promotion.percentage} %`}{" "}
                       · {promotion.enabled ? "Active" : "Inactive"}
                     </small>
+                  </div>
+                  <div className="rates-center-actions">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const range = parseRange(promotion.valid_range);
+                        const fallbackYear = new Date().getFullYear();
+                        setEditingPromotionId(promotion.id);
+                        setPromotionDraft({
+                          name: promotion.name,
+                          mode: promotion.fixed_discount_cents ? "fixed" : "percentage",
+                          value: String(
+                            promotion.fixed_discount_cents
+                              ? promotion.fixed_discount_cents / 100
+                              : promotion.percentage,
+                          ),
+                          startsOn: range.startsOn || `${fallbackYear}-01-01`,
+                          endsOn: range.endsOn || `${fallbackYear}-12-31`,
+                        });
+                      }}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const range = parseRange(promotion.valid_range);
+                        const fallbackYear = new Date().getFullYear();
+                        setEditingPromotionId(null);
+                        setPromotionDraft({
+                          name: `${promotion.name} (copie)`,
+                          mode: promotion.fixed_discount_cents ? "fixed" : "percentage",
+                          value: String(
+                            promotion.fixed_discount_cents
+                              ? promotion.fixed_discount_cents / 100
+                              : promotion.percentage,
+                          ),
+                          startsOn: range.startsOn || `${fallbackYear}-01-01`,
+                          endsOn: range.endsOn || `${fallbackYear}-12-31`,
+                        });
+                      }}
+                    >
+                      Dupliquer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        void mutateCenter(
+                          {
+                            action: "promotion-toggle",
+                            id: promotion.id,
+                            enabled: !promotion.enabled,
+                          },
+                          promotion.enabled ? "Promotion désactivée." : "Promotion activée.",
+                        )
+                      }
+                    >
+                      {promotion.enabled ? "Désactiver" : "Activer"}
+                    </button>
+                    <button
+                      type="button"
+                      className="is-danger"
+                      onClick={() => {
+                        if (
+                          !window.confirm(
+                            `Supprimer définitivement cette promotion ?\n\n« ${promotion.name} »\n\nCette action est irréversible.`,
+                          )
+                        )
+                          return;
+                        void mutateCenter(
+                          { action: "promotion-delete", id: promotion.id },
+                          "Promotion supprimée définitivement.",
+                        );
+                      }}
+                    >
+                      Supprimer
+                    </button>
                   </div>
                 </article>
               ))}
@@ -886,27 +1154,14 @@ export function RatesAdmin() {
                 value={promotionDraft.endsOn}
                 onChange={(e) => setPromotionDraft({ ...promotionDraft, endsOn: e.target.value })}
               />
-              <button
-                type="button"
-                onClick={() =>
-                  void mutateCenter(
-                    {
-                      action: "promotion",
-                      kind: "seasonal",
-                      name: promotionDraft.name,
-                      startsOn: promotionDraft.startsOn,
-                      endsOn: promotionDraft.endsOn,
-                      percentage:
-                        promotionDraft.mode === "percentage" ? Number(promotionDraft.value) : 0,
-                      fixedAmount:
-                        promotionDraft.mode === "fixed" ? Number(promotionDraft.value) : undefined,
-                    },
-                    "Promotion créée et historisée.",
-                  )
-                }
-              >
-                Créer la promotion
+              <button type="button" onClick={() => void savePromotion()}>
+                {editingPromotionId ? "Enregistrer la promotion" : "Créer la promotion"}
               </button>
+              {editingPromotionId && (
+                <button type="button" onClick={() => setEditingPromotionId(null)}>
+                  Annuler la modification
+                </button>
+              )}
             </div>
           </section>
           <section>

@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { localeLabels, supportedLocales, type SupportedLocale } from "@/i18n/config";
 
-const flags: Record<SupportedLocale, string> = { fr: "🇫🇷", en: "🇬🇧", de: "🇩🇪", es: "🇪🇸" };
+const flags: Record<SupportedLocale, string> = { fr: "🇫🇷", en: "🇬🇧", de: "🇩🇪", es: "🇪🇸", nl: "🇳🇱" };
 const prefixPattern = new RegExp(
   `^/(${supportedLocales.filter((locale) => locale !== "fr").join("|")})(?=/|$)`,
 );

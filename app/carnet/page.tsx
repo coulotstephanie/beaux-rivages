@@ -78,7 +78,7 @@ export default function CarnetPage() {
           <p className="local-signature__award">
             Pâtissière Mondiale 2023 · World’s Best Pastry Chef 2024
           </p>
-          <h2 id="nina-metayer-title">La pâtisserie de Nina Métayer, à quelques pas.</h2>
+          <h2 id="nina-metayer-title">Une gourmandise d’exception, à quelques pas.</h2>
           <p>
             Chez Nina fait entrer l’excellence mondiale dans la vie du village. Pour une première
             visite, Stéphanie et Bruno vous conseillent la chocolatine praliné.
@@ -93,16 +93,19 @@ export default function CarnetPage() {
       </section>
       <section className="carnet-small-happiness shell">
         <Image
-          src="/images/destination/nina-metayer/selection-patisseries.jpg"
-          alt="Une sélection gourmande choisie par Stéphanie et Bruno"
+          src="/images/destination/famille-coucher-soleil.jpg"
+          alt="Moment partagé en famille au coucher du soleil sur l’océan"
           width={720}
           height={720}
         />
         <div>
-          <p className="eyebrow">Le carnet personnel</p>
-          <h2>Les petits bonheurs de Stéphanie &amp; Bruno</h2>
-          <p>Nos rituels, nos habitudes et ces adresses où nous revenons avec le même plaisir.</p>
-          <Link href="/nos-petits-bonheurs">Entrer dans notre quotidien →</Link>
+          <p className="eyebrow">Anecdotes &amp; traditions</p>
+          <h2>Ces petits bonheurs que nous avons envie de partager avec vous.</h2>
+          <p>
+            Non pas un second guide d’adresses, mais les souvenirs, les rituels et les scènes
+            simples qui racontent notre vie sur les îles.
+          </p>
+          <Link href="/nos-petits-bonheurs">Lire nos histoires personnelles →</Link>
         </div>
       </section>
       <PremiumPlaceCollection />
@@ -110,9 +113,9 @@ export default function CarnetPage() {
 
       <Section id="carte" tone="dark" className="carnet-map-section">
         <Heading
-          eyebrow="S’orienter"
-          title="Toutes nos adresses sur de vraies cartes."
-          description="Adresses, marchés, plages, producteurs, Fort Boyard, vélo, parkings et bornes électriques : filtrez selon votre envie et votre destination."
+          eyebrow="Se laisser guider"
+          title="Retrouvez les lieux qui accompagnent nos journées sur les îles."
+          description="Marchés, plages, producteurs, Fort Boyard, vélo et repères pratiques restent réunis sur une carte précise, lorsque vient le moment de partir à leur rencontre."
           light
         />
         <PremiumInteractiveMap />

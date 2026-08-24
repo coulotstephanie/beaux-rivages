@@ -82,7 +82,7 @@ export const staticPageSeo = {
   "/nos-petits-bonheurs": {
     title: "Les petits bonheurs de Stéphanie & Bruno | Beaux Rivages",
     description:
-      "Les habitudes, traditions et adresses préférées de Stéphanie et Bruno sur l’Île de Ré : une sélection personnelle racontée comme un carnet de souvenirs.",
+      "Les souvenirs, traditions et moments de vie de Stéphanie et Bruno sur l’Île de Ré, racontés comme un journal personnel au fil des saisons.",
     path: "/nos-petits-bonheurs",
     breadcrumbs: [home, { name: "Nos petits bonheurs", path: "/nos-petits-bonheurs" }],
     schemaTypes: ["CollectionPage"],

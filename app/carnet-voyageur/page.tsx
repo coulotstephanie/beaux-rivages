@@ -8,7 +8,6 @@ import { SITE_URL } from "@/seo";
 export const metadata: Metadata = {
   title: "Mon séjour | Beaux Rivages",
   description: "Votre espace voyageur sécurisé Beaux Rivages.",
-  alternates: { canonical: `${SITE_URL}/carnet-voyageur` },
   robots: { index: false, follow: false },
 };
 

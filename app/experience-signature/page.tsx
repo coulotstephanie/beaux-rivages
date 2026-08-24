@@ -5,7 +5,6 @@ const service = getHospitalityService("experience-signature")!;
 export const metadata: Metadata = {
   title: `${service.title} | Beaux Rivages`,
   description: service.intro,
-  alternates: { canonical: "/experience-signature" },
   openGraph: { images: [service.image] },
 };
 export default function Page() {

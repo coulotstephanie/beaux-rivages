@@ -34,6 +34,7 @@ const staticRoutes = [
   "/animaux",
   "/faq",
   "/inspiration",
+  "/velo-itineraires",
   "/personnaliser",
   "/phototheque",
   "/maison-heureuse-fort-boyard",
@@ -67,13 +68,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
   const heritageRoutes = heritageSites.map((site) => `/patrimoine/${site.slug}`);
 
-  return [
-    ...staticRoutes,
-    ...propertyRoutes,
-    ...guideRoutes,
-    ...experienceRoutes,
-    ...heritageRoutes,
-  ].flatMap((route) => {
+  const routes = [
+    ...new Set([
+      ...staticRoutes,
+      ...propertyRoutes,
+      ...guideRoutes,
+      ...experienceRoutes,
+      ...heritageRoutes,
+    ]),
+  ];
+
+  return routes.flatMap((route) => {
     const languages = Object.fromEntries(
       productionLocales.map((locale) => [
         locale,

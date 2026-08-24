@@ -22,13 +22,37 @@ export type DashboardView =
   | "pilotage"
   | "fiscalite"
   | "juridique"
-  | "parametres";
+  | "parametres"
+  | "promotions"
+  | "phototheque"
+  | "videos"
+  | "contenus"
+  | "seo"
+  | "avis"
+  | "utilisateurs";
 
 export const dashboardNavigation: {
   category: string;
   items: { id: DashboardView; label: string }[];
 }[] = [
   { category: "Journée", items: [{ id: "dashboard", label: "Aujourd’hui" }] },
+  {
+    category: "Centre de Pilotage",
+    items: [
+      { id: "logements", label: "Maisons" },
+      { id: "calendrier", label: "Calendrier" },
+      { id: "promotions", label: "Tarifs & Canaux" },
+      { id: "phototheque", label: "Photothèque" },
+      { id: "videos", label: "Vidéos" },
+      { id: "contenus", label: "Contenus" },
+      { id: "carnet", label: "Carnet" },
+      { id: "seo", label: "Référencement SEO" },
+      { id: "avis", label: "Avis" },
+      { id: "statistiques", label: "Statistiques" },
+      { id: "utilisateurs", label: "Utilisateurs" },
+      { id: "parametres", label: "Paramètres" },
+    ],
+  },
   {
     category: "Réservations",
     items: [

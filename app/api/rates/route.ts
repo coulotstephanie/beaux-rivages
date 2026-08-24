@@ -7,6 +7,7 @@ import { requireSameOrigin } from "@/platform/http/security";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { rateOverrideBatchSchema, rateOverrideSchema } from "@/features/revenue-management/schemas";
 import { RateOverrideRepository } from "@/features/revenue-management/repositories";
+import { isInsideRollingWindow } from "@/platform/pricing/channels";
 
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, 40);
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const limited = rateLimit(request, 5);
+  const limited = rateLimit(request, 30);
   if (limited) return limited;
   if (!requireSameOrigin(request))
     return noStoreJson({ error: "Origine non autorisée." }, { status: 403 });
@@ -36,6 +37,16 @@ export async function PUT(request: NextRequest) {
       { error: "Tarif invalide.", details: parsed.error.flatten() },
       { status: 400 },
     );
+  const today = new Date().toISOString().slice(0, 10);
+  const stayDates =
+    "entries" in parsed.data
+      ? parsed.data.entries.map((entry) => entry.date)
+      : [parsed.data.start, parsed.data.end];
+  if (stayDates.some((stayDate) => !isInsideRollingWindow(stayDate, today)))
+    return noStoreJson(
+      { error: "Les tarifs doivent rester dans les 12 mois glissants autorisés." },
+      { status: 400 },
+    );
   try {
     return noStoreJson(
       {
@@ -45,7 +56,7 @@ export async function PUT(request: NextRequest) {
             ? await new RateOverrideRepository().createBatch(parsed.data, identity.userId)
             : await new RateOverrideRepository().create(parsed.data, identity.userId),
       },
-      { status: 201 },
+      { status: 200 },
     );
   } catch (error) {
     const code = error instanceof Error ? error.message.split(":")[0] : "UNKNOWN";
@@ -54,7 +65,9 @@ export async function PUT(request: NextRequest) {
         error:
           code === "RATE_OUTSIDE_GUARDRAILS"
             ? "Le prix doit rester entre le minimum et le maximum autorisés."
-            : "Enregistrement impossible.",
+            : code === "RATE_OVERRIDE_READ_FAILED"
+              ? "Le tarif actuel n'a pas pu être relu. Réessayez dans un instant."
+              : "Le tarif n'a pas pu être enregistré. Réessayez ou contactez l'assistance.",
         code,
       },
       { status: code === "RATE_OUTSIDE_GUARDRAILS" ? 409 : 500 },

@@ -7,6 +7,7 @@ const loaders: Record<PublishedLocale, () => Promise<TranslationCatalog>> = {
   en: () => import("./translations/en.json").then((module) => module.default),
   de: () => import("./translations/de.json").then((module) => module.default),
   es: () => import("./translations/es.json").then((module) => module.default),
+  nl: () => import("./translations/nl.json").then((module) => module.default),
 };
 
 export function loadTranslations(locale: PublishedLocale) {

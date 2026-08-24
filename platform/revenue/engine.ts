@@ -89,7 +89,7 @@ export const premiumExperiences = [
     description:
       "Vin Pelletier de l’Île de Ré, biscuits apéritifs artisanaux, terrine et carte des producteurs.",
     priceCents: 4500,
-    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.png",
+    image: "/images/properties/villa-raie-manta/editorial/ilot-aperitif.webp",
   },
   {
     code: "sweet",
@@ -104,7 +104,7 @@ export const premiumExperiences = [
     label: "Linge préparé",
     description: "Lits et linge prêts pour voyager plus léger.",
     priceCents: 2500,
-    image: "/images/properties/nid-d-ete/editorial/chambre-attention.png",
+    image: "/images/properties/nid-d-ete/editorial/chambre-attention.webp",
   },
   {
     code: "beach-towels",

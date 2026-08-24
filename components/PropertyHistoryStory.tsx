@@ -13,9 +13,9 @@ const stories = {
     quote:
       "Les maisons les plus vivantes sont celles qui gardent une trace de ce qu’elles ont été.",
     images: [
-      propertyMedia["chai-des-tortues"].hero,
-      propertyMedia["chai-des-tortues"].details[0],
-      propertyMedia["chai-des-tortues"].livingRoom[0],
+      propertyMedia["chai-des-tortues"].livingRoom[7],
+      propertyMedia["chai-des-tortues"].details[5],
+      propertyMedia["chai-des-tortues"].livingRoom[6],
     ],
     href: "/histoire-de-nos-maisons#chai-des-tortues",
   },
@@ -28,9 +28,9 @@ const stories = {
     ],
     quote: "Ici, le pont n’est plus un passage : il devient une ligne de lumière dans le paysage.",
     images: [
-      propertyMedia["villa-raie-manta"].hero,
-      propertyMedia["villa-raie-manta"].livingRoom[1],
-      propertyMedia["villa-raie-manta"].exterior[0],
+      propertyMedia["villa-raie-manta"].kitchen[0],
+      propertyMedia["villa-raie-manta"].terrace[2],
+      propertyMedia["villa-raie-manta"].bedrooms[3],
     ],
     href: "/histoire-de-nos-maisons#villa-raie-manta",
   },
@@ -44,9 +44,24 @@ const stories = {
     quote:
       "Entre les allées de La Maison Heureuse et le fort à l’horizon, le paysage porte encore sa mémoire.",
     images: [
-      propertyMedia["nid-d-ete"].livingRoom[0],
-      propertyMedia["nid-d-ete"].lifestyle[14],
-      propertyMedia["nid-d-ete"].lifestyle[6],
+      {
+        src: "/images/destination/patrimoine/maison-heureuse-vue-aerienne-groupe-francois-1er.jpg",
+        alt: "La Maison Heureuse entre les arbres, le chenal et l’océan",
+        caption: "La Maison Heureuse dans son paysage maritime",
+        scope: "destination",
+      },
+      {
+        src: "/images/destination/patrimoine/saumonards-fort-boyard-pins.jpeg",
+        alt: "Fort Boyard aperçu depuis les pins des Saumonards",
+        caption: "Fort Boyard entre les pins",
+        scope: "destination",
+      },
+      {
+        src: "/images/destination/patrimoine/saumonards-dune-coucher-soleil.jpeg",
+        alt: "La dune des Saumonards dans la lumière du soir",
+        caption: "La lumière du soir sur les Saumonards",
+        scope: "destination",
+      },
     ],
     href: "/maison-heureuse-fort-boyard",
   },
