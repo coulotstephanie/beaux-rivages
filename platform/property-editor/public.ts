@@ -19,7 +19,7 @@ function collectMediaAssets(value: unknown): MediaAsset[] {
   return Object.values(value).flatMap(collectMediaAssets);
 }
 
-function useOptimizedMedia(property: Property, slug: EditablePropertySlug): Property {
+function optimizeMedia(property: Property, slug: EditablePropertySlug): Property {
   const optimizedByStem = new Map(
     collectMediaAssets(propertyMedia[slug])
       .filter((asset) => asset.src.endsWith(".webp"))
@@ -49,11 +49,11 @@ export async function getPublishedProperty(slug: EditablePropertySlug): Promise<
   noStore();
   const original = getProperty(slug);
   try {
-    return useOptimizedMedia(
+    return optimizeMedia(
       applyVisualContent(original, (await new PropertyEditorRepository().get(slug)).published),
       slug,
     );
   } catch {
-    return useOptimizedMedia(original, slug);
+    return optimizeMedia(original, slug);
   }
 }

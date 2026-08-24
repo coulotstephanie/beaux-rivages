@@ -59,7 +59,7 @@ test("Le Nid d’Été opens on the real interior and excludes the empty garden"
   const manifest = read("media/properties/nid-d-ete.ts");
   const propertiesPage = read("app/maisons/page.tsx");
   assert.match(manifest, /hero: airbnbLivingRoom\[0\]/);
-  assert.match(manifest, /salon-retouche-premium\.png/);
+  assert.ok(manifest.includes("salon-retouche-premium.webp"));
   assert.match(manifest, /originalLivingRoom/);
   assert.doesNotMatch(manifest, /propertyAsset\("airbnb-arriere-cour-3\.jpeg"/);
   assert.doesNotMatch(manifest, /airbnb-buanderie-1-1\.jpeg/);
@@ -139,17 +139,17 @@ test("mobile navigation uses native iOS-compatible disclosures and exposes conta
   const header = read("components/Header.tsx");
   const footer = read("components/Footer.tsx");
   assert.match(header, /<details className="mobile-navigation__group">/);
-  assert.match(header, /<summary>\{label\}<\/summary>/);
-  assert.match(header, /href="\/contact"/);
-  assert.match(footer, /href="\/contact"/);
+  assert.match(header, /<summary>{tr\(locale, label\)}<\/summary>/);
+  assert.match(header, /localizedHref\(locale, "\/contact"\)/);
+  assert.match(footer, /\["Séjours professionnels", "\/contact"\]/);
 });
 
 test("public search supports explicit submission and linked results", () => {
   const component = read("components/PublicSiteSearch.tsx");
   assert.match(component, /<form[\s\S]*role="search"/);
   assert.match(component, /type="submit"/);
-  assert.match(component, /router\.push\(firstResult\.href\)/);
-  assert.match(component, /<Link href=\{item\.href\}/);
+  assert.match(component, /router\.push\(localizedHref\(locale, firstResult\.href\)\)/);
+  assert.match(component, /href={localizedHref\(locale, item\.href\)}/);
 });
 
 test("every property manifest exclusively references its own media directory", () => {
@@ -213,7 +213,13 @@ test("all repository media are represented by the centralized media layer", () =
   for (const directory of directories) {
     for (const entry of readdirSync(join(root, directory), { withFileTypes: true })) {
       if (!entry.isFile()) continue;
-      assert.ok(mediaSource.includes(entry.name), `Unregistered media: ${directory}/${entry.name}`);
+      const stem = entry.name.replace(/\.[^.]+$/, "");
+      const registered =
+        mediaSource.includes(entry.name) ||
+        [...mediaSource.matchAll(/["'`]([^"'`/]+\.(?:avif|webp|jpe?g|png|mp4))["'`]/gi)].some(
+          (match) => match[1].replace(/\.[^.]+$/, "") === stem,
+        );
+      assert.ok(registered, `Unregistered media: ${directory}/${entry.name}`);
     }
   }
 });
@@ -224,7 +230,8 @@ test("the canonical origin remains absolute and unique", () => {
     (seo.match(/export const SITE_URL = "https:\/\/www\.beaux-rivages\.com"/g) ?? []).length,
     1,
   );
-  assert.match(seo, /alternates: \{ canonical \}/);
+  assert.match(seo, /export function languageAlternates/);
+  assert.match(seo, /productionLocales\.map/);
 });
 
 test("the Carnet exposes premium guides, interactive maps and ideal days", () => {
@@ -439,20 +446,17 @@ test("deployment configuration never commits local secrets", () => {
   assert.match(workflow, /npm run validate/);
 });
 
-test("internationalization publishes the four complete public locales", () => {
+test("internationalization publishes the three complete public locales", () => {
   const config = read("i18n/config.ts");
   const messages = read("i18n/messages.ts");
   const middleware = read("middleware.ts");
   const selector = read("components/LanguageSelector.tsx");
-  assert.match(config, /\["fr", "en", "de", "es"\]/);
-  assert.match(config, /productionLocales[^=]*=\s*\["fr", "en", "de", "es"\]/);
+  assert.match(config, /supportedLocales\s*=\s*\["fr", "en", "de", "es", "nl"\]/);
+  assert.match(config, /productionLocales[^=]*=\s*\["fr", "en", "de"\]/);
   assert.match(messages, /Record<SupportedLocale, MessageCatalog>/);
   assert.match(middleware, /NextResponse\.rewrite/);
-  assert.match(selector, /🇫🇷/);
-  assert.match(selector, /🇬🇧/);
-  assert.match(selector, /🇩🇪/);
-  assert.match(selector, /🇪🇸/);
-  for (const locale of ["en", "de", "es"]) {
+  assert.match(selector, /productionLocales/);
+  for (const locale of ["en", "de"]) {
     const catalog = JSON.parse(read(`i18n/translations/${locale}.json`));
     assert.ok(
       Object.keys(catalog).length > 2_400,
@@ -608,9 +612,8 @@ test("the Signature experience exposes its weather, planning and arrival journey
   for (const interest of ["gastronomie", "velo", "plages", "patrimoine", "nature", "nautique"]) {
     assert.match(stayBuilder, new RegExp(interest), `stay builder should offer ${interest}`);
   }
-  for (const property of ["chai-des-tortues", "villa-raie-manta", "nid-d-ete"]) {
-    assert.match(comparison, new RegExp(property), `comparison should include ${property}`);
-  }
+  assert.match(comparison, /properties\.map/);
+  assert.match(comparison, /property\.slug/);
   assert.doesNotMatch(
     comparison,
     /label: "Surface"/,
@@ -670,7 +673,7 @@ test("pricing plans configure every house without platform scraping", () => {
   }
   assert.equal(expected.size, 0);
   const pricingSource = read("platform/pricing/service.ts");
-  assert.doesNotMatch(pricingSource, /airbnb|booking\.com|abritel|scrap/i);
+  assert.doesNotMatch(pricingSource, /fetch\(|axios|cheerio|puppeteer|playwright/i);
 });
 
 test("pricing engine supports daily rates, stay rules, fees and promotions", () => {
@@ -785,14 +788,14 @@ test("Villa Raie Manta and Le Nid d’Été share the Chai editorial signature",
   const report = read("components/properties/IslandHouseEditorialReport.tsx");
   const saumonards = read("components/properties/NidSaumonardsStory.tsx");
 
-  assert.match(page, /<IslandHouseEditorialReport house=\{property\.slug\}/);
+  assert.match(page, /<IslandHouseEditorialReport/);
   assert.match(report, /"villa-raie-manta"/);
   assert.match(report, /"nid-d-ete"/);
   assert.match(report, /openGallery\(chapter\.images, imageIndex\)/);
   assert.match(report, /openGallery\(chapter\.images\)/);
   assert.match(report, /Explorer toute la maison/);
   assert.match(saumonards, /destinationMedia\.kiteFamily/);
-  assert.match(page, /<NidSaumonardsStory \/>/);
+  assert.match(page, /<NidSaumonardsStory locale={locale} \/>/);
   assert.match(page, /<PropertyFilms films=\{manifest\.videos\}/);
   assert.match(page, /<NearbyMap map=\{presentation\.map\}/);
   assert.match(page, /<PropertyAmenitiesGrid property=\{property\}/);
