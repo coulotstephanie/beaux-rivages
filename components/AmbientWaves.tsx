@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr } from "@/i18n/lot1-client";
 
-export function AmbientWaves() {
+export function AmbientWaves({ locale = "fr" }: { locale?: SupportedLocale }) {
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState("");
   const contextRef = useRef<AudioContext | null>(null);
@@ -71,12 +73,12 @@ export function AmbientWaves() {
       setPlaying(true);
     } catch {
       stop();
-      setError("Le bruit des vagues n’a pas pu démarrer. Réessayez.");
+      setError(tr(locale, "Le bruit des vagues n’a pas pu démarrer. Réessayez."));
     }
   };
 
   return (
-    <aside className="ambient-waves" aria-label="Ambiance sonore de l’océan">
+    <aside className="ambient-waves" aria-label={tr(locale, "Ambiance sonore de l’océan")}>
       {error && (
         <span className="sr-only" role="status">
           {error}
@@ -87,10 +89,13 @@ export function AmbientWaves() {
         className={playing ? "is-active" : ""}
         onClick={() => (playing ? stop() : void play())}
         aria-pressed={playing}
-        aria-label={playing ? "Couper le bruit des vagues" : "Écouter le bruit des vagues"}
+        aria-label={tr(
+          locale,
+          playing ? "Couper le bruit des vagues" : "Écouter le bruit des vagues",
+        )}
       >
         <span aria-hidden="true">≈</span>
-        {playing ? "Couper les vagues" : "Écouter les vagues"}
+        {tr(locale, playing ? "Couper les vagues" : "Écouter les vagues")}
       </button>
     </aside>
   );
