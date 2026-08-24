@@ -1,10 +1,12 @@
 import "server-only";
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_cache as cache } from "next/cache";
 import { getProperty, type Property } from "@/data";
 import { propertyMedia } from "@/media/properties";
 import type { MediaAsset } from "@/media/types";
 import { applyVisualContent, type EditablePropertySlug } from "./contracts";
 import { PropertyEditorRepository } from "./repository";
+
+export const PUBLISHED_PROPERTY_CACHE_TAG = "published-property-content";
 
 function collectMediaAssets(value: unknown): MediaAsset[] {
   if (Array.isArray(value)) {
@@ -45,12 +47,18 @@ function optimizeMedia(property: Property, slug: EditablePropertySlug): Property
   };
 }
 
+const getPublishedVisualContent = cache(
+  async (slug: EditablePropertySlug) =>
+    (await new PropertyEditorRepository().get(slug)).published,
+  ["published-property-content"],
+  { revalidate: 300, tags: [PUBLISHED_PROPERTY_CACHE_TAG] },
+);
+
 export async function getPublishedProperty(slug: EditablePropertySlug): Promise<Property> {
-  noStore();
   const original = getProperty(slug);
   try {
     return optimizeMedia(
-      applyVisualContent(original, (await new PropertyEditorRepository().get(slug)).published),
+      applyVisualContent(original, await getPublishedVisualContent(slug)),
       slug,
     );
   } catch {

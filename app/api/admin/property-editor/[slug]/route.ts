@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 import { authorizeStaff } from "@/platform/auth/server";
 import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/security";
 import {
@@ -7,6 +8,7 @@ import {
 } from "@/platform/property-editor/contracts";
 import { propertyEditorMutationSchema } from "@/platform/property-editor/schemas";
 import { PropertyEditorRepository } from "@/platform/property-editor/repository";
+import { PUBLISHED_PROPERTY_CACHE_TAG } from "@/platform/property-editor/public";
 
 function valid(value: string): value is EditablePropertySlug {
   return editablePropertySlugs.includes(value as EditablePropertySlug);
@@ -45,8 +47,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ sl
   try {
     if (parsed.data.action === "save-draft")
       await repository.saveDraft(slug, parsed.data.content, identity.userId);
-    else if (parsed.data.action === "publish")
+    else if (parsed.data.action === "publish") {
       await repository.publish(slug, parsed.data.content, identity.userId);
+      revalidateTag(PUBLISHED_PROPERTY_CACHE_TAG);
+    }
     else await repository.discard(slug, identity.userId);
     return noStoreJson({ ok: true, document: await repository.get(slug) });
   } catch {
