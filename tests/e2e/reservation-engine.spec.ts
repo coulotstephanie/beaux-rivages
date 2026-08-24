@@ -68,6 +68,7 @@ test("a traveler sees the real total and receives a clear request reference", as
   );
 
   await page.goto("/reserver?maison=chai-des-tortues");
+  await page.getByRole("radio", { name: /Le Chai des Tortues/i }).check();
   await page.getByRole("button", { name: /Continuer/i }).click();
   await page.getByRole("button", { name: "Mois suivant" }).click();
   await page.locator(".availability-calendar__days button:not([disabled])").nth(1).click();
