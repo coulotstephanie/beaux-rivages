@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("a traveler can reach the availability calendar", async ({ page }) => {
   await page.route("**/api/calendar?property=*", (route) =>
-    route.fulfill({ json: { blocks: [], sources: [{ status: "success" }] } }),
+    route.fulfill({ json: { blocks: [], reliable: true, sources: [{ status: "success" }] } }),
   );
   await page.goto("/reserver");
 
@@ -50,7 +50,7 @@ test("a traveler sees the real total and receives a clear request reference", as
     total: 755,
   };
   await page.route("**/api/calendar?property=*", (route) =>
-    route.fulfill({ json: { blocks: [], sources: [{ status: "success" }] } }),
+    route.fulfill({ json: { blocks: [], reliable: true, sources: [{ status: "success" }] } }),
   );
   await page.route("**/api/pricing**", (route) => route.fulfill({ json: quote }));
   await page.route("**/api/quote**", (route) =>
