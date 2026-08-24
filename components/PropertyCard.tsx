@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "./ui";
+import type { SupportedLocale } from "@/i18n/config";
+import { clientLocalize as tr, localizedHref } from "@/i18n/lot1-client";
 
 type PropertyCardProps = {
   title: string;
@@ -10,6 +12,7 @@ type PropertyCardProps = {
   location: string;
   facts?: { value: string; label: string }[];
   bookingHref?: string;
+  locale?: SupportedLocale;
 };
 
 export function PropertyCard({
@@ -20,13 +23,14 @@ export function PropertyCard({
   location,
   facts = [],
   bookingHref,
+  locale = "fr",
 }: PropertyCardProps) {
   return (
     <article className="property-card premium-property-card">
-      <Link href={href} className="property-image" aria-label={`Découvrir ${title}`}>
+      <Link href={localizedHref(locale, href)} className="property-image" aria-label={`${tr(locale, "Découvrir")} ${title}`}>
         <Image
           src={image}
-          alt={`Découvrir ${title}`}
+          alt={`${tr(locale, "Découvrir")} ${title}`}
           fill
           quality={88}
           loading="lazy"
@@ -40,14 +44,14 @@ export function PropertyCard({
         </span>
       </Link>
       <div className="property-copy">
-        <p className="eyebrow">Maison Beaux Rivages</p>
+        <p className="eyebrow">{tr(locale, "Maison Beaux Rivages")}</p>
         <h3>{title}</h3>
         <p>{subtitle}</p>
         <div className="property-card__footer">
           {facts.length > 0 ? (
             <ul
               className="property-card__facts"
-              aria-label={`Informations essentielles — ${title}`}
+              aria-label={`${tr(locale, "Informations essentielles")} — ${title}`}
             >
               {facts.map((fact) => (
                 <li key={fact.label}>
@@ -58,10 +62,10 @@ export function PropertyCard({
             </ul>
           ) : null}
           <div className="property-card__actions">
-            <Link href={href} className="text-link">
-              Découvrir <span aria-hidden="true">→</span>
+            <Link href={localizedHref(locale, href)} className="text-link">
+              {tr(locale, "Découvrir")} <span aria-hidden="true">→</span>
             </Link>
-            {bookingHref ? <Link href={bookingHref}>Réserver</Link> : null}
+            {bookingHref ? <Link href={localizedHref(locale, bookingHref)}>{tr(locale, "Réserver")}</Link> : null}
           </div>
         </div>
       </div>
