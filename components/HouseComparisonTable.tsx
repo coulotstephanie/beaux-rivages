@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { properties } from "@/data";
-import { propertyMedia } from "@/media/properties";
 
 const comparisonRows = [
   { label: "Distance plage", values: ["250 m", "Quelques pas", "Portail privé à 20 m"] },
@@ -20,14 +19,9 @@ const comparisonRows = [
     values: ["Pierre et patrimoine", "Design et lumière", "Nature et sérénité"],
   },
   {
-    label: "Vidéos",
-    values: [
-      `${propertyMedia["chai-des-tortues"].videos.length} films`,
-      `${propertyMedia["villa-raie-manta"].videos.length} film`,
-      `${propertyMedia["nid-d-ete"].videos.length} film`,
-    ],
+    label: "Présentation",
+    values: ["3 films · galerie immersive", "Galerie immersive", "Galerie immersive"],
   },
-  { label: "Galerie", values: properties.map((property) => `${property.gallery.length} vues`) },
 ] as const;
 
 export function HouseComparisonTable() {
