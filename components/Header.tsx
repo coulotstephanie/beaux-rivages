@@ -70,7 +70,7 @@ function MegaMenu({
             ))}
           </div>
         </div>
-        <PublicSiteSearch />
+        <PublicSiteSearch locale={locale} />
       </div>
     </details>
   );
@@ -139,7 +139,7 @@ export function Header({
       className={`site-header site-header--${contrast}${scrolled ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}`}
     >
       <div className="site-header__inner">
-        <BrandLogo />
+        <BrandLogo locale={locale} />
         <nav className="desktop-navigation" aria-label={tr(locale, "Navigation principale")}>
           <Link href={localizedHref(locale, "/")}>{tr(locale, "Accueil")}</Link>
           <MegaMenu
@@ -223,7 +223,7 @@ export function Header({
           <Link href={localizedHref(locale, "/contact")} onClick={closeMenu}>
             {tr(locale, "Contact")}
           </Link>
-          <PublicSiteSearch onNavigate={closeMenu} />
+          <PublicSiteSearch locale={locale} onNavigate={closeMenu} />
         </div>
       </nav>
     </header>
