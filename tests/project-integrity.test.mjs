@@ -141,7 +141,7 @@ test("mobile navigation uses native iOS-compatible disclosures and exposes conta
   assert.match(header, /<details className="mobile-navigation__group">/);
   assert.match(header, /<summary>{tr\(locale, label\)}<\/summary>/);
   assert.match(header, /localizedHref\(locale, "\/contact"\)/);
-  assert.match(footer, /localizedHref\(locale, "\/contact"\)/);
+  assert.match(footer, /\["Séjours professionnels", "\/contact"\]/);
 });
 
 test("public search supports explicit submission and linked results", () => {
