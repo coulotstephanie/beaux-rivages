@@ -673,7 +673,7 @@ test("pricing plans configure every house without platform scraping", () => {
   }
   assert.equal(expected.size, 0);
   const pricingSource = read("platform/pricing/service.ts");
-  assert.doesNotMatch(pricingSource, /fetch\\(|axios|cheerio|puppeteer|playwright/i);
+  assert.doesNotMatch(pricingSource, /fetch\(|axios|cheerio|puppeteer|playwright/i);
 });
 
 test("pricing engine supports daily rates, stay rules, fees and promotions", () => {
