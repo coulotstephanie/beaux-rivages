@@ -17,12 +17,12 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
-  const airbnb2027Rate =
+  const directBooking2027Rate =
     plan.propertySlug === "nid-d-ete" ? nidDEte2027NightlyRate(date) : undefined;
-  if (airbnb2027Rate !== undefined) {
+  if (directBooking2027Rate !== undefined) {
     return {
-      rate: airbnb2027Rate,
-      season: "Tarif Airbnb 2027",
+      rate: directBooking2027Rate,
+      season: "Tarif direct 2027",
       minimumNights: plan.minimumNights,
     };
   }
