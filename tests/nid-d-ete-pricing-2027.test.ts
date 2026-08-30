@@ -54,7 +54,7 @@ function accommodation(arrival: string, departure: string) {
   return total;
 }
 
-test("each of the 365 dates in 2027 maps to exactly one Airbnb period and exact rate", () => {
+test("each of the 365 dates in 2027 maps to exactly one direct-booking period and exact rate", () => {
   const dates = datesIn2027();
   assert.equal(dates.length, 365);
   for (const date of dates) {
@@ -93,12 +93,12 @@ test("legacy imports, fallback seasons and old summer values never override the 
     ],
   };
   const checks = [
-    ["2027-05-14", 285],
-    ["2027-06-28", 208],
-    ["2027-07-01", 208],
-    ["2027-07-10", 220],
-    ["2027-07-24", 235],
-    ["2027-08-01", 250],
+    ["2027-05-14", 195],
+    ["2027-06-28", 175],
+    ["2027-07-01", 175],
+    ["2027-07-10", 195],
+    ["2027-07-24", 210],
+    ["2027-08-01", 225],
   ] as const;
   for (const [date, expected] of checks) {
     assert.equal(rateForDate(legacyPlan, date).rate, expected, date);
@@ -132,13 +132,13 @@ test("UTC and Europe/Paris calendar construction resolve every 2027 date identic
 
 test("required 2027 stay examples equal the sum of arrival-inclusive nights", () => {
   const examples = [
-    ["2027-08-01", "2027-08-08", 1_750],
-    ["2027-08-08", "2027-08-15", 1_750],
-    ["2027-08-16", "2027-08-23", 1_540],
-    ["2027-09-01", "2027-09-08", 1_246],
-    ["2027-05-05", "2027-05-09", 1_288],
-    ["2027-12-17", "2027-12-24", 1_449],
-    ["2027-07-28", "2027-08-04", 1_705],
+    ["2027-08-01", "2027-08-08", 1_575],
+    ["2027-08-08", "2027-08-15", 1_575],
+    ["2027-08-16", "2027-08-23", 1_365],
+    ["2027-09-01", "2027-09-08", 1_015],
+    ["2027-05-05", "2027-05-09", 880],
+    ["2027-12-17", "2027-12-24", 1_120],
+    ["2027-07-28", "2027-08-04", 1_530],
   ] as const;
   for (const [arrival, departure, expected] of examples) {
     assert.equal(accommodation(arrival, departure), expected, `${arrival} → ${departure}`);
@@ -157,9 +157,9 @@ test("public quote keeps 90 euro cleaning separate and applies no accommodation 
     options: [],
     experiences: [],
   });
-  assert.equal(quote.accommodationBeforeDiscount, 1_750);
+  assert.equal(quote.accommodationBeforeDiscount, 1_575);
   assert.equal(quote.promotion, null);
-  assert.equal(quote.accommodation, 1_750);
+  assert.equal(quote.accommodation, 1_575);
   assert.equal(quote.cleaningFee, 90);
   assert.equal(quote.optionsTotal, 0);
   assert.equal(quote.optionLines.length, 0);
@@ -167,14 +167,14 @@ test("public quote keeps 90 euro cleaning separate and applies no accommodation 
 
 test("priority stays keep exact accommodation for two and six adults", async () => {
   const stays = [
-    ["2027-01-01", "2027-01-03", 429],
-    ["2027-03-08", "2027-03-10", 246],
-    ["2027-05-05", "2027-05-09", 1_288],
-    ["2027-05-14", "2027-05-17", 855],
-    ["2027-06-04", "2027-06-07", 666],
-    ["2027-07-05", "2027-07-12", 1_540],
-    ["2027-07-19", "2027-07-26", 1_645],
-    ["2027-08-01", "2027-08-08", 1_750],
+    ["2027-01-01", "2027-01-03", 305],
+    ["2027-03-08", "2027-03-10", 210],
+    ["2027-05-05", "2027-05-09", 880],
+    ["2027-05-14", "2027-05-17", 585],
+    ["2027-06-04", "2027-06-07", 525],
+    ["2027-07-05", "2027-07-12", 1_365],
+    ["2027-07-19", "2027-07-26", 1_470],
+    ["2027-08-01", "2027-08-08", 1_575],
   ] as const;
   for (const [arrival, departure, expected] of stays) {
     for (const adults of [2, 6]) {
