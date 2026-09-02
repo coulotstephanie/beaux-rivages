@@ -127,9 +127,13 @@ export function createPageStructuredData(config: PageSeoConfig): Record<string, 
 
 export function createPropertySeo(property: Property): PageSeoConfig {
   const path = `/maisons/${property.slug}` as const;
-  const locality = property.location.split(" · ")[0];
+  const searchTitles: Record<string, string> = {
+    "chai-des-tortues": "Le Chai des Tortues | Location Île de Ré à 250 m de la plage",
+    "villa-raie-manta": "Villa Raie Manta | Villa vue mer Île de Ré, plage à pied",
+    "nid-d-ete": "Le Nid d’Été | Location Île d’Oléron, plage à 20 m",
+  };
   return {
-    title: `${property.title}, ${locality} | Beaux Rivages`,
+    title: searchTitles[property.slug] ?? `${property.title} | Beaux Rivages`,
     description: property.seoDescription,
     path,
     breadcrumbs: [
