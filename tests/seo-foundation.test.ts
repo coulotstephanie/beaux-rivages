@@ -28,3 +28,25 @@ test("le sitemap publie les alternates sans date de fraîcheur artificielle", ()
   assert.match(source, /"x-default"/);
   assert.doesNotMatch(source, /lastModified/);
 });
+
+
+test("les titres des maisons ciblent leur destination et leur proximité plage", async () => {
+  const { createPropertySeo } = await import("../seo");
+  const { properties } = await import("../data");
+  const titles = Object.fromEntries(
+    properties.map((property) => [property.slug, createPropertySeo(property).title]),
+  );
+
+  assert.equal(
+    titles["chai-des-tortues"],
+    "Le Chai des Tortues | Location Île de Ré à 250 m de la plage",
+  );
+  assert.equal(
+    titles["villa-raie-manta"],
+    "Villa Raie Manta | Villa vue mer Île de Ré, plage à pied",
+  );
+  assert.equal(
+    titles["nid-d-ete"],
+    "Le Nid d’Été | Location Île d’Oléron, plage à 20 m",
+  );
+});
