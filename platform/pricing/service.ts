@@ -4,7 +4,7 @@ import { ratePlanRepository } from "./repository";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 import { frenchStayReferenceCalendar } from "@/platform/calendar/french-reference-calendar";
 import { minimumNightsForDate } from "./channels";
-import { nidDEte2027NightlyRate } from "./nid-d-ete-2027";
+import { validated2027NightlyRate } from "./validated-2027-rates";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -17,12 +17,11 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
-  const airbnb2027Rate =
-    plan.propertySlug === "nid-d-ete" ? nidDEte2027NightlyRate(date) : undefined;
-  if (airbnb2027Rate !== undefined) {
+  const validated2027Rate = validated2027NightlyRate(plan.propertySlug, date);
+  if (validated2027Rate !== undefined) {
     return {
-      rate: airbnb2027Rate,
-      season: "Tarif Airbnb 2027",
+      rate: validated2027Rate,
+      season: "Tarif validé 2027",
       minimumNights: plan.minimumNights,
     };
   }

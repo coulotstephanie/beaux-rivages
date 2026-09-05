@@ -1,0 +1,52 @@
+import type { PropertySlug } from "@/platform/calendar/config";
+import { nidDEte2027NightlyRate } from "./nid-d-ete-2027";
+
+type RatePeriod = {
+  startsOn: string;
+  endsOn: string;
+  nightlyRate: number;
+};
+
+const CHAI_DES_TORTUES_2027_RATE_PERIODS: readonly RatePeriod[] = [
+  { startsOn: "2027-09-01", endsOn: "2027-10-01", nightlyRate: 180 },
+  { startsOn: "2027-10-01", endsOn: "2027-10-16", nightlyRate: 150 },
+  { startsOn: "2027-10-16", endsOn: "2027-11-01", nightlyRate: 180 },
+  { startsOn: "2027-11-01", endsOn: "2027-11-10", nightlyRate: 140 },
+  { startsOn: "2027-11-10", endsOn: "2027-11-14", nightlyRate: 180 },
+  { startsOn: "2027-11-14", endsOn: "2027-12-18", nightlyRate: 130 },
+  { startsOn: "2027-12-18", endsOn: "2027-12-24", nightlyRate: 180 },
+  { startsOn: "2027-12-24", endsOn: "2027-12-31", nightlyRate: 220 },
+  { startsOn: "2027-12-31", endsOn: "2028-01-01", nightlyRate: 250 },
+];
+
+const VILLA_RAIE_MANTA_2027_RATE_PERIODS: readonly RatePeriod[] = [
+  { startsOn: "2027-09-01", endsOn: "2027-10-01", nightlyRate: 200 },
+  { startsOn: "2027-10-01", endsOn: "2027-10-16", nightlyRate: 180 },
+  { startsOn: "2027-10-16", endsOn: "2027-11-01", nightlyRate: 220 },
+  { startsOn: "2027-11-01", endsOn: "2027-11-10", nightlyRate: 170 },
+  { startsOn: "2027-11-10", endsOn: "2027-11-14", nightlyRate: 220 },
+  { startsOn: "2027-11-14", endsOn: "2027-12-18", nightlyRate: 160 },
+  { startsOn: "2027-12-18", endsOn: "2027-12-24", nightlyRate: 250 },
+  { startsOn: "2027-12-24", endsOn: "2027-12-31", nightlyRate: 300 },
+  { startsOn: "2027-12-31", endsOn: "2028-01-01", nightlyRate: 350 },
+];
+
+function findRate(periods: readonly RatePeriod[], date: string) {
+  return periods.find((period) => date >= period.startsOn && date < period.endsOn)?.nightlyRate;
+}
+
+/**
+ * Rates explicitly validated with Stéphanie and harmonized with the channel
+ * calendars. They take precedence over stale imported seasons and yield data.
+ */
+export function validated2027NightlyRate(
+  propertySlug: PropertySlug,
+  date: string,
+): number | undefined {
+  if (propertySlug === "nid-d-ete") return nidDEte2027NightlyRate(date);
+  if (propertySlug === "chai-des-tortues")
+    return findRate(CHAI_DES_TORTUES_2027_RATE_PERIODS, date);
+  if (propertySlug === "villa-raie-manta")
+    return findRate(VILLA_RAIE_MANTA_2027_RATE_PERIODS, date);
+  return undefined;
+}

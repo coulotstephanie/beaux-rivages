@@ -70,8 +70,14 @@ export const NID_D_ETE_2027_RATE_PERIODS: readonly NidDEte2027RatePeriod[] = [
   { startsOn: "2027-09-24", endsOn: "2027-09-26", nightlyRate: 140 },
   { startsOn: "2027-09-26", endsOn: "2027-09-28", nightlyRate: 130 },
   { startsOn: "2027-09-28", endsOn: "2027-10-01", nightlyRate: 115 },
-  { startsOn: "2027-10-01", endsOn: "2027-12-17", nightlyRate: 178 },
-  { startsOn: "2027-12-17", endsOn: "2028-01-01", nightlyRate: 207 },
+  { startsOn: "2027-10-01", endsOn: "2027-10-16", nightlyRate: 130 },
+  { startsOn: "2027-10-16", endsOn: "2027-11-01", nightlyRate: 145 },
+  { startsOn: "2027-11-01", endsOn: "2027-11-10", nightlyRate: 110 },
+  { startsOn: "2027-11-10", endsOn: "2027-11-14", nightlyRate: 140 },
+  { startsOn: "2027-11-14", endsOn: "2027-12-18", nightlyRate: 105 },
+  { startsOn: "2027-12-18", endsOn: "2027-12-24", nightlyRate: 160 },
+  { startsOn: "2027-12-24", endsOn: "2027-12-31", nightlyRate: 180 },
+  { startsOn: "2027-12-31", endsOn: "2028-01-01", nightlyRate: 200 },
 ];
 
 export function nidDEte2027NightlyRate(date: string): number | undefined {
