@@ -73,7 +73,7 @@ export class SupabasePricingPlanReader {
         .select(
           "deposit_percentage,full_payment_threshold_days,balance_due_days,security_deposit_cents",
         )
-        .filter("id" as "slug", "eq", "true")
+        .eq("id" as "slug", true)
         .maybeSingle(),
     ]);
     if (ratesResult.error) throw new Error(`PRICING_RATES_FAILED:${ratesResult.error.code}`);
