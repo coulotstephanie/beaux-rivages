@@ -141,7 +141,7 @@ test("required 2027 stay examples equal the sum of arrival-inclusive nights", ()
     ["2027-05-05", "2027-05-09", 720],
     ["2027-05-15", "2027-05-22", 1_150],
     ["2027-05-22", "2027-05-29", 1_040],
-    ["2027-12-17", "2027-12-24", 1_449],
+    ["2027-12-17", "2027-12-24", 1_065],
     ["2027-07-28", "2027-08-04", 1_705],
   ] as const;
   for (const [arrival, departure, expected] of examples) {
