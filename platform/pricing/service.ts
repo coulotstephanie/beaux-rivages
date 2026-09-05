@@ -4,7 +4,7 @@ import { ratePlanRepository } from "./repository";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 import { frenchStayReferenceCalendar } from "@/platform/calendar/french-reference-calendar";
 import { minimumNightsForDate } from "./channels";
-import { validated2027NightlyRate } from "./validated-2027-rates";
+import { validated2027MinimumNights, validated2027NightlyRate } from "./validated-2027-rates";
 
 function eachNight(arrival: string, nights: number) {
   const dates: string[] = [];
@@ -22,7 +22,7 @@ export function rateForDate(plan: PropertyRatePlan, date: string) {
     return {
       rate: validated2027Rate,
       season: "Tarif validé 2027",
-      minimumNights: plan.minimumNights,
+      minimumNights: validated2027MinimumNights(plan.propertySlug, date) ?? plan.minimumNights,
     };
   }
   const priority = {
@@ -89,7 +89,9 @@ export async function calculateQuote(input: QuoteRequest) {
     return {
       date,
       ...rate,
-      minimumNights: minimumNightsForDate(date, rate.minimumNights, referenceDays),
+      minimumNights:
+        validated2027MinimumNights(plan.propertySlug, date) ??
+        minimumNightsForDate(date, rate.minimumNights, referenceDays),
     };
   });
   const requiredMinimum = Math.max(
@@ -243,7 +245,9 @@ export async function buildAnnualRates(
     days.push({
       date,
       ...rate,
-      minimumNights: minimumNightsForDate(date, rate.minimumNights, referenceDays),
+      minimumNights:
+        validated2027MinimumNights(plan.propertySlug, date) ??
+        minimumNightsForDate(date, rate.minimumNights, referenceDays),
     });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
   }
