@@ -89,7 +89,9 @@ export async function calculateQuote(input: QuoteRequest) {
     return {
       date,
       ...rate,
-      minimumNights:\n        validated2027MinimumNights(plan.propertySlug, date) ??\n        minimumNightsForDate(date, rate.minimumNights, referenceDays),
+      minimumNights:
+        validated2027MinimumNights(plan.propertySlug, date) ??
+        minimumNightsForDate(date, rate.minimumNights, referenceDays),
     };
   });
   const requiredMinimum = Math.max(
@@ -243,7 +245,9 @@ export async function buildAnnualRates(
     days.push({
       date,
       ...rate,
-      minimumNights:\n        validated2027MinimumNights(plan.propertySlug, date) ??\n        minimumNightsForDate(date, rate.minimumNights, referenceDays),
+      minimumNights:
+        validated2027MinimumNights(plan.propertySlug, date) ??
+        minimumNightsForDate(date, rate.minimumNights, referenceDays),
     });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
   }
