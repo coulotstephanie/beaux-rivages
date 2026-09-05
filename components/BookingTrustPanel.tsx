@@ -26,7 +26,7 @@ const assurances = [
   },
   {
     title: "Règlement",
-    copy: "Le règlement des réservations directes s’effectue actuellement exclusivement par virement bancaire, selon les instructions transmises après validation.",
+    copy: "Le règlement des réservations directes peut s’effectuer par virement bancaire, PayPal ou Wero, selon les instructions transmises après validation.",
   },
   {
     title: "Contact direct",
