@@ -8,6 +8,10 @@ type RatePeriod = {
 };
 
 const CHAI_DES_TORTUES_2027_RATE_PERIODS: readonly RatePeriod[] = [
+  { startsOn: "2027-06-28", endsOn: "2027-07-24", nightlyRate: 325 },
+  { startsOn: "2027-07-24", endsOn: "2027-08-16", nightlyRate: 350 },
+  { startsOn: "2027-08-16", endsOn: "2027-08-23", nightlyRate: 335 },
+  { startsOn: "2027-08-23", endsOn: "2027-09-01", nightlyRate: 250 },
   { startsOn: "2027-09-01", endsOn: "2027-10-01", nightlyRate: 180 },
   { startsOn: "2027-10-01", endsOn: "2027-10-16", nightlyRate: 150 },
   { startsOn: "2027-10-16", endsOn: "2027-11-01", nightlyRate: 180 },
@@ -20,6 +24,12 @@ const CHAI_DES_TORTUES_2027_RATE_PERIODS: readonly RatePeriod[] = [
 ];
 
 const VILLA_RAIE_MANTA_2027_RATE_PERIODS: readonly RatePeriod[] = [
+  { startsOn: "2027-01-04", endsOn: "2027-04-03", nightlyRate: 140 },
+  { startsOn: "2027-04-03", endsOn: "2027-07-01", nightlyRate: 190 },
+  { startsOn: "2027-07-01", endsOn: "2027-07-10", nightlyRate: 420 },
+  { startsOn: "2027-07-10", endsOn: "2027-07-24", nightlyRate: 480 },
+  { startsOn: "2027-07-24", endsOn: "2027-08-21", nightlyRate: 520 },
+  { startsOn: "2027-08-21", endsOn: "2027-09-01", nightlyRate: 390 },
   { startsOn: "2027-09-01", endsOn: "2027-10-01", nightlyRate: 200 },
   { startsOn: "2027-10-01", endsOn: "2027-10-16", nightlyRate: 180 },
   { startsOn: "2027-10-16", endsOn: "2027-11-01", nightlyRate: 220 },
