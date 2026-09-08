@@ -93,7 +93,7 @@ test("legacy imports, fallback seasons and old summer values never override the 
     ],
   };
   const checks = [
-    ["2027-05-14", 210],
+    ["2027-05-14", 285],
     ["2027-06-28", 208],
     ["2027-07-01", 208],
     ["2027-07-10", 220],
@@ -136,11 +136,11 @@ test("required 2027 stay examples equal the sum of arrival-inclusive nights", ()
     ["2027-08-08", "2027-08-15", 1_750],
     ["2027-08-16", "2027-08-23", 1_540],
     ["2027-08-25", "2027-09-01", 1_190],
-    ["2027-09-01", "2027-09-08", 1_000],
-    ["2027-05-01", "2027-05-08", 1_260],
-    ["2027-05-05", "2027-05-09", 720],
-    ["2027-05-15", "2027-05-22", 1_150],
-    ["2027-05-22", "2027-05-29", 1_040],
+    ["2027-09-01", "2027-09-08", 875],
+    ["2027-05-01", "2027-05-08", 1_844],
+    ["2027-05-05", "2027-05-09", 1_288],
+    ["2027-05-15", "2027-05-22", 1_465],
+    ["2027-05-22", "2027-05-29", 1_172],
     ["2027-12-17", "2027-12-24", 1_065],
     ["2027-07-28", "2027-08-04", 1_705],
   ] as const;
@@ -149,7 +149,7 @@ test("required 2027 stay examples equal the sum of arrival-inclusive nights", ()
   }
 });
 
-test("public quote keeps 90 euro cleaning separate and applies no accommodation promotion", async () => {
+test("public quote keeps 75 euro cleaning separate and applies no accommodation promotion", async () => {
   const quote = await calculateQuote({
     propertySlug: "nid-d-ete",
     arrival: "2027-08-01",
@@ -164,7 +164,7 @@ test("public quote keeps 90 euro cleaning separate and applies no accommodation 
   assert.equal(quote.accommodationBeforeDiscount, 1_750);
   assert.equal(quote.promotion, null);
   assert.equal(quote.accommodation, 1_750);
-  assert.equal(quote.cleaningFee, 90);
+  assert.equal(quote.cleaningFee, 75);
   assert.equal(quote.optionsTotal, 0);
   assert.equal(quote.optionLines.length, 0);
 });
@@ -173,8 +173,8 @@ test("priority stays keep exact accommodation for two and six adults", async () 
   const stays = [
     ["2027-01-01", "2027-01-03", 429],
     ["2027-03-08", "2027-03-10", 246],
-    ["2027-05-05", "2027-05-09", 720],
-    ["2027-05-14", "2027-05-17", 630],
+    ["2027-05-05", "2027-05-09", 1_288],
+    ["2027-05-14", "2027-05-17", 855],
     ["2027-06-04", "2027-06-07", 666],
     ["2027-07-05", "2027-07-12", 1_540],
     ["2027-07-19", "2027-07-26", 1_645],
@@ -194,7 +194,7 @@ test("priority stays keep exact accommodation for two and six adults", async () 
         experiences: [],
       });
       assert.equal(quote.accommodation, expected, `${arrival}, ${adults} adultes`);
-      assert.equal(quote.cleaningFee, 90);
+      assert.equal(quote.cleaningFee, 75);
       assert.equal(quote.promotion, null);
       assert.equal(quote.optionsTotal, 0);
       assert.equal(

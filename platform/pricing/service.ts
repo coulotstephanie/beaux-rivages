@@ -4,6 +4,7 @@ import { ratePlanRepository } from "./repository";
 import { buildPaymentSchedule } from "@/platform/reservations/payment-schedule";
 import { frenchStayReferenceCalendar } from "@/platform/calendar/french-reference-calendar";
 import { minimumNightsForDate } from "./channels";
+import { airbnbCalendarNightlyRate } from "./airbnb-calendar-rates";
 import { validated2027MinimumNights, validated2027NightlyRate } from "./validated-2027-rates";
 
 function eachNight(arrival: string, nights: number) {
@@ -17,6 +18,14 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
+  const calendarRate = airbnbCalendarNightlyRate(plan.propertySlug, date);
+  if (calendarRate !== undefined) {
+    return {
+      rate: calendarRate,
+      season: "Tarif Airbnb relevé le 8 septembre 2026",
+      minimumNights: validated2027MinimumNights(plan.propertySlug, date) ?? plan.minimumNights,
+    };
+  }
   const validated2027Rate = validated2027NightlyRate(plan.propertySlug, date);
   if (validated2027Rate !== undefined) {
     return {
