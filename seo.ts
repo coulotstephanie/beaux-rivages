@@ -3,6 +3,7 @@ import type { PageSeoConfig } from "@/content/fr/seo";
 import type { Property } from "@/data";
 import type { DestinationGuide } from "@/destinationGuides";
 import { productionLocales, type SupportedLocale } from "@/i18n/config";
+import { reviewProfiles } from "@/reviews";
 
 export const SITE_URL = "https://www.beaux-rivages.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/destination/marais-coucher-soleil.jpeg";
@@ -202,6 +203,13 @@ export function createPropertyStructuredData(property: Property): Record<string,
     },
   };
   const propertyLocation = propertyLocations[property.slug];
+  const reviewProfile = reviewProfiles.find((profile) => profile.slug === property.slug);
+  const sameAs = reviewProfile
+    ? [
+        reviewProfile.sourceUrl,
+        ...(reviewProfile.otherSources ?? []).map((source) => source.sourceUrl),
+      ]
+    : [];
   const amenityNames = property.amenityGroups
     .flatMap((group) => group.items)
     .join(" ")
@@ -241,8 +249,9 @@ export function createPropertyStructuredData(property: Property): Record<string,
       value: "Free",
     },
   ];
-  const images = [...new Set([property.hero, ...property.gallery.map((image) => image.src)])]
-    .map(absoluteUrl);
+  const images = [...new Set([property.hero, ...property.gallery.map((image) => image.src)])].map(
+    absoluteUrl,
+  );
   const pageSchemas = createPageStructuredData(config).map((schema) =>
     schema["@type"] === "WebPage" ? { ...schema, mainEntity: { "@id": lodgingId } } : schema,
   );
@@ -256,6 +265,7 @@ export function createPropertyStructuredData(property: Property): Record<string,
       identifier: `beaux-rivages:${property.slug}`,
       brand: {
         "@type": "Brand",
+        "@id": `${SITE_URL}#brand`,
         name: "Beaux Rivages",
       },
       name: property.title,
@@ -276,8 +286,7 @@ export function createPropertyStructuredData(property: Property): Record<string,
         "@type": "PostalAddress",
         streetAddress: propertyLocation?.streetAddress,
         postalCode: propertyLocation?.postalCode,
-        addressLocality:
-          propertyLocation?.addressLocality ?? property.location.split(" · ")[0],
+        addressLocality: propertyLocation?.addressLocality ?? property.location.split(" · ")[0],
         addressRegion: property.location.split(" · ")[1],
         addressCountry: "FR",
       },
@@ -295,6 +304,8 @@ export function createPropertyStructuredData(property: Property): Record<string,
         ),
       },
       image: images,
+      sameAs,
+      knowsLanguage: ["fr-FR", "en-GB", "de-DE"],
       checkinTime: "16:00:00",
       checkoutTime: "10:00:00",
       potentialAction: {

@@ -29,6 +29,13 @@ test("le sitemap publie les alternates sans date de fraîcheur artificielle", ()
   assert.doesNotMatch(source, /lastModified/);
 });
 
+test("la marque Beaux Rivages est distinguée géographiquement", () => {
+  const source = readFileSync("app/layout.tsx", "utf8");
+  assert.match(source, /Beaux Rivages — Île de Ré et Île d’Oléron/);
+  assert.match(source, /"@type": "Brand"/);
+  assert.match(source, /Rivedoux-Plage/);
+  assert.match(source, /Saint-Georges-d’Oléron/);
+});
 
 test("les titres des maisons ciblent leur destination et leur proximité plage", async () => {
   const { createPropertySeo } = await import("../seo");
@@ -45,8 +52,5 @@ test("les titres des maisons ciblent leur destination et leur proximité plage",
     titles["villa-raie-manta"],
     "Villa Raie Manta | Villa vue mer Île de Ré, plage à pied",
   );
-  assert.equal(
-    titles["nid-d-ete"],
-    "Le Nid d’Été | Location Île d’Oléron, plage à 20 m",
-  );
+  assert.equal(titles["nid-d-ete"], "Le Nid d’Été | Location Île d’Oléron, plage à 20 m");
 });

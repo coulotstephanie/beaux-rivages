@@ -7,6 +7,9 @@ const seo = readFileSync(new URL("../seo.ts", import.meta.url), "utf8");
 test("vacation rental schema nests accommodation details as required by Google", () => {
   assert.match(seo, /"@type": "VacationRental"/);
   assert.match(seo, /identifier: `beaux-rivages:\$\{property\.slug\}`/);
+  assert.match(seo, /sameAs,/);
+  assert.match(seo, /knowsLanguage: \["fr-FR", "en-GB", "de-DE"\]/);
+  assert.match(seo, /"@id": `\$\{SITE_URL\}#brand`/);
   assert.match(
     seo,
     /containsPlace: \{[\s\S]*?"@type": "Accommodation"[\s\S]*?occupancy: \{[\s\S]*?value: capacity/,
