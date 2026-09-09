@@ -8,6 +8,13 @@ import { reviewProfiles } from "@/reviews";
 export const SITE_URL = "https://www.beaux-rivages.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/destination/marais-coucher-soleil.jpeg";
 
+const propertyExternalProfiles: Record<string, string[]> = {
+  "villa-raie-manta": [
+    "https://www.iledereloc.com/maison-location.php?id=9617",
+    "https://www.abritel.fr/location-vacances/p2580699",
+  ],
+};
+
 export type PageMetadataInput = Pick<PageSeoConfig, "title" | "description" | "path"> & {
   title: string;
   description: string;
@@ -208,8 +215,32 @@ export function createPropertyStructuredData(property: Property): Record<string,
     ? [
         reviewProfile.sourceUrl,
         ...(reviewProfile.otherSources ?? []).map((source) => source.sourceUrl),
+        ...(propertyExternalProfiles[property.slug] ?? []),
+      ]
+    : (propertyExternalProfiles[property.slug] ?? []);
+  const platformRatings = reviewProfile
+    ? [
+        {
+          rating: Number(reviewProfile.airbnbRating.replace(",", ".")),
+          scale: 5,
+          count: reviewProfile.airbnbReviewCount,
+        },
+        ...(reviewProfile.otherSources ?? [])
+          .filter((source) => source.rating && source.scale && source.reviewCount)
+          .map((source) => ({
+            rating: Number(source.rating?.replace(",", ".") ?? 0),
+            scale: source.scale ?? 5,
+            count: source.reviewCount ?? 0,
+          })),
       ]
     : [];
+  const publicReviewCount = platformRatings.reduce((total, rating) => total + rating.count, 0);
+  const publicRatingValue = publicReviewCount
+    ? platformRatings.reduce(
+        (total, rating) => total + (rating.rating / rating.scale) * 5 * rating.count,
+        0,
+      ) / publicReviewCount
+    : 0;
   const amenityNames = property.amenityGroups
     .flatMap((group) => group.items)
     .join(" ")
@@ -305,6 +336,17 @@ export function createPropertyStructuredData(property: Property): Record<string,
       },
       image: images,
       sameAs,
+      ...(publicReviewCount
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: Number(publicRatingValue.toFixed(2)),
+              bestRating: 5,
+              worstRating: 1,
+              reviewCount: publicReviewCount,
+            },
+          }
+        : {}),
       knowsLanguage: ["fr-FR", "en-GB", "de-DE"],
       checkinTime: "16:00:00",
       checkoutTime: "10:00:00",

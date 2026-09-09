@@ -52,3 +52,15 @@ test("vacation rental schema publishes the three explicitly approved precise loc
   assert.match(seo, /latitude: 46\.1610812/);
   assert.match(seo, /latitude: 45\.9700386/);
 });
+
+test("Villa Raie Manta links its current public partner profiles", () => {
+  assert.match(seo, /https:\/\/www\.iledereloc\.com\/maison-location\.php\?id=9617/);
+  assert.match(seo, /https:\/\/www\.abritel\.fr\/location-vacances\/p2580699/);
+  assert.match(seo, /propertyExternalProfiles\[property\.slug\]/);
+});
+
+test("publishes the visible public review totals as an aggregate rating", () => {
+  assert.match(seo, /"@type": "AggregateRating"/);
+  assert.match(seo, /ratingValue: Number\(publicRatingValue\.toFixed\(2\)\)/);
+  assert.match(seo, /reviewCount: publicReviewCount/);
+});
