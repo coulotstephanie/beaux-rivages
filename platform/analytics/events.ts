@@ -1,4 +1,5 @@
 import { track } from "@vercel/analytics";
+import { getTrafficAttribution } from "./attribution";
 
 export type AnalyticsEventName =
   | "page_view"
@@ -22,11 +23,14 @@ export function trackEvent(
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
   };
+  const enrichedParameters = { ...getTrafficAttribution(), ...parameters };
   layer.dataLayer = layer.dataLayer ?? [];
-  layer.dataLayer.push({ event: name, ...parameters });
-  layer.gtag?.("event", name, parameters);
-  track(name, parameters);
+  layer.dataLayer.push({ event: name, ...enrichedParameters });
+  layer.gtag?.("event", name, enrichedParameters);
+  track(name, enrichedParameters);
   window.dispatchEvent(
-    new CustomEvent("beaux-rivages:conversion", { detail: { name, parameters } }),
+    new CustomEvent("beaux-rivages:conversion", {
+      detail: { name, parameters: enrichedParameters },
+    }),
   );
 }
