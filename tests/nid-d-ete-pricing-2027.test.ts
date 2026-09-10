@@ -93,7 +93,7 @@ test("legacy imports, fallback seasons and old summer values never override the 
     ],
   };
   const checks = [
-    ["2027-05-14", 285],
+    ["2027-05-14", 245],
     ["2027-06-28", 208],
     ["2027-07-01", 208],
     ["2027-07-10", 220],
@@ -113,6 +113,13 @@ test("all period boundaries are contiguous and use inclusive/exclusive dates", (
       NID_D_ETE_2027_RATE_PERIODS[index - 1].endsOn,
       NID_D_ETE_2027_RATE_PERIODS[index].startsOn,
     );
+  }
+});
+
+test("all April to June 2027 nightly rates stay within the validated 173 to 245 euro range", () => {
+  for (const date of datesIn2027().filter((date) => date >= "2027-04-01" && date < "2027-06-25")) {
+    const rate = nidDEte2027NightlyRate(date);
+    assert.ok(rate !== undefined && rate >= 173 && rate <= 245, `${date}: ${rate}`);
   }
 });
 
@@ -137,10 +144,10 @@ test("required 2027 stay examples equal the sum of arrival-inclusive nights", ()
     ["2027-08-16", "2027-08-23", 1_540],
     ["2027-08-25", "2027-09-01", 1_190],
     ["2027-09-01", "2027-09-08", 875],
-    ["2027-05-01", "2027-05-08", 1_844],
-    ["2027-05-05", "2027-05-09", 1_288],
-    ["2027-05-15", "2027-05-22", 1_465],
-    ["2027-05-22", "2027-05-29", 1_172],
+    ["2027-05-01", "2027-05-08", 1_613],
+    ["2027-05-05", "2027-05-09", 980],
+    ["2027-05-15", "2027-05-22", 1_385],
+    ["2027-05-22", "2027-05-29", 1_241],
     ["2027-12-17", "2027-12-24", 1_065],
     ["2027-07-28", "2027-08-04", 1_705],
   ] as const;
@@ -173,8 +180,8 @@ test("priority stays keep exact accommodation for two and six adults", async () 
   const stays = [
     ["2027-01-01", "2027-01-03", 429],
     ["2027-03-08", "2027-03-10", 246],
-    ["2027-05-05", "2027-05-09", 1_288],
-    ["2027-05-14", "2027-05-17", 855],
+    ["2027-05-05", "2027-05-09", 980],
+    ["2027-05-14", "2027-05-17", 735],
     ["2027-06-04", "2027-06-07", 666],
     ["2027-07-05", "2027-07-12", 1_540],
     ["2027-07-19", "2027-07-26", 1_645],
