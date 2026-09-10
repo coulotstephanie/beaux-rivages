@@ -136,9 +136,9 @@ export function createPageStructuredData(config: PageSeoConfig): Record<string, 
 export function createPropertySeo(property: Property): PageSeoConfig {
   const path = `/maisons/${property.slug}` as const;
   const searchTitles: Record<string, string> = {
-    "chai-des-tortues": "Le Chai des Tortues | Location Île de Ré à 250 m de la plage",
-    "villa-raie-manta": "Villa Raie Manta | Villa vue mer Île de Ré, plage à pied",
-    "nid-d-ete": "Le Nid d’Été | Location Île d’Oléron, plage à 20 m",
+    "chai-des-tortues": "Le Chai des Tortues | Location maison à Rivedoux-Plage",
+    "villa-raie-manta": "Villa Raie Manta | Location vue mer à Rivedoux-Plage",
+    "nid-d-ete": "Le Nid d’Été | Location à Boyardville, bord de mer",
   };
   return {
     title: searchTitles[property.slug] ?? `${property.title} | Beaux Rivages`,
