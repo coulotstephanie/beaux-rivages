@@ -14,6 +14,8 @@ export function StaffAccess({ busy, message, onAuthenticated }: StaffAccessProps
   const [authenticationError, setAuthenticationError] = useState("");
   const [mfa, setMfa] = useState<{ factorId: string; challengeId: string } | null>(null);
   const [code, setCode] = useState("");
+  const [recoveryMode, setRecoveryMode] = useState(false);
+  const [recoverySent, setRecoverySent] = useState(false);
   const authenticationCallback = useRef(onAuthenticated);
 
   useEffect(() => {
@@ -68,6 +70,23 @@ export function StaffAccess({ busy, message, onAuthenticated }: StaffAccessProps
     await onAuthenticated();
   };
 
+  const requestPasswordReset = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setAuthenticationError("");
+    const response = await fetch("/api/auth/staff/recovery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const result = (await response.json()) as { error?: string; message?: string };
+    if (!response.ok) {
+      setAuthenticationError(result.error ?? "Réinitialisation impossible.");
+      return;
+    }
+    setRecoverySent(true);
+    setAuthenticationError(result.message ?? "Consultez votre messagerie pour continuer.");
+  };
+
   return (
     <section className="admin-login" aria-labelledby="admin-login-title">
       <div>
@@ -75,7 +94,26 @@ export function StaffAccess({ busy, message, onAuthenticated }: StaffAccessProps
         <h2 id="admin-login-title">Ouvrir le Back Office</h2>
         <p>Connectez-vous avec votre compte professionnel Beaux Rivages.</p>
       </div>
-      {mfa ? (
+      {recoveryMode ? (
+        <form onSubmit={requestPasswordReset}>
+          <label htmlFor="staff-recovery-email">Adresse e-mail</label>
+          <input
+            id="staff-recovery-email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+            autoFocus
+          />
+          <button type="submit" disabled={recoverySent}>
+            {recoverySent ? "Lien envoyé" : "Recevoir le lien sécurisé"}
+          </button>
+          <button type="button" onClick={() => setRecoveryMode(false)}>
+            Revenir à la connexion
+          </button>
+        </form>
+      ) : mfa ? (
         <form onSubmit={verifyMfa}>
           <label htmlFor="staff-mfa">Code de vérification</label>
           <input
@@ -115,6 +153,9 @@ export function StaffAccess({ busy, message, onAuthenticated }: StaffAccessProps
           />
           <button type="submit" disabled={busy}>
             {busy ? "Ouverture…" : "Ouvrir le Back Office"}
+          </button>
+          <button type="button" onClick={() => setRecoveryMode(true)}>
+            Mot de passe oublié ?
           </button>
         </form>
       )}
