@@ -6,11 +6,16 @@ import { noStoreJson, rateLimit, requireSameOrigin } from "@/platform/http/secur
 const requestSchema = z.object({ email: z.string().trim().email().max(254) }).strict();
 const updateSchema = z
   .object({
-    accessToken: z.string().min(20).max(4096),
-    refreshToken: z.string().min(20).max(4096),
+    code: z.string().min(10).max(4096).optional(),
+    accessToken: z.string().min(20).max(4096).optional(),
+    refreshToken: z.string().min(20).max(4096).optional(),
     password: z.string().min(10).max(1024),
   })
-  .strict();
+  .strict()
+  .refine(
+    (value) => Boolean(value.code || (value.accessToken && value.refreshToken)),
+    "Lien de réinitialisation incomplet.",
+  );
 
 export async function POST(request: NextRequest) {
   const limited = rateLimit(request, 3, 60_000);
@@ -48,10 +53,12 @@ export async function PUT(request: NextRequest) {
     return noStoreJson({ error: "Lien expiré ou nouveau mot de passe invalide." }, { status: 400 });
 
   const client = getStaffAuthClient();
-  const session = await client.auth.setSession({
-    access_token: parsed.data.accessToken,
-    refresh_token: parsed.data.refreshToken,
-  });
+  const session = parsed.data.code
+    ? await client.auth.exchangeCodeForSession(parsed.data.code)
+    : await client.auth.setSession({
+        access_token: parsed.data.accessToken!,
+        refresh_token: parsed.data.refreshToken!,
+      });
   if (session.error || !session.data.session)
     return noStoreJson({ error: "Ce lien a expiré. Demandez-en un nouveau." }, { status: 401 });
 

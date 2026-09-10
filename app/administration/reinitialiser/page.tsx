@@ -4,30 +4,42 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 export default function ResetStaffPasswordPage() {
-  const [tokens, setTokens] = useState<{ accessToken: string; refreshToken: string } | null>(null);
+  const [recovery, setRecovery] = useState<
+    { code: string } | { accessToken: string; refreshToken: string } | null
+  >(null);
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [message, setMessage] = useState("Vérification du lien sécurisé…");
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const code = query.get("code");
     const accessToken = params.get("access_token");
     const refreshToken = params.get("refresh_token");
-    if (!accessToken || !refreshToken || params.get("type") !== "recovery") {
+    const errorDescription = query.get("error_description") ?? params.get("error_description");
+    if (errorDescription) {
+      setMessage("Ce lien n’est plus valide. Demandez un nouveau lien depuis le Back Office.");
+      return;
+    }
+    if (code) {
+      setRecovery({ code });
+    } else if (accessToken && refreshToken && params.get("type") === "recovery") {
+      setRecovery({ accessToken, refreshToken });
+    } else {
       setMessage(
         "Ce lien est incomplet ou a expiré. Demandez un nouveau lien depuis le Back Office.",
       );
       return;
     }
-    setTokens({ accessToken, refreshToken });
     setMessage("Choisissez votre nouveau mot de passe.");
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!tokens) return;
+    if (!recovery) return;
     if (password !== confirmation) {
       setMessage("Les deux mots de passe ne correspondent pas.");
       return;
@@ -35,7 +47,7 @@ export default function ResetStaffPasswordPage() {
     const response = await fetch("/api/auth/staff/recovery", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...tokens, password }),
+      body: JSON.stringify({ ...recovery, password }),
     });
     const result = (await response.json()) as { error?: string };
     if (!response.ok) {
@@ -43,7 +55,7 @@ export default function ResetStaffPasswordPage() {
       return;
     }
     setDone(true);
-    setTokens(null);
+    setRecovery(null);
     setMessage("Votre nouveau mot de passe est enregistré.");
   };
 
@@ -59,7 +71,7 @@ export default function ResetStaffPasswordPage() {
             <h1 id="reset-title">Nouveau mot de passe</h1>
             <p>{message}</p>
           </div>
-          {tokens ? (
+          {recovery ? (
             <form onSubmit={submit}>
               <label htmlFor="new-password">Nouveau mot de passe</label>
               <input
