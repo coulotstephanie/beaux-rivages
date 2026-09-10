@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return noStoreJson({ error: "Adresse e-mail invalide." }, { status: 400 });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
-  if (!siteUrl) return noStoreJson({ error: "Adresse du site non configurée." }, { status: 503 });
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.beaux-rivages.com";
 
   await getStaffAuthClient().auth.resetPasswordForEmail(parsed.data.email, {
     redirectTo: `${siteUrl}/administration/reinitialiser`,
