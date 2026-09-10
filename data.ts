@@ -156,7 +156,7 @@ export const properties: Property[] = [
     ],
     faq: [
       {
-        question: "La plage et les Halles sont-elles accessibles à pied ?",
+        question: "Cette location de vacances à Rivedoux-Plage est-elle proche de la plage et des Halles ?",
         answer:
           "Oui. La plage se trouve à environ 250 mètres et les Halles, le marché, les commerces et les restaurants à environ 300 mètres.",
       },
@@ -327,7 +327,7 @@ export const properties: Property[] = [
     ],
     faq: [
       {
-        question: "La plage est-elle accessible à pied ?",
+        question: "Cette villa vue mer à Rivedoux-Plage est-elle proche de la plage ?",
         answer:
           "Oui. Il suffit de traverser la route pour rejoindre le rivage en quelques instants.",
       },
@@ -496,7 +496,7 @@ export const properties: Property[] = [
     ],
     faq: [
       {
-        question: "À quelle distance se trouve réellement la plage ?",
+        question: "Cette location de vacances à Boyardville est-elle réellement en bord de mer ?",
         answer:
           "Le portail privé de la résidence se trouve à environ 20 mètres de la maison et ouvre directement sur le chemin de la plage des Saumonards.",
       },
