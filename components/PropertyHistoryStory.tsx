@@ -6,6 +6,8 @@ const stories = {
   "chai-des-tortues": {
     eyebrow: "L’âme de la maison",
     title: "Il y a des maisons que l’on n’oublie pas en refermant la porte.",
+    subtitle:
+      "Location de vacances familiale à Rivedoux-Plage, dans un ancien chai rénové à 250 mètres de la plage.",
     paragraphs: [
       "Ancien chai de Pineau et de Cognac, Le Chai des Tortues fait partie de ces lieux où les vieilles pierres continuent de raconter une histoire.",
       "Nous en avons préservé les volumes et la matière. La lumière retrouve aujourd’hui les murs anciens, tandis que la grande table rassemble les voyageurs.",
@@ -17,11 +19,18 @@ const stories = {
       propertyMedia["chai-des-tortues"].details[5],
       propertyMedia["chai-des-tortues"].livingRoom[6],
     ],
+    captions: [
+      "Soirée en famille dans l’ancien chai rénové de Rivedoux-Plage",
+      "Les pierres d’origine qui racontent l’histoire du Chai des Tortues",
+      "Une maison de vacances chaleureuse à 250 mètres de la plage",
+    ],
     href: "/histoire-de-nos-maisons#chai-des-tortues",
   },
   "villa-raie-manta": {
     eyebrow: "L’océan comme horizon",
     title: "Une maison où l’horizon entre avant vous.",
+    subtitle:
+      "Villa avec vue sur mer pour huit voyageurs à Rivedoux-Plage, près de la plage, des Halles et du pont de l’Île de Ré.",
     paragraphs: [
       "À peine le pont franchi, le rythme change. Villa Raie Manta prolonge cette sensation dans une maison ouverte sur la lumière et la mer.",
       "Depuis le salon panoramique, le pont devient une ligne dans le paysage. Le matin comme le soir, l’océan accompagne naturellement les retrouvailles.",
@@ -32,11 +41,18 @@ const stories = {
       propertyMedia["villa-raie-manta"].terrace[2],
       propertyMedia["villa-raie-manta"].bedrooms[3],
     ],
+    captions: [
+      "Préparer ensemble les produits du marché dans la cuisine de Villa Raie Manta",
+      "Déjeuner et soirée en famille sur la terrasse à Rivedoux-Plage",
+      "Une chambre lumineuse pour des vacances face à l’océan sur l’Île de Ré",
+    ],
     href: "/histoire-de-nos-maisons#villa-raie-manta",
   },
   "nid-d-ete": {
     eyebrow: "La Maison Heureuse · Monument historique",
     title: "Un refuge d’été au cœur d’une histoire maritime.",
+    subtitle:
+      "Maison de plain-pied à Boyardville avec accès privé direct à la plage des Saumonards, face à Fort Boyard.",
     paragraphs: [
       "Le Nid d’Été se niche dans La Maison Heureuse, ensemble inscrit au titre des Monuments historiques et intimement lié au chantier de Fort Boyard.",
       "Sous les grands arbres, quelques pas mènent au portail privé de la plage des Saumonards. Le fort demeure à l’horizon, comme un fil discret entre le séjour et l’histoire.",
@@ -63,6 +79,11 @@ const stories = {
         scope: "destination",
       },
     ],
+    captions: [
+      "La Maison Heureuse, résidence historique près de la plage des Saumonards",
+      "Pique-nique sur la plage face à Fort Boyard, à quelques pas du Nid d’Été",
+      "Soirée en famille dans la lumière des Saumonards sur l’Île d’Oléron",
+    ],
     href: "/maison-heureuse-fort-boyard",
   },
 } as const;
@@ -76,6 +97,7 @@ export function PropertyHistoryStory({ propertySlug }: { propertySlug: PropertyS
         <div className="property-history-story__heading">
           <p className="eyebrow">{story.eyebrow}</p>
           <h2>{story.title}</h2>
+          <p className="property-history-story__subtitle">{story.subtitle}</p>
         </div>
         <div className="property-history-story__layout">
           <div className="property-history-story__copy">
@@ -98,6 +120,7 @@ export function PropertyHistoryStory({ propertySlug }: { propertySlug: PropertyS
                   loading="lazy"
                   sizes="(max-width: 900px) calc(100vw - 40px), 30vw"
                 />
+                <figcaption>{story.captions[index]}</figcaption>
               </figure>
             ))}
           </div>
