@@ -27,7 +27,7 @@ export type PropertyReviewProfile = {
   }[];
 };
 
-export const reviewsVerifiedOn = "31 juillet 2026";
+export const reviewsVerifiedOn = "11 septembre 2026";
 
 export const reviewProfiles: PropertyReviewProfile[] = [
   {
@@ -84,9 +84,9 @@ export const reviewProfiles: PropertyReviewProfile[] = [
     otherSources: [
       {
         platform: "Booking.com",
-        rating: "9,3",
+        rating: "9,2",
         scale: 10,
-        reviewCount: 21,
+        reviewCount: 29,
         sourceUrl:
           "https://www.booking.com/hotel/fr/chai-renove-ile-de-re-250-m-de-la-plage-rivedoux-plage.fr.html",
       },
@@ -144,9 +144,9 @@ export const reviewProfiles: PropertyReviewProfile[] = [
     otherSources: [
       {
         platform: "Booking.com",
-        rating: "9,1",
+        rating: "9,2",
         scale: 10,
-        reviewCount: 30,
+        reviewCount: 33,
         sourceUrl:
           "https://www.booking.com/hotel/fr/maison-vue-mer-ile-de-re-rivedoux-plage.fr.html",
       },

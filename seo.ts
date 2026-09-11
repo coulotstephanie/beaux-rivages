@@ -9,6 +9,7 @@ export const SITE_URL = "https://www.beaux-rivages.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/destination/marais-coucher-soleil.jpeg";
 
 const propertyExternalProfiles: Record<string, string[]> = {
+  "chai-des-tortues": ["https://www.abritel.fr/location-vacances/p2594510"],
   "villa-raie-manta": [
     "https://www.iledereloc.com/maison-location.php?id=9617",
     "https://www.abritel.fr/location-vacances/p2580699",
@@ -42,18 +43,25 @@ export function languageAlternates(path: string) {
 export function createPageMetadata({
   title,
   description,
+  path,
   image,
   openGraphTitle,
 }: PageMetadataInput): Metadata {
   const socialImage = absoluteUrl(image ?? DEFAULT_SOCIAL_IMAGE);
+  const canonicalUrl = absoluteUrl(path);
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: languageAlternates(path),
+    },
     openGraph: {
       title: openGraphTitle ?? title,
       description,
       siteName: "Beaux Rivages",
+      url: canonicalUrl,
       locale: "fr_FR",
       type: "website",
       images: [{ url: socialImage, alt: openGraphTitle ?? title }],

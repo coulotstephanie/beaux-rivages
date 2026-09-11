@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { languageAlternates, localizedUrl } from "../seo";
+import { createPageMetadata, languageAlternates, localizedUrl } from "../seo";
 
 test("les trois langues publiées et x-default ont une URL stable", () => {
   assert.equal(
@@ -29,6 +29,26 @@ test("le sitemap publie les alternates sans date de fraîcheur artificielle", ()
   assert.doesNotMatch(source, /lastModified/);
 });
 
+test("chaque page déclare sa propre URL canonique et ses variantes linguistiques", () => {
+  const metadata = createPageMetadata({
+    title: "Villa Raie Manta",
+    description: "Maison avec vue mer sur l’Île de Ré.",
+    path: "/maisons/villa-raie-manta",
+  });
+
+  assert.equal(
+    metadata.alternates?.canonical,
+    "https://www.beaux-rivages.com/maisons/villa-raie-manta",
+  );
+  assert.equal(metadata.openGraph?.url, "https://www.beaux-rivages.com/maisons/villa-raie-manta");
+  assert.deepEqual(metadata.alternates?.languages, {
+    fr: "https://www.beaux-rivages.com/maisons/villa-raie-manta",
+    en: "https://www.beaux-rivages.com/en/maisons/villa-raie-manta",
+    de: "https://www.beaux-rivages.com/de/maisons/villa-raie-manta",
+    "x-default": "https://www.beaux-rivages.com/maisons/villa-raie-manta",
+  });
+});
+
 test("la marque Beaux Rivages est distinguée géographiquement", () => {
   const source = readFileSync("app/layout.tsx", "utf8");
   assert.match(source, /Beaux Rivages — Île de Ré et Île d’Oléron/);
@@ -52,5 +72,5 @@ test("les titres des maisons ciblent leur destination et leur proximité plage",
     titles["villa-raie-manta"],
     "Location Île de Ré | Villa Raie Manta · Vue mer · 8 pers.",
   );
-  assert.equal(\n    titles["nid-d-ete"],\n    "Location Île d’Oléron | Le Nid d’Été · Plage · Fort Boyard",\n  );
+  assert.equal(titles["nid-d-ete"], "Location Île d’Oléron | Le Nid d’Été · Plage · Fort Boyard");
 });

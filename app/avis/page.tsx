@@ -35,11 +35,22 @@ const sharedStrengths = [
     copy: "Plage, marchés, commerces, restaurants et pistes cyclables composent un séjour où la voiture peut souvent rester stationnée.",
   },
 ];
-const satisfaction = [
+const bookingSatisfaction = reviewProfiles.flatMap((profile) =>
+  (profile.otherSources ?? [])
+    .filter((source) => source.platform === "Booking.com" && source.rating && source.reviewCount)
+    .map(
+      (source) =>
+        [
+          `${source.rating} / ${source.scale ?? 10}`,
+          profile.property,
+          `${source.reviewCount} avis Booking.com`,
+        ] as [string, string, string],
+    ),
+);
+
+const satisfaction: Array<[string, string, string]> = [
   [`${weightedAirbnbRating} / 5`, "Moyenne Airbnb", `${totalAirbnbReviews} avis publics`],
-  ["9,3 / 10", "Le Chai des Tortues", "21 avis Booking.com"],
-  ["9,1 / 10", "Villa Raie Manta", "30 avis Booking.com"],
-  ["9,2 / 10", "Le Nid d’Été", "15 avis Booking.com"],
+  ...bookingSatisfaction,
   ["3", "Maisons analysées", `vérifié le ${reviewsVerifiedOn}`],
 ];
 
