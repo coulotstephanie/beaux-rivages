@@ -138,7 +138,11 @@ export function BookingExperience({
     step === 1
       ? Boolean(selection.propertySlug)
       : step === 2
-        ? Boolean(selection.arrival && selection.departure)
+        ? Boolean(
+            selection.arrival &&
+              selection.departure &&
+              verifiedQuote?.stayRules.valid,
+          )
         : true;
   const updateGuests = (guests: GuestCounts) => setSelection((current) => ({ ...current, guests }));
   const selectProperty = (propertySlug: string) => {
@@ -331,7 +335,9 @@ export function BookingExperience({
               <p role="status">
                 {step === 1
                   ? "Choisissez une maison pour continuer."
-                  : "Choisissez une date d’arrivée et de départ."}
+                  : selection.arrival && selection.departure && verifiedQuote
+                    ? `Pour ces dates, choisissez un séjour d’au moins ${verifiedQuote.stayRules.requiredMinimum} nuits.`
+                    : "Choisissez une date d’arrivée et de départ."}
               </p>
             )}
             {finalValidation.status === "error" ? (
