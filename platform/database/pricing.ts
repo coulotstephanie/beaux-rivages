@@ -4,6 +4,12 @@ import type { PropertySlug } from "@/platform/calendar/config";
 import type { Promotion, PropertyRatePlan } from "@/platform/pricing/contracts";
 import { getDatabaseClient } from "./client";
 
+const validatedCleaningFees: Record<PropertySlug, number> = {
+  "chai-des-tortues": 120,
+  "villa-raie-manta": 150,
+  "nid-d-ete": 90,
+};
+
 function addDay(date: string) {
   const value = new Date(`${date}T12:00:00Z`);
   value.setUTCDate(value.getUTCDate() + 1);
@@ -204,7 +210,9 @@ export class SupabasePricingPlanReader {
               optimize_calendar_gaps?: boolean;
             } | null)
         )?.optimize_calendar_gaps ?? true,
-      cleaningFee: baseRate.cleaning_fee_cents / 100,
+      // Keep public quotes aligned with the channel fees while the matching
+      // database migration is being rolled out.
+      cleaningFee: validatedCleaningFees[propertySlug],
       securityDeposit:
         financialSettingsResult.error || !financialSettingsResult.data
           ? baseRate.security_deposit_cents / 100
