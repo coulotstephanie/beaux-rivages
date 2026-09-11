@@ -8,7 +8,7 @@
       "minimumNights": 2,
       "maximumNights": 28,
       "optimizeCalendarGaps": true,
-      "cleaningFee": 130,
+      "cleaningFee": 120,
       "securityDeposit": 800,
       "touristTax": {
         "mode": "percentage",
@@ -86,7 +86,7 @@
       "minimumNights": 2,
       "maximumNights": 28,
       "optimizeCalendarGaps": true,
-      "cleaningFee": 155,
+      "cleaningFee": 150,
       "securityDeposit": 1200,
       "touristTax": {
         "mode": "percentage",
@@ -164,7 +164,7 @@
       "minimumNights": 2,
       "maximumNights": 28,
       "optimizeCalendarGaps": true,
-      "cleaningFee": 75,
+      "cleaningFee": 90,
       "securityDeposit": 800,
       "touristTax": {
         "mode": "percentage",

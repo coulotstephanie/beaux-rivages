@@ -156,7 +156,7 @@ test("required 2027 stay examples equal the sum of arrival-inclusive nights", ()
   }
 });
 
-test("public quote keeps 75 euro cleaning separate and applies no accommodation promotion", async () => {
+test("public quote keeps 90 euro cleaning separate and applies no accommodation promotion", async () => {
   const quote = await calculateQuote({
     propertySlug: "nid-d-ete",
     arrival: "2027-08-01",
@@ -171,7 +171,7 @@ test("public quote keeps 75 euro cleaning separate and applies no accommodation 
   assert.equal(quote.accommodationBeforeDiscount, 1_750);
   assert.equal(quote.promotion, null);
   assert.equal(quote.accommodation, 1_750);
-  assert.equal(quote.cleaningFee, 75);
+  assert.equal(quote.cleaningFee, 90);
   assert.equal(quote.optionsTotal, 0);
   assert.equal(quote.optionLines.length, 0);
 });
@@ -201,7 +201,7 @@ test("priority stays keep exact accommodation for two and six adults", async () 
         experiences: [],
       });
       assert.equal(quote.accommodation, expected, `${arrival}, ${adults} adultes`);
-      assert.equal(quote.cleaningFee, 75);
+      assert.equal(quote.cleaningFee, 90);
       assert.equal(quote.promotion, null);
       assert.equal(quote.optionsTotal, 0);
       assert.equal(
