@@ -139,6 +139,14 @@ export async function getPropertyAvailability(
   const failedProviders = calendar.results
     .filter((result) => result.status === "error")
     .map((result) => result.provider);
+  const liveProviders = new Set(
+    calendar.results
+      .filter((result) => result.status === "success")
+      .map((result) => result.provider),
+  );
+  const fallbackBlocks = lastKnown.blocks.filter(
+    (block) => !liveProviders.has(block.source as (typeof calendar.results)[number]["provider"]),
+  );
   const reliable = requiredProviders.every((provider) => {
     const live = calendar.results.some(
       (result) => result.provider === provider && result.status === "success",
@@ -165,7 +173,7 @@ export async function getPropertyAvailability(
         status: "confirmed" as const,
         source: block.source,
       })),
-      ...lastKnown.blocks.map((block) => ({
+      ...fallbackBlocks.map((block) => ({
         ...block,
         status: block.status as "confirmed" | "tentative",
       })),
