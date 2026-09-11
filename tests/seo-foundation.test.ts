@@ -46,11 +46,11 @@ test("les titres des maisons ciblent leur destination et leur proximité plage",
 
   assert.equal(
     titles["chai-des-tortues"],
-    "Le Chai des Tortues | Location Île de Ré à 250 m de la plage",
+    "Location Île de Ré | Le Chai des Tortues · Plage 250 m",
   );
   assert.equal(
     titles["villa-raie-manta"],
-    "Villa Raie Manta | Villa vue mer Île de Ré, plage à pied",
+    "Location Île de Ré | Villa Raie Manta · Vue mer · 8 pers.",
   );
-  assert.equal(titles["nid-d-ete"], "Le Nid d’Été | Location Île d’Oléron, plage à 20 m");
+  assert.equal(\n    titles["nid-d-ete"],\n    "Location Île d’Oléron | Le Nid d’Été · Plage · Fort Boyard",\n  );
 });
