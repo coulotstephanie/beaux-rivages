@@ -217,8 +217,10 @@ export function ChaiEditorialReport({
                   />
                   <span className="chai-report__image-shade" />
                   <span className="chai-report__caption">{image.caption}</span>
-                  <span className="visual-edit-media">Modifier la photo</span>
-                  <span className="visual-reorder">
+                  <span className="visual-edit-media" data-nosnippet>
+                    Modifier la photo
+                  </span>
+                  <span className="visual-reorder" data-nosnippet>
                     <span data-editor-reorder="previous" aria-label="Déplacer à gauche">
                       ←
                     </span>
@@ -226,7 +228,11 @@ export function ChaiEditorialReport({
                       →
                     </span>
                   </span>
-                  <span className="visual-remove" data-editor-remove-media={image.editorField}>
+                  <span
+                    className="visual-remove"
+                    data-editor-remove-media={image.editorField}
+                    data-nosnippet
+                  >
                     Retirer
                   </span>
                 </button>
@@ -235,6 +241,7 @@ export function ChaiEditorialReport({
                 type="button"
                 className="visual-add-media"
                 data-editor-add-media={`editorial.${chapterIndex}`}
+                data-nosnippet
               >
                 + Ajouter une photo
               </button>
