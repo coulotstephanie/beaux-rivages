@@ -156,8 +156,8 @@ export default async function HomePage() {
           aria-label={t("Avantages de la réservation directe")}
         >
           <div>
-            <strong>{t("Meilleur tarif")}</strong>
-            <span>{t("En réservant en direct")}</span>
+            <strong>{t("Réservation directe")}</strong>
+            <span>{t("Sans intermédiaire")}</span>
           </div>
           <div>
             <strong>{t("Relation directe")}</strong>
