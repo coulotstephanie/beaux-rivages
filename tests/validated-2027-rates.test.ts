@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { validated2027NightlyRate } from "../platform/pricing/validated-2027-rates";
+import {
+  validated2027MinimumNights,
+  validated2027NightlyRate,
+} from "../platform/pricing/validated-2027-rates";
+import { airbnbCalendarNightlyRate } from "../platform/pricing/airbnb-calendar-rates";
 
 const expected = {
   "chai-des-tortues": [
@@ -31,10 +35,7 @@ test("validated autumn and winter rates match every channel boundary", () => {
   for (const [propertySlug, checks] of Object.entries(expected)) {
     for (const [date, nightlyRate] of checks) {
       assert.equal(
-        validated2027NightlyRate(
-          propertySlug as "chai-des-tortues" | "villa-raie-manta",
-          date,
-        ),
+        validated2027NightlyRate(propertySlug as "chai-des-tortues" | "villa-raie-manta", date),
         nightlyRate,
         `${propertySlug} ${date}`,
       );
@@ -52,4 +53,38 @@ test("validated rates cover every night from September through December", () => 
       cursor.setUTCDate(cursor.getUTCDate() + 1);
     }
   }
+});
+
+test("corrected minimum stays apply identically to all three houses", () => {
+  const checks = [
+    ["2026-10-16", 2],
+    ["2026-10-17", 4],
+    ["2026-11-08", 4],
+    ["2026-11-09", 2],
+    ["2026-12-19", 4],
+    ["2027-02-06", 4],
+    ["2027-03-15", 2],
+    ["2027-04-03", 4],
+    ["2027-05-09", 4],
+    ["2027-05-10", 2],
+    ["2027-05-14", 4],
+    ["2027-05-17", 4],
+    ["2027-05-18", 2],
+    ["2027-07-01", 7],
+    ["2027-08-31", 7],
+    ["2027-09-01", 2],
+  ] as const;
+
+  for (const propertySlug of ["nid-d-ete", "chai-des-tortues", "villa-raie-manta"] as const)
+    for (const [date, expectedMinimum] of checks)
+      assert.equal(
+        validated2027MinimumNights(propertySlug, date),
+        expectedMinimum,
+        `${propertySlug} ${date}`,
+      );
+});
+
+test("Villa Raie Manta Ascension correction is 350 euros per night", () => {
+  for (const date of ["2027-05-05", "2027-05-06", "2027-05-07", "2027-05-08", "2027-05-09"])
+    assert.equal(airbnbCalendarNightlyRate("villa-raie-manta", date), 350, date);
 });

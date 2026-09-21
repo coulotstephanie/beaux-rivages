@@ -79,23 +79,20 @@ const VILLA_RAIE_MANTA_2027_RATE_PERIODS: readonly RatePeriod[] = [
   { startsOn: "2027-12-31", endsOn: "2028-01-01", nightlyRate: 350 },
 ];
 
-const CHAI_DES_TORTUES_2027_MINIMUM_STAYS: readonly MinimumStayPeriod[] = [
-  { startsOn: "2027-01-01", endsOn: "2027-01-11", minimumNights: 4 },
-  { startsOn: "2027-01-11", endsOn: "2027-02-01", minimumNights: 2 },
-  { startsOn: "2027-02-01", endsOn: "2027-05-03", minimumNights: 4 },
-  { startsOn: "2027-05-03", endsOn: "2027-05-05", minimumNights: 2 },
-  { startsOn: "2027-05-05", endsOn: "2027-05-14", minimumNights: 4 },
-  { startsOn: "2027-05-14", endsOn: "2027-05-17", minimumNights: 3 },
-  { startsOn: "2027-05-17", endsOn: "2027-06-07", minimumNights: 4 },
-  { startsOn: "2027-06-07", endsOn: "2027-06-28", minimumNights: 2 },
-  { startsOn: "2027-06-28", endsOn: "2027-08-23", minimumNights: 7 },
-  { startsOn: "2027-08-23", endsOn: "2027-09-01", minimumNights: 4 },
-];
-
-const VILLA_RAIE_MANTA_2027_MINIMUM_STAYS: readonly MinimumStayPeriod[] = [
-  { startsOn: "2027-01-04", endsOn: "2027-04-03", minimumNights: 2 },
-  { startsOn: "2027-04-03", endsOn: "2027-07-01", minimumNights: 3 },
+const CORRECTED_MINIMUM_STAYS: readonly MinimumStayPeriod[] = [
+  { startsOn: "2026-09-20", endsOn: "2026-10-17", minimumNights: 2 },
+  { startsOn: "2026-10-17", endsOn: "2026-11-09", minimumNights: 4 },
+  { startsOn: "2026-11-09", endsOn: "2026-12-19", minimumNights: 2 },
+  { startsOn: "2026-12-19", endsOn: "2027-01-11", minimumNights: 4 },
+  { startsOn: "2027-01-11", endsOn: "2027-02-06", minimumNights: 2 },
+  { startsOn: "2027-02-06", endsOn: "2027-03-15", minimumNights: 4 },
+  { startsOn: "2027-03-15", endsOn: "2027-04-03", minimumNights: 2 },
+  { startsOn: "2027-04-03", endsOn: "2027-05-10", minimumNights: 4 },
+  { startsOn: "2027-05-10", endsOn: "2027-05-14", minimumNights: 2 },
+  { startsOn: "2027-05-14", endsOn: "2027-05-18", minimumNights: 4 },
+  { startsOn: "2027-05-18", endsOn: "2027-07-01", minimumNights: 2 },
   { startsOn: "2027-07-01", endsOn: "2027-09-01", minimumNights: 7 },
+  { startsOn: "2027-09-01", endsOn: "2027-09-21", minimumNights: 2 },
 ];
 
 function findRate(periods: readonly RatePeriod[], date: string) {
@@ -138,9 +135,7 @@ export function validated2027MinimumNights(
   propertySlug: PropertySlug,
   date: string,
 ): number | undefined {
-  if (propertySlug === "chai-des-tortues")
-    return findMinimumStay(CHAI_DES_TORTUES_2027_MINIMUM_STAYS, date);
-  if (propertySlug === "villa-raie-manta")
-    return findMinimumStay(VILLA_RAIE_MANTA_2027_MINIMUM_STAYS, date);
-  return undefined;
+  if (!["nid-d-ete", "chai-des-tortues", "villa-raie-manta"].includes(propertySlug))
+    return undefined;
+  return findMinimumStay(CORRECTED_MINIMUM_STAYS, date);
 }
