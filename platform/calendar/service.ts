@@ -4,6 +4,7 @@ import { getCalendarSources, getCalendarConfigurationStatus, type PropertySlug }
 import { mergeCalendarBlocks } from "./ical";
 import { isDatabaseConfigured } from "@/platform/database/client";
 import { SupabaseCalendarRepository } from "@/platform/database/calendar";
+import { verifiedBookingBlocks } from "./verified-booking-blocks";
 export { isDateRangeAvailable as isRangeAvailable } from "@/lib/date-ranges";
 
 type CachedCalendar = { blocks: CalendarBlock[]; results: CalendarSyncResult[]; expiresAt: number };
@@ -172,6 +173,10 @@ export async function getPropertyAvailability(
         endsOn: block.endsOn,
         status: "confirmed" as const,
         source: block.source,
+      })),
+      ...verifiedBookingBlocks(propertySlug).map((block) => ({
+        ...block,
+        status: "confirmed" as const,
       })),
       ...fallbackBlocks.map((block) => ({
         ...block,
