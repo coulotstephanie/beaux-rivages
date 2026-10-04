@@ -144,6 +144,20 @@ const VILLA_RATE_PERIODS: readonly RatePeriod[] = [
   { startsOn: "2027-09-01", endsOn: "2027-10-01", nightlyRate: 200 },
 ];
 
+// Le Nid d’Été: November prices observed in the Airbnb host calendar on 4 October 2026.
+const NID_RATE_PERIODS: RatePeriod[] = [
+  { startsOn: "2026-11-01", endsOn: "2026-11-02", nightlyRate: 94 },
+  { startsOn: "2026-11-02", endsOn: "2026-11-06", nightlyRate: 99 },
+  { startsOn: "2026-11-06", endsOn: "2026-11-09", nightlyRate: 146 },
+  { startsOn: "2026-11-09", endsOn: "2026-11-12", nightlyRate: 126 },
+  { startsOn: "2026-11-12", endsOn: "2026-11-15", nightlyRate: 144 },
+  { startsOn: "2026-11-15", endsOn: "2026-11-20", nightlyRate: 85 },
+  { startsOn: "2026-11-20", endsOn: "2026-11-22", nightlyRate: 118 },
+  { startsOn: "2026-11-22", endsOn: "2026-11-27", nightlyRate: 85 },
+  { startsOn: "2026-11-27", endsOn: "2026-11-29", nightlyRate: 118 },
+  { startsOn: "2026-11-29", endsOn: "2026-12-01", nightlyRate: 85 },
+];
+
 export function airbnbCalendarNightlyRate(
   propertySlug: PropertySlug,
   date: string,
@@ -153,6 +167,8 @@ export function airbnbCalendarNightlyRate(
       ? CHAI_RATE_PERIODS
       : propertySlug === "villa-raie-manta"
         ? VILLA_RATE_PERIODS
-        : [];
+        : propertySlug === "nid-d-ete"
+          ? NID_RATE_PERIODS
+          : [];
   return periods.find((period) => date >= period.startsOn && date < period.endsOn)?.nightlyRate;
 }
