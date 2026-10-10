@@ -20,17 +20,17 @@ const houses = { name: "Nos maisons", path: "/maisons" } as const;
 
 export const staticPageSeo = {
   "/": {
-    title: "Maisons de caractère sur Ré et Oléron | Beaux Rivages",
+    title: "Locations de vacances à Ré et Oléron | Beaux Rivages",
     description:
-      "Trois maisons de caractère sur les îles de Ré et d’Oléron, portées par une hospitalité attentive.",
+      "Louez une maison de vacances à Rivedoux-Plage sur l’Île de Ré ou à Boyardville sur l’Île d’Oléron. Proche plage, vue mer et réservation directe.",
     path: "/",
     breadcrumbs: [home],
     schemaTypes: ["WebSite", "Organization"],
   },
   "/maisons": {
-    title: "Nos maisons | Beaux Rivages",
+    title: "Maisons de vacances à Ré et Oléron | Beaux Rivages",
     description:
-      "Découvrez les trois maisons Beaux Rivages sur les îles de Ré et d’Oléron, chacune pensée pour une autre façon de vivre l’océan.",
+      "Comparez nos trois locations de vacances : Chai des Tortues et Villa Raie Manta à Rivedoux-Plage, Nid d’Été à Boyardville. Réservez en direct.",
     path: "/maisons",
     breadcrumbs: [home, houses],
     schemaTypes: ["CollectionPage"],
