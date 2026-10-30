@@ -1,8 +1,9 @@
+import { lot1Hospitality } from "./hospitality";
 import { lot1Catalog } from "./catalog";
 import { lot1Content } from "./content";
 import { lot1Locales, type Lot1Locale } from "./types";
 
-export const lot1Entries = { ...lot1Catalog, ...lot1Content };
+export const lot1Entries = { ...lot1Catalog, ...lot1Content, ...lot1Hospitality };
 export type Lot1Key = keyof typeof lot1Entries;
 
 export const lot1ByLocale = Object.fromEntries(
