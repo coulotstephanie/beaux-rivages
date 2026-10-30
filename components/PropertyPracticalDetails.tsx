@@ -1,3 +1,5 @@
+import { cleaningFees, hospitalityCopy } from "@/content/hospitality";
+import type { PropertySlug } from "@/platform/calendar/config";
 import type { Property } from "@/data";
 import { Card, Container, Heading, Section } from "./ui";
 import type { SupportedLocale } from "@/i18n/config";
@@ -11,6 +13,8 @@ export function PropertyPracticalDetails({
   locale?: SupportedLocale;
 }) {
   if (!property.spaces.length) return null;
+
+  const hospitality = hospitalityCopy[locale];
 
   return (
     <>
@@ -40,6 +44,12 @@ export function PropertyPracticalDetails({
           description={tr(locale, "Les détails pratiques qui permettent d’arriver l’esprit libre.")}
         />
         <Container size="narrow">
+          <h3>{hospitality.title}</h3>
+          <p>{hospitality.linen}</p>
+          <p>{hospitality.essentials}</p>
+          <p>
+            {hospitality.cleaning} : {cleaningFees[property.slug as PropertySlug]} €.
+          </p>
           <dl className="property-practical__list">
             {property.practicalInformation.map((item) => (
               <div key={item.label}>

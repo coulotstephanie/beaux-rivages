@@ -24,7 +24,7 @@
       },
       "optionPrices": {
         "signature": 145,
-        "linen": 20,
+        "linen": 15,
         "pet": 25,
         "personal-arrival": 35,
         "early-checkin": 55,
@@ -86,7 +86,7 @@
       "minimumNights": 2,
       "maximumNights": 28,
       "optimizeCalendarGaps": true,
-      "cleaningFee": 150,
+      "cleaningFee": 135,
       "securityDeposit": 1200,
       "touristTax": {
         "mode": "percentage",
@@ -102,7 +102,7 @@
       },
       "optionPrices": {
         "signature": 145,
-        "linen": 20,
+        "linen": 15,
         "pet": 25,
         "personal-arrival": 35,
         "early-checkin": 55,
@@ -164,7 +164,7 @@
       "minimumNights": 2,
       "maximumNights": 28,
       "optimizeCalendarGaps": true,
-      "cleaningFee": 90,
+      "cleaningFee": 85,
       "securityDeposit": 800,
       "touristTax": {
         "mode": "percentage",
@@ -180,7 +180,7 @@
       },
       "optionPrices": {
         "signature": 145,
-        "linen": 20,
+        "linen": 15,
         "pet": 25,
         "personal-arrival": 35,
         "early-checkin": 55,

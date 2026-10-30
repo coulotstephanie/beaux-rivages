@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 const options = [
-  ["linen", "Linge & lits préparés", 20, "par personne", "option"],
+  ["linen", "Linge & lits préparés", 15, "par personne et par séjour · facultatif", "option"],
   ["signature", "Pack Signature", 145, "à partir de · selon le nombre de voyageurs", "option"],
   ["personal-arrival", "Arrivée personnalisée", 35, "sur demande", "option"],
   ["romance", "Attention romantique", 75, "sur demande", "experience"],

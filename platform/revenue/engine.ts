@@ -102,8 +102,8 @@ export const premiumExperiences = [
   {
     code: "linen",
     label: "Linge préparé",
-    description: "Lits et linge prêts pour voyager plus léger.",
-    priceCents: 2500,
+    description: "Linge facultatif à 15 € par personne et par séjour, sur demande.",
+    priceCents: 1500,
     image: "/images/properties/nid-d-ete/editorial/chambre-attention.webp",
   },
   {

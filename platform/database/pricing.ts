@@ -1,14 +1,11 @@
 import "server-only";
+import { cleaningFees } from "@/content/hospitality";
 import type { StayOptionId } from "@/booking";
 import type { PropertySlug } from "@/platform/calendar/config";
 import type { Promotion, PropertyRatePlan } from "@/platform/pricing/contracts";
 import { getDatabaseClient } from "./client";
 
-const validatedCleaningFees: Record<PropertySlug, number> = {
-  "chai-des-tortues": 120,
-  "villa-raie-manta": 150,
-  "nid-d-ete": 90,
-};
+const validatedCleaningFees = cleaningFees;
 
 function addDay(date: string) {
   const value = new Date(`${date}T12:00:00Z`);
@@ -267,7 +264,7 @@ export class SupabasePricingPlanReader {
                 : "fixed-per-adult-per-night",
             value: Number(baseRate.tourist_tax_value),
           },
-      optionPrices,
+      optionPrices: { ...optionPrices, linen: 15 },
       seasons,
       promotions,
       overrides: yieldOverridesResult.data.map((override) => ({

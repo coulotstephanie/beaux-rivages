@@ -101,8 +101,8 @@ export const stayOptions: StayOption[] = [
     id: "linen",
     label: "Linge complet et lits faits",
     description:
-      "Forfait par séjour : linge de lit complet, lits faits à l’arrivée, serviettes de toilette, tapis de bain, essuie-mains et torchons de cuisine. Une éponge neuve est également fournie dans les maisons de l’Île de Ré.",
-    price: 20,
+      "Option facultative : apportez votre linge ou choisissez notre forfait complet à 15 € par personne et par séjour. Il comprend le linge de lit, les lits préparés selon les couchages convenus, les serviettes, les tapis de bain, les torchons, les essuie-mains et une éponge. Le linge du lit bébé reste à apporter.",
+    price: 15,
     unit: "par voyageur et par séjour",
   },
   {

@@ -8,7 +8,7 @@ export class ConciergePremiumRepository {
   async catalog(locale:"fr"|"en"|"de"="fr") {
     const [categories,experiences]=await Promise.all([this.client.from("concierge_categories").select("*").eq("enabled",true).order("sort_order"),this.client.from("concierge_experiences").select("*").eq("enabled",true).order("sort_order")]);
     if(categories.error||experiences.error) throw new Error("CONCIERGE_CATALOG_FAILED");
-    return { locale,categories:((categories.data??[]) as Row[]).map((r)=>({id:String(r.id),code:String(r.code),label:String(r[`label_${locale}`]),description:String(r[`description_${locale}`]??"")})),experiences:((experiences.data??[]) as Row[]).map((r)=>({id:String(r.id),categoryId:String(r.category_id),code:String(r.code),title:String(r[`title_${locale}`]),description:String(r[`description_${locale}`]),inclusions:r.inclusions,priceCents:Number(r.price_cents),pricingUnit:String(r.pricing_unit),requiresConfirmation:Boolean(r.requires_confirmation),imagePath:r.image_path?String(r.image_path):null})) };
+    return { locale,categories:((categories.data??[]) as Row[]).map((r)=>({id:String(r.id),code:String(r.code),label:String(r[`label_${locale}`]),description:String(r[`description_${locale}`]??"")})),experiences:((experiences.data??[]) as Row[]).map((r)=>({id:String(r.id),categoryId:String(r.category_id),code:String(r.code),title:String(r[`title_${locale}`]),description:String(r[`description_${locale}`]),inclusions:r.inclusions,priceCents:r.code==="linen"?1500:Number(r.price_cents),pricingUnit:String(r.pricing_unit),requiresConfirmation:Boolean(r.requires_confirmation),imagePath:r.image_path?String(r.image_path):null})) };
   }
   async create(input:Input) {
     const identity=await this.identity(input.reservationReference,input.email);
@@ -19,9 +19,9 @@ export class ConciergePremiumRepository {
       return {id:data.id,status:"requested"};
     }
     const ids=input.items.map((item)=>item.experienceId);
-    const {data:catalog,error:catalogError}=await this.client.from("concierge_experiences").select("id,price_cents,enabled,title_fr").in("id",ids);
+    const {data:catalog,error:catalogError}=await this.client.from("concierge_experiences").select("id,code,price_cents,enabled,title_fr").in("id",ids);
     if(catalogError||!catalog||catalog.length!==new Set(ids).size) throw new Error("CONCIERGE_EXPERIENCE_INVALID");
-    const prices=new Map(catalog.map((item)=>[item.id,item]));
+    const prices=new Map(catalog.map((item)=>[item.id,{...item,price_cents:item.code==="linen"?1500:item.price_cents}]));
     const subtotal=input.items.reduce((sum,item)=>sum+Number(prices.get(item.experienceId)?.price_cents??0)*item.quantity,0);
     const {data:order,error}=await this.client.from("concierge_orders").insert({reservation_id:identity.reservationId,guest_id:identity.guestId,status:"requested",locale:input.locale,promotion_code:input.promotionCode??null,subtotal_cents:subtotal,total_cents:subtotal,guest_message:input.message??null}).select("id").single();
     if(error) throw new Error(`CONCIERGE_ORDER_FAILED:${error.code}`);
