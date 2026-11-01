@@ -22,8 +22,9 @@ export function rateForDate(plan: PropertyRatePlan, date: string) {
   if (calendarRate !== undefined) {
     return {
       rate: calendarRate,
-      season:
-        plan.propertySlug === "nid-d-ete"
+      season: date.startsWith("2027-")
+        ? "Tarif Airbnb relevé le 1 novembre 2026"
+        : plan.propertySlug === "nid-d-ete"
           ? "Tarif Airbnb relevé le 4 octobre 2026"
           : "Tarif Airbnb relevé le 8 septembre 2026",
       minimumNights: validated2027MinimumNights(plan.propertySlug, date) ?? plan.minimumNights,

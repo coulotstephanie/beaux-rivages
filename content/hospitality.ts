@@ -2,7 +2,7 @@ import type { SupportedLocale } from "@/i18n/config";
 import type { PropertySlug } from "@/platform/calendar/config";
 
 export const cleaningFees: Record<PropertySlug, number> = {
-  "chai-des-tortues": 120,
+  "chai-des-tortues": 125,
   "villa-raie-manta": 135,
   "nid-d-ete": 85,
 };

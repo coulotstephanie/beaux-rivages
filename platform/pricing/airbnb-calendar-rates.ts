@@ -1,3 +1,4 @@
+import calendar2027 from "@/content/calendar-rates-2027.json";
 import type { PropertySlug } from "@/platform/calendar/config";
 
 type RatePeriod = { startsOn: string; endsOn: string; nightlyRate: number };
@@ -162,6 +163,8 @@ export function airbnbCalendarNightlyRate(
   propertySlug: PropertySlug,
   date: string,
 ): number | undefined {
+  const observed = (calendar2027.rates[propertySlug] as Record<string, number> | undefined)?.[date];
+  if (observed !== undefined) return observed;
   const periods =
     propertySlug === "chai-des-tortues"
       ? CHAI_RATE_PERIODS

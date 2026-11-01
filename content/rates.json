@@ -8,7 +8,7 @@
       "minimumNights": 2,
       "maximumNights": 28,
       "optimizeCalendarGaps": true,
-      "cleaningFee": 120,
+      "cleaningFee": 125,
       "securityDeposit": 800,
       "touristTax": {
         "mode": "percentage",

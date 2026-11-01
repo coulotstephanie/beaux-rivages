@@ -85,10 +85,10 @@ export const properties: Property[] = [
       {
         title: "Pour dormir et voyager léger",
         items: [
-          "Lit king size dans la suite et deux lits doubles",
-          "Rideaux occultants, couettes et oreillers supplémentaires",
+          "Literie de haute qualité : un lit 160 × 200 cm et deux lits 140 × 200 cm",
+          "Rideaux occultants thermiques, couettes et oreillers supplémentaires",
           "Lit parapluie, chaise haute, poussette, baignoire pliante et tapis d’éveil",
-          "Livres, jeux de société, jeux de cartes et jouets de plage",
+          "Livres et BD pour tous les âges, jeux de société, jeux de cartes et jeux de plage",
           "Parasol, nattes et siège de plage",
           "Deux salles de bain et deux toilettes",
           "Sèche-cheveux et lisseur",
@@ -97,8 +97,9 @@ export const properties: Property[] = [
       {
         title: "Le confort d’une maison de village",
         items: [
-          "Fibre Orange, TV Orange et enceinte Bluetooth",
+          "Fibre Orange, télévision connectée avec les services Orange et enceinte Bluetooth",
           "Deux bureaux pour travailler au calme",
+          "Ventilateurs de plafond",
           "Lave-linge séchant et matériel d’entretien",
           "Fer à repasser et étendoir",
           "Petit extérieur privatif pour le café ou l’apéritif",
@@ -116,11 +117,12 @@ export const properties: Property[] = [
       {
         title: "La suite parentale",
         detail:
-          "À l’étage, un lit king size, des rangements et une salle de bain privative habillée de marbre.",
+          "À l’étage, un lit 160 × 200 cm avec literie de haute qualité, des rangements et une salle d’eau privative habillée de marbre.",
       },
       {
         title: "Les deux chambres doubles",
-        detail: "Deux chambres à l’étage, chacune avec bureau, rangements et ventilateur.",
+        detail:
+          "Deux chambres à l’étage avec lits 140 × 200 cm, literie de haute qualité, bureaux et rangements. Des ventilateurs de plafond complètent le confort.",
       },
       {
         title: "Les deux salles de bain",
@@ -138,32 +140,38 @@ export const properties: Property[] = [
       },
     ],
     practicalInformation: [
+      {
+        label: "Durée du séjour",
+        value:
+          "7 nuits minimum en juillet et août ; à partir de 2 nuits hors saison, selon la période",
+      },
       { label: "Arrivée", value: "À partir de 16 h, en autonomie par boîte à clés" },
       { label: "Départ", value: "Avant 10 h ; départ tardif sur demande et selon disponibilité" },
       { label: "Stationnement", value: "Places gratuites dans les rues et parkings à proximité" },
       {
         label: "Linge",
         value:
-          "Kit de maison et serviettes de plage proposés en option ; linge de lit bébé non fourni",
+          "Forfait complet en option à 15 € par personne et par séjour ; linge de lit bébé à apporter",
       },
       { label: "Animaux", value: "Acceptés avec supplément, en prévoyant leur couchage" },
       {
         label: "Mobilité",
         value:
-          "Les trois chambres sont accessibles par un escalier intérieur étroit, peu adapté aux tout-petits sans surveillance et aux personnes à mobilité réduite",
+          "Les trois chambres sont à l’étage, accessibles par un escalier en colimaçon. Consultez sa photo pour apprécier sa configuration ; il est peu adapté aux personnes à mobilité réduite et demande une surveillance des jeunes enfants",
       },
       { label: "Quiétude", value: "Maison non-fumeur ; calme demandé entre 23 h et 7 h" },
     ],
     faq: [
       {
-        question: "Cette location de vacances à Rivedoux-Plage est-elle proche de la plage et des Halles ?",
+        question:
+          "Cette location de vacances à Rivedoux-Plage est-elle proche de la plage et des Halles ?",
         answer:
           "Oui. La plage se trouve à environ 250 mètres et les Halles, le marché, les commerces et les restaurants à environ 300 mètres.",
       },
       {
         question: "Comment sont réparties les chambres ?",
         answer:
-          "Les trois chambres sont à l’étage : une suite avec lit king size et salle de bain privative, puis deux chambres avec lit double et bureau.",
+          "Les trois chambres sont à l’étage, accessibles par un escalier en colimaçon : une suite avec lit 160 × 200 cm et salle d’eau privative, puis deux chambres avec lit 140 × 200 cm et bureau.",
       },
       {
         question: "Combien la maison compte-t-elle de salles de bain et de toilettes ?",
@@ -252,9 +260,9 @@ export const properties: Property[] = [
         title: "Dormir et voyager léger",
         items: [
           "Deux chambres avec lit 160 × 200",
-          "Chambre avec deux lits 90 × 200 réunissables",
-          "Chambre avec lits superposés",
-          "Rideaux occultants et couchages supplémentaires",
+          "Chambre avec deux lits 90 × 190 cm réunissables",
+          "Chambre avec deux couchages superposés de 80 × 190 cm",
+          "Literie de haute qualité et rideaux occultants ; un ventilateur dans chaque chambre",
           "Lit parapluie, chaise haute, baignoire et vaisselle bébé",
           "Deux salles d’eau, trois toilettes, sèche-cheveux et lisseur",
         ],
@@ -262,7 +270,7 @@ export const properties: Property[] = [
       {
         title: "Confort et loisirs",
         items: [
-          "Salon panoramique avec Apple TV et enceinte Bluetooth",
+          "Salon vue mer avec télévision connectée, services Orange et enceinte Bluetooth",
           "Fibre très haut débit et espace de travail",
           "Livres, jeux de société, Monopoly, poker et Mikado",
           "Badminton et kit de tennis de table pour la table extérieure",
@@ -284,7 +292,7 @@ export const properties: Property[] = [
       {
         title: "Le salon panoramique",
         detail:
-          "À l’étage, un grand canapé, des fauteuils et l’Apple TV composent un espace tourné vers la mer et le pont.",
+          "À l’étage, un grand canapé, des fauteuils et une télévision connectée avec les services Orange composent un espace tourné vers la mer et le pont.",
       },
       {
         title: "La cuisine et la grande table",
@@ -302,7 +310,8 @@ export const properties: Property[] = [
       },
       {
         title: "Les deux chambres à l’étage",
-        detail: "Un lit 160 × 200 dans l’une ; deux lits 90 × 200 réunissables dans l’autre.",
+        detail:
+          "Un lit 160 × 200 cm dans l’une ; deux lits 90 × 190 cm réunissables dans l’autre. Literie de haute qualité et ventilateur dans chaque chambre.",
       },
       {
         title: "Le jardin clos",
@@ -311,6 +320,11 @@ export const properties: Property[] = [
       },
     ],
     practicalInformation: [
+      {
+        label: "Durée du séjour",
+        value:
+          "7 nuits minimum en juillet et août ; à partir de 2 nuits hors saison, selon la période",
+      },
       { label: "Arrivée", value: "À partir de 16 h, en autonomie par boîte à clés" },
       { label: "Départ", value: "Avant 10 h ; départ tardif sur demande et selon disponibilité" },
       {
@@ -318,7 +332,16 @@ export const properties: Property[] = [
         value:
           "Gratuit dans les rues et parkings à proximité ; certaines zones nécessitent un disque bleu",
       },
-      { label: "Linge", value: "Kit de maison et serviettes de plage proposés en option" },
+      {
+        label: "Linge",
+        value:
+          "Forfait complet en option à 15 € par personne et par séjour ; linge de lit bébé à apporter",
+      },
+      { label: "Buanderie", value: "Pas de lave-linge ni de sèche-linge ; laverie à proximité" },
+      {
+        label: "Quiétude",
+        value: "Maison non-fumeur à l’intérieur ; possibilité de fumer dans la cour privative",
+      },
       { label: "Animaux", value: "Acceptés avec supplément et dans le respect de la maison" },
       {
         label: "Mobilité",
@@ -435,7 +458,7 @@ export const properties: Property[] = [
         items: [
           "Lave-vaisselle, four, micro-ondes, plaques et hotte",
           "Réfrigérateur-congélateur, cafetière filtre et machine expresso",
-          "Robot multicuiseur Moulinex et batterie de cuisine complète",
+          "Cookeo Moulinex et batterie de cuisine complète",
           "Raclette, grill, crêpière et matériel pour fruits de mer",
           "Canapé convertible, grande télévision et enceinte Bluetooth",
         ],
@@ -465,11 +488,12 @@ export const properties: Property[] = [
       {
         title: "La chambre principale",
         detail:
-          "Lit king size 180 × 200 avec surmatelas, télévision, rangements et ventilateur de plafond.",
+          "Lit king size 180 × 200 cm avec literie de haute qualité et surmatelas, télévision, placard, commode et ventilateur de plafond.",
       },
       {
         title: "La seconde chambre",
-        detail: "Lit double 140 × 200, rangements et ventilateur de plafond.",
+        detail:
+          "Lit double 140 × 200 cm avec literie de haute qualité, rangements, commode et ventilateur de plafond.",
       },
       {
         title: "La salle d’eau",
@@ -481,18 +505,29 @@ export const properties: Property[] = [
       },
     ],
     practicalInformation: [
+      {
+        label: "Durée du séjour",
+        value:
+          "7 nuits minimum en juillet et août ; à partir de 2 nuits hors saison, selon la période",
+      },
       { label: "Arrivée", value: "À partir de 16 h, en autonomie par boîte à clés" },
       { label: "Départ", value: "Avant 10 h ; départ tardif sur demande et selon disponibilité" },
       {
         label: "Stationnement",
-        value: "Deux places privatives ; circulation et stationnement interdits dans les allées",
+        value:
+          "Deux places privatives numérotées 27 et 28 et local à vélos ; circulation et stationnement interdits dans les allées",
       },
       {
         label: "Linge",
-        value: "Kit draps et serviettes proposé en option ; linge de lit bébé non fourni",
+        value:
+          "Forfait complet en option à 15 € par personne et par séjour ; linge de lit bébé à apporter",
       },
       { label: "Animaux", value: "Acceptés avec supplément ; prévoir leur couchage" },
-      { label: "Quiétude", value: "Résidence non-fumeur ; calme demandé entre 23 h et 7 h" },
+      {
+        label: "Quiétude",
+        value:
+          "Logement non-fumeur à l’intérieur ; possibilité de fumer dans le jardin privatif. Calme demandé entre 23 h et 7 h",
+      },
     ],
     faq: [
       {
@@ -517,7 +552,7 @@ export const properties: Property[] = [
       {
         question: "Quel équipement peut-on utiliser dehors ?",
         answer:
-          "La terrasse dispose d’une table, de transats, d’une voile d’ombrage saisonnière et d’une plancha électrique. Les appareils au gaz sont interdits dans la résidence classée.",
+          "La terrasse dispose d’une table, de transats, d’une voile d’ombrage saisonnière et d’une plancha électrique. Les barbecues au gaz et au charbon sont interdits dans la résidence ; une plancha électrique est disponible.",
       },
       {
         question: "Le linge est-il fourni ?",
