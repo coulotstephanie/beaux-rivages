@@ -222,6 +222,12 @@ export function renderGuestMessage(
   if (type === "departure") {
     const subject = "À bientôt… et merci pour votre séjour 🌊";
     const island = data.propertyId === "nid-d-ete" ? "l’Île d’Oléron" : "l’Île de Ré";
+    const useUpdatedDepartureInstructions = data.bookingSource !== "airbnb";
+    const linenLocation = {
+      "chai-des-tortues": "dans la buanderie",
+      "villa-raie-manta": "dans la cuisine",
+      "nid-d-ete": "dans l’entrée",
+    }[data.propertyId];
     const propertyClosing =
       data.propertyId === "chai-des-tortues"
         ? "Nous espérons que vous garderez un beau souvenir de l’atmosphère chaleureuse du Chai des Tortues et de vos moments passés à Rivedoux-Plage."
@@ -235,13 +241,17 @@ export function renderGuestMessage(
       },
       {
         title: "🍽 Avant votre départ",
-        copy: "✓ Nous envoyer un petit message lorsque vous quittez le logement.\n✓ Laisser la cuisine propre en portant une attention particulière au plan de travail et aux appareils électroménagers.\n✓ Vider le lave-vaisselle et ranger la vaisselle propre.\n✓ Déposer les déchets dans les conteneurs prévus à cet effet.\n✓ Déposer les bouteilles et bocaux en verre dans les conteneurs à verre du village.\n\nLes emplacements sont indiqués dans le livret d’accueil.",
+        copy: useUpdatedDepartureInstructions
+          ? "Nous nous occupons du ménage de fin de séjour. Pour nous aider à préparer un accueil tout aussi agréable aux prochains voyageurs, nous vous remercions simplement de :\n✓ Laver et ranger la vaisselle, puis vider le lave-vaisselle.\n✓ Vider les poubelles dans les conteneurs adaptés, en respectant le tri.\n\nLes emplacements sont indiqués dans le livret d’accueil. Merci pour ces petites attentions !"
+          : "✓ Nous envoyer un petit message lorsque vous quittez le logement.\n✓ Laisser la cuisine propre en portant une attention particulière au plan de travail et aux appareils électroménagers.\n✓ Vider le lave-vaisselle et ranger la vaisselle propre.\n✓ Déposer les déchets dans les conteneurs prévus à cet effet.\n✓ Déposer les bouteilles et bocaux en verre dans les conteneurs à verre du village.\n\nLes emplacements sont indiqués dans le livret d’accueil.",
       },
       ...(data.selectedOptions.linenPackage
         ? [
             {
               title: "🧺 Forfait linge",
-              copy: "Nous vous remercions de retirer les draps, les serviettes de toilette ainsi que le linge fourni, puis de les déposer à l’endroit indiqué dans le logement.",
+              copy: useUpdatedDepartureInstructions
+                ? `Merci de réunir le linge de maison fourni que vous avez utilisé ${linenLocation}.`
+                : "Nous vous remercions de retirer les draps, les serviettes de toilette ainsi que le linge fourni, puis de les déposer à l’endroit indiqué dans le logement.",
             },
           ]
         : []),
@@ -255,7 +265,10 @@ export function renderGuestMessage(
         : []),
       {
         title: "🚪 Avant de quitter la maison",
-        copy: "✓ Fermer les fenêtres.\n✓ Éteindre les lumières.\n✓ Fermer la porte d’entrée à clé.\n✓ Remettre les clés dans la boîte à clés.",
+        copy: "✓ Fermer les fenêtres.\n✓ Éteindre les lumières.\n✓ Fermer la porte d’entrée à clé.\n✓ Remettre les clés dans la boîte à clés." +
+          (useUpdatedDepartureInstructions
+            ? `${data.propertyId === "villa-raie-manta" ? "\n✓ Fermer les volets, en laissant ouvert celui de la fenêtre où se trouve la boîte à clés." : ""}\n\nUn petit message pour nous signaler votre départ sera apprécié.`
+            : ""),
       },
       {
         title: "💙 Votre avis compte énormément",
