@@ -62,7 +62,10 @@ export async function POST(request: NextRequest) {
           ...staffRecoveryEmail(generated.data.properties.hashed_token),
           idempotencyKey: `staff-recovery-${randomUUID()}`,
         });
-      } catch {
+      } catch (error) {
+        // Provider errors contain delivery diagnostics, never recovery material.
+        const detail = error instanceof Error ? error.message : "unknown";
+        console.error(JSON.stringify({ event: "staff.recovery.delivery_error", detail }));
         return noStoreJson(
           { error: "Le lien n’a pas pu être envoyé. Réessayez dans un instant." },
           { status: 503 },
