@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 
 export default function ResetStaffPasswordPage() {
   const [recovery, setRecovery] = useState<
-    { code: string } | { accessToken: string; refreshToken: string } | null
+    { tokenHash: string } | { code: string } | { accessToken: string; refreshToken: string } | null
   >(null);
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
@@ -15,6 +15,7 @@ export default function ResetStaffPasswordPage() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const tokenHash = params.get("type") === "recovery" ? params.get("token_hash") : null;
     const code = query.get("code");
     const accessToken = params.get("access_token");
     const refreshToken = params.get("refresh_token");
@@ -23,7 +24,9 @@ export default function ResetStaffPasswordPage() {
       setMessage("Ce lien n’est plus valide. Demandez un nouveau lien depuis le Back Office.");
       return;
     }
-    if (code) {
+    if (tokenHash) {
+      setRecovery({ tokenHash });
+    } else if (code) {
       setRecovery({ code });
     } else if (accessToken && refreshToken && params.get("type") === "recovery") {
       setRecovery({ accessToken, refreshToken });
