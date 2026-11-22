@@ -1,3 +1,4 @@
+import bookingReference from "../content/booking-reference-rates-2027.json";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { calculateQuote, rateForDate } from "../platform/pricing/service";
@@ -54,7 +55,7 @@ function accommodation(arrival: string, departure: string) {
   return total;
 }
 
-test("each of the 365 dates in 2027 maps to exactly one Airbnb period and exact rate", () => {
+test("historical Airbnb periods remain intact and the approved Booking reference takes priority", () => {
   const dates = datesIn2027();
   assert.equal(dates.length, 365);
   for (const date of dates) {
@@ -63,7 +64,8 @@ test("each of the 365 dates in 2027 maps to exactly one Airbnb period and exact 
     );
     assert.equal(matchingPeriods.length, 1, `${date} must match exactly one period`);
     assert.equal(nidDEte2027NightlyRate(date), matchingPeriods[0].nightlyRate, date);
-    assert.equal(rateForDate(plan, date).rate, matchingPeriods[0].nightlyRate, date);
+    const currentRate = (bookingReference.rates["nid-d-ete"] as Record<string, number>)[date];
+    assert.equal(rateForDate(plan, date).rate, currentRate ?? matchingPeriods[0].nightlyRate, date);
   }
 });
 
@@ -178,7 +180,7 @@ test("public quote keeps 85 euro cleaning separate and applies no accommodation 
 
 test("priority stays keep exact accommodation for two and six adults", async () => {
   const stays = [
-    ["2027-01-01", "2027-01-03", 429],
+    ["2027-01-01", "2027-01-03", 312],
     ["2027-03-08", "2027-03-10", 246],
     ["2027-05-05", "2027-05-09", 980],
     ["2027-05-14", "2027-05-17", 735],
@@ -238,4 +240,13 @@ test("pet and linen remain optional and use the validated units", async () => {
     ],
   );
   assert.equal(quote.optionsTotal, 95);
+});
+
+
+test("approved Booking rates apply by property while Chai summer stays unchanged", () => {
+  assert.equal(rateForDate({ ...plan, propertySlug: "chai-des-tortues" }, "2027-06-24").rate, 220);
+  assert.equal(rateForDate({ ...plan, propertySlug: "villa-raie-manta" }, "2027-06-24").rate, 302.5);
+  assert.equal(rateForDate({ ...plan, propertySlug: "chai-des-tortues" }, "2027-07-26").rate, 442);
+  assert.match(rateForDate(plan, "2027-01-02").season, /Booking/);
+  assert.equal(rateForDate(plan, "2027-01-02").rate, 75);
 });

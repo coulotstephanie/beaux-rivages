@@ -1,3 +1,4 @@
+import bookingReference from "@/content/booking-reference-rates-2027.json";
 import { bookingExperiences, calculateSignaturePackPrice, getNights, stayOptions } from "@/booking";
 import type { Promotion, PropertyRatePlan, QuoteRequest } from "./contracts";
 import { ratePlanRepository } from "./repository";
@@ -18,6 +19,14 @@ function eachNight(arrival: string, nights: number) {
 }
 
 export function rateForDate(plan: PropertyRatePlan, date: string) {
+  const bookingRate = (bookingReference.rates[plan.propertySlug] as Record<string, number>)[date];
+  if (bookingRate !== undefined) {
+    return {
+      rate: bookingRate,
+      season: "Tarif de référence Booking relevé le 22 novembre 2026",
+      minimumNights: validated2027MinimumNights(plan.propertySlug, date) ?? plan.minimumNights,
+    };
+  }
   const calendarRate = airbnbCalendarNightlyRate(plan.propertySlug, date);
   if (calendarRate !== undefined) {
     return {

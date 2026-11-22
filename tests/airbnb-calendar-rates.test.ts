@@ -11,8 +11,8 @@ test("the Airbnb calendar rates are mirrored for the Chai and Villa", () => {
   assert.equal(airbnbCalendarNightlyRate("villa-raie-manta", "2027-09-15"), 200);
 });
 
-test("unavailable Airbnb dates keep the existing Beaux Rivages fallback", () => {
-  assert.equal(airbnbCalendarNightlyRate("chai-des-tortues", "2027-07-01"), undefined);
-  assert.equal(airbnbCalendarNightlyRate("villa-raie-manta", "2027-08-01"), undefined);
-  assert.equal(airbnbCalendarNightlyRate("nid-d-ete", "2027-09-01"), undefined);
+test("the existing complete calendar retains rates for previously unavailable dates", () => {
+  assert.equal(airbnbCalendarNightlyRate("chai-des-tortues", "2027-07-01"), 332);
+  assert.equal(airbnbCalendarNightlyRate("villa-raie-manta", "2027-08-01"), 474);
+  assert.equal(airbnbCalendarNightlyRate("nid-d-ete", "2027-09-01"), 125);
 });
